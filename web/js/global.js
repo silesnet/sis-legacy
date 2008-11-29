@@ -1,0 +1,2 @@
+
+<!-- This is global script -->
