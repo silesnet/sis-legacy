@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<configs>
+		<config>web/WEB-INF/applicationContext.xml</config>
+		<config>web/WEB-INF/sis-servlet.xml</config>
+		<config>web/WEB-INF/applicationContext-acegi-security.xml</config>
+		<config>web/WEB-INF/applicationContext-hibernate.xml</config>
+	</configs>
+	<configSets>
+		<configSet>
+			<name>std</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>web/WEB-INF/applicationContext.xml</config>
+				<config>web/WEB-INF/applicationContext-acegi-security.xml</config>
+				<config>web/WEB-INF/applicationContext-hibernate.xml</config>
+				<config>web/WEB-INF/sis-servlet.xml</config>
+			</configs>
+		</configSet>
+	</configSets>
+</beansProjectDescription>
