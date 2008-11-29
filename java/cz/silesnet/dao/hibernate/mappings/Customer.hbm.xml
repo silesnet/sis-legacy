@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="cz.silesnet.model.Customer" table="customers">
+        <id name="id" unsaved-value="null">
+            <generator class="increment"/>
+        </id>
+        <property name="historyId" column="history_id" not-null="true" unique="true" />
+        <property name="contractNo" column="contract_no" length="50" not-null="true" />
+        <property name="name" length="80" not-null="true"/>
+        <property name="supplementaryName" column="supplementary_name" length="50" />
+		<component name="contact">
+	        <property name="name" column="contact_name" length="50" />
+			<component name="address">
+		        <property name="street" length="40" not-null="true" />
+		        <property name="city" length="40" not-null="true" />
+		        <property name="postalCode" column="postal_code" length="10" not-null="true" />
+		        <property name="country" type="cz.silesnet.dao.hibernate.support.CountryHibernateUserType" />
+			</component>
+	        <property name="email" length="50"/>
+	        <property name="phone" length="70" />
+		</component>
+        <property name="publicId" column="public_id" length="20" not-null="true" unique="true" />
+        <property name="DIC" length="20" />
+        <property name="symbol" length="20" />
+		<bag name="services" lazy="false" cascade="all-delete-orphan" order-by="is_connectivity desc, period_from">
+			<key column="customer_id" />
+			<one-to-many class="cz.silesnet.model.Service" />
+        </bag>
+		<component name="billing">
+			<property name="frequency" type="cz.silesnet.dao.hibernate.support.FrequencyHibernateUserType" />
+			<property name="lastlyBilled" column="lastly_billed" type="timestamp" />
+			<property name="isBilledAfter" column="is_billed_after" />
+			<property name="deliverByMail" column="deliver_by_mail" />
+			<property name="deliverByEmail" column="deliver_by_email" />
+			<property name="deliverCopyEmail" column="deliver_copy_email" length="100" />
+			<property name="format" column="format" type="cz.silesnet.dao.hibernate.support.InvoiceFormatHibernateUserType" />
+			<property name="deliverSigned" column="deliver_signed" />
+			<many-to-one name="shire" column="shire_id" lazy="false" />
+			<many-to-one name="responsible" column="responsible_id" lazy="false" />
+			<property name="isActive" column="is_active" />
+			<property name="status" type="cz.silesnet.dao.hibernate.support.BillingStatusHibernateUserType" />
+		</component>
+        <property name="connectionSpot" column="connection_spot" length="100"/>
+        <property name="info" length="150" />
+        <property name="insertedOn" column="inserted_on" type="timestamp" not-null="true"/>
+
+		<filter name="activeFilter" condition=":isActive=is_active" />
+    </class>
+    
+    <filter-def name="activeFilter">
+    	<filter-param name="isActive" type="boolean" />
+    </filter-def>
+</hibernate-mapping>
