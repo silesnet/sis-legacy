@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[2.2.0.v200809261800]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>web/WEB-INF/applicationContext.xml</config>
 		<config>web/WEB-INF/sis-servlet.xml</config>
@@ -8,7 +14,7 @@
 	</configs>
 	<configSets>
 		<configSet>
-			<name>std</name>
+			<name><![CDATA[std]]></name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>

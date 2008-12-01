@@ -22,13 +22,11 @@ public class SqlHibernateOrder extends Order {
 	public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
 		return super.toString();
 	}
-	@Override
 
 	public static SqlHibernateOrder asc(String orderStr) {
 		return new SqlHibernateOrder(orderStr, true);
 	}
 
-	@Override
 	public static SqlHibernateOrder desc(String orderStr) {
 		return new SqlHibernateOrder(orderStr, false);
 	}
