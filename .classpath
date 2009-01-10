@@ -6,7 +6,7 @@
 	<classpathentry kind="src" path="web/WEB-INF/classes"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="M:/bin/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
-	<classpathentry sourcepath="W:/testing/java/inst/spring-framework-2.0-m3-with-dependencies/spring-framework-2.0-m3/src" kind="lib" path="web/WEB-INF/lib/spring.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/spring.jar" sourcepath="W:/testing/java/inst/spring-framework-2.0-m3-with-dependencies/spring-framework-2.0-m3/src"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-collections-3.1.jar"/>
@@ -40,5 +40,6 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/bcmail-jdk15-136.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/bcprov-jdk15-136.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/quartz-1.6.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="target"/>
 </classpath>
