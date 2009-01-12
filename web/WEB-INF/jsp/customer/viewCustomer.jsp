@@ -144,6 +144,14 @@
 			<fmt:message key="viewCustomer.action.exportToInsert" /></a></span>
 	</c:if>
 </authz:authorize>
+<br />
+<c:if test="${synchronized}">
+    <fmt:message key="viewCustomer.status.synchronized.true" />
+</c:if>
+<c:if test="${!synchronized}">
+    <fmt:message key="viewCustomer.status.synchronized.false" />
+</c:if>
+
 </div>
 
 <%@ include file="/WEB-INF/jsp/inc/footer.jsp" %>
