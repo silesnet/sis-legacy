@@ -151,7 +151,7 @@ public class CustomerController extends AbstractCRUDController {
         model.putAll(referenceI18nFields(c));
         model.put("billsList", bMgr.getByCustomer(c));
         boolean isSynchronized = false;
-        if (c.getUpdated().before(c.getSynchronized())) {
+        if ((c.getSynchronized() != null) && (c.getUpdated().before(c.getSynchronized()))) {
             isSynchronized = true;
         }
         model.put("synchronized", isSynchronized);
