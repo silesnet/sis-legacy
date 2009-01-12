@@ -50,7 +50,7 @@ public class CustomerDAOHibernate extends HibernateDaoSupport implements Custome
         SearchUtils.addIlikeRestriction(crit, "substring(replace(public_id, '/', ''), 1, 8)", cExample
                 .getExportPublicId());
         SearchUtils.addIlikeInRestriction(crit, "contract_no", cExample.getContractNo());
-        SearchUtils.addIlikeInRestriction(crit, "symbol", cExample.getSymbol());
+        SearchUtils.addEqRestriction(crit, "symbol", cExample.getSymbol());
         // contact restrictions
         if (cExample.getContact() != null) {
             SearchUtils.addIlikeRestriction(crit, "email", cExample.getContact().getEmail());
