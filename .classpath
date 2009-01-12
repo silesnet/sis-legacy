@@ -40,6 +40,6 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/bcmail-jdk15-136.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/bcprov-jdk15-136.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/quartz-1.6.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="target"/>
 </classpath>

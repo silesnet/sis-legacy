@@ -10,25 +10,23 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Base test case for services testing. Instantiates log and context.
- *
+ * 
  * @author Richard Sikora
- *
+ * 
  */
-public class BaseServiceTestCase
-    extends TestCase {
+public abstract class BaseServiceTestCase extends TestCase {
 
-    //~ Instance fields --------------------------------------------------------
+    // ~ Instance fields
+    // --------------------------------------------------------
 
-    protected final Log          log = LogFactory.getLog(getClass());
+    protected final Log log = LogFactory.getLog(getClass());
     protected ApplicationContext ctx = null;
 
-    //~ Constructors -----------------------------------------------------------
+    // ~ Constructors
+    // -----------------------------------------------------------
 
     public BaseServiceTestCase() {
-        String[] paths = {
-                "/WEB-INF/applicationContext-hibernate.xml",
-                "/WEB-INF/applicationContext.xml"
-            };
+        String[] paths = { "/WEB-INF/applicationContext-hibernate.xml", "/WEB-INF/applicationContext.xml" };
         ctx = new ClassPathXmlApplicationContext(paths);
     }
 }
