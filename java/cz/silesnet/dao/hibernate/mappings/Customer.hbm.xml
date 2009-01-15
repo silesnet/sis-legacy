@@ -47,7 +47,7 @@
         <property name="connectionSpot" column="connection_spot" length="100"/>
         <property name="info" length="150" />
         <property name="insertedOn" column="inserted_on" type="timestamp" not-null="true"/>
-        <property name="updated" column="updated" type="timestamp" not-null="true"/>
+        <property name="updated" column="updated" type="timestamp" />
         <property name="synchronized" column="synchronized" type="timestamp" />
 
 		<filter name="activeFilter" condition=":isActive=is_active" />

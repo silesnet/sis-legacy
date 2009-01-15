@@ -1,6 +1,5 @@
 package cz.silesnet.dao.hibernate;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -29,6 +28,7 @@ public class CustomerDAOHibernate extends HibernateDaoSupport implements Custome
     // ~ Methods
     // ----------------------------------------------------------------
 
+    @SuppressWarnings("unchecked")
     public List<Customer> getAll() {
         DetachedCriteria crit = DetachedCriteria.forClass(Customer.class);
         crit.addOrder(SqlHibernateOrder.asc(SearchUtils.getTranslateOrder("name")));
@@ -37,6 +37,7 @@ public class CustomerDAOHibernate extends HibernateDaoSupport implements Custome
         return getHibernateTemplate().findByCriteria(crit);
     }
 
+    @SuppressWarnings("unchecked")
     public List<Customer> getByExample(Customer cExample) {
         if (cExample == null)
             return null;
@@ -100,7 +101,6 @@ public class CustomerDAOHibernate extends HibernateDaoSupport implements Custome
     }
 
     public void save(Customer customer) {
-        customer.setUpdated(new Date());
         getHibernateTemplate().saveOrUpdate(customer);
     }
 

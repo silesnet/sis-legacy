@@ -287,4 +287,11 @@ public class Customer extends Entity implements Historic {
         // => customer is deactivate candidate
         return true;
     }
+
+    public boolean isSpsSynchronized() {
+        if ((getSynchronized() != null) && (getUpdated() != null) && (getUpdated().before(getSynchronized()))) {
+            return true;
+        }
+        return false;
+    }
 }

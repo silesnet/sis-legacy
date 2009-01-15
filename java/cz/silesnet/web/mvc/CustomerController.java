@@ -150,11 +150,7 @@ public class CustomerController extends AbstractCRUDController {
             model.putAll(cHistory);
         model.putAll(referenceI18nFields(c));
         model.put("billsList", bMgr.getByCustomer(c));
-        boolean isSynchronized = false;
-        if ((c.getSynchronized() != null) && (c.getUpdated().before(c.getSynchronized()))) {
-            isSynchronized = true;
-        }
-        model.put("synchronized", isSynchronized);
+        model.put("synchronized", c.isSpsSynchronized());
         return new ModelAndView("customer/viewCustomer", model);
     }
 
@@ -395,6 +391,7 @@ public class CustomerController extends AbstractCRUDController {
         binder.registerCustomEditor(Label.class, new CustomLabelEditor(lmgr));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected Map referenceData(HttpServletRequest request) {
         HashMap<String, Object> model = new HashMap<String, Object>();
@@ -418,6 +415,7 @@ public class CustomerController extends AbstractCRUDController {
         return model;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected Map referenceHistory(Historic historic) {
         HashMap<String, Object> model = new HashMap<String, Object>();
@@ -506,6 +504,7 @@ public class CustomerController extends AbstractCRUDController {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected Map referenceI18nFields(Object o) {
         HashMap<String, Object> fields = new HashMap<String, Object>();

@@ -8,7 +8,7 @@
 <tr><td width="45%" >
 
 <%-- Contract --%>
-<h3><fmt:message key="editCustomer.header.Contract" /></h3>
+<h3><fmt:message key="editCustomer.header.Contract" /><c:if test="${!synchronized}">*</c:if></h3>
 <table class="customerDetail" width="100%">
 <s:nestedPath path="customer">
 	<app:viewTextLine path="contractNo" label="Customer.fContractNo" styleClass="odd" />
@@ -144,14 +144,6 @@
 			<fmt:message key="viewCustomer.action.exportToInsert" /></a></span>
 	</c:if>
 </authz:authorize>
-<br />
-<c:if test="${synchronized}">
-    <fmt:message key="viewCustomer.status.synchronized.true" />
-</c:if>
-<c:if test="${!synchronized}">
-    <fmt:message key="viewCustomer.status.synchronized.false" />
-</c:if>
-
 </div>
 
 <%@ include file="/WEB-INF/jsp/inc/footer.jsp" %>
