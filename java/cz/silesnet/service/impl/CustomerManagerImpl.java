@@ -165,6 +165,8 @@ public class CustomerManagerImpl implements CustomerManager {
             return true;
         if (changedString(formerContact.getName(), contact.getName()))
             return true;
+        if (!formerCustomer.getBilling().getIsActive() && customer.getBilling().getIsActive())
+            return true;
         return false;
     }
 
