@@ -247,6 +247,7 @@ public class CustomerController extends AbstractCRUDController {
         // set new status from parameter in the request
         c.getBilling().setStatus(
                 BillingStatus.INVOICE.valueOf(ServletRequestUtils.getRequiredIntParameter(request, "newStatusId")));
+        c.setUpdated(new Date());
         cMgr.update(c);
         // set success message
         MessagesUtils.setCodedSuccessMessage(request, "editCustomer.activateSuccess", new Object[] { c.getId(),
