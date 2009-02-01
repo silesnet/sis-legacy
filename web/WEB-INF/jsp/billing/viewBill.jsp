@@ -21,7 +21,7 @@
 	<app:viewTextLine path="isDelivered" label="Bill.fIsDelivered" styleClass="odd" i18n="true" />
 	<app:viewTextLine path="isArchived" label="Bill.fIsArchived" styleClass="even" i18n="true" />
 	<app:viewLine label="Bill.totalPrice" styleClass="odd" emphasis="true" valueType="${moneyStr}">
-			<fmt:formatNumber value="${bill.totalPrice}" type="number" groupingUsed="true" maxFractionDigits="0" />
+			<fmt:formatNumber value="${bill.netRounded}" type="number" groupingUsed="true" maxFractionDigits="2" />
 	</app:viewLine>
 	<app:viewTextLine path="vat" label="Bill.fVat" styleClass="even" valueType="%" />
 </table>
@@ -36,7 +36,7 @@
 			<fmt:formatNumber value="${row.price}" type="number" groupingUsed="true" maxFractionDigits="0" />
 		</display:column>
 		<display:column titleKey="BillItem.linePrice">
-			<fmt:formatNumber value="${row.linePrice}" type="number" groupingUsed="true" maxFractionDigits="0" />
+			<fmt:formatNumber value="${row.net}" type="number" groupingUsed="true" maxFractionDigits="2" />
 		</display:column>
 	</display:table>
 
