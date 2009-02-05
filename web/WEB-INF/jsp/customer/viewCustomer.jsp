@@ -50,10 +50,11 @@
 	<app:viewLabelLine path="shire" label="Customer.fBilling.shire" styleClass="odd" />
 	<app:viewLabelLine path="responsible" label="Customer.fBilling.responsible" styleClass="even" />
 	<app:viewTextLine path="isActive" label="Customer.fBilling.fIsActive" i18n="true" styleClass="odd" />
-	<app:viewLabelLine path="status" label="Customer.fBilling.fStatus" i18n="true" styleClass="even" />
+    <app:viewLabelLine path="status" label="Customer.fBilling.fStatus" i18n="true" styleClass="even" />
+	<app:viewTextLine path="bankAccount" label="Customer.fBilling.fAccount" styleClass="odd" />
 </s:nestedPath>
 <s:nestedPath path="customer">
-	<app:viewTextLine path="info" label="Customer.fInfo" styleClass="odd" />
+	<app:viewTextLine path="info" label="Customer.fInfo" styleClass="even" />
 </s:nestedPath>
 </table>
 
@@ -135,10 +136,6 @@
 	<fmt:message key="viewCustomer.action.addOneTimeService" /></a></span>
 <br />
 <authz:authorize ifAllGranted="ROLE_ACCOUNTING">
-	<c:if test="${customer.contact.address.country.name == 'enum.country.cz'}">
-		<span class="actionLink"><a href="${ctx}/customer/c_${customer.exportName}.cwd?action=exportToWinduo&selectedCustomers_${customer.id}">
-			<fmt:message key="viewCustomer.action.exportToWinduo" /></a></span>
-	</c:if>
 	<c:if test="${customer.contact.address.country.name == 'enum.country.pl'}">
 		<span class="actionLink"><a href="${ctx}/customer/c_${customer.exportName}.epp?action=exportToInsert&selectedCustomers_${customer.id}">
 			<fmt:message key="viewCustomer.action.exportToInsert" /></a></span>

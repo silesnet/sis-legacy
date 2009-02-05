@@ -1,18 +1,19 @@
 package cz.silesnet.model;
 
-import cz.silesnet.model.enums.BillingStatus;
-import cz.silesnet.model.enums.Frequency;
-import cz.silesnet.service.invoice.InvoiceFormat;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import cz.silesnet.model.enums.BillingStatus;
+import cz.silesnet.model.enums.Frequency;
+import cz.silesnet.service.invoice.InvoiceFormat;
 
 /**
  * Component class for customer billing.
@@ -21,158 +22,180 @@ import java.util.Date;
  * 
  */
 public class Billing implements HistoricToString, Serializable {
-	private static final long serialVersionUID = -946891192465278665L;
+    private static final long serialVersionUID = -946891192465278665L;
 
-	private static DateFormat sDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private static DateFormat sDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
-	private Frequency fFrequency = Frequency.MONTHLY;
+    private Frequency fFrequency = Frequency.MONTHLY;
 
-	private Date fLastlyBilled;
+    private Date fLastlyBilled;
 
-	private Boolean fIsBilledAfter = false;
+    private Boolean fIsBilledAfter = false;
 
-	private Boolean fDeliverByMail = false;
+    private Boolean fDeliverByMail = false;
 
-	private Boolean fDeliverByEmail = true;
+    private Boolean fDeliverByEmail = true;
 
-	private String fDeliverCopyEmail;
+    private String fDeliverCopyEmail;
 
-	private InvoiceFormat format = InvoiceFormat.LINK;
-	
-	private Boolean deliverSigned = false;
-	
-	private Label shire;
+    private InvoiceFormat format = InvoiceFormat.LINK;
 
-	private Label responsible;
+    private Boolean deliverSigned = false;
 
-	private Boolean fIsActive = true;
+    private Label shire;
 
-	private BillingStatus fStatus = BillingStatus.INVOICE;
+    private Label responsible;
 
-	public void setFrequency(Frequency frequency) {
-		fFrequency = frequency;
-	}
+    private Boolean fIsActive = true;
 
-	public Frequency getFrequency() {
-		return fFrequency;
-	}
+    private BillingStatus fStatus = BillingStatus.INVOICE;
 
-	public String getHistoricToString() {
-		return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(
-				getLastlyBilled() != null ? sDateFormat
-						.format(getLastlyBilled()) : "").append(getFrequency())
-				.append(getIsBilledAfter()).append(getDeliverByMail()).append(
-						getDeliverByEmail()).append(getDeliverCopyEmail())
-						.append(getFormat().toString()).append(getDeliverSigned())
-				.append(
-						getShire() != null ? getShire().getHistoricToString()
-								: "").append(
-						getResponsible() != null ? getResponsible()
-								.getHistoricToString() : "").append(
-						getIsActive()).append(getStatus()).toString();
-	}
+    private String fAccountNumber;
 
-	public void setIsBilledAfter(Boolean isBilledAfter) {
-		fIsBilledAfter = isBilledAfter;
-	}
+    private String fBankCode;
 
-	public Boolean getIsBilledAfter() {
-		return fIsBilledAfter;
-	}
+    public void setFrequency(Frequency frequency) {
+        fFrequency = frequency;
+    }
 
-	public void setLastlyBilled(Date lastlyBilled) {
-		fLastlyBilled = lastlyBilled;
-	}
+    public Frequency getFrequency() {
+        return fFrequency;
+    }
 
-	public Date getLastlyBilled() {
-		return fLastlyBilled;
-	}
+    public String getHistoricToString() {
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(
+                getLastlyBilled() != null ? sDateFormat.format(getLastlyBilled()) : "").append(getFrequency()).append(
+                getIsBilledAfter()).append(getDeliverByMail()).append(getDeliverByEmail())
+                .append(getDeliverCopyEmail()).append(getFormat().toString()).append(getDeliverSigned()).append(
+                        getShire() != null ? getShire().getHistoricToString() : "").append(
+                        getResponsible() != null ? getResponsible().getHistoricToString() : "").append(getIsActive())
+                .append(getStatus()).toString();
+    }
 
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
-	}
+    public void setIsBilledAfter(Boolean isBilledAfter) {
+        fIsBilledAfter = isBilledAfter;
+    }
 
-	public Boolean getDeliverByEmail() {
-		return fDeliverByEmail;
-	}
+    public Boolean getIsBilledAfter() {
+        return fIsBilledAfter;
+    }
 
-	public void setDeliverByEmail(Boolean deliverByEmail) {
-		fDeliverByEmail = deliverByEmail;
-	}
+    public void setLastlyBilled(Date lastlyBilled) {
+        fLastlyBilled = lastlyBilled;
+    }
 
-	public Boolean getDeliverByMail() {
-		return fDeliverByMail;
-	}
+    public Date getLastlyBilled() {
+        return fLastlyBilled;
+    }
 
-	public void setDeliverByMail(Boolean deliverByMail) {
-		fDeliverByMail = deliverByMail;
-	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 
-	public String getDeliverCopyEmail() {
-		return fDeliverCopyEmail != null ? fDeliverCopyEmail.replace(" ", "")
-				: null;
-	}
+    public Boolean getDeliverByEmail() {
+        return fDeliverByEmail;
+    }
 
-	public void setDeliverCopyEmail(String deliverCopyEmail) {
-		fDeliverCopyEmail = deliverCopyEmail != null ? deliverCopyEmail
-				.replace(" ", "") : null;
-	}
+    public void setDeliverByEmail(Boolean deliverByEmail) {
+        fDeliverByEmail = deliverByEmail;
+    }
 
-	public Boolean getIsActive() {
-		return fIsActive;
-	}
+    public Boolean getDeliverByMail() {
+        return fDeliverByMail;
+    }
 
-	public void setIsActive(Boolean isActive) {
-		fIsActive = isActive;
-	}
+    public void setDeliverByMail(Boolean deliverByMail) {
+        fDeliverByMail = deliverByMail;
+    }
 
-	public BillingStatus getStatus() {
-		return fStatus;
-	}
+    public String getDeliverCopyEmail() {
+        return fDeliverCopyEmail != null ? fDeliverCopyEmail.replace(" ", "") : null;
+    }
 
-	public void setStatus(BillingStatus status) {
-		fStatus = status;
-	}
+    public void setDeliverCopyEmail(String deliverCopyEmail) {
+        fDeliverCopyEmail = deliverCopyEmail != null ? deliverCopyEmail.replace(" ", "") : null;
+    }
 
-	public boolean equals(Object o) {
-		return EqualsBuilder.reflectionEquals(this, o);
-	}
+    public Boolean getIsActive() {
+        return fIsActive;
+    }
 
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
-	}
+    public void setIsActive(Boolean isActive) {
+        fIsActive = isActive;
+    }
 
-	public Label getResponsible() {
-		return responsible;
-	}
+    public BillingStatus getStatus() {
+        return fStatus;
+    }
 
-	public void setResponsible(Label responsible) {
-		this.responsible = responsible;
-	}
+    public void setStatus(BillingStatus status) {
+        fStatus = status;
+    }
 
-	public Label getShire() {
-		return shire;
-	}
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
 
-	public void setShire(Label shire) {
-		this.shire = shire;
-	}
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
 
-	public Boolean getDeliverSigned() {
-		return deliverSigned;
-	}
+    public Label getResponsible() {
+        return responsible;
+    }
 
-	public void setDeliverSigned(Boolean deliverSigned) {
-		this.deliverSigned = deliverSigned;
-	}
+    public void setResponsible(Label responsible) {
+        this.responsible = responsible;
+    }
 
-	public InvoiceFormat getFormat() {
-		return format;
-	}
+    public Label getShire() {
+        return shire;
+    }
 
-	public void setFormat(InvoiceFormat format) {
-		this.format = format;
-	}
+    public void setShire(Label shire) {
+        this.shire = shire;
+    }
 
+    public Boolean getDeliverSigned() {
+        return deliverSigned;
+    }
+
+    public void setDeliverSigned(Boolean deliverSigned) {
+        this.deliverSigned = deliverSigned;
+    }
+
+    public InvoiceFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(InvoiceFormat format) {
+        this.format = format;
+    }
+
+    public String getAccountNumber() {
+        return fAccountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        fAccountNumber = accountNumber;
+    }
+
+    public String getBankCode() {
+        return fBankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        fBankCode = bankCode;
+    }
+
+    public String getBankAccount() {
+        if (StringUtils.isNotBlank(fAccountNumber) && StringUtils.isNotBlank(fBankCode)) {
+            return fAccountNumber + "/" + fBankCode;
+        } else {
+            return "";
+        }
+    }
 }

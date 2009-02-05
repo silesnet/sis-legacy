@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.acegisecurity.annotation.Secured;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
@@ -57,6 +58,8 @@ public class CustomerController extends AbstractCRUDController {
     // ~ Instance fields
     // --------------------------------------------------------
 
+    private static final int ACCOUNT_NUMBER_LENGHT = 17;
+    private static final int BANK_CODE_LENGHT = 4;
     private HistoryManager hmgr;
     private CustomerManager cMgr;
     private LabelManager lmgr;
@@ -446,6 +449,30 @@ public class CustomerController extends AbstractCRUDController {
                 "editForm.error.blank-or-null", "Value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "publicId", "editForm.error.blank-or-null",
                 "Value required.");
+        // check account number
+        String accNo = customer.getBilling().getAccountNumber();
+        if (StringUtils.isNotBlank(accNo)) {
+            if (accNo.length() > ACCOUNT_NUMBER_LENGHT) {
+                bindingResult.rejectValue("billing.accountNumber", "editCustomer.too-long",
+                        new Object[] { ACCOUNT_NUMBER_LENGHT }, "Field is too long (max  " + ACCOUNT_NUMBER_LENGHT
+                                + " characters).");
+            }
+            if (!StringUtils.isNumeric(accNo.replace("-", ""))) {
+                bindingResult.rejectValue("billing.accountNumber", "editCustomer.numeric", "Numeric value expected.");
+            }
+        }
+        // check bank code
+        String bankCo = customer.getBilling().getBankCode();
+        if (StringUtils.isNotBlank(bankCo)) {
+            if (bankCo.length() > BANK_CODE_LENGHT) {
+                bindingResult.rejectValue("billing.bankCode", "editCustomer.too-long",
+                        new Object[] { BANK_CODE_LENGHT }, "Field is too long (max " + BANK_CODE_LENGHT
+                                + " characters).");
+            }
+            if (!StringUtils.isNumeric(bankCo.replace("-", ""))) {
+                bindingResult.rejectValue("billing.bankCode", "editCustomer.numeric", "Numeric value expected.");
+            }
+        }
         // validate publicId uniqueness, use exportPublicId
         log.debug("Checking uniqueness for publicId: " + customer.getPublicId());
         Customer exampleCustomer = prepareExampleCustomer();

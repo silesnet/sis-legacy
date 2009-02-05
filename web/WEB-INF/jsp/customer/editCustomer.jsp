@@ -60,6 +60,8 @@
 		${customer.billing.isActive ? yes : no }
 	</app:formLine>
 	<app:formEnumLine path="billing.status" label="Customer.fBilling.fStatus" enums="${billingStatus}" required="true" />
+    <app:formInputLine path="billing.accountNumber" label="Customer.fBilling.fAccount" size="17"/>
+    <app:formInputLine path="billing.bankCode" label="Customer.fBilling.fBank" size="4"/>
 	<app:formTextareaLine path="info" label="Customer.fInfo" cols="23" rows="5" />
 </table>
 

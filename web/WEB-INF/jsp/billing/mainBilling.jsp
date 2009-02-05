@@ -160,11 +160,6 @@
 </div>
 <hr />
 <c:if test="${!empty invoicing }">
-<c:if test="${country == 'cz'}">
-<span class="actionLink"><a href="${ctx}/billing/bills_cz_${billingMonth}.bwd?action=exportSentToWinduo&invoicingId=${invoicing.id}">
-	<fmt:message key="mainBilling.action.exportSentToWinduo" /></a></span>
-<hr />
-</c:if>
 <c:if test="${country == 'pl'}">
 <span class="actionLink"><a href="${ctx}/billing/bills_pl_${billingMonth}.epp?action=exportSentToInsert&invoicingId=${invoicing.id}">
 	<fmt:message key="mainBilling.action.exportSentToInsert" /></a></span>

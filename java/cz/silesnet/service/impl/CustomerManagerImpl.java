@@ -147,6 +147,10 @@ public class CustomerManagerImpl implements CustomerManager {
             return true;
         if (changedString(formerCustomer.getSymbol(), customer.getSymbol()))
             return true;
+        if (changedString(formerCustomer.getBilling().getAccountNumber(), customer.getBilling().getAccountNumber()))
+            return true;
+        if (changedString(formerCustomer.getBilling().getBankCode(), customer.getBilling().getBankCode()))
+            return true;
         // address
         Address formerAddres = formerCustomer.getContact().getAddress();
         Address addres = customer.getContact().getAddress();

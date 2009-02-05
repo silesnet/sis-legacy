@@ -43,6 +43,8 @@
 			<many-to-one name="responsible" column="responsible_id" lazy="false" />
 			<property name="isActive" column="is_active" />
 			<property name="status" type="cz.silesnet.dao.hibernate.support.BillingStatusHibernateUserType" />
+            <property name="accountNumber" column="account_no" length="17" />
+            <property name="bankCode" column="bank_no" length="4" />
 		</component>
         <property name="connectionSpot" column="connection_spot" length="100"/>
         <property name="info" length="150" />
