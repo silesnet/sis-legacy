@@ -87,7 +87,7 @@
 		<TR align="center" valign="top">
 			<td>${status.count}</td>
 			<TD ALIGN="LEFT" NOWRAP>${item.text}<c:if test="${item.isDisplayUnit}"><br/><i>abonament&nbsp;${bill.period.periodString}</i></c:if></TD>
-			<td>64.20</td>
+			<td>6120Z</td>
 			<TD ALIGN="RIGHT" NOWRAP>${fn:replace(amount, ",", ".")}</TD>
 			<TD NOWRAP><c:if test="${item.isDisplayUnit}">mies.</c:if></TD>
 			<td ALIGN="RIGHT">0.00</td>
