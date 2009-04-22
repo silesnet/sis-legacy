@@ -201,7 +201,7 @@
 	
 	<!-- schedule automatic canditate customers deactivation utilizing Quartz -->
 
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref local="deactivateCandidatesTrigger" />

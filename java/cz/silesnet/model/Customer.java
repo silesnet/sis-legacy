@@ -185,8 +185,8 @@ public class Customer extends Entity implements Historic {
             comm = "[" + getBilling().getShire().getName().substring(0, 3) + "]";
         if (getServices().size() == 0)
             return comm;
-        return getServices().size() > 1 ? getServices().get(0).getShortInfo() + " (+�) " + comm : getServices().get(0)
-                .getShortInfo()
+        return getServices().size() > 1 ? getServices().get(0).getShortInfo() + " (+...) " + comm : getServices()
+                .get(0).getShortInfo()
                 + " " + comm;
     }
 
