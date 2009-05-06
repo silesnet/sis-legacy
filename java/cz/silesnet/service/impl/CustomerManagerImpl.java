@@ -431,9 +431,9 @@ public class CustomerManagerImpl implements CustomerManager {
                 customer.setSymbol(shortName.toUpperCase() + "-" + customer.getId().toString());
                 log.debug("New Symbol composed :" + customer.getSymbol());
             } else {
-                // CZ & SK symbol definition, use ICO
-                customer.setSymbol(customer.getPublicId());
-                log.debug("New Symbol composed :" + customer.getSymbol());
+                // CZ & SK symbol leave it empty
+                // customer.setSymbol(customer.getPublicId());
+                // log.debug("New Symbol composed :" + customer.getSymbol());
             }
         }
     }
