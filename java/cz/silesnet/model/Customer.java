@@ -1,7 +1,9 @@
 package cz.silesnet.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import cz.silesnet.model.enums.BillingStatus;
@@ -242,6 +244,8 @@ public class Customer extends Entity implements Historic {
         // throw exception if due not set
         if (due == null)
             throw new NullPointerException("Due date not set!");
+        // tune due, cut off time of the day, move it to 00:00 of the day
+        due = cutDayTime(due);
         // skip suspensed customers
         if (BillingStatus.CEASE.equals(getBilling().getStatus()))
             return false;
@@ -286,6 +290,16 @@ public class Customer extends Entity implements Historic {
         // 7. maxTo <= lastlyBilled
         // => customer is deactivate candidate
         return true;
+    }
+
+    protected static Date cutDayTime(Date due) {
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(due);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 
     public boolean isSpsSynchronized() {
