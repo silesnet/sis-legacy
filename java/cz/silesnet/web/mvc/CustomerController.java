@@ -58,8 +58,9 @@ public class CustomerController extends AbstractCRUDController {
     // ~ Instance fields
     // --------------------------------------------------------
 
-    private static final int ACCOUNT_NUMBER_LENGHT = 17;
-    private static final int BANK_CODE_LENGHT = 4;
+    private static final int DIVISION_LENGTH = 32;
+    private static final int ACCOUNT_NUMBER_LENGTH = 17;
+    private static final int BANK_CODE_LENGTH = 4;
     private HistoryManager hmgr;
     private CustomerManager cMgr;
     private LabelManager lmgr;
@@ -452,9 +453,9 @@ public class CustomerController extends AbstractCRUDController {
         // check account number
         String accNo = customer.getBilling().getAccountNumber();
         if (StringUtils.isNotBlank(accNo)) {
-            if (accNo.length() > ACCOUNT_NUMBER_LENGHT) {
+            if (accNo.length() > ACCOUNT_NUMBER_LENGTH) {
                 bindingResult.rejectValue("billing.accountNumber", "editCustomer.too-long",
-                        new Object[] { ACCOUNT_NUMBER_LENGHT }, "Field is too long (max  " + ACCOUNT_NUMBER_LENGHT
+                        new Object[] { ACCOUNT_NUMBER_LENGTH }, "Field is too long (max  " + ACCOUNT_NUMBER_LENGTH
                                 + " characters).");
             }
             if (!StringUtils.isNumeric(accNo.replace("-", ""))) {
@@ -464,14 +465,20 @@ public class CustomerController extends AbstractCRUDController {
         // check bank code
         String bankCo = customer.getBilling().getBankCode();
         if (StringUtils.isNotBlank(bankCo)) {
-            if (bankCo.length() > BANK_CODE_LENGHT) {
+            if (bankCo.length() > BANK_CODE_LENGTH) {
                 bindingResult.rejectValue("billing.bankCode", "editCustomer.too-long",
-                        new Object[] { BANK_CODE_LENGHT }, "Field is too long (max " + BANK_CODE_LENGHT
+                        new Object[] { BANK_CODE_LENGTH }, "Field is too long (max " + BANK_CODE_LENGTH
                                 + " characters).");
             }
             if (!StringUtils.isNumeric(bankCo.replace("-", ""))) {
                 bindingResult.rejectValue("billing.bankCode", "editCustomer.numeric", "Numeric value expected.");
             }
+        }
+        // validate supplementaryName for 32 characters
+        String division = customer.getSupplementaryName();
+        if (StringUtils.isNotBlank(division) && division.length() > DIVISION_LENGTH) {
+            bindingResult.rejectValue("billing.supplementaryName", "editCustomer.too-long",
+                    new Object[] { DIVISION_LENGTH }, "Field is too long (max  " + DIVISION_LENGTH + " characters).");
         }
         // validate publicId uniqueness, use exportPublicId
         log.debug("Checking uniqueness for publicId: " + customer.getPublicId());
@@ -482,8 +489,11 @@ public class CustomerController extends AbstractCRUDController {
             if (!c.getId().equals(customer.getId())) {
                 // there is existing customer with given exportPublicId, so
                 // reject it
-                bindingResult.rejectValue("publicId", "editCustomer.not-unique.publicId", new Object[] { c.getName() },
-                        "Unique value required.");
+                /*
+                 * DISABLED: 2009-05-06 bindingResult.rejectValue("publicId",
+                 * "editCustomer.not-unique.publicId", new Object[] {
+                 * c.getName() }, "Unique value required.");
+                 */
                 break;
             }
         }
