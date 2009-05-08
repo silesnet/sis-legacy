@@ -477,8 +477,8 @@ public class CustomerController extends AbstractCRUDController {
         // validate supplementaryName for 32 characters
         String division = customer.getSupplementaryName();
         if (StringUtils.isNotBlank(division) && division.length() > DIVISION_LENGTH) {
-            bindingResult.rejectValue("billing.supplementaryName", "editCustomer.too-long",
-                    new Object[] { DIVISION_LENGTH }, "Field is too long (max  " + DIVISION_LENGTH + " characters).");
+            bindingResult.rejectValue("supplementaryName", "editCustomer.too-long", new Object[] { DIVISION_LENGTH },
+                    "Field is too long (max  " + DIVISION_LENGTH + " characters).");
         }
         // validate publicId uniqueness, use exportPublicId
         log.debug("Checking uniqueness for publicId: " + customer.getPublicId());
