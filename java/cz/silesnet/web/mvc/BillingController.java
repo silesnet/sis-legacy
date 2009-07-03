@@ -113,7 +113,7 @@ public class BillingController extends MultiActionController {
         model.put("countConfirmed", bMgr.getCountByStatus(invoicing, true, false, false, null, null));
         model.put("countUndelivered", bMgr.getCountByStatus(invoicing, true, true, false, null, null));
         model.put("countDelivered", bMgr.getCountByStatus(invoicing, true, true, true, null, null));
-        model.put("countSnail", bMgr.getCountByStatus(invoicing, true, true, false, null, true));
+        model.put("countSnail", bMgr.getCountByStatus(invoicing, true, null, null, null, true));
         model.put("countSent", bMgr.getCountByStatus(invoicing, true, true, null, null, null));
         model.put("countToSend", bMgr.getCountByStatus(invoicing, true, false, false, null, null));
         model.put("countAll", bMgr.getCountByStatus(invoicing, true, null, null, null, null));
