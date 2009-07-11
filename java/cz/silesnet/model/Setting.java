@@ -11,8 +11,9 @@ public class Setting extends Entity {
 	private static final long serialVersionUID = -7471033959879511347L;
 
 	private String fName;
+
 	private String fValue;
-	
+
 	public Setting() {
 		super();
 	}
@@ -26,16 +27,19 @@ public class Setting extends Entity {
 		fName = name;
 		fValue = value;
 	}
-	
+
 	public String getName() {
 		return fName;
 	}
+
 	public void setName(String name) {
 		fName = name;
 	}
+
 	public String getValue() {
 		return fValue;
 	}
+
 	public void setValue(String value) {
 		fValue = value;
 	}

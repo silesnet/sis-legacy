@@ -7,18 +7,19 @@ import java.util.List;
 
 /**
  * User manager interface mainly for logging in users.
- *
+ * 
  * @author Richard Sikora
  */
 public interface UserManager {
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public List getUsers();
+	public List getUsers();
 
-    public void dispatchSessionDestroyedEvent(
-        HttpSessionDestroyedEvent sessionEvent);
+	public void dispatchSessionDestroyedEvent(
+			HttpSessionDestroyedEvent sessionEvent);
 
-    public void dispatchSuccessfulLoginEvent(
-        InteractiveAuthenticationSuccessEvent authEvent);
+	public void dispatchSuccessfulLoginEvent(
+			InteractiveAuthenticationSuccessEvent authEvent);
 }

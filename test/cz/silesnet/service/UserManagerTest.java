@@ -6,31 +6,31 @@ import java.util.ArrayList;
 
 /**
  * User Manager tests. Testing Loggin in.
- *
+ * 
  * @author Richard Sikora
- *
+ * 
  */
-public class UserManagerTest
-    extends BaseServiceTestCase {
+public class UserManagerTest extends BaseServiceTestCase {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    private UserManager umgr = null;
+	private UserManager umgr = null;
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public void testGetUsers() {
-        ArrayList<User> users = (ArrayList<User>) umgr.getUsers();
+	public void testGetUsers() {
+		ArrayList<User> users = (ArrayList<User>) umgr.getUsers();
 
-        for (User u : users)
-            log.debug(u);
-    }
+		for (User u : users)
+			log.debug(u);
+	}
 
-    protected void setUp()
-        throws Exception {
-        // get user manager class instantiated by spring
-        // according to applicationContext
-        umgr = (UserManager) ctx.getBean("userManager");
-        assertNotNull(umgr);
-    }
+	protected void setUp() throws Exception {
+		// get user manager class instantiated by spring
+		// according to applicationContext
+		umgr = (UserManager) ctx.getBean("userManager");
+		assertNotNull(umgr);
+	}
 }

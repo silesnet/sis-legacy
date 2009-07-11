@@ -40,266 +40,273 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller for editing nodes.
- *
+ * 
  * @author Richard Sikora
  */
-public class NodeWirelessEditController
-    extends SimpleFormController {
+public class NodeWirelessEditController extends SimpleFormController {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    protected final Log    log  = LogFactory.getLog(getClass());
-    private NodeManager    nmgr;
-    private LabelManager   lmgr;
-    private HistoryManager hmgr;
+	protected final Log log = LogFactory.getLog(getClass());
 
-    //~ Methods ----------------------------------------------------------------
+	private NodeManager nmgr;
 
-    // injected by Spring
-    public void setHistoryManager(HistoryManager historyManager) {
-        hmgr = historyManager;
-    }
+	private LabelManager lmgr;
 
-    // injected by Spring
-    public void setLabelManager(LabelManager labelManager) {
-        lmgr = labelManager;
-    }
+	private HistoryManager hmgr;
 
-    // injected by Spring
-    public void setNodeManager(NodeManager nodeManager) {
-        nmgr = nodeManager;
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public Node formBackingObject(HttpServletRequest request) {
-        // determine request action
-        String action = ServletRequestUtils.getStringParameter(request, "action",
-                "actionUpdate");
+	// injected by Spring
+	public void setHistoryManager(HistoryManager historyManager) {
+		hmgr = historyManager;
+	}
 
-        // get nodeId parameter
-        long nodeId = ServletRequestUtils.getLongParameter(request, "nodeId", 0);
-        log.debug("Want to " + action + " on node with id: " + nodeId);
+	// injected by Spring
+	public void setLabelManager(LabelManager labelManager) {
+		lmgr = labelManager;
+	}
 
-        if (action.equals("actionAdd")) {
-            // create new node with parent set
-            Node node = new Wireless();
-            node.setParentId(ServletRequestUtils.getLongParameter(request, "parentId",
-                    0));
+	// injected by Spring
+	public void setNodeManager(NodeManager nodeManager) {
+		nmgr = nodeManager;
+	}
 
-            return node;
-        } else
-            // return existing node
-            return nmgr.getNodeById(nodeId);
-    }
+	public Node formBackingObject(HttpServletRequest request) {
+		// determine request action
+		String action = ServletRequestUtils.getStringParameter(request,
+				"action", "actionUpdate");
 
-    // support binder with custor editors for some fields
-    public void initBinder(HttpServletRequest request,
-        ServletRequestDataBinder binder) {
-        // Labels
-        binder.registerCustomEditor(Label.class, new CustomLabelEditor(lmgr));
-        // Integers
-        binder.registerCustomEditor(Integer.class,
-            new CustomNumberEditor(Integer.class, true));
-    }
+		// get nodeId parameter
+		long nodeId = ServletRequestUtils
+				.getLongParameter(request, "nodeId", 0);
+		log.debug("Want to " + action + " on node with id: " + nodeId);
 
-    public ModelAndView onSubmit(HttpServletRequest request,
-        HttpServletResponse response, Object command, BindException errors)
-        throws ServletException {
-        Node node = (Node) command;
+		if (action.equals("actionAdd")) {
+			// create new node with parent set
+			Node node = new Wireless();
+			node.setParentId(ServletRequestUtils.getLongParameter(request,
+					"parentId", 0));
 
-        if (request.getParameter("buttonSave") != null) {
-            // save button pressed
-            log.debug("Persisting node " + node);
-            nmgr.updateNode(node);
-            MessagesUtils.setCodedSuccessMessage(request,
-                "editWireless.saveSuccess",
-                new Object[] { node.getId(), node.getName() });
-        }
+			return node;
+		}
+		else
+			// return existing node
+			return nmgr.getNodeById(nodeId);
+	}
 
-        if (WebUtils.hasSubmitParameter(request, "buttonInsert")) {
-            // insert button pressed
-            log.debug("Inserting new node " + node);
-            nmgr.insertNode(node);
-            MessagesUtils.setCodedSuccessMessage(request,
-                "editWireless.insertSuccess",
-                new Object[] { node.getId(), node.getName() });
-        }
+	// support binder with custor editors for some fields
+	public void initBinder(HttpServletRequest request,
+			ServletRequestDataBinder binder) {
+		// Labels
+		binder.registerCustomEditor(Label.class, new CustomLabelEditor(lmgr));
+		// Integers
+		binder.registerCustomEditor(Integer.class, new CustomNumberEditor(
+				Integer.class, true));
+	}
 
-        // figure out returnUrl after save or insert
-        String returnUrl = NavigationUtils.getReturnUrl(request,
-                "/net/wireless/view.html?view=viewDetail&nodeId="
-                + node.getId());
-        log.debug("Action successful, returning back to : " + returnUrl);
+	public ModelAndView onSubmit(HttpServletRequest request,
+			HttpServletResponse response, Object command, BindException errors)
+			throws ServletException {
+		Node node = (Node) command;
 
-        // need redirect so we will go throught controller mechanism
-        return new ModelAndView(new RedirectView(returnUrl));
-    }
+		if (request.getParameter("buttonSave") != null) {
+			// save button pressed
+			log.debug("Persisting node " + node);
+			nmgr.updateNode(node);
+			MessagesUtils.setCodedSuccessMessage(request,
+					"editWireless.saveSuccess", new Object[] { node.getId(),
+							node.getName() });
+		}
 
-    // dispatch cancel and delete button before form validation
-    public ModelAndView processFormSubmission(HttpServletRequest request,
-        HttpServletResponse response, Object command, BindException errors)
-        throws Exception {
-        // get presented node
-        Node node = (Node) command;
+		if (WebUtils.hasSubmitParameter(request, "buttonInsert")) {
+			// insert button pressed
+			log.debug("Inserting new node " + node);
+			nmgr.insertNode(node);
+			MessagesUtils.setCodedSuccessMessage(request,
+					"editWireless.insertSuccess", new Object[] { node.getId(),
+							node.getName() });
+		}
 
-        if (request.getParameter("buttonCancel") != null) {
-            // form cancelled get back without any changes
+		// figure out returnUrl after save or insert
+		String returnUrl = NavigationUtils.getReturnUrl(request,
+				"/net/wireless/view.html?view=viewDetail&nodeId="
+						+ node.getId());
+		log.debug("Action successful, returning back to : " + returnUrl);
 
-            // figure out returnUrl
-            String returnUrl = NavigationUtils.getReturnUrl(request,
-                    "/net/wireless/view.html?view=viewDetail&nodeId="
-                    + node.getId());
-            log.debug("Action canceled, returning back to : " + returnUrl
-                + " without changes.");
+		// need redirect so we will go throught controller mechanism
+		return new ModelAndView(new RedirectView(returnUrl));
+	}
 
-            // need redirect so we will go throught controller mechanism
-            return new ModelAndView(new RedirectView(returnUrl));
-        }
+	// dispatch cancel and delete button before form validation
+	public ModelAndView processFormSubmission(HttpServletRequest request,
+			HttpServletResponse response, Object command, BindException errors)
+			throws Exception {
+		// get presented node
+		Node node = (Node) command;
 
-        // delete given node
-        if (request.getParameter("buttonDelete") != null) {
-            // try to delete node here
-            if (node.getSubNodesCount() > 0) {
-                // node is not leaf can not delete
-                log.debug(
-                    "Trying to delete parent withou first deleting children. "
-                    + node);
-                MessagesUtils.setCodedSuccessMessage(request,
-                    "editWireless.canNotDelete",
-                    new Object[] { node.getId(), node.getName() });
-            } else {
-                log.debug("Deleting node: " + node);
-                nmgr.deleteNode(node);
-                MessagesUtils.setCodedSuccessMessage(request,
-                    "editWireless.deleteSuccess",
-                    new Object[] { node.getId(), node.getName() });
-            }
+		if (request.getParameter("buttonCancel") != null) {
+			// form cancelled get back without any changes
 
-            // figure out returnUrl after deletion
-            // just pop from stack (koz there can be detail view of deleted
-            // node)
-            // so always return to siblings list
-            String returnUrl = NavigationUtils.getReturnUrl(request, "");
+			// figure out returnUrl
+			String returnUrl = NavigationUtils.getReturnUrl(request,
+					"/net/wireless/view.html?view=viewDetail&nodeId="
+							+ node.getId());
+			log.debug("Action canceled, returning back to : " + returnUrl
+					+ " without changes.");
 
-            if (node.getParentId() != 0)
-                returnUrl = request.getContextPath()
-                    + "/net/wireless/view.html?view=viewSlaveList&parentId="
-                    + node.getParentId();
-            else
-                returnUrl = request.getContextPath()
-                    + "/net/wireless/view.html?view=viewMasterList";
+			// need redirect so we will go throught controller mechanism
+			return new ModelAndView(new RedirectView(returnUrl));
+		}
 
-            log.debug("Node deleted, returning back to: " + returnUrl);
+		// delete given node
+		if (request.getParameter("buttonDelete") != null) {
+			// try to delete node here
+			if (node.getSubNodesCount() > 0) {
+				// node is not leaf can not delete
+				log
+						.debug("Trying to delete parent withou first deleting children. "
+								+ node);
+				MessagesUtils.setCodedSuccessMessage(request,
+						"editWireless.canNotDelete", new Object[] {
+								node.getId(), node.getName() });
+			}
+			else {
+				log.debug("Deleting node: " + node);
+				nmgr.deleteNode(node);
+				MessagesUtils.setCodedSuccessMessage(request,
+						"editWireless.deleteSuccess", new Object[] {
+								node.getId(), node.getName() });
+			}
 
-            // need redirect so we will go throught controller mechanism
-            return new ModelAndView(new RedirectView(returnUrl));
-        }
+			// figure out returnUrl after deletion
+			// just pop from stack (koz there can be detail view of deleted
+			// node)
+			// so always return to siblings list
+			String returnUrl = NavigationUtils.getReturnUrl(request, "");
 
-        // if validation needed continue standard way
-        return super.processFormSubmission(request, response, command, errors);
-    }
+			if (node.getParentId() != 0)
+				returnUrl = request.getContextPath()
+						+ "/net/wireless/view.html?view=viewSlaveList&parentId="
+						+ node.getParentId();
+			else
+				returnUrl = request.getContextPath()
+						+ "/net/wireless/view.html?view=viewMasterList";
 
-    public Map referenceData(HttpServletRequest request, Object command,
-        Errors errors)
-        throws Exception {
-        HashMap<String, Object> model = new HashMap<String, Object>();
+			log.debug("Node deleted, returning back to: " + returnUrl);
 
-        // support view with additional info
+			// need redirect so we will go throught controller mechanism
+			return new ModelAndView(new RedirectView(returnUrl));
+		}
 
-        // first let's generate labels lists
+		// if validation needed continue standard way
+		return super.processFormSubmission(request, response, command, errors);
+	}
 
-        // create N/A option label for not mandatory fields
-        Label notAvailableLabel = new Label();
-        notAvailableLabel.setId(Long.valueOf(0));
-        notAvailableLabel.setName(MessagesUtils.getMessage(
-                "app.label.notAvailable", request.getLocale()));
+	public Map referenceData(HttpServletRequest request, Object command,
+			Errors errors) throws Exception {
+		HashMap<String, Object> model = new HashMap<String, Object>();
 
-        // FIXME parent label values can not be hardcoded
-        // get appropriage label lists
-        ArrayList<Label> typeLabels = (ArrayList<Label>) lmgr.getSubLabels(lmgr
-                    .getLabelById(Long.valueOf(10)));
-        ArrayList<Label> domainLabels = (ArrayList<Label>) lmgr.getSubLabels(lmgr
-                    .getLabelById(Long.valueOf(19)));
-        ArrayList<Label> polarizationLabels = (ArrayList<Label>) lmgr
-                    .getSubLabels(lmgr.getLabelById(Long.valueOf(30)));
+		// support view with additional info
 
-            // sort domainLabel according 2 name 
-            Collections.sort(domainLabels,
-                (Comparator<? super Label>) (new BeanComparator("name")));
+		// first let's generate labels lists
 
-            // add N/A option to non mandatory fields
-            domainLabels.add(0, notAvailableLabel);
-            polarizationLabels.add(0, notAvailableLabel);
+		// create N/A option label for not mandatory fields
+		Label notAvailableLabel = new Label();
+		notAvailableLabel.setId(Long.valueOf(0));
+		notAvailableLabel.setName(MessagesUtils.getMessage(
+				"app.label.notAvailable", request.getLocale()));
 
-            // put it into model
-            model.put("typeLabels", typeLabels);
-            model.put("domainLabels", domainLabels);
-            model.put("polarizationLabels", polarizationLabels);
+		// FIXME parent label values can not be hardcoded
+		// get appropriage label lists
+		ArrayList<Label> typeLabels = (ArrayList<Label>) lmgr.getSubLabels(lmgr
+				.getLabelById(Long.valueOf(10)));
+		ArrayList<Label> domainLabels = (ArrayList<Label>) lmgr
+				.getSubLabels(lmgr.getLabelById(Long.valueOf(19)));
+		ArrayList<Label> polarizationLabels = (ArrayList<Label>) lmgr
+				.getSubLabels(lmgr.getLabelById(Long.valueOf(30)));
 
-            // support form with node history
-            Node node = (Node) command;
-            model.put("historyRecord", hmgr.getHistory(node));
+		// sort domainLabel according 2 name
+		Collections.sort(domainLabels,
+				(Comparator<? super Label>) (new BeanComparator("name")));
 
-            // set additional infos in model
-            if (node.getParentId() != 0) {
-                // we have slave node
-                model.put("isMaster", false);
-                model.put("isSlave", true);
-                model.put("parentNode", nmgr.getNodeById(node.getParentId()));
+		// add N/A option to non mandatory fields
+		domainLabels.add(0, notAvailableLabel);
+		polarizationLabels.add(0, notAvailableLabel);
 
-                // kick from typeLabels list AP label
-                // FIXME label id can not be so hardcoded here
-                int indexOfAP = -1;
+		// put it into model
+		model.put("typeLabels", typeLabels);
+		model.put("domainLabels", domainLabels);
+		model.put("polarizationLabels", polarizationLabels);
 
-                for (Label label : typeLabels)
-                    if (label.getId() == 11)
-                        indexOfAP = typeLabels.indexOf(label);
+		// support form with node history
+		Node node = (Node) command;
+		model.put("historyRecord", hmgr.getHistory(node));
 
-                if (indexOfAP > -1)
-                    typeLabels.remove(indexOfAP);
-            } else {
-                // we have master node
-                model.put("isMaster", true);
-                model.put("isSlave", false);
+		// set additional infos in model
+		if (node.getParentId() != 0) {
+			// we have slave node
+			model.put("isMaster", false);
+			model.put("isSlave", true);
+			model.put("parentNode", nmgr.getNodeById(node.getParentId()));
 
-                // kick from typeLabels list SA label
-                // FIXME label id can not be so hardcoded here
-                int indexOfSA = -1;
+			// kick from typeLabels list AP label
+			// FIXME label id can not be so hardcoded here
+			int indexOfAP = -1;
 
-                for (Label label : typeLabels)
-                    if (label.getId() == 12)
-                        indexOfSA = typeLabels.indexOf(label);
+			for (Label label : typeLabels)
+				if (label.getId() == 11)
+					indexOfAP = typeLabels.indexOf(label);
 
-                if (indexOfSA > -1)
-                    typeLabels.remove(indexOfSA);
-            }
+			if (indexOfAP > -1)
+				typeLabels.remove(indexOfAP);
+		}
+		else {
+			// we have master node
+			model.put("isMaster", true);
+			model.put("isSlave", false);
 
-            // TODO actions should be done also via global const
-            Boolean isUpdate        = Boolean.valueOf(false);
-            Boolean isNew           = Boolean.valueOf(false);
-            Boolean isDelete        = Boolean.valueOf(false);
-            Boolean isDeleteConfirm = Boolean.valueOf(false);
+			// kick from typeLabels list SA label
+			// FIXME label id can not be so hardcoded here
+			int indexOfSA = -1;
 
-            // get request action
-            String action = ServletRequestUtils.getStringParameter(request, "action",
-                    "actionUpdate");
+			for (Label label : typeLabels)
+				if (label.getId() == 12)
+					indexOfSA = typeLabels.indexOf(label);
 
-            if (action.equals("actionUpdate"))
-                isUpdate = Boolean.valueOf(true);
-            else if (action.equals("actionAdd"))
-                isNew = Boolean.valueOf(true);
-            else if (action.equals("actionDelete"))
-                isDelete = Boolean.valueOf(true);
-            else if (action.equals("actionDeleteConfirm"))
-                isDeleteConfirm = Boolean.valueOf(true);
+			if (indexOfSA > -1)
+				typeLabels.remove(indexOfSA);
+		}
 
-            model.put("isUpdate", isUpdate);
-            model.put("isNew", isNew);
-            model.put("isDelete", isDelete);
-            model.put("isDeleteConfirm", isDeleteConfirm);
+		// TODO actions should be done also via global const
+		Boolean isUpdate = Boolean.valueOf(false);
+		Boolean isNew = Boolean.valueOf(false);
+		Boolean isDelete = Boolean.valueOf(false);
+		Boolean isDeleteConfirm = Boolean.valueOf(false);
 
-            // include Javascripts
-            model.put("scripts", new String[] { "safeSubmit.js" });
+		// get request action
+		String action = ServletRequestUtils.getStringParameter(request,
+				"action", "actionUpdate");
 
-            return model;
-        }
-    }
+		if (action.equals("actionUpdate"))
+			isUpdate = Boolean.valueOf(true);
+		else if (action.equals("actionAdd"))
+			isNew = Boolean.valueOf(true);
+		else if (action.equals("actionDelete"))
+			isDelete = Boolean.valueOf(true);
+		else if (action.equals("actionDeleteConfirm"))
+			isDeleteConfirm = Boolean.valueOf(true);
+
+		model.put("isUpdate", isUpdate);
+		model.put("isNew", isNew);
+		model.put("isDelete", isDelete);
+		model.put("isDeleteConfirm", isDeleteConfirm);
+
+		// include Javascripts
+		model.put("scripts", new String[] { "safeSubmit.js" });
+
+		return model;
+	}
+}

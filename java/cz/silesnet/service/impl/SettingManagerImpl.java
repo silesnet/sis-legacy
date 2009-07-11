@@ -12,9 +12,9 @@ import cz.silesnet.service.SettingManager;
  * @author Richard Sikora
  */
 public class SettingManagerImpl implements SettingManager {
-	
+
 	private SettingDAO dao;
-	
+
 	public void setSettingDAO(SettingDAO settingDAO) {
 		dao = settingDAO;
 	}
@@ -43,8 +43,11 @@ public class SettingManagerImpl implements SettingManager {
 		Long aValue = null;
 		try {
 			aValue = Long.valueOf(get(name).getValue());
-		} catch (NullPointerException e) {
-		} catch (NumberFormatException e) {}
+		}
+		catch (NullPointerException e) {
+		}
+		catch (NumberFormatException e) {
+		}
 		return aValue;
 	}
 
@@ -57,8 +60,11 @@ public class SettingManagerImpl implements SettingManager {
 		Double aValue = null;
 		try {
 			aValue = Double.valueOf(get(name).getValue());
-		} catch (NullPointerException e) {
-		} catch (NumberFormatException e) {}
+		}
+		catch (NullPointerException e) {
+		}
+		catch (NumberFormatException e) {
+		}
 		return aValue;
 	}
 
@@ -71,13 +77,16 @@ public class SettingManagerImpl implements SettingManager {
 		Integer aValue = null;
 		try {
 			aValue = Integer.valueOf(get(name).getValue());
-		} catch (NullPointerException e) {
-		} catch (NumberFormatException e) {}
+		}
+		catch (NullPointerException e) {
+		}
+		catch (NumberFormatException e) {
+		}
 		return aValue;
 	}
 
 	public Integer getInteger(String name, Integer fallBack) {
-		Integer  aValue = getInteger(name);
+		Integer aValue = getInteger(name);
 		return aValue != null ? aValue : fallBack;
 	}
 

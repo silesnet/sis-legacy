@@ -6,23 +6,23 @@ import java.util.List;
 
 /**
  * An interface to manipulate Labels for stored objects.
- *
+ * 
  * @author Richard Sikora
  */
-public interface LabelDAO
-    extends DAO {
+public interface LabelDAO extends DAO {
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public Label getLabelById(Long labelId);
+	public Label getLabelById(Long labelId);
 
-    public List<Label> getAll();
-    
-    public List<Label> getByExmaple(Label example);
+	public List<Label> getAll();
 
-    public List getSubLabels(Long labelId);
+	public List<Label> getByExmaple(Label example);
 
-    public void removeLabel(Label label);
+	public List getSubLabels(Long labelId);
 
-    public void saveLabel(Label label);
+	public void removeLabel(Label label);
+
+	public void saveLabel(Label label);
 }

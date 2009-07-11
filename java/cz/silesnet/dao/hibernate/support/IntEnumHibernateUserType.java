@@ -16,14 +16,16 @@ import cz.silesnet.model.enums.EnumPersistenceMapping;
  * 
  * @author Richard Sikora
  */
-public class IntEnumHibernateUserType<E extends Enum<E> & EnumPersistenceMapping<E>> implements UserType {
+public class IntEnumHibernateUserType<E extends Enum<E> & EnumPersistenceMapping<E>>
+		implements UserType {
 	private E fEnumSample = null;
-	
+
 	public IntEnumHibernateUserType(E enumSample) {
 		fEnumSample = enumSample;
 	}
-	
-	private static final int[] SQL_TYPES = {Types.INTEGER};
+
+	private static final int[] SQL_TYPES = { Types.INTEGER };
+
 	public int[] sqlTypes() {
 		return SQL_TYPES;
 	}
@@ -44,20 +46,24 @@ public class IntEnumHibernateUserType<E extends Enum<E> & EnumPersistenceMapping
 		return obj.hashCode();
 	}
 
-	public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner) throws HibernateException, SQLException {
+	public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner)
+			throws HibernateException, SQLException {
 		return fEnumSample.valueOf(resultSet.getInt(names[0]));
 	}
 
 	@SuppressWarnings("unchecked")
-	public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index) throws HibernateException, SQLException {
+	public void nullSafeSet(PreparedStatement preparedStatement, Object value,
+			int index) throws HibernateException, SQLException {
 		E enumValue = null;
 		try {
 			enumValue = (E) value;
-		} catch (ClassCastException e) { }
+		}
+		catch (ClassCastException e) {
+		}
 
 		if (enumValue == null)
 			preparedStatement.setNull(index, Types.INTEGER);
-		else 
+		else
 			preparedStatement.setInt(index, enumValue.getId());
 	}
 
@@ -73,11 +79,13 @@ public class IntEnumHibernateUserType<E extends Enum<E> & EnumPersistenceMapping
 		return (Serializable) value;
 	}
 
-	public Object assemble(Serializable cached, Object owner) throws HibernateException {
+	public Object assemble(Serializable cached, Object owner)
+			throws HibernateException {
 		return cached;
 	}
 
-	public Object replace(Object original, Object target, Object owner) throws HibernateException {
+	public Object replace(Object original, Object target, Object owner)
+			throws HibernateException {
 		return original;
 	}
 }

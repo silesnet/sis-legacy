@@ -14,36 +14,40 @@ import org.springframework.context.ApplicationListener;
 
 /**
  * Used to keep record of succesfull logins in application history.
- *
+ * 
  * @author Richard Sikora
  */
-public class LoginListener
-    implements ApplicationListener {
+public class LoginListener implements ApplicationListener {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    protected final Log log  = LogFactory.getLog(getClass());
-    private UserManager umgr;
+	protected final Log log = LogFactory.getLog(getClass());
 
-    //~ Methods ----------------------------------------------------------------
+	private UserManager umgr;
 
-    // wired by Spring
-    public void setUserManager(UserManager userManager) {
-        umgr = userManager;
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public void onApplicationEvent(ApplicationEvent event) {
-        if (event instanceof InteractiveAuthenticationSuccessEvent) {
-            log.info("Interactive authentication success.");
-            umgr.dispatchSuccessfulLoginEvent((InteractiveAuthenticationSuccessEvent) event);
-        }
+	// wired by Spring
+	public void setUserManager(UserManager userManager) {
+		umgr = userManager;
+	}
 
-        if (event instanceof HttpSessionCreatedEvent)
-            log.info("Http session created.");
+	public void onApplicationEvent(ApplicationEvent event) {
+		if (event instanceof InteractiveAuthenticationSuccessEvent) {
+			log.info("Interactive authentication success.");
+			umgr
+					.dispatchSuccessfulLoginEvent((InteractiveAuthenticationSuccessEvent) event);
+		}
 
-        if (event instanceof HttpSessionDestroyedEvent) {
-            log.info("Http session destroyed.");
-            umgr.dispatchSessionDestroyedEvent((HttpSessionDestroyedEvent) event);
-        }
-    }
+		if (event instanceof HttpSessionCreatedEvent)
+			log.info("Http session created.");
+
+		if (event instanceof HttpSessionDestroyedEvent) {
+			log.info("Http session destroyed.");
+			umgr
+					.dispatchSessionDestroyedEvent((HttpSessionDestroyedEvent) event);
+		}
+	}
 }

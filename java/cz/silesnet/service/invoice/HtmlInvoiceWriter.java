@@ -10,7 +10,7 @@ import cz.silesnet.model.Bill;
  * Invoice writer generating invoice in HTML format.
  * 
  * @author Richard Sikora
- *
+ * 
  */
 public class HtmlInvoiceWriter extends AbstractInvoiceWriter {
 

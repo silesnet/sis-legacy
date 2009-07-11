@@ -10,40 +10,42 @@ import java.io.Serializable;
 /**
  * Base model class implementing toString(), equals(), hash() methods using
  * apache-commons-lang library. Also including Id for persistence purposes.
- *
+ * 
  * @author Richard Sikora
  */
-public abstract class Entity
-    implements Serializable {
+public abstract class Entity implements Serializable {
 
-    //~ Static fields/initializers ---------------------------------------------
+	// ~ Static fields/initializers
+	// ---------------------------------------------
 
-    private static final long serialVersionUID = 2005228878467135340L;
+	private static final long serialVersionUID = 2005228878467135340L;
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    private Long id;
+	private Long id;
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
+	public boolean equals(Object o) {
+		return EqualsBuilder.reflectionEquals(this, o);
+	}
 
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
 
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this,
-            ToStringStyle.MULTI_LINE_STYLE);
-    }
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.MULTI_LINE_STYLE);
+	}
 }

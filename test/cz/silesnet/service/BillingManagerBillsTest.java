@@ -38,7 +38,8 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		c.setName("Test Billing Customer");
 		c.getBilling().setFrequency(Frequency.MONTHLY);
 		c.getBilling().setIsBilledAfter(false);
-		Calendar lastlyBilled = new GregorianCalendar(2006, Calendar.FEBRUARY, 28);
+		Calendar lastlyBilled = new GregorianCalendar(2006, Calendar.FEBRUARY,
+				28);
 		c.getBilling().setLastlyBilled(lastlyBilled.getTime());
 		Service s1 = new Service();
 		s1.setName("Testing service 1");
@@ -47,28 +48,28 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		Calendar serviceFrom = new GregorianCalendar(2005, Calendar.JANUARY, 1);
 		s1.setPeriod(new Period(serviceFrom.getTime(), null));
 		s1.setIsConnectivity(false);
-		c.getServices().add(s1);	
+		c.getServices().add(s1);
 
 		// prepare fake customer
 		Customer c2 = PrepareMixture.getCustomerSimple();
 		c2.getBilling().setLastlyBilled(null);
 		c.setId(2L);
-		
+
 		List<Customer> cs = new ArrayList<Customer>();
 		cs.add(c);
 		cs.add(c2);
-		
+
 		// mock historyManager in BillingManager
 		BillingManagerImpl bMgrI = new BillingManagerImpl();
 		Mock hMgr = new Mock(HistoryManager.class);
 		bMgrI.setHistoryManager((HistoryManager) hMgr.proxy());
 		hMgr.expects(atLeastOnce()).method(ANYTHING);
 		BillingManager bMgr = (BillingManager) bMgrI;
-		
+
 		Calendar due = new GregorianCalendar(2006, Calendar.MARCH, 10);
 		Invoicing invoicing = new Invoicing();
 		invoicing.setName("Test invoicing");
-				
+
 		List<Bill> bills = bMgr.generateAll(invoicing, cs, due.getTime(), "0");
 		assertNotNull(bills);
 		assertTrue(bills.size() == 1);
@@ -78,33 +79,34 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		bills = bMgr.generateAll(invoicing, cs, due.getTime(), "0");
 		assertNotNull(bills);
 		assertTrue(bills.size() == 0);
-		
+
 		c.getBilling().setIsActive(true);
 		c.getContact().getAddress().setCountry(Country.PL);
 		bills = bMgr.generateAll(invoicing, cs, due.getTime(), "0");
 		assertNotNull(bills);
 		assertTrue(bills.size() == 0);
-		
+
 		due.set(2000, Calendar.JANUARY, 1);
 		c.getContact().getAddress().setCountry(Country.CZ);
 		bills = bMgr.generateAll(invoicing, cs, due.getTime(), "0");
 		assertNotNull(bills);
 		assertTrue(bills.size() == 0);
-		
+
 	}
 
 	public void testPrepareBill() {
 
 		int precision = BillingManagerImpl.sPrecison;
 		float eAmount = 0;
-		
+
 		// prepare customer
 		Customer c = new Customer();
 		c.setId(1L);
 		c.setName("Test Billing Customer");
 		c.getBilling().setFrequency(Frequency.MONTHLY);
 		c.getBilling().setIsBilledAfter(false);
-		Calendar lastlyBilled = new GregorianCalendar(2006, Calendar.FEBRUARY, 28);
+		Calendar lastlyBilled = new GregorianCalendar(2006, Calendar.FEBRUARY,
+				28);
 		c.getBilling().setLastlyBilled(lastlyBilled.getTime());
 		Service s1 = new Service();
 		s1.setName("Testing service 1");
@@ -119,8 +121,8 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 
 		Calendar billFrom = new GregorianCalendar(2006, Calendar.JANUARY, 1);
 		Calendar billTo = new GregorianCalendar(2006, Calendar.JANUARY, 1);
-		
-		// service is during whole period 
+
+		// service is during whole period
 		BillingManager bMgr = new BillingManagerImpl();
 		Calendar due = new GregorianCalendar(2006, Calendar.MARCH, 10);
 		Bill bill = bMgr.generate(c, due.getTime(), null);
@@ -130,7 +132,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getItems().get(0).getLinePrice() == 460);
 		assertTrue(bill.getItems().get(0).getPrice() == 460);
 		eAmount = (float) 1;
-		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math
+				.round(eAmount * precision))
+				/ precision);
 		hashCode = bill.getHashCode();
 		assertNotNull(hashCode);
 		log.debug("Bill hashCode: " + hashCode);
@@ -139,19 +143,21 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getPeriod().getFrom().equals(billFrom.getTime()));
 		assertTrue(bill.getPeriod().getTo().equals(billTo.getTime()));
 		assertTrue(bill.getBillingDate().equals(due.getTime()));
-	
+
 		// service starts in period
 		serviceFrom.set(2006, Calendar.MARCH, 15);
 		s1.getPeriod().setFrom(serviceFrom.getTime());
 		bill = bMgr.generate(c, due.getTime(), null);
 		log.debug("Bill Period: " + bill.getPeriod().getPeriodString());
 		log.debug("Bill totalPrice: " + bill.getTotalPrice());
-		assertTrue(bill.getTotalPrice() == 252);		// 17 days
+		assertTrue(bill.getTotalPrice() == 252); // 17 days
 		assertTrue(bill.getItems().get(0).getLinePrice() == 252);
 		assertTrue(bill.getItems().get(0).getPrice() == 460);
 		eAmount = (float) 0.5483871;
-		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision)) / precision);
-//		assertFalse(hashCode.equals(bill.getHashCode()));
+		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math
+				.round(eAmount * precision))
+				/ precision);
+		// assertFalse(hashCode.equals(bill.getHashCode()));
 		hashCode = bill.getHashCode();
 		log.debug("Bill hashCode: " + hashCode);
 		billFrom.set(2006, Calendar.MARCH, 15);
@@ -160,7 +166,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getPeriod().getTo().equals(billTo.getTime()));
 		billFrom.set(2006, Calendar.MARCH, 1);
 		assertTrue(bill.getBillingDate().equals(due.getTime()));
-		
+
 		// service is in period
 		serviceFrom.set(2006, Calendar.MARCH, 15);
 		serviceTo.set(2006, Calendar.MARCH, 23);
@@ -169,12 +175,14 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		bill = bMgr.generate(c, due.getTime(), null);
 		log.debug("Bill Period: " + bill.getPeriod().getPeriodString());
 		log.debug("Bill totalPrice: " + bill.getTotalPrice());
-		assertTrue(bill.getTotalPrice() == 134);		// 9 days	
+		assertTrue(bill.getTotalPrice() == 134); // 9 days
 		assertTrue(bill.getItems().get(0).getLinePrice() == 134);
 		assertTrue(bill.getItems().get(0).getPrice() == 460);
 		eAmount = (float) 0.29032257;
-		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision)) / precision);
-//		assertFalse(hashCode.equals(bill.getHashCode()));
+		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math
+				.round(eAmount * precision))
+				/ precision);
+		// assertFalse(hashCode.equals(bill.getHashCode()));
 		hashCode = bill.getHashCode();
 		log.debug("Bill hashCode: " + hashCode);
 		billFrom.set(2006, Calendar.MARCH, 15);
@@ -183,7 +191,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getPeriod().getTo().equals(billTo.getTime()));
 		billFrom.set(2006, Calendar.MARCH, 1);
 		assertTrue(bill.getBillingDate().equals(due.getTime()));
-	
+
 		// service ends in period
 		serviceFrom.set(2005, Calendar.JANUARY, 1);
 		serviceTo.set(2006, Calendar.MARCH, 23);
@@ -196,8 +204,10 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getItems().get(0).getLinePrice() == 341);
 		assertTrue(bill.getItems().get(0).getPrice() == 460);
 		eAmount = (float) 0.7419355;
-		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision)) / precision);
-//		assertFalse(hashCode.equals(bill.getHashCode()));
+		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math
+				.round(eAmount * precision))
+				/ precision);
+		// assertFalse(hashCode.equals(bill.getHashCode()));
 		hashCode = bill.getHashCode();
 		log.debug("Bill hashCode: " + hashCode);
 		billFrom.set(2006, Calendar.MARCH, 1);
@@ -205,7 +215,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getPeriod().getFrom().equals(billFrom.getTime()));
 		assertTrue(bill.getPeriod().getTo().equals(billTo.getTime()));
 		assertTrue(bill.getBillingDate().equals(due.getTime()));
-
 
 		// more services in bill with different
 		// periods and service.frequencies
@@ -220,7 +229,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		s2.setFrequency(Frequency.ANNUAL);
 		s2.setIsConnectivity(false);
 		c.getServices().add(s2);
-		
+
 		// one_time service
 		Service s3 = new Service();
 		s3.setName("Odpocet testing");
@@ -231,7 +240,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		s3.setFrequency(Frequency.ONE_TIME);
 		s3.setIsConnectivity(false);
 		c.getServices().add(s3);
-		
+
 		bill = bMgr.generate(c, due.getTime(), null);
 		log.debug("Bill Period: " + bill.getPeriod().getPeriodString());
 		log.debug("Bill totalPrice: " + bill.getTotalPrice());
@@ -240,18 +249,24 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getItems().get(0).getLinePrice() == 341);
 		assertTrue(bill.getItems().get(0).getPrice() == 460);
 		eAmount = (float) 0.7419355;
-		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(bill.getItems().get(0).getAmount() == (float) (Math
+				.round(eAmount * precision))
+				/ precision);
 		log.debug(bill.getItems().get(1).getLinePrice());
 		assertTrue(bill.getItems().get(1).getLinePrice() == 100);
 		assertTrue(bill.getItems().get(1).getPrice() == 1200);
 		eAmount = (float) 0.083333336;
-		assertTrue(bill.getItems().get(1).getAmount() == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(bill.getItems().get(1).getAmount() == (float) (Math
+				.round(eAmount * precision))
+				/ precision);
 		log.debug(bill.getItems().get(2).getLinePrice());
 		assertTrue(bill.getItems().get(2).getLinePrice() == -200);
 		assertTrue(bill.getItems().get(2).getPrice() == -200);
 		eAmount = (float) 1;
-		assertTrue(bill.getItems().get(2).getAmount() == (float) (Math.round(eAmount * precision)) / precision);
-//		assertFalse(hashCode.equals(bill.getHashCode()));
+		assertTrue(bill.getItems().get(2).getAmount() == (float) (Math
+				.round(eAmount * precision))
+				/ precision);
+		// assertFalse(hashCode.equals(bill.getHashCode()));
 		hashCode = bill.getHashCode();
 		log.debug("Bill hashCode: " + hashCode);
 		billFrom.set(2006, Calendar.MARCH, 1);
@@ -260,7 +275,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(bill.getPeriod().getTo().equals(billTo.getTime()));
 		assertTrue(bill.getBillingDate().equals(due.getTime()));
 
-
 		// adjust a bit services so price will be -1 price bill
 		s3.setPrice(-442);
 		bill = bMgr.generate(c, due.getTime(), null);
@@ -268,30 +282,30 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		log.debug("Bill Period: " + bill.getPeriod().getPeriodString());
 		log.debug("Bill totalPrice: " + bill.getTotalPrice());
 		assertTrue(bill.getTotalPrice() == -1);
-		
+
 	}
-	
+
 	@SuppressWarnings("static-access")
 	public void testGetBillItemAmount() {
 		BillingManagerImpl bMgr = new BillingManagerImpl();
 
 		int precision = bMgr.sPrecison;
 		float eAmount = 0;
-		
+
 		Calendar from = new GregorianCalendar();
 		Calendar to = new GregorianCalendar();
 		Period b = new Period();
 		Period s = new Period();
 		Frequency f = Frequency.MONTHLY;
 		float amount = 0;
-		
+
 		// one month, MONTHLY
 		from.set(2006, Calendar.FEBRUARY, 1);
 		to.set(2006, Calendar.FEBRUARY, 28);
 		b.setFrom(from.getTime());
 		b.setTo(to.getTime());
 		f = Frequency.MONTHLY;
-		
+
 		// whole service
 		from.set(2006, Calendar.JANUARY, 1);
 		s.setFrom(from.getTime());
@@ -299,8 +313,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 1;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
-		
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
+
 		// service is out
 		from.set(2006, Calendar.MARCH, 1);
 		s.setFrom(from.getTime());
@@ -308,7 +323,8 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 0;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
 		// partial service
 		from.set(2006, Calendar.JANUARY, 1);
@@ -318,8 +334,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 0.71428573;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
-		
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
+
 		// one day service
 		from.set(2006, Calendar.FEBRUARY, 1);
 		to.set(2006, Calendar.FEBRUARY, 1);
@@ -328,7 +345,8 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 0.035714287;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
 		// 3 months == Q, MONTHLY
 		from.set(2006, Calendar.JANUARY, 1);
@@ -344,8 +362,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 3;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
-		
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
+
 		// service is out
 		from.set(2005, Calendar.JANUARY, 1);
 		to.set(2005, Calendar.DECEMBER, 31);
@@ -354,7 +373,8 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 0;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
 		// partial service
 		from.set(2006, Calendar.FEBRUARY, 1);
@@ -364,8 +384,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 1.6451613;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
-		
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
+
 		from.set(2006, Calendar.MARCH, 7);
 		to.set(2006, Calendar.APRIL, 20);
 		s.setFrom(from.getTime());
@@ -373,27 +394,26 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 0.8064516;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
-		
-		
-		
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
+
 		// 3 months == Q, ANNUAL
 		from.set(2006, Calendar.JANUARY, 1);
 		to.set(2006, Calendar.MARCH, 31);
 		b.setFrom(from.getTime());
 		b.setTo(to.getTime());
 		f = Frequency.ANNUAL;
-		
+
 		// whole service
 		from.set(2006, Calendar.JANUARY, 1);
 		s.setFrom(from.getTime());
 		s.setTo(null);
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
-		eAmount = (float) 0.25;	// 3 months are 0.25 of annual price
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		eAmount = (float) 0.25; // 3 months are 0.25 of annual price
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
-		
 		// service is out
 		from.set(2005, Calendar.JANUARY, 1);
 		to.set(2005, Calendar.DECEMBER, 31);
@@ -402,7 +422,8 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 0;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
 		// partial service
 		from.set(2006, Calendar.FEBRUARY, 1);
@@ -411,8 +432,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		s.setTo(to.getTime());
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
-		eAmount = (float) 0.13709678;	// 1.65 monts are 0.14 of annual price
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		eAmount = (float) 0.13709678; // 1.65 monts are 0.14 of annual price
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
 		// one day service
 		from.set(2006, Calendar.FEBRUARY, 1);
@@ -422,9 +444,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 0.0029761905;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
-		
 		// one month, ONE_TIME
 		from.set(2006, Calendar.FEBRUARY, 1);
 		to.set(2006, Calendar.FEBRUARY, 28);
@@ -438,11 +460,11 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		amount = bMgr.getBillItemAmount(b, s, f);
 		log.debug(amount);
 		eAmount = (float) 1;
-		assertTrue(amount == (float) (Math.round(eAmount * precision)) / precision);
+		assertTrue(amount == (float) (Math.round(eAmount * precision))
+				/ precision);
 
 	}
 
-	
 	public void testBillingPeriods() {
 		// set some vars
 		BillingManagerImpl bMgr = new BillingManagerImpl();
@@ -451,10 +473,9 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		Calendar from = new GregorianCalendar();
 		Calendar to = new GregorianCalendar();
 		Period p = null;
-		
-		/// prepare customer billing component
-		Billing b = new Billing();
 
+		// / prepare customer billing component
+		Billing b = new Billing();
 
 		// billing forward, MONTHLY
 		b.setFrequency(Frequency.MONTHLY);
@@ -481,7 +502,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(p.getFrom().equals(from.getTime()));
 		assertTrue(p.getTo().equals(to.getTime()));
 
-		
 		// billing forward, Q
 		b.setFrequency(Frequency.Q);
 		b.setIsBilledAfter(false);
@@ -507,7 +527,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		to.set(2006, Calendar.JUNE, 30);
 		assertTrue(p.getFrom().equals(from.getTime()));
 		assertTrue(p.getTo().equals(to.getTime()));
-		
+
 		// odd due date
 		lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
 		due.set(2006, Calendar.MAY, 10);
@@ -545,8 +565,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		to.set(2006, Calendar.JUNE, 30);
 		assertTrue(p.getFrom().equals(from.getTime()));
 		assertTrue(p.getTo().equals(to.getTime()));
-		
-		
+
 		// billing backward, MONTHLY
 		b.setFrequency(Frequency.MONTHLY);
 		b.setIsBilledAfter(true);
@@ -561,7 +580,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		to.set(2006, Calendar.MARCH, 31);
 		assertTrue(p.getFrom().equals(from.getTime()));
 		assertTrue(p.getTo().equals(to.getTime()));
-		
+
 		lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
 		due.set(2006, Calendar.APRIL, 10);
 		b.setLastlyBilled(lastlyBilled.getTime());
@@ -592,7 +611,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		assertTrue(p.getFrom().equals(from.getTime()));
 		assertTrue(p.getTo().equals(to.getTime()));
 
-
 		// billing backward, Q
 		b.setFrequency(Frequency.Q);
 		b.setIsBilledAfter(true);
@@ -607,7 +625,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		to.set(2006, Calendar.MARCH, 31);
 		assertTrue(p.getFrom().equals(from.getTime()));
 		assertTrue(p.getTo().equals(to.getTime()));
-		
+
 		// if due date is odd do not generate bill
 		lastlyBilled.set(2006, Calendar.MARCH, 15);
 		due.set(2006, Calendar.MAY, 10);
@@ -619,26 +637,25 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 	}
 
 	public void testMailSender() {
-        String[] paths = {
-                "/WEB-INF/applicationContext-hibernate.xml",
-                "/WEB-INF/applicationContext.xml"
-            };
-        ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
-        assertNotNull(ctx);
-        	
+		String[] paths = { "/WEB-INF/applicationContext-hibernate.xml",
+				"/WEB-INF/applicationContext.xml" };
+		ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
+		assertNotNull(ctx);
+
 		Bill bill = PrepareMixture.getBill();
 		bill.getInvoicedCustomer().getContact().setEmail("rsi.news@quick.cz");
-		bill.getInvoicedCustomer().getBilling().setDeliverCopyEmail("sikora@silesnet.cz,sikora@gympol.cz");
+		bill.getInvoicedCustomer().getBilling().setDeliverCopyEmail(
+				"sikora@silesnet.cz,sikora@gympol.cz");
 		Calendar cFrom = new GregorianCalendar(2006, Calendar.MARCH, 1);
 		Calendar cTo = new GregorianCalendar(2006, Calendar.MARCH, 31);
 		bill.setPeriod(new Period(cFrom.getTime(), cTo.getTime()));
 		bill.setHashCode("2853a22d-b4b9-11da-9de4-958326744870");
 
-		@SuppressWarnings("unused") BillingManager bMgr = (BillingManager) ctx.getBean("billingManager");
-//		bMgr.email(bill);
+		@SuppressWarnings("unused")
+		BillingManager bMgr = (BillingManager) ctx.getBean("billingManager");
+		// bMgr.email(bill);
 	}
 
-	
 	public void testVAT() {
 		BillItem bi = new BillItem("Text 1", 1.0F, 838);
 		Bill b = PrepareMixture.getBillSimple();
@@ -650,23 +667,24 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		try {
 			itemVat = bi.getLinePriceVat();
 			fail();
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e) {
 			log.debug("Got expected exception: " + e);
 		}
 		bi.setBill(b);
-		
+
 		assertTrue(bi.getLinePrice() == 838);
 		itemVat = bi.getLinePriceVat();
 		log.debug("Item VAT: " + itemVat);
 		assertTrue(itemVat == 997.22F);
-		
+
 		float billVat = b.getBillVat();
 		log.debug("Bill VAT: " + billVat);
 		assertTrue(billVat == 159.22F);
 		float billRoundedVat = b.getBillRoundedVat();
 		log.debug("Bill rounder VAT: " + billRoundedVat);
 		assertTrue(billRoundedVat == 159.0F);
-		
+
 		bi.setPrice(839);
 		billVat = b.getBillVat();
 		log.debug("Bill VAT: " + billVat);
@@ -674,7 +692,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		billRoundedVat = b.getBillRoundedVat();
 		log.debug("Bill rounder VAT: " + billRoundedVat);
 		assertTrue(billRoundedVat == 159.5F);
-		
+
 		bi.setPrice(840);
 		billVat = b.getBillVat();
 		log.debug("Bill VAT: " + billVat);
@@ -691,12 +709,14 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		log.debug("Bill rounder VAT: " + billRoundedVat);
 		assertTrue(billRoundedVat == 160.0F);
 	}
-	
+
 	public void testHashCode2() {
 		// compose new invoice uuid from customer db id and invoice db id
 		// "1" 5 digit customer id 8 digits of invoice id -> hex
-		long id = new Long(String.format("1%05d", 9999) + String.format("%08d", 999999));
-		long id2 = new Long(String.format("1%05d", new Long("9999")) + String.format("%08d", new Long("999999")));
+		long id = new Long(String.format("1%05d", 9999)
+				+ String.format("%08d", 999999));
+		long id2 = new Long(String.format("1%05d", new Long("9999"))
+				+ String.format("%08d", new Long("999999")));
 		log.info(id);
 		log.info(String.format("%d", id));
 		log.info(String.format("%H", id));
@@ -704,75 +724,76 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 		log.info(Long.toHexString(id).toUpperCase());
 		log.info(Long.toHexString(id2));
 	}
-	
+
 	public void testHashCode3() {
-		Long customerId =  new Long ("14") + 1000000;
-		Long customerId2 =  new Long ("14");
+		Long customerId = new Long("14") + 1000000;
+		Long customerId2 = new Long("14");
 		Long timeStamp = new Long((new Date()).getTime());
-		String hashCode = Long.toHexString(customerId) + Long.toHexString(timeStamp);
-		String hashCode2 = Long.toHexString(customerId2 + 1000000) + Long.toHexString((new Date()).getTime());
+		String hashCode = Long.toHexString(customerId)
+				+ Long.toHexString(timeStamp);
+		String hashCode2 = Long.toHexString(customerId2 + 1000000)
+				+ Long.toHexString((new Date()).getTime());
 		log.info(hashCode);
-		log.info(Long.toHexString(customerId) + "z" + Long.toHexString(timeStamp));
+		log.info(Long.toHexString(customerId) + "z"
+				+ Long.toHexString(timeStamp));
 		log.info(hashCode2);
 	}
-	
+
 	public void testHashCode() {
-	    UUIDGenerator  uuidGen = UUIDGenerator.getInstance();
-	    for (int i = 0; i < 10; i++) {
-	    	UUID uuid = uuidGen.generateTimeBasedUUID();
-	    	log.debug(uuid.toString() + "-" + uuid.hashCode());
+		UUIDGenerator uuidGen = UUIDGenerator.getInstance();
+		for (int i = 0; i < 10; i++) {
+			UUID uuid = uuidGen.generateTimeBasedUUID();
+			log.debug(uuid.toString() + "-" + uuid.hashCode());
 		}
-	    log.debug(String.format("%h", -123));
+		log.debug(String.format("%h", -123));
 	}
 
 	public void testGetByStatus() {
-        String[] paths = {
-                "/WEB-INF/applicationContext-hibernate.xml",
-                "/WEB-INF/applicationContext.xml"
-            };
-        ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
-        assertNotNull(ctx);
-        @SuppressWarnings("unused") BillingManager bMgr = (BillingManager) ctx.getBean("billingManager");
-        
-        // get for winDuo
-        List<Bill> bills = bMgr.getByStatus(null, true, null, null, false);
-        log.info("winDuo export");
-        log.info(bills.size());
-        for (Bill bill : bills) {
+		String[] paths = { "/WEB-INF/applicationContext-hibernate.xml",
+				"/WEB-INF/applicationContext.xml" };
+		ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
+		assertNotNull(ctx);
+		@SuppressWarnings("unused")
+		BillingManager bMgr = (BillingManager) ctx.getBean("billingManager");
+
+		// get for winDuo
+		List<Bill> bills = bMgr.getByStatus(null, true, null, null, false);
+		log.info("winDuo export");
+		log.info(bills.size());
+		for (Bill bill : bills) {
 			Customer c = bMgr.fetchCustomer(bill);
 			log.info(c.getName());
 		}
 
-        // get for undelivered
-        bills = bMgr.getByStatus(null, true, true, false, false);
-        log.info("Undelivered bills");
-        log.info(bills.size());
-        for (Bill bill : bills) {
+		// get for undelivered
+		bills = bMgr.getByStatus(null, true, true, false, false);
+		log.info("Undelivered bills");
+		log.info(bills.size());
+		for (Bill bill : bills) {
 			Customer c = bMgr.fetchCustomer(bill);
 			log.info(c.getName());
 		}
 
-        // get for delivered
-        bills = bMgr.getByStatus(null, true, true, true, false);
-        log.info("Delivered bills");
-        log.info(bills.size());
-        for (Bill bill : bills) {
+		// get for delivered
+		bills = bMgr.getByStatus(null, true, true, true, false);
+		log.info("Delivered bills");
+		log.info(bills.size());
+		for (Bill bill : bills) {
 			Customer c = bMgr.fetchCustomer(bill);
 			log.info(c.getName());
 		}
 
-        // get from Adamek Daniel bills
-        CustomerManager cMgr = (CustomerManager) ctx.getBean("customerManager");
-        Customer cA = cMgr.get(new Long(1));
-        bills = bMgr.getByCustomer(cA);
-        log.info("Adamek Daniel bills");
-        log.info(bills.size());
-        for (Bill bill : bills) {
+		// get from Adamek Daniel bills
+		CustomerManager cMgr = (CustomerManager) ctx.getBean("customerManager");
+		Customer cA = cMgr.get(new Long(1));
+		bills = bMgr.getByCustomer(cA);
+		log.info("Adamek Daniel bills");
+		log.info(bills.size());
+		for (Bill bill : bills) {
 			Customer c = bMgr.fetchCustomer(bill);
 			log.info(c.getName());
 		}
-	
+
 	}
 
 }
-

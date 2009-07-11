@@ -13,35 +13,38 @@ import cz.silesnet.model.enums.Country;
 import java.util.Locale;
 
 /**
- * @author Vlastník
- *
+ * @author Vlastnï¿½k
+ * 
  */
-public class MessagesUtilsTest
-    extends TestCase {
+public class MessagesUtilsTest extends TestCase {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    protected final Log          log = LogFactory.getLog(getClass());
-    protected ApplicationContext ctx = null;
+	protected final Log log = LogFactory.getLog(getClass());
 
-    //~ Methods ----------------------------------------------------------------
+	protected ApplicationContext ctx = null;
 
-    public void testMessages() {
-        log.debug(MessagesUtils.getMessage(
-                "listWireless.label.filter.anyDomain", Locale.ENGLISH));
+	// ~ Methods
+	// ----------------------------------------------------------------
+
+	public void testMessages() {
+		log.debug(MessagesUtils.getMessage(
+				"listWireless.label.filter.anyDomain", Locale.ENGLISH));
 		log.debug(MessagesUtils.getMessage(Country.CZ.getName(), null));
 		log.debug(MessagesUtils.getMessage(Country.CZ.getName()));
-		log.debug(MessagesUtils.getMessage(Country.CZ.getName(), new Locale("cs")));
-		log.debug(MessagesUtils.getMessage(Country.CZ.getName(), new Locale("en")));
-		log.debug(MessagesUtils.getMessage(Country.CZ.getName(), new Locale("it")));
+		log.debug(MessagesUtils.getMessage(Country.CZ.getName(), new Locale(
+				"cs")));
+		log.debug(MessagesUtils.getMessage(Country.CZ.getName(), new Locale(
+				"en")));
+		log.debug(MessagesUtils.getMessage(Country.CZ.getName(), new Locale(
+				"it")));
 
-    }
+	}
 
-    protected void setUp() {
-        String[] paths = {
-                "/WEB-INF/applicationContext-hibernate.xml",
-                "/WEB-INF/applicationContext.xml"
-            };
-        ctx = new ClassPathXmlApplicationContext(paths);
-    }
+	protected void setUp() {
+		String[] paths = { "/WEB-INF/applicationContext-hibernate.xml",
+				"/WEB-INF/applicationContext.xml" };
+		ctx = new ClassPathXmlApplicationContext(paths);
+	}
 }

@@ -15,17 +15,19 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public abstract class BaseDAOTestCase extends TestCase {
 
-    // ~ Instance fields
-    // --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    protected final Log log = LogFactory.getLog(getClass());
-    protected ApplicationContext ctx = null;
+	protected final Log log = LogFactory.getLog(getClass());
 
-    // ~ Constructors
-    // -----------------------------------------------------------
+	protected ApplicationContext ctx = null;
 
-    public BaseDAOTestCase() {
-        String[] paths = { "/WEB-INF/applicationContext-hibernate.xml", "/WEB-INF/applicationContext.xml" };
-        ctx = new ClassPathXmlApplicationContext(paths);
-    }
+	// ~ Constructors
+	// -----------------------------------------------------------
+
+	public BaseDAOTestCase() {
+		String[] paths = { "/WEB-INF/applicationContext-hibernate.xml",
+				"/WEB-INF/applicationContext.xml" };
+		ctx = new ClassPathXmlApplicationContext(paths);
+	}
 }

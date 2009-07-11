@@ -13,100 +13,107 @@ import org.springframework.util.StringUtils;
 
 /**
  * User bean.
- *
+ * 
  * @author Richard Sikora
- *
+ * 
  */
-public class User
-    extends Entity
-    implements UserDetails {
+public class User extends Entity implements UserDetails {
 
-    //~ Static fields/initializers ---------------------------------------------
+	// ~ Static fields/initializers
+	// ---------------------------------------------
 
-    protected static final Log log              = LogFactory.getLog(DiffUtils.class);
-    private static final long  serialVersionUID = 5880017008602237629L;
+	protected static final Log log = LogFactory.getLog(DiffUtils.class);
 
-    //~ Instance fields --------------------------------------------------------
+	private static final long serialVersionUID = 5880017008602237629L;
 
-    private String             fLoginName;
-    private String             fPassword;
-    private String             fName;
-    private String             fRoles;
-    private GrantedAuthority[] fAuthorities;
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    //~ Methods ----------------------------------------------------------------
+	private String fLoginName;
 
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	private String fPassword;
 
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	private String fName;
 
-    public void setAuthorities(GrantedAuthority[] authorities) {
-        fAuthorities = authorities;
-    }
+	private String fRoles;
 
-    public GrantedAuthority[] getAuthorities() {
-        // if Authorities not polupated yet do it
-        if (fAuthorities == null) {
-            log.debug("Initializing authorities...");
+	private GrantedAuthority[] fAuthorities;
 
-            String[] roles = StringUtils.commaDelimitedListToStringArray(getRoles());
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-            fAuthorities = new GrantedAuthority[roles.length];
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-            for (int i = 0; i < roles.length; i++)
-                fAuthorities[i] = new GrantedAuthorityImpl(StringUtils
-                                .trimTrailingWhitespace(
-                                    StringUtils.trimLeadingWhitespace(roles[i])));
-            }
+	public boolean isAccountNonLocked() {
+		return true;
+	}
 
-            return fAuthorities;
-        }
+	public void setAuthorities(GrantedAuthority[] authorities) {
+		fAuthorities = authorities;
+	}
 
-        public boolean isCredentialsNonExpired() {
-            return true;
-        }
+	public GrantedAuthority[] getAuthorities() {
+		// if Authorities not polupated yet do it
+		if (fAuthorities == null) {
+			log.debug("Initializing authorities...");
 
-        public boolean isEnabled() {
-            return true;
-        }
+			String[] roles = StringUtils
+					.commaDelimitedListToStringArray(getRoles());
 
-        public void setLoginName(String loginName) {
-            fLoginName = loginName;
-        }
+			fAuthorities = new GrantedAuthority[roles.length];
 
-        public String getLoginName() {
-            return fLoginName;
-        }
+			for (int i = 0; i < roles.length; i++)
+				fAuthorities[i] = new GrantedAuthorityImpl(StringUtils
+						.trimTrailingWhitespace(StringUtils
+								.trimLeadingWhitespace(roles[i])));
+		}
 
-        public void setName(String name) {
-            fName = name;
-        }
+		return fAuthorities;
+	}
 
-        public String getName() {
-            return fName;
-        }
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
-        public void setPassword(String password) {
-            fPassword = password;
-        }
+	public boolean isEnabled() {
+		return true;
+	}
 
-        public String getPassword() {
-            return fPassword;
-        }
+	public void setLoginName(String loginName) {
+		fLoginName = loginName;
+	}
 
-        public void setRoles(String roles) {
-            fRoles = roles;
-        }
+	public String getLoginName() {
+		return fLoginName;
+	}
 
-        public String getRoles() {
-            return fRoles;
-        }
+	public void setName(String name) {
+		fName = name;
+	}
 
-        public String getUsername() {
-            return getLoginName();
-        }
-    }
+	public String getName() {
+		return fName;
+	}
+
+	public void setPassword(String password) {
+		fPassword = password;
+	}
+
+	public String getPassword() {
+		return fPassword;
+	}
+
+	public void setRoles(String roles) {
+		fRoles = roles;
+	}
+
+	public String getRoles() {
+		return fRoles;
+	}
+
+	public String getUsername() {
+		return getLoginName();
+	}
+}

@@ -10,7 +10,6 @@ import junit.framework.TestCase;
 public class WirelessTest extends TestCase {
 	protected final Log log = LogFactory.getLog(getClass());
 
-
 	public void testFrequencyMap() {
 
 		Wireless w = new Wireless();
@@ -20,6 +19,6 @@ public class WirelessTest extends TestCase {
 		assertTrue(w.getFrequency().getId() == 10);
 		assertTrue(w.getFrequency().getFrequency() == 2412);
 		assertTrue(w.getFrequency().getChannel() == 1);
-		
+
 	}
 }

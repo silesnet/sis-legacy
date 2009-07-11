@@ -14,114 +14,122 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class BillItem implements Serializable {
 
-    // ~ Instance fields
-    // --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    private static final long serialVersionUID = 4071067933886947302L;
-    private Bill fBill;
-    private String fText;
-    private float fAmount;
-    private int fPrice;
-    private Boolean fIsDisplayUnit = true;
+	private static final long serialVersionUID = 4071067933886947302L;
 
-    // ~ Constructors
-    // -----------------------------------------------------------
-    public BillItem() {
-        super();
-    }
+	private Bill fBill;
 
-    public BillItem(String text, float amount, int price) {
-        super();
-        fText = text;
-        fAmount = amount;
-        fPrice = price;
-    }
+	private String fText;
 
-    // ~ Methods
-    // ----------------------------------------------------------------
+	private float fAmount;
 
-    public void setPrice(int price) {
-        fPrice = price;
-    }
+	private int fPrice;
 
-    public int getPrice() {
-        return fPrice;
-    }
+	private Boolean fIsDisplayUnit = true;
 
-    public void setText(String text) {
-        fText = text;
-    }
+	// ~ Constructors
+	// -----------------------------------------------------------
+	public BillItem() {
+		super();
+	}
 
-    public String getText() {
-        return fText;
-    }
+	public BillItem(String text, float amount, int price) {
+		super();
+		fText = text;
+		fAmount = amount;
+		fPrice = price;
+	}
 
-    public int getLinePrice() {
-        return Math.round(fAmount * fPrice);
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public float getLinePriceVat() {
-        if (getBill() == null)
-            throw new IllegalStateException("Bill item without bill, can not get VAT value.");
-        return (float) (getLinePrice() * (100 + getBill().getVat())) / 100;
-    }
+	public void setPrice(int price) {
+		fPrice = price;
+	}
 
-    public float getLineVat() {
-        return getLinePriceVat() - getLinePrice();
-    }
+	public int getPrice() {
+		return fPrice;
+	}
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
+	public void setText(String text) {
+		fText = text;
+	}
 
-    public Float getAmount() {
-        return fAmount;
-    }
+	public String getText() {
+		return fText;
+	}
 
-    public void setAmount(float amount) {
-        fAmount = amount;
-    }
+	public int getLinePrice() {
+		return Math.round(fAmount * fPrice);
+	}
 
-    public Bill getBill() {
-        return fBill;
-    }
+	public float getLinePriceVat() {
+		if (getBill() == null)
+			throw new IllegalStateException(
+					"Bill item without bill, can not get VAT value.");
+		return (float) (getLinePrice() * (100 + getBill().getVat())) / 100;
+	}
 
-    public void setBill(Bill bill) {
-        fBill = bill;
-    }
+	public float getLineVat() {
+		return getLinePriceVat() - getLinePrice();
+	}
 
-    public Boolean getIsDisplayUnit() {
-        return fIsDisplayUnit;
-    }
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.MULTI_LINE_STYLE);
+	}
 
-    public void setIsDisplayUnit(Boolean isDisplayUnit) {
-        fIsDisplayUnit = isDisplayUnit;
-    }
+	public Float getAmount() {
+		return fAmount;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
+	public void setAmount(float amount) {
+		fAmount = amount;
+	}
 
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
+	public Bill getBill() {
+		return fBill;
+	}
 
-    public float getNet() {
-        return fAmount * fPrice;
-    }
+	public void setBill(Bill bill) {
+		fBill = bill;
+	}
 
-    public float getVat() {
-        if (getBill() == null)
-            throw new IllegalStateException("Bill item without bill, can not get VAT value.");
-        double vat = getNet() * (getBill().getVat() / 100.0);
-        return (float) vat;
-    }
+	public Boolean getIsDisplayUnit() {
+		return fIsDisplayUnit;
+	}
 
-    public float getBrt() {
-        return getNet() + getVat();
-    }
+	public void setIsDisplayUnit(Boolean isDisplayUnit) {
+		fIsDisplayUnit = isDisplayUnit;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return EqualsBuilder.reflectionEquals(this, o);
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
+
+	public float getNet() {
+		return fAmount * fPrice;
+	}
+
+	public float getVat() {
+		if (getBill() == null)
+			throw new IllegalStateException(
+					"Bill item without bill, can not get VAT value.");
+		double vat = getNet() * (getBill().getVat() / 100.0);
+		return (float) vat;
+	}
+
+	public float getBrt() {
+		return getNet() + getVat();
+	}
 
 }

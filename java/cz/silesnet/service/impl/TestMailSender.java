@@ -14,16 +14,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
 /**
- * Just for testing purposes of mail sending.
- * This sender only logs events. 
+ * Just for testing purposes of mail sending. This sender only logs events.
  * 
  * @author Richard Sikora
  */
 public class TestMailSender implements JavaMailSender {
 
-    protected final Log    log  = LogFactory.getLog(getClass());
-    private String smtpHost;
-    
+	protected final Log log = LogFactory.getLog(getClass());
+
+	private String smtpHost;
+
 	public void setHost(String host) {
 		this.smtpHost = host;
 	}
@@ -41,7 +41,8 @@ public class TestMailSender implements JavaMailSender {
 	}
 
 	public void send(MimeMessage[] emails) throws MailException {
-		log.debug("Sending multiple emails " + emails.length + " (" + smtpHost + ")");
+		log.debug("Sending multiple emails " + emails.length + " (" + smtpHost
+				+ ")");
 	}
 
 	public void send(MimeMessagePreparator preparator) throws MailException {
@@ -49,7 +50,8 @@ public class TestMailSender implements JavaMailSender {
 	}
 
 	public void send(MimeMessagePreparator[] emails) throws MailException {
-		log.debug("Sending multiple emails " + emails.length + " (" + smtpHost + ")");
+		log.debug("Sending multiple emails " + emails.length + " (" + smtpHost
+				+ ")");
 	}
 
 	public void send(SimpleMailMessage arg0) throws MailException {
@@ -57,7 +59,8 @@ public class TestMailSender implements JavaMailSender {
 	}
 
 	public void send(SimpleMailMessage[] emails) throws MailException {
-		log.debug("Sending multiple emails " + emails.length + " (" + smtpHost + ")");
+		log.debug("Sending multiple emails " + emails.length + " (" + smtpHost
+				+ ")");
 	}
 
 }

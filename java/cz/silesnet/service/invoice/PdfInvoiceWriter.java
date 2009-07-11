@@ -10,7 +10,7 @@ import cz.silesnet.model.Bill;
  * Invoice writer generating invoice in PDF format.
  * 
  * @author Richard Sikora
- *
+ * 
  */
 public class PdfInvoiceWriter extends AbstractInvoiceWriter {
 

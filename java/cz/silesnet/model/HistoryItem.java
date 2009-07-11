@@ -9,127 +9,141 @@ import java.util.Date;
 /**
  * History of changes class. Object of this class hold one modification to
  * reffered object.
- *
+ * 
  * @author Richard Sikora
  */
-public class HistoryItem
-    extends Entity {
+public class HistoryItem extends Entity {
 
-    //~ Static fields/initializers ---------------------------------------------
+	// ~ Static fields/initializers
+	// ---------------------------------------------
 
-    private static final long serialVersionUID = -7246797505077022816L;
+	private static final long serialVersionUID = -7246797505077022816L;
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    private Long   fHistoryId;
-    private Label  fHistoryTypeLabel;
-    private User   fUser;
-    private Date   fTimeStamp;
-    private String fFieldName;
-    private String fOldValue;
-    private String fNewValue;
+	private Long fHistoryId;
 
-    //~ Methods ----------------------------------------------------------------
+	private Label fHistoryTypeLabel;
 
-    public void setFieldName(String fieldName) {
-        fFieldName = fieldName;
-    }
+	private User fUser;
 
-    public String getFieldName() {
-        return fFieldName;
-    }
+	private Date fTimeStamp;
 
-    public void setHistoryId(Long historyId) {
-        fHistoryId = historyId;
-    }
+	private String fFieldName;
 
-    public Long getHistoryId() {
-        return fHistoryId;
-    }
+	private String fOldValue;
 
-    public void setHistoryTypeLabel(Label historyTypeLabel) {
-        fHistoryTypeLabel = historyTypeLabel;
-    }
+	private String fNewValue;
 
-    public Label getHistoryTypeLabel() {
-        return fHistoryTypeLabel;
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public String getLogoutTime() {
-        Long logoutTime = null;
-
-        try {
-            logoutTime = Long.valueOf(fNewValue);
-        } catch (NumberFormatException e) {
-        }
-
-        String logoutStr = null;
-
-        if (logoutTime != null) {
-            // there was integer there, count date from it and return it
-            Date logoutDate = new Date(logoutTime);
-            logoutStr = DateFormatUtils.format(logoutDate, "dd.MM.yyyy HH:mm:ss");
-        } else
-            // give it as message
-            logoutStr = MessagesUtils.getMessage(fNewValue);
-
-        return logoutStr;
-    }
-    
-    public Long getLogoutOrderValue() {
-		Long logout = null;
-        try {
-            logout = Long.valueOf(fNewValue);
-        } catch (NumberFormatException e) {
-        }
-        return logout;
+	public void setFieldName(String fieldName) {
+		fFieldName = fieldName;
 	}
 
-    public void setNewValue(String newValue) {
-        fNewValue = newValue;
-    }
+	public String getFieldName() {
+		return fFieldName;
+	}
 
-    public String getNewValue() {
-        return fNewValue;
-    }
+	public void setHistoryId(Long historyId) {
+		fHistoryId = historyId;
+	}
 
-    public void setOldValue(String oldValue) {
-        fOldValue = oldValue;
-    }
+	public Long getHistoryId() {
+		return fHistoryId;
+	}
 
-    public String getOldValue() {
-        return fOldValue;
-    }
+	public void setHistoryTypeLabel(Label historyTypeLabel) {
+		fHistoryTypeLabel = historyTypeLabel;
+	}
 
-    public void setTimeStamp(Date timeStamp) {
-        fTimeStamp = timeStamp;
-    }
+	public Label getHistoryTypeLabel() {
+		return fHistoryTypeLabel;
+	}
 
-    public Date getTimeStamp() {
-        return fTimeStamp;
-    }
+	public String getLogoutTime() {
+		Long logoutTime = null;
 
-    public void setUser(User user) {
-        fUser = user;
-    }
+		try {
+			logoutTime = Long.valueOf(fNewValue);
+		}
+		catch (NumberFormatException e) {
+		}
 
-    public User getUser() {
-        return fUser;
-    }
-    
-    public Long getCustomerId() {
-    	Long id = null;
-    	int commaIndex = getFieldName().indexOf(',');
-    	if (commaIndex > 0) {
-    		try {
-    			id = Long.valueOf(getFieldName().substring(0, commaIndex));
-    		} catch (NumberFormatException e) { }
-    	}
-    	return id;
-    }
-    
-    public String getCustomerName() {
-    	int commaIndex = getFieldName().indexOf(',');
-    	return commaIndex >= 0 ? getFieldName().substring(commaIndex + 1) : "";
-    }
+		String logoutStr = null;
+
+		if (logoutTime != null) {
+			// there was integer there, count date from it and return it
+			Date logoutDate = new Date(logoutTime);
+			logoutStr = DateFormatUtils.format(logoutDate,
+					"dd.MM.yyyy HH:mm:ss");
+		}
+		else
+			// give it as message
+			logoutStr = MessagesUtils.getMessage(fNewValue);
+
+		return logoutStr;
+	}
+
+	public Long getLogoutOrderValue() {
+		Long logout = null;
+		try {
+			logout = Long.valueOf(fNewValue);
+		}
+		catch (NumberFormatException e) {
+		}
+		return logout;
+	}
+
+	public void setNewValue(String newValue) {
+		fNewValue = newValue;
+	}
+
+	public String getNewValue() {
+		return fNewValue;
+	}
+
+	public void setOldValue(String oldValue) {
+		fOldValue = oldValue;
+	}
+
+	public String getOldValue() {
+		return fOldValue;
+	}
+
+	public void setTimeStamp(Date timeStamp) {
+		fTimeStamp = timeStamp;
+	}
+
+	public Date getTimeStamp() {
+		return fTimeStamp;
+	}
+
+	public void setUser(User user) {
+		fUser = user;
+	}
+
+	public User getUser() {
+		return fUser;
+	}
+
+	public Long getCustomerId() {
+		Long id = null;
+		int commaIndex = getFieldName().indexOf(',');
+		if (commaIndex > 0) {
+			try {
+				id = Long.valueOf(getFieldName().substring(0, commaIndex));
+			}
+			catch (NumberFormatException e) {
+			}
+		}
+		return id;
+	}
+
+	public String getCustomerName() {
+		int commaIndex = getFieldName().indexOf(',');
+		return commaIndex >= 0 ? getFieldName().substring(commaIndex + 1) : "";
+	}
 }

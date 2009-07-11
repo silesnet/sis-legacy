@@ -18,7 +18,7 @@ public class BeforeAspectJSecurityInterceptor extends
 	protected final Log log = LogFactory.getLog(getClass());
 
 	private MethodDefinitionSource objectDefinitionSource;
-	
+
 	public Class getSecureObjectClass() {
 		return JoinPoint.class;
 	}
@@ -35,7 +35,7 @@ public class BeforeAspectJSecurityInterceptor extends
 			MethodDefinitionSource objectDefinitionSource) {
 		this.objectDefinitionSource = objectDefinitionSource;
 	}
-	
+
 	public void before(JoinPoint joinPoint) {
 		log.debug("Before security test.");
 		InterceptorStatusToken token = super.beforeInvocation(joinPoint);

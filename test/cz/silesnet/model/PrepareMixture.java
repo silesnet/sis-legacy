@@ -8,7 +8,6 @@ import java.util.GregorianCalendar;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
 
-
 /**
  * Prepare domain objects used in tests.
  * 
@@ -16,13 +15,12 @@ import cz.silesnet.model.enums.Frequency;
  */
 public class PrepareMixture {
 
-	
 	public static Label getCommissionLabel() {
 		Label l = new Label();
 		l.setName("Commission Test Label");
 		return l;
 	}
-	
+
 	public static Address getAddress() {
 		Address a = new Address();
 		a.setStreet("Street Test 129/23");
@@ -31,7 +29,7 @@ public class PrepareMixture {
 		a.setCountry(Country.CZ);
 		return a;
 	}
-	
+
 	public static Contact getContact(String name) {
 		Contact c = new Contact();
 		c.setName(name);
@@ -44,7 +42,7 @@ public class PrepareMixture {
 	public static Contact getContact() {
 		return getContact("Contact Test Name");
 	}
-	
+
 	public static Billing getBilling() {
 		Billing b = new Billing();
 		b.setFrequency(Frequency.MONTHLY);
@@ -58,14 +56,14 @@ public class PrepareMixture {
 	}
 
 	public static Connectivity getConnectivity() {
-		Connectivity c = new  Connectivity();
+		Connectivity c = new Connectivity();
 		c.setDownload(512);
 		c.setUpload(256);
 		c.setIsAggregated(false);
 		c.setAggregationId(0);
 		return c;
 	}
-	
+
 	public static Service getService(String name) {
 		Service s = new Service();
 		s.setCustomerId(null);
@@ -78,11 +76,11 @@ public class PrepareMixture {
 		s.setInfo("Service Test Info String");
 		return s;
 	}
-	
+
 	public static Service getService() {
 		return getService("Service Test");
 	}
-	
+
 	public static Customer getCustomerSimple(String name) {
 		Customer c = new Customer();
 		c.setHistoryId(Long.valueOf(0));
@@ -99,11 +97,11 @@ public class PrepareMixture {
 		c.setInsertedOn(new Date());
 		return c;
 	}
-	
+
 	public static Customer getCustomerSimple() {
 		return getCustomerSimple("Customer Test Name");
 	}
-	
+
 	public static Customer getCustomer(String name) {
 		Customer c = getCustomerSimple(name);
 		c.setServices(new ArrayList<Service>());
@@ -111,21 +109,21 @@ public class PrepareMixture {
 		c.getServices().add(1, getService("Service Test 2"));
 		return c;
 	}
-		
+
 	public static Customer getCustomer() {
 		return getCustomer("Customer Test Name");
 	}
 
 	public static Bill getBillSimple() {
 		Bill b = new Bill();
-        b.setInvoicedCustomer(null);
-        b.setPeriod(new Period(new Date(), new Date()));
-        b.setHashCode("hash1234123512351");
-        b.getItems().add(new BillItem("First Test Line", 1, 1234));
-        b.getItems().add(new BillItem("Second Test Line", 3, 234));
+		b.setInvoicedCustomer(null);
+		b.setPeriod(new Period(new Date(), new Date()));
+		b.setHashCode("hash1234123512351");
+		b.getItems().add(new BillItem("First Test Line", 1, 1234));
+		b.getItems().add(new BillItem("Second Test Line", 3, 234));
 		return b;
 	}
-	
+
 	public static Bill getBill() {
 		Bill b = getBillSimple();
 		b.setInvoicedCustomer(getCustomer());
@@ -139,5 +137,5 @@ public class PrepareMixture {
 	public static Setting getSetting2() {
 		return new Setting("SettingTestName2", "Setting Test Value2");
 	}
-	
+
 }

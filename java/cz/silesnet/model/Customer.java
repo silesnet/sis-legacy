@@ -16,296 +16,319 @@ import cz.silesnet.utils.SearchUtils;
  * @author Richard Sikora
  */
 public class Customer extends Entity implements Historic {
-    private static final long serialVersionUID = 2203444523758922808L;
+	private static final long serialVersionUID = 2203444523758922808L;
 
-    // FIXME should do it more elegant!!!
-    // it depends on id value in db !!!
-    private static final Long sHistoryTypeLabelId = Long.valueOf(41);
-    private static final String[] sDiffExcludeFields = { "class$0", "serialVersionUID", "sHistoryTypeLabelId",
-            "sDiffExcludeFields", "fId", "fHistoryId" };
-    private Long fHistoryId;
-    private String fContractNo;
-    private String fName;
-    private String fSupplementaryName;
-    private String fPublicId;
-    private String fDIC;
-    private String fSymbol;
-    private Contact fContact = new Contact();
-    private List<Service> fServices = new ArrayList<Service>();
-    private Billing fBilling = new Billing();
-    private String fConnectionSpot;
-    private String fInfo;
-    private Date fInsertedOn;
-    private Date fUpdated;
-    private Date fSynchronized;
+	// FIXME should do it more elegant!!!
+	// it depends on id value in db !!!
+	private static final Long sHistoryTypeLabelId = Long.valueOf(41);
 
-    public void setConnectionSpot(String connectionSpot) {
-        fConnectionSpot = connectionSpot;
-    }
+	private static final String[] sDiffExcludeFields = { "class$0",
+			"serialVersionUID", "sHistoryTypeLabelId", "sDiffExcludeFields",
+			"fId", "fHistoryId" };
 
-    public String getConnectionSpot() {
-        return fConnectionSpot;
-    }
+	private Long fHistoryId;
 
-    public void setDIC(String dic) {
-        fDIC = dic;
-    }
+	private String fContractNo;
 
-    public String getDIC() {
-        return fDIC;
-    }
+	private String fName;
 
-    public String getSymbol() {
-        return fSymbol;
-    }
+	private String fSupplementaryName;
 
-    public void setSymbol(String symbol) {
-        fSymbol = symbol;
-    }
+	private String fPublicId;
 
-    public String[] getDiffExcludeFields() {
-        return sDiffExcludeFields;
-    }
+	private String fDIC;
 
-    public void setHistoryId(Long historyId) {
-        fHistoryId = historyId;
-    }
+	private String fSymbol;
 
-    public Long getHistoryId() {
-        return fHistoryId;
-    }
+	private Contact fContact = new Contact();
 
-    public Long getHistoryTypeLabelId() {
-        return sHistoryTypeLabelId;
-    }
+	private List<Service> fServices = new ArrayList<Service>();
 
-    public void setInfo(String info) {
-        fInfo = info;
-    }
+	private Billing fBilling = new Billing();
 
-    public String getInfo() {
-        return fInfo;
-    }
+	private String fConnectionSpot;
 
-    public void setName(String name) {
-        fName = name;
-    }
+	private String fInfo;
 
-    public String getName() {
-        return fName;
-    }
+	private Date fInsertedOn;
 
-    public void setPublicId(String publicId) {
-        fPublicId = publicId;
-    }
+	private Date fUpdated;
 
-    public String getPublicId() {
-        return fPublicId;
-    }
+	private Date fSynchronized;
 
-    public void setServices(List<Service> services) {
-        fServices = services;
-    }
+	public void setConnectionSpot(String connectionSpot) {
+		fConnectionSpot = connectionSpot;
+	}
 
-    public List<Service> getServices() {
-        return fServices;
-    }
+	public String getConnectionSpot() {
+		return fConnectionSpot;
+	}
 
-    public Date getInsertedOn() {
-        return fInsertedOn;
-    }
+	public void setDIC(String dic) {
+		fDIC = dic;
+	}
 
-    public void setInsertedOn(Date insertedOn) {
-        fInsertedOn = insertedOn;
-    }
+	public String getDIC() {
+		return fDIC;
+	}
 
-    public Date getUpdated() {
-        return fUpdated;
-    }
+	public String getSymbol() {
+		return fSymbol;
+	}
 
-    public void setUpdated(Date updated) {
-        fUpdated = updated;
-    }
+	public void setSymbol(String symbol) {
+		fSymbol = symbol;
+	}
 
-    public Date getSynchronized() {
-        return fSynchronized;
-    }
+	public String[] getDiffExcludeFields() {
+		return sDiffExcludeFields;
+	}
 
-    public void setSynchronized(Date synchronized1) {
-        fSynchronized = synchronized1;
-    }
+	public void setHistoryId(Long historyId) {
+		fHistoryId = historyId;
+	}
 
-    public Integer getOverallDownload() {
-        List<Service> sList = getConnectivityServices();
-        Integer download = 0;
-        // sum services download
-        for (Service s : sList) {
-            if (s.getConnectivity().getDownload() != null)
-                download += s.getConnectivity().getDownload();
-        }
-        return download;
-    }
+	public Long getHistoryId() {
+		return fHistoryId;
+	}
 
-    public Integer getOverallUpload() {
-        List<Service> sList = getConnectivityServices();
-        Integer upload = 0;
-        // sum services upload
-        for (Service s : sList) {
-            if (s.getConnectivity().getUpload() != null)
-                upload += s.getConnectivity().getUpload();
-        }
-        return upload;
-    }
+	public Long getHistoryTypeLabelId() {
+		return sHistoryTypeLabelId;
+	}
 
-    public Integer getOverallPrice() {
-        List<Service> sList = getServices();
-        // report zero to non billed customers
-        if (!BillingStatus.INVOICE.equals(getBilling().getStatus()))
-            return 0;
-        Integer price = 0;
-        // sum services price
-        for (Service s : sList) {
-            if (!Frequency.ONE_TIME.equals(s.getFrequency()) && (s.getPrice() != null))
-                price += s.getPrice();
-        }
-        return price;
-    }
+	public void setInfo(String info) {
+		fInfo = info;
+	}
 
-    private List<Service> getConnectivityServices() {
-        // filter service for monthy connectivity
-        ArrayList<Service> cServices = new ArrayList<Service>();
-        for (Service s : getServices()) {
-            if (Frequency.MONTHLY.equals(s.getFrequency()) && s.getIsConnectivity() && (s.getConnectivity() != null))
-                cServices.add(s);
-        }
-        return cServices;
-    }
+	public String getInfo() {
+		return fInfo;
+	}
 
-    public String getServicesInfo() {
-        String comm = "";
-        if (getBilling().getShire() != null)
-            comm = "[" + getBilling().getShire().getName().substring(0, 3) + "]";
-        if (getServices().size() == 0)
-            return comm;
-        return getServices().size() > 1 ? getServices().get(0).getShortInfo() + " (+...) " + comm : getServices()
-                .get(0).getShortInfo()
-                + " " + comm;
-    }
+	public void setName(String name) {
+		fName = name;
+	}
 
-    public String getContractNo() {
-        return fContractNo;
-    }
+	public String getName() {
+		return fName;
+	}
 
-    public void setContractNo(String contractNo) {
-        fContractNo = contractNo;
-    }
+	public void setPublicId(String publicId) {
+		fPublicId = publicId;
+	}
 
-    public String getSupplementaryName() {
-        return fSupplementaryName;
-    }
+	public String getPublicId() {
+		return fPublicId;
+	}
 
-    public void setSupplementaryName(String supplementaryName) {
-        fSupplementaryName = supplementaryName;
-    }
+	public void setServices(List<Service> services) {
+		fServices = services;
+	}
 
-    public Billing getBilling() {
-        return fBilling;
-    }
+	public List<Service> getServices() {
+		return fServices;
+	}
 
-    public void setBilling(Billing billing) {
-        fBilling = billing;
-    }
+	public Date getInsertedOn() {
+		return fInsertedOn;
+	}
 
-    public Contact getContact() {
-        return fContact;
-    }
+	public void setInsertedOn(Date insertedOn) {
+		fInsertedOn = insertedOn;
+	}
 
-    public void setContact(Contact contact) {
-        fContact = contact;
-    }
+	public Date getUpdated() {
+		return fUpdated;
+	}
 
-    public String getExportPublicId() {
-        if (getPublicId() == null)
-            return null;
-        String noSlash = getPublicId().replace("/", "");
-        return noSlash.length() > 8 ? noSlash.substring(0, 8) : noSlash;
-    }
+	public void setUpdated(Date updated) {
+		fUpdated = updated;
+	}
 
-    public String getExportName() {
-        // return cripled first two words from customers name
-        String[] words = getName().split(" ");
-        StringBuffer exportName = new StringBuffer(SearchUtils.translate(words[0]));
-        if (words.length > 1)
-            exportName.append("_" + SearchUtils.translate(words[1]));
-        return exportName.toString();
-    }
+	public Date getSynchronized() {
+		return fSynchronized;
+	}
 
-    public boolean isDeactivateCandidate(Date due) {
-        // throw exception if due not set
-        if (due == null)
-            throw new NullPointerException("Due date not set!");
-        // tune due, cut off time of the day, move it to 00:00 of the day
-        due = cutDayTime(due);
-        // skip suspensed customers
-        if (BillingStatus.CEASE.equals(getBilling().getStatus()))
-            return false;
-        // skip no service customers
-        if (getServices().size() == 0)
-            return false;
-        // check services
-        Date maxTo = null;
-        Date to = null;
-        for (Service service : getServices()) {
-            // skip if one time service found
-            if (Frequency.ONE_TIME.equals(service.getFrequency()))
-                return false;
-            // skip if service without stop date found
-            to = service.getPeriod().getTo();
-            if (to == null)
-                return false;
-            // update max services to date
-            if (maxTo != null) {
-                if (maxTo.before(to))
-                    maxTo = to;
-            } else {
-                maxTo = to;
-            }
-        }
-        // skip if we have active service till due
-        if (!maxTo.before(due))
-            return false;
-        // skip if billing lastlyBilled not set
-        if (getBilling().getLastlyBilled() == null)
-            return false;
-        // skip if we have inactive service, not yet fully billed
-        if (maxTo.after(getBilling().getLastlyBilled()))
-            return false;
-        // we made it here, so here are conditions met (review):
-        // 1. customer has BillingStatus <> CEASE
-        // 2. customer has at least one service
-        // 3. customer has no ONE_TIME frequency service
-        // 4. customer has all services with period.to date set
-        // 5. maxTo < due
-        // 6. customer has been billed, lastlyBilled != null
-        // 7. maxTo <= lastlyBilled
-        // => customer is deactivate candidate
-        return true;
-    }
+	public void setSynchronized(Date synchronized1) {
+		fSynchronized = synchronized1;
+	}
 
-    protected static Date cutDayTime(Date due) {
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(due);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
+	public Integer getOverallDownload() {
+		List<Service> sList = getConnectivityServices();
+		Integer download = 0;
+		// sum services download
+		for (Service s : sList) {
+			if (s.getConnectivity().getDownload() != null)
+				download += s.getConnectivity().getDownload();
+		}
+		return download;
+	}
 
-    public boolean isSpsSynchronized() {
-        if ((getSynchronized() != null) && (getUpdated() != null) && (getUpdated().before(getSynchronized()))) {
-            return true;
-        }
-        return false;
-    }
+	public Integer getOverallUpload() {
+		List<Service> sList = getConnectivityServices();
+		Integer upload = 0;
+		// sum services upload
+		for (Service s : sList) {
+			if (s.getConnectivity().getUpload() != null)
+				upload += s.getConnectivity().getUpload();
+		}
+		return upload;
+	}
+
+	public Integer getOverallPrice() {
+		List<Service> sList = getServices();
+		// report zero to non billed customers
+		if (!BillingStatus.INVOICE.equals(getBilling().getStatus()))
+			return 0;
+		Integer price = 0;
+		// sum services price
+		for (Service s : sList) {
+			if (!Frequency.ONE_TIME.equals(s.getFrequency())
+					&& (s.getPrice() != null))
+				price += s.getPrice();
+		}
+		return price;
+	}
+
+	private List<Service> getConnectivityServices() {
+		// filter service for monthy connectivity
+		ArrayList<Service> cServices = new ArrayList<Service>();
+		for (Service s : getServices()) {
+			if (Frequency.MONTHLY.equals(s.getFrequency())
+					&& s.getIsConnectivity() && (s.getConnectivity() != null))
+				cServices.add(s);
+		}
+		return cServices;
+	}
+
+	public String getServicesInfo() {
+		String comm = "";
+		if (getBilling().getShire() != null)
+			comm = "[" + getBilling().getShire().getName().substring(0, 3)
+					+ "]";
+		if (getServices().size() == 0)
+			return comm;
+		return getServices().size() > 1 ? getServices().get(0).getShortInfo()
+				+ " (+...) " + comm : getServices().get(0).getShortInfo() + " "
+				+ comm;
+	}
+
+	public String getContractNo() {
+		return fContractNo;
+	}
+
+	public void setContractNo(String contractNo) {
+		fContractNo = contractNo;
+	}
+
+	public String getSupplementaryName() {
+		return fSupplementaryName;
+	}
+
+	public void setSupplementaryName(String supplementaryName) {
+		fSupplementaryName = supplementaryName;
+	}
+
+	public Billing getBilling() {
+		return fBilling;
+	}
+
+	public void setBilling(Billing billing) {
+		fBilling = billing;
+	}
+
+	public Contact getContact() {
+		return fContact;
+	}
+
+	public void setContact(Contact contact) {
+		fContact = contact;
+	}
+
+	public String getExportPublicId() {
+		if (getPublicId() == null)
+			return null;
+		String noSlash = getPublicId().replace("/", "");
+		return noSlash.length() > 8 ? noSlash.substring(0, 8) : noSlash;
+	}
+
+	public String getExportName() {
+		// return cripled first two words from customers name
+		String[] words = getName().split(" ");
+		StringBuffer exportName = new StringBuffer(SearchUtils
+				.translate(words[0]));
+		if (words.length > 1)
+			exportName.append("_" + SearchUtils.translate(words[1]));
+		return exportName.toString();
+	}
+
+	public boolean isDeactivateCandidate(Date due) {
+		// throw exception if due not set
+		if (due == null)
+			throw new NullPointerException("Due date not set!");
+		// tune due, cut off time of the day, move it to 00:00 of the day
+		due = cutDayTime(due);
+		// skip suspensed customers
+		if (BillingStatus.CEASE.equals(getBilling().getStatus()))
+			return false;
+		// skip no service customers
+		if (getServices().size() == 0)
+			return false;
+		// check services
+		Date maxTo = null;
+		Date to = null;
+		for (Service service : getServices()) {
+			// skip if one time service found
+			if (Frequency.ONE_TIME.equals(service.getFrequency()))
+				return false;
+			// skip if service without stop date found
+			to = service.getPeriod().getTo();
+			if (to == null)
+				return false;
+			// update max services to date
+			if (maxTo != null) {
+				if (maxTo.before(to))
+					maxTo = to;
+			}
+			else {
+				maxTo = to;
+			}
+		}
+		// skip if we have active service till due
+		if (!maxTo.before(due))
+			return false;
+		// skip if billing lastlyBilled not set
+		if (getBilling().getLastlyBilled() == null)
+			return false;
+		// skip if we have inactive service, not yet fully billed
+		if (maxTo.after(getBilling().getLastlyBilled()))
+			return false;
+		// we made it here, so here are conditions met (review):
+		// 1. customer has BillingStatus <> CEASE
+		// 2. customer has at least one service
+		// 3. customer has no ONE_TIME frequency service
+		// 4. customer has all services with period.to date set
+		// 5. maxTo < due
+		// 6. customer has been billed, lastlyBilled != null
+		// 7. maxTo <= lastlyBilled
+		// => customer is deactivate candidate
+		return true;
+	}
+
+	protected static Date cutDayTime(Date due) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(due);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
+
+	public boolean isSpsSynchronized() {
+		if ((getSynchronized() != null) && (getUpdated() != null)
+				&& (getUpdated().before(getSynchronized()))) {
+			return true;
+		}
+		return false;
+	}
 }

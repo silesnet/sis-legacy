@@ -31,54 +31,55 @@ import cz.silesnet.utils.SearchUtilsTest;
 
 /**
  * Run all tests at once.
- *
+ * 
  * @author Richard Sikora
  */
 public class AllTests {
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite("Tests for cz.silesnet");
-        // $JUnit-BEGIN$
+	public static Test suite() {
+		TestSuite suite = new TestSuite("Tests for cz.silesnet");
+		// $JUnit-BEGIN$
 
-        // cz.silesnet.dao tests
-        suite.addTestSuite(BillDAOTest.class);
-        suite.addTestSuite(CustomerDAOTest.class);
-        suite.addTestSuite(HistoryItemDAOTest.class);
-        suite.addTestSuite(LabelDAOTest.class);
-        suite.addTestSuite(NodeDAOTest.class);
-        suite.addTestSuite(ServiceDAOTest.class);
-        suite.addTestSuite(SettingDAOTest.class);
-        suite.addTestSuite(UserDAOTest.class);
+		// cz.silesnet.dao tests
+		suite.addTestSuite(BillDAOTest.class);
+		suite.addTestSuite(CustomerDAOTest.class);
+		suite.addTestSuite(HistoryItemDAOTest.class);
+		suite.addTestSuite(LabelDAOTest.class);
+		suite.addTestSuite(NodeDAOTest.class);
+		suite.addTestSuite(ServiceDAOTest.class);
+		suite.addTestSuite(SettingDAOTest.class);
+		suite.addTestSuite(UserDAOTest.class);
 
-        // cz.silesnet.model tests
-        suite.addTestSuite(CustomerDeactivateTest.class);
-        suite.addTestSuite(PeriodTest.class);
-        suite.addTestSuite(ServiceTest.class);
-        suite.addTestSuite(WirelessTest.class);
+		// cz.silesnet.model tests
+		suite.addTestSuite(CustomerDeactivateTest.class);
+		suite.addTestSuite(PeriodTest.class);
+		suite.addTestSuite(ServiceTest.class);
+		suite.addTestSuite(WirelessTest.class);
 
-        // cz.silesnet.service tests
-        suite.addTestSuite(AcegiAuthenticateTest.class);
-        suite.addTestSuite(BillingManagerBillsTest.class);
-        suite.addTestSuite(BillingManagerTest.class);
-        suite.addTestSuite(CustomerManagerTest.class);
-        // AspectJ is turned OFF so this test is not performed
-//        suite.addTestSuite(CustomerControllerTest.class);
-        suite.addTestSuite(HistoryManagerTest.class);
-        suite.addTestSuite(NodeManagerTest.class);
-        suite.addTestSuite(SettingManagerTest.class);
-        suite.addTestSuite(UserManagerTest.class);
-       
-        // cz.silesnet.utils tests
-        suite.addTestSuite(DiffUtilsTest.class);
-        suite.addTestSuite(HistoricToStringTest.class);
-        suite.addTestSuite(MessagesUtilsTest.class);
-        suite.addTestSuite(NavigationUtilsTest.class);
-        suite.addTestSuite(NodeRegexpTest.class);
-        suite.addTestSuite(SearchUtilsTest.class);
+		// cz.silesnet.service tests
+		suite.addTestSuite(AcegiAuthenticateTest.class);
+		suite.addTestSuite(BillingManagerBillsTest.class);
+		suite.addTestSuite(BillingManagerTest.class);
+		suite.addTestSuite(CustomerManagerTest.class);
+		// AspectJ is turned OFF so this test is not performed
+		// suite.addTestSuite(CustomerControllerTest.class);
+		suite.addTestSuite(HistoryManagerTest.class);
+		suite.addTestSuite(NodeManagerTest.class);
+		suite.addTestSuite(SettingManagerTest.class);
+		suite.addTestSuite(UserManagerTest.class);
 
-        // $JUnit-END$
-        return suite;
-    }
+		// cz.silesnet.utils tests
+		suite.addTestSuite(DiffUtilsTest.class);
+		suite.addTestSuite(HistoricToStringTest.class);
+		suite.addTestSuite(MessagesUtilsTest.class);
+		suite.addTestSuite(NavigationUtilsTest.class);
+		suite.addTestSuite(NodeRegexpTest.class);
+		suite.addTestSuite(SearchUtilsTest.class);
+
+		// $JUnit-END$
+		return suite;
+	}
 }

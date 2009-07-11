@@ -8,21 +8,21 @@ import java.util.List;
 
 /**
  * User DAO class.
- *
+ * 
  * @author Richard Sikora
  */
-public interface UserDAO
-    extends DAO, UserDetailsService {
+public interface UserDAO extends DAO, UserDetailsService {
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public User getUserById(Long userId);
+	public User getUserById(Long userId);
 
-    public User getUserByLoginName(String loginName);
+	public User getUserByLoginName(String loginName);
 
-    public List getUsers();
+	public List getUsers();
 
-    public void removeUser(Long userId);
+	public void removeUser(Long userId);
 
-    public void saveUser(User user);
+	public void saveUser(User user);
 }

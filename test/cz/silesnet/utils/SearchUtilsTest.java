@@ -7,26 +7,27 @@ import org.apache.commons.logging.LogFactory;
 
 import cz.silesnet.dao.hibernate.support.SqlHibernateOrder;
 
-public class SearchUtilsTest
-    extends TestCase {
+public class SearchUtilsTest extends TestCase {
 
-    protected final Log log = LogFactory.getLog(getClass());
+	protected final Log log = LogFactory.getLog(getClass());
 
-    public void testGetTranslateSql() {
-    	String tss = SearchUtils.getTranslateColumn("column_name");
-    	log.debug(tss);
-    }
-    
-    public void testTranslate() {
-    	String t = "Èeský Tìšín.;'\"(Ù)";
-    	log.debug(t);
-    	String ts = SearchUtils.translate(t);
-    	log.debug(ts);
-    }
-    
-    public void testSqlHibernateOrder() {
-    	log.debug(SqlHibernateOrder.asc(SearchUtils.getTranslateOrder("name")).toSqlString(null, null));
-    	log.debug(SqlHibernateOrder.desc(SearchUtils.getTranslateOrder("name")).toSqlString(null, null));
-    }
-        
+	public void testGetTranslateSql() {
+		String tss = SearchUtils.getTranslateColumn("column_name");
+		log.debug(tss);
+	}
+
+	public void testTranslate() {
+		String t = "ï¿½eskï¿½ Tï¿½ï¿½n.;'\"(ï¿½)";
+		log.debug(t);
+		String ts = SearchUtils.translate(t);
+		log.debug(ts);
+	}
+
+	public void testSqlHibernateOrder() {
+		log.debug(SqlHibernateOrder.asc(SearchUtils.getTranslateOrder("name"))
+				.toSqlString(null, null));
+		log.debug(SqlHibernateOrder.desc(SearchUtils.getTranslateOrder("name"))
+				.toSqlString(null, null));
+	}
+
 }

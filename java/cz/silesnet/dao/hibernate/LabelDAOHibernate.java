@@ -13,47 +13,47 @@ import cz.silesnet.utils.SearchUtils;
 
 /**
  * Implementation of LabelDAO interface using Hibernate.
- *
+ * 
  * @author Richard Sikora
  */
-public class LabelDAOHibernate
-    extends HibernateDaoSupport
-    implements LabelDAO {
+public class LabelDAOHibernate extends HibernateDaoSupport implements LabelDAO {
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public Label getLabelById(Long labelId) {
-        Label label = (Label) getHibernateTemplate()
-                                      .get(Label.class, labelId);
+	public Label getLabelById(Long labelId) {
+		Label label = (Label) getHibernateTemplate().get(Label.class, labelId);
 
-        return label;
-    }
+		return label;
+	}
 
-    public List getSubLabels(Long labelId) {
-        return (ArrayList<Label>) getHibernateTemplate()
-                                          .find("from cz.silesnet.model.Label as label where label.parentId=?",
-                labelId);
-    }
+	public List getSubLabels(Long labelId) {
+		return (ArrayList<Label>) getHibernateTemplate().find(
+				"from cz.silesnet.model.Label as label where label.parentId=?",
+				labelId);
+	}
 
-    public void removeLabel(Label label) {
-        getHibernateTemplate().delete(label);
-    }
+	public void removeLabel(Label label) {
+		getHibernateTemplate().delete(label);
+	}
 
-    public void saveLabel(Label label) {
-        getHibernateTemplate().saveOrUpdate(label);
-    }
+	public void saveLabel(Label label) {
+		getHibernateTemplate().saveOrUpdate(label);
+	}
 
 	public List<Label> getByExmaple(Label example) {
-    	DetachedCriteria crit = DetachedCriteria.forClass(Label.class);
-    	// set restrictions from exmaple object
-    	SearchUtils.addEqRestriction(crit, "parent_id", example.getParentId());
-    	SearchUtils.addIlikeRestrictionI18n(crit, "name", example.getName());
-    	// set ordering
-    	crit.addOrder(SqlHibernateOrder.asc(SearchUtils.getTranslateOrder("name")));
+		DetachedCriteria crit = DetachedCriteria.forClass(Label.class);
+		// set restrictions from exmaple object
+		SearchUtils.addEqRestriction(crit, "parent_id", example.getParentId());
+		SearchUtils.addIlikeRestrictionI18n(crit, "name", example.getName());
+		// set ordering
+		crit.addOrder(SqlHibernateOrder.asc(SearchUtils
+				.getTranslateOrder("name")));
 		return (ArrayList<Label>) getHibernateTemplate().findByCriteria(crit);
 	}
-	
+
 	public List<Label> getAll() {
-    	return (ArrayList<Label>) getHibernateTemplate().find("from Label l order by l.name");
+		return (ArrayList<Label>) getHibernateTemplate().find(
+				"from Label l order by l.name");
 	}
 }

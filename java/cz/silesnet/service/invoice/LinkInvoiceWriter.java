@@ -11,7 +11,7 @@ import cz.silesnet.model.Bill;
  * Invoice writer producing text with link for onlive invoice delivery.
  * 
  * @author Richard Sikora
- *
+ * 
  */
 public class LinkInvoiceWriter extends AbstractInvoiceWriter {
 
@@ -23,8 +23,10 @@ public class LinkInvoiceWriter extends AbstractInvoiceWriter {
 	public MimeBodyPart getMimeBodyPart() {
 		MimeBodyPart mimeBodyPart = new MimeBodyPart();
 		try {
-			mimeBodyPart.setText("From Link writer getMimeBodyPart(): " + bill.getNumber());
-		} catch (MessagingException e) {
+			mimeBodyPart.setText("From Link writer getMimeBodyPart(): "
+					+ bill.getNumber());
+		}
+		catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

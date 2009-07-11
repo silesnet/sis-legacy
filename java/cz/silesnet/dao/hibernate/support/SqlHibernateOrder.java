@@ -13,13 +13,14 @@ import org.hibernate.criterion.Order;
 public class SqlHibernateOrder extends Order {
 
 	private static final long serialVersionUID = 2204134155156562378L;
-	
+
 	public SqlHibernateOrder(String orderStr, boolean ascending) {
 		super(orderStr, ascending);
 	}
 
 	@Override
-	public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
+	public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery)
+			throws HibernateException {
 		return super.toString();
 	}
 
@@ -30,5 +31,5 @@ public class SqlHibernateOrder extends Order {
 	public static SqlHibernateOrder desc(String orderStr) {
 		return new SqlHibernateOrder(orderStr, false);
 	}
-	
+
 }

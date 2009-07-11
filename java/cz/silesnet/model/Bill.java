@@ -15,231 +15,247 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Bill extends Entity {
 
-    // ~ Static fields/initializers
-    // ---------------------------------------------
+	// ~ Static fields/initializers
+	// ---------------------------------------------
 
-    private static final long serialVersionUID = -1741749406722866169L;
+	private static final long serialVersionUID = -1741749406722866169L;
 
-    // ~ Instance fields
-    // --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    private String fNumber;
-    private Date fBillingDate;
-    private Date fPurgeDate;
-    private Customer fInvoicedCustomer;
-    private Long fCustomerId;
-    private Long fInvoicingId;
-    private String fCustomerName;
-    private Period fPeriod;
-    private List<BillItem> fItems = new ArrayList<BillItem>();
-    private int fVat = 19;
-    private String fHashCode;
-    private Boolean fIsConfirmed = false;
-    private Boolean fIsSent = false;
-    private Boolean fIsDelivered = false;
-    private Boolean fIsArchived = false;
-    private Boolean fDeliverByMail = false;
+	private String fNumber;
 
-    // ~ Methods
-    // ----------------------------------------------------------------
+	private Date fBillingDate;
 
-    public Customer getInvoicedCustomer() {
-        return fInvoicedCustomer;
-    }
+	private Date fPurgeDate;
 
-    public void setInvoicedCustomer(Customer invoicedCustomer) {
-        fInvoicedCustomer = invoicedCustomer;
-        if (invoicedCustomer != null) {
-            fCustomerId = invoicedCustomer.getId();
-            fCustomerName = invoicedCustomer.getName();
-        }
-    }
+	private Customer fInvoicedCustomer;
 
-    public void setHashCode(String hashCode) {
-        fHashCode = hashCode;
-    }
+	private Long fCustomerId;
 
-    public String getHashCode() {
-        return fHashCode;
-    }
+	private Long fInvoicingId;
 
-    public void setIsConfirmed(Boolean isConfirmed) {
-        fIsConfirmed = isConfirmed;
-    }
+	private String fCustomerName;
 
-    public Boolean getIsConfirmed() {
-        return fIsConfirmed;
-    }
+	private Period fPeriod;
 
-    public void setIsDelivered(Boolean isDelivered) {
-        fIsDelivered = isDelivered;
-    }
+	private List<BillItem> fItems = new ArrayList<BillItem>();
 
-    public Boolean getIsDelivered() {
-        return fIsDelivered;
-    }
+	private int fVat = 19;
 
-    public void setIsSent(Boolean isSent) {
-        fIsSent = isSent;
-    }
+	private String fHashCode;
 
-    public Boolean getIsSent() {
-        return fIsSent;
-    }
+	private Boolean fIsConfirmed = false;
 
-    public void setItems(List<BillItem> items) {
-        fItems = items;
-    }
+	private Boolean fIsSent = false;
 
-    public List<BillItem> getItems() {
-        return fItems;
-    }
+	private Boolean fIsDelivered = false;
 
-    public void setPeriod(Period period) {
-        fPeriod = period;
-    }
+	private Boolean fIsArchived = false;
 
-    public Period getPeriod() {
-        return fPeriod;
-    }
+	private Boolean fDeliverByMail = false;
 
-    public int getTotalPrice() {
-        if (fItems == null)
-            return 0;
-        int total = 0;
-        for (BillItem item : fItems)
-            total += item.getLinePrice();
-        return total;
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public float getBillVat() {
-        return (float) (getTotalPrice() * getVat()) / 100;
-    }
+	public Customer getInvoicedCustomer() {
+		return fInvoicedCustomer;
+	}
 
-    public float getBillRoundedVat() {
-        // bill VAT is roundet up to 2 digits afrer coma by definition
-        // round it to 50 cents mathematicaly
-        return (float) Math.round(getBillVat() * 2) / 2;
-    }
+	public void setInvoicedCustomer(Customer invoicedCustomer) {
+		fInvoicedCustomer = invoicedCustomer;
+		if (invoicedCustomer != null) {
+			fCustomerId = invoicedCustomer.getId();
+			fCustomerName = invoicedCustomer.getName();
+		}
+	}
 
-    public float getTotalPriceVat() {
-        return getTotalPrice() + getBillRoundedVat();
-    }
+	public void setHashCode(String hashCode) {
+		fHashCode = hashCode;
+	}
 
-    public float getTotalPriceVatNotRounded() {
-        return getTotalPrice() + getBillVat();
-    }
+	public String getHashCode() {
+		return fHashCode;
+	}
 
-    public Boolean getIsArchived() {
-        return fIsArchived;
-    }
+	public void setIsConfirmed(Boolean isConfirmed) {
+		fIsConfirmed = isConfirmed;
+	}
 
-    public void setIsArchived(Boolean isArchived) {
-        fIsArchived = isArchived;
-    }
+	public Boolean getIsConfirmed() {
+		return fIsConfirmed;
+	}
 
-    public String getNumber() {
-        return fNumber;
-    }
+	public void setIsDelivered(Boolean isDelivered) {
+		fIsDelivered = isDelivered;
+	}
 
-    public String getNumberShortPL() {
-        return StringUtils.stripStart(fNumber.substring(4), "0");
-    }
+	public Boolean getIsDelivered() {
+		return fIsDelivered;
+	}
 
-    public String getNumberPL() {
-        return getNumberShortPL() + "/" + fNumber.substring(0, 4);
-    }
+	public void setIsSent(Boolean isSent) {
+		fIsSent = isSent;
+	}
 
-    public void setNumber(String number) {
-        fNumber = number;
-    }
+	public Boolean getIsSent() {
+		return fIsSent;
+	}
 
-    public Date getBillingDate() {
-        return fBillingDate;
-    }
+	public void setItems(List<BillItem> items) {
+		fItems = items;
+	}
 
-    public void setBillingDate(Date billingDate) {
-        fBillingDate = billingDate;
-    }
+	public List<BillItem> getItems() {
+		return fItems;
+	}
 
-    public void setPurgeDate(int purgeDateDays) {
-        if (getBillingDate() != null) {
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(getBillingDate());
-            cal.add(Calendar.DAY_OF_MONTH, purgeDateDays);
-            setPurgeDate(cal.getTime());
-        } else
-            setPurgeDate(null);
-    }
+	public void setPeriod(Period period) {
+		fPeriod = period;
+	}
 
-    public int getVat() {
-        return fVat;
-    }
+	public Period getPeriod() {
+		return fPeriod;
+	}
 
-    public void setVat(int vat) {
-        fVat = vat;
-    }
+	public int getTotalPrice() {
+		if (fItems == null)
+			return 0;
+		int total = 0;
+		for (BillItem item : fItems)
+			total += item.getLinePrice();
+		return total;
+	}
 
-    public Date getPurgeDate() {
-        return fPurgeDate;
-    }
+	public float getBillVat() {
+		return (float) (getTotalPrice() * getVat()) / 100;
+	}
 
-    public void setPurgeDate(Date purgeDate) {
-        fPurgeDate = purgeDate;
-    }
+	public float getBillRoundedVat() {
+		// bill VAT is roundet up to 2 digits afrer coma by definition
+		// round it to 50 cents mathematicaly
+		return (float) Math.round(getBillVat() * 2) / 2;
+	}
 
-    public Boolean getDeliverByMail() {
-        return fDeliverByMail;
-    }
+	public float getTotalPriceVat() {
+		return getTotalPrice() + getBillRoundedVat();
+	}
 
-    public void setDeliverByMail(Boolean deliverByMail) {
-        fDeliverByMail = deliverByMail;
-    }
+	public float getTotalPriceVatNotRounded() {
+		return getTotalPrice() + getBillVat();
+	}
 
-    public String getCustomerName() {
-        return fCustomerName;
-    }
+	public Boolean getIsArchived() {
+		return fIsArchived;
+	}
 
-    public void setCustomerName(String customerName) {
-        fCustomerName = customerName;
-    }
+	public void setIsArchived(Boolean isArchived) {
+		fIsArchived = isArchived;
+	}
 
-    public Long getCustomerId() {
-        return fCustomerId;
-    }
+	public String getNumber() {
+		return fNumber;
+	}
 
-    public void setCustomerId(Long customerId) {
-        fCustomerId = customerId;
-    }
+	public String getNumberShortPL() {
+		return StringUtils.stripStart(fNumber.substring(4), "0");
+	}
 
-    public Long getInvoicingId() {
-        return fInvoicingId;
-    }
+	public String getNumberPL() {
+		return getNumberShortPL() + "/" + fNumber.substring(0, 4);
+	}
 
-    public void setInvoicingId(Long invoicingId) {
-        fInvoicingId = invoicingId;
-    }
+	public void setNumber(String number) {
+		fNumber = number;
+	}
 
-    public float getNet() {
-        if (fItems == null)
-            return 0.0F;
-        double net = 0.0;
-        for (BillItem item : fItems)
-            net += item.getNet();
-        return (float) net;
-    }
+	public Date getBillingDate() {
+		return fBillingDate;
+	}
 
-    public int getNetRounded() {
-        return Math.round(getNet());
-    }
+	public void setBillingDate(Date billingDate) {
+		fBillingDate = billingDate;
+	}
 
-    public int getVatRounded() {
-        double vat = getNetRounded() * (fVat / 100.0);
-        return (int) Math.round(vat);
-    }
+	public void setPurgeDate(int purgeDateDays) {
+		if (getBillingDate() != null) {
+			Calendar cal = new GregorianCalendar();
+			cal.setTime(getBillingDate());
+			cal.add(Calendar.DAY_OF_MONTH, purgeDateDays);
+			setPurgeDate(cal.getTime());
+		}
+		else
+			setPurgeDate(null);
+	}
 
-    public int getBrt() {
-        return getNetRounded() + getVatRounded();
-    }
+	public int getVat() {
+		return fVat;
+	}
+
+	public void setVat(int vat) {
+		fVat = vat;
+	}
+
+	public Date getPurgeDate() {
+		return fPurgeDate;
+	}
+
+	public void setPurgeDate(Date purgeDate) {
+		fPurgeDate = purgeDate;
+	}
+
+	public Boolean getDeliverByMail() {
+		return fDeliverByMail;
+	}
+
+	public void setDeliverByMail(Boolean deliverByMail) {
+		fDeliverByMail = deliverByMail;
+	}
+
+	public String getCustomerName() {
+		return fCustomerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		fCustomerName = customerName;
+	}
+
+	public Long getCustomerId() {
+		return fCustomerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		fCustomerId = customerId;
+	}
+
+	public Long getInvoicingId() {
+		return fInvoicingId;
+	}
+
+	public void setInvoicingId(Long invoicingId) {
+		fInvoicingId = invoicingId;
+	}
+
+	public float getNet() {
+		if (fItems == null)
+			return 0.0F;
+		double net = 0.0;
+		for (BillItem item : fItems)
+			net += item.getNet();
+		return (float) net;
+	}
+
+	public int getNetRounded() {
+		return Math.round(getNet());
+	}
+
+	public int getVatRounded() {
+		double vat = getNetRounded() * (fVat / 100.0);
+		return (int) Math.round(vat);
+	}
+
+	public int getBrt() {
+		return getNetRounded() + getVatRounded();
+	}
 
 }

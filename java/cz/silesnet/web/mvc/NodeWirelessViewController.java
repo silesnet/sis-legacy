@@ -32,147 +32,155 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Network node viewing controller.
- *
+ * 
  * @author Richard Sikora
  */
-public class NodeWirelessViewController
-    extends MultiActionController {
+public class NodeWirelessViewController extends MultiActionController {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    protected final Log    log  = LogFactory.getLog(getClass());
-    private NodeManager    nmgr;
-    private LabelManager   lmgr;
-    private HistoryManager hmgr;
+	protected final Log log = LogFactory.getLog(getClass());
 
-    //~ Methods ----------------------------------------------------------------
+	private NodeManager nmgr;
 
-    // injected by Spring
-    public void setHistoryManager(HistoryManager historyManager) {
-        hmgr = historyManager;
-    }
+	private LabelManager lmgr;
 
-    // injected by Spring
-    public void setLabelManager(LabelManager labelManager) {
-        lmgr = labelManager;
-    }
+	private HistoryManager hmgr;
 
-    // injected by Spring
-    public void setNodeManager(NodeManager nodeManager) {
-        nmgr = nodeManager;
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public ModelAndView viewDetail(HttpServletRequest request,
-        HttpServletResponse response) {
-        HashMap<String, Object> model = new HashMap<String, Object>();
+	// injected by Spring
+	public void setHistoryManager(HistoryManager historyManager) {
+		hmgr = historyManager;
+	}
 
-        long                    nodeId = ServletRequestUtils.getLongParameter(request,
-                "nodeId", 0);
-        log.debug("View detail of node whit id: " + nodeId);
-        Assert.isTrue(nodeId != 0, "No nodeId given, can not display details!");
+	// injected by Spring
+	public void setLabelManager(LabelManager labelManager) {
+		lmgr = labelManager;
+	}
 
-        // retrieve node and put it into model
-        Node node = nmgr.getNodeById(nodeId);
-        model.put("node", node);
+	// injected by Spring
+	public void setNodeManager(NodeManager nodeManager) {
+		nmgr = nodeManager;
+	}
 
-        // retrieve node's history and support view with it
-        model.put("historyRecord", hmgr.getHistory(node));
+	public ModelAndView viewDetail(HttpServletRequest request,
+			HttpServletResponse response) {
+		HashMap<String, Object> model = new HashMap<String, Object>();
 
-        // support view with additional info
-        if (node.getParentId() != 0) {
-            // we have slave node
-            model.put("isMaster", false);
-            model.put("isSlave", true);
-            model.put("parentNode", nmgr.getNodeById(node.getParentId()));
+		long nodeId = ServletRequestUtils
+				.getLongParameter(request, "nodeId", 0);
+		log.debug("View detail of node whit id: " + nodeId);
+		Assert.isTrue(nodeId != 0, "No nodeId given, can not display details!");
 
-            // FIXME this can not be so hardcoded here, use application global
-            // const
-            // which should be automatically set on application deploy
-            if (node instanceof Wireless && WirelessEnum.SA.equals(((Wireless) node).getType()))
-                model.put("isSA", true);
-            else
-                model.put("isSA", false);
-        } else {
-            // we have master node
-            model.put("isMaster", true);
-            model.put("isSlave", false);
-            model.put("isSA", false);
-        }
+		// retrieve node and put it into model
+		Node node = nmgr.getNodeById(nodeId);
+		model.put("node", node);
 
-        return new ModelAndView("wireless/detailWireless", model);
-    }
+		// retrieve node's history and support view with it
+		model.put("historyRecord", hmgr.getHistory(node));
 
-    public ModelAndView viewMasterList(HttpServletRequest request,
-        HttpServletResponse response) {
-        HashMap<String, Object> model = new HashMap<String, Object>();
+		// support view with additional info
+		if (node.getParentId() != 0) {
+			// we have slave node
+			model.put("isMaster", false);
+			model.put("isSlave", true);
+			model.put("parentNode", nmgr.getNodeById(node.getParentId()));
 
-        log.debug("View master wireless list.");
+			// FIXME this can not be so hardcoded here, use application global
+			// const
+			// which should be automatically set on application deploy
+			if (node instanceof Wireless
+					&& WirelessEnum.SA.equals(((Wireless) node).getType()))
+				model.put("isSA", true);
+			else
+				model.put("isSA", false);
+		}
+		else {
+			// we have master node
+			model.put("isMaster", true);
+			model.put("isSlave", false);
+			model.put("isSA", false);
+		}
 
-        // get DomainLabelId if present
-        String domainLabelIdString = FilterUtils.getFilterParameter(request,
-                "DomainLabelId");
+		return new ModelAndView("wireless/detailWireless", model);
+	}
 
-        // support view with nodes
-        if (!"".equals(domainLabelIdString)) {
-            // get filtered nodes by domainLabelId
-            log.debug("Getting filtered nodes by DomainLabelId: "
-                + domainLabelIdString);
-            model.put("nodes",
-                nmgr.getLeveOfNodesByDomain(0, Long.valueOf(domainLabelIdString)));
-        } else {
-            // get unfiltered nodes
-            log.debug("Getting unfiltered nodes.");
-            model.put("nodes", nmgr.getLevelOfNodes(0));
-        }
+	public ModelAndView viewMasterList(HttpServletRequest request,
+			HttpServletResponse response) {
+		HashMap<String, Object> model = new HashMap<String, Object>();
 
-        // support view wiht additional info
-        model.put("isMaster", true);
-        model.put("isSlave", false);
+		log.debug("View master wireless list.");
 
-        // support view with domain labels list for filtering
+		// get DomainLabelId if present
+		String domainLabelIdString = FilterUtils.getFilterParameter(request,
+				"DomainLabelId");
 
-        // create empty option label if no filtering needed
-        // id has to be 0, ViewFilterFilter utilizes this value
-        // to remove filterAttribute from session sisFilterMap
-        Label anyDomainLabel = new Label();
-        anyDomainLabel.setId(Long.valueOf(0));
+		// support view with nodes
+		if (!"".equals(domainLabelIdString)) {
+			// get filtered nodes by domainLabelId
+			log.debug("Getting filtered nodes by DomainLabelId: "
+					+ domainLabelIdString);
+			model.put("nodes", nmgr.getLeveOfNodesByDomain(0, Long
+					.valueOf(domainLabelIdString)));
+		}
+		else {
+			// get unfiltered nodes
+			log.debug("Getting unfiltered nodes.");
+			model.put("nodes", nmgr.getLevelOfNodes(0));
+		}
 
-        anyDomainLabel.setName(MessagesUtils.getMessage(
-                "listWireless.label.filter.anyDomain", request.getLocale()));
+		// support view wiht additional info
+		model.put("isMaster", true);
+		model.put("isSlave", false);
 
-        // FIXME parent label values can not be hardcoded
-        ArrayList<Label> domainLabels = (ArrayList<Label>) lmgr.getSubLabels(lmgr
-                    .getLabelById(Long.valueOf(19)));
+		// support view with domain labels list for filtering
 
-        // sort domainLabel according 2 name 
-        Collections.sort(domainLabels,
-            (Comparator<? super Label>) (new BeanComparator("name")));
+		// create empty option label if no filtering needed
+		// id has to be 0, ViewFilterFilter utilizes this value
+		// to remove filterAttribute from session sisFilterMap
+		Label anyDomainLabel = new Label();
+		anyDomainLabel.setId(Long.valueOf(0));
 
-        domainLabels.add(0, anyDomainLabel);
-        model.put("domainLabels", domainLabels);
+		anyDomainLabel.setName(MessagesUtils.getMessage(
+				"listWireless.label.filter.anyDomain", request.getLocale()));
 
-        return new ModelAndView("wireless/listWireless", model);
-    }
+		// FIXME parent label values can not be hardcoded
+		ArrayList<Label> domainLabels = (ArrayList<Label>) lmgr
+				.getSubLabels(lmgr.getLabelById(Long.valueOf(19)));
 
-    public ModelAndView viewSlaveList(HttpServletRequest request,
-        HttpServletResponse response) {
-        HashMap<String, Object> model = new HashMap<String, Object>();
+		// sort domainLabel according 2 name
+		Collections.sort(domainLabels,
+				(Comparator<? super Label>) (new BeanComparator("name")));
 
-        log.debug("View slave wireless list.");
+		domainLabels.add(0, anyDomainLabel);
+		model.put("domainLabels", domainLabels);
 
-        // get parentId for list
-        long parentId = ServletRequestUtils.getLongParameter(request, "parentId", 0);
-        Assert.isTrue(parentId != 0,
-            "No parentId given, can not display any slaves!");
+		return new ModelAndView("wireless/listWireless", model);
+	}
 
-        // support view with slave nodes list (parentId=0)
-        model.put("nodes", nmgr.getLevelOfNodes(parentId));
+	public ModelAndView viewSlaveList(HttpServletRequest request,
+			HttpServletResponse response) {
+		HashMap<String, Object> model = new HashMap<String, Object>();
 
-        // support view wiht additional info
-        model.put("isMaster", false);
-        model.put("isSlave", true);
-        model.put("parentNode", nmgr.getNodeById(parentId));
+		log.debug("View slave wireless list.");
 
-        return new ModelAndView("wireless/listWireless", model);
-    }
+		// get parentId for list
+		long parentId = ServletRequestUtils.getLongParameter(request,
+				"parentId", 0);
+		Assert.isTrue(parentId != 0,
+				"No parentId given, can not display any slaves!");
+
+		// support view with slave nodes list (parentId=0)
+		model.put("nodes", nmgr.getLevelOfNodes(parentId));
+
+		// support view wiht additional info
+		model.put("isMaster", false);
+		model.put("isSlave", true);
+		model.put("parentNode", nmgr.getNodeById(parentId));
+
+		return new ModelAndView("wireless/listWireless", model);
+	}
 }

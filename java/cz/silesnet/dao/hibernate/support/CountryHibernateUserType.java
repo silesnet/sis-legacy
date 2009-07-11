@@ -4,15 +4,15 @@ import cz.silesnet.model.enums.Country;
 
 /**
  * Class for Country enum Hibernate mapping.
- *
+ * 
  * @author Richard Sikora
  */
-public class CountryHibernateUserType
-    extends IntEnumHibernateUserType<Country> {
+public class CountryHibernateUserType extends IntEnumHibernateUserType<Country> {
 
-    //~ Constructors -----------------------------------------------------------
+	// ~ Constructors
+	// -----------------------------------------------------------
 
-    public CountryHibernateUserType() {
-        super(Country.CZ);
-    }
+	public CountryHibernateUserType() {
+		super(Country.CZ);
+	}
 }

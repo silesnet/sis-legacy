@@ -9,30 +9,33 @@ import java.beans.PropertyEditorSupport;
 
 /**
  * Property editor to set labels object property in jsp forms.
- *
+ * 
  * @author Richard Sikora
  */
-public class CustomLabelEditor
-    extends PropertyEditorSupport {
+public class CustomLabelEditor extends PropertyEditorSupport {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    protected final Log log  = LogFactory.getLog(getClass());
-    LabelManager        lmgr;
+	protected final Log log = LogFactory.getLog(getClass());
 
-    //~ Constructors -----------------------------------------------------------
+	LabelManager lmgr;
 
-    private CustomLabelEditor() {
-    }
+	// ~ Constructors
+	// -----------------------------------------------------------
 
-    public CustomLabelEditor(LabelManager labelManager) {
-        super();
-        lmgr = labelManager;
-    }
+	private CustomLabelEditor() {
+	}
 
-    //~ Methods ----------------------------------------------------------------
+	public CustomLabelEditor(LabelManager labelManager) {
+		super();
+		lmgr = labelManager;
+	}
 
-    public void setAsText(String labelString) {
-        setValue(lmgr.getLabelById(Long.valueOf(labelString)));
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
+
+	public void setAsText(String labelString) {
+		setValue(lmgr.getLabelById(Long.valueOf(labelString)));
+	}
 }

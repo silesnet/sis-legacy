@@ -14,7 +14,8 @@ import cz.silesnet.model.Setting;
  * 
  * @author Richard Sikora
  */
-public class SettingDAOHibernate extends HibernateDaoSupport implements SettingDAO {
+public class SettingDAOHibernate extends HibernateDaoSupport implements
+		SettingDAO {
 
 	public Setting get(Long settingId) {
 		return (Setting) getHibernateTemplate().get(Setting.class, settingId);
@@ -22,7 +23,7 @@ public class SettingDAOHibernate extends HibernateDaoSupport implements SettingD
 
 	public Setting getByName(String name) {
 		List<Setting> settings = (ArrayList<Setting>) getHibernateTemplate()
-			.find("from Setting s where s.name=?", name);
+				.find("from Setting s where s.name=?", name);
 		if (settings == null || settings.size() == 0)
 			return null;
 		if (settings.size() > 1)

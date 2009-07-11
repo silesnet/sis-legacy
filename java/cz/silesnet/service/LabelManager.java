@@ -7,16 +7,17 @@ import java.util.Map;
 
 /**
  * Label manager interface to provide labels for marking objects.
- *
- * @author Vlastník
+ * 
+ * @author Vlastnï¿½k
  */
 public interface LabelManager extends PersistenceManager<Label> {
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public Label getLabelById(Long labelId);
+	public Label getLabelById(Long labelId);
 
-    public List getSubLabels(Label label);
+	public List getSubLabels(Label label);
 
-    public Map getSubLabelsMap(long parentId);
+	public Map getSubLabelsMap(long parentId);
 }

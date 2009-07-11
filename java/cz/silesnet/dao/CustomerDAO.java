@@ -7,29 +7,29 @@ import java.util.List;
 
 /**
  * Interface for Customers persistence operations.
- *
+ * 
  * @author Richard Sikora
  */
-public interface CustomerDAO
-    extends DAO {
+public interface CustomerDAO extends DAO {
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public List<Customer> getAll();
+	public List<Customer> getAll();
 
-    public List<Customer> getByExample(Customer customerExample);
+	public List<Customer> getByExample(Customer customerExample);
 
-    public void evict(Customer customer);
+	public void evict(Customer customer);
 
-    public Customer get(Long customerId);
+	public Customer get(Long customerId);
 
-    public Customer load(Long customerId);
+	public Customer load(Long customerId);
 
-    public void remove(Customer customer);
+	public void remove(Customer customer);
 
-    public void save(Customer customer);
+	public void save(Customer customer);
 
-    public void saveAll(List<Customer> customers);
+	public void saveAll(List<Customer> customers);
 
 	public int getTotalCustomers(Country c);
 

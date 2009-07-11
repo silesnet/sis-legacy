@@ -11,41 +11,42 @@ import java.util.List;
 
 /**
  * LabelManager implementation for manipulating labels in order 2 mark objects.
- *
+ * 
  * @author Richard Sikora
  */
 public class LabelManagerImpl implements LabelManager {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    private LabelDAO dao;
+	private LabelDAO dao;
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public Label getLabelById(Long labelId) {
-        return dao.getLabelById(labelId);
-    }
+	public Label getLabelById(Long labelId) {
+		return dao.getLabelById(labelId);
+	}
 
-    // used by spring DI
-    public void setLabelDAO(LabelDAO labelDAO) {
-        this.dao = labelDAO;
-    }
+	// used by spring DI
+	public void setLabelDAO(LabelDAO labelDAO) {
+		this.dao = labelDAO;
+	}
 
-    public List getSubLabels(Label label) {
-        return dao.getSubLabels(label.getId());
-    }
+	public List getSubLabels(Label label) {
+		return dao.getSubLabels(label.getId());
+	}
 
-    public HashMap<Long, String> getSubLabelsMap(long parentId) {
-        ArrayList<Label>      llist = (ArrayList<Label>) dao
-                    .getSubLabels(parentId);
-            HashMap<Long, String> lmap = new HashMap<Long, String>();
+	public HashMap<Long, String> getSubLabelsMap(long parentId) {
+		ArrayList<Label> llist = (ArrayList<Label>) dao.getSubLabels(parentId);
+		HashMap<Long, String> lmap = new HashMap<Long, String>();
 
-            // fill map with id, name of received labels
-            for (Label l : llist)
-                lmap.put(l.getId(), l.getName());
+		// fill map with id, name of received labels
+		for (Label l : llist)
+			lmap.put(l.getId(), l.getName());
 
-            return lmap;
-        }
+		return lmap;
+	}
 
 	public Label get(Long id) {
 		return dao.getLabelById(id);

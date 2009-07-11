@@ -11,50 +11,53 @@ import cz.silesnet.model.enums.Country;
 
 /**
  * Component class to hold address info for customer.
- *
+ * 
  * @author Richard Sikora
  */
-public class Address
-    implements HistoricToString, Serializable {
+public class Address implements HistoricToString, Serializable {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
 	private static final long serialVersionUID = 2297446722831120403L;
+
 	private String fStreet;
-    private String fCity;
-    private String fPostalCode;
-    private Country fCountry = Country.CZ;
 
-    //~ Methods ----------------------------------------------------------------
+	private String fCity;
 
-    public void setCity(String city) {
-        fCity = city;
-    }
+	private String fPostalCode;
 
-    public String getCity() {
-        return fCity;
-    }
+	private Country fCountry = Country.CZ;
 
-    public String getHistoricToString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(getStreet())
-                                                                        .append(getCity())
-                                                                        .append(getPostalCode())
-                                                                        .append(getCountry())
-                                                                        .toString();
-    }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    public void setPostalCode(String postalCode) {
-        fPostalCode = postalCode;
-    }
+	public void setCity(String city) {
+		fCity = city;
+	}
 
-    public String getPostalCode() {
-        return fPostalCode;
-    }
+	public String getCity() {
+		return fCity;
+	}
 
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this,
-            ToStringStyle.MULTI_LINE_STYLE);
-    }
+	public String getHistoricToString() {
+		return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(
+				getStreet()).append(getCity()).append(getPostalCode()).append(
+				getCountry()).toString();
+	}
+
+	public void setPostalCode(String postalCode) {
+		fPostalCode = postalCode;
+	}
+
+	public String getPostalCode() {
+		return fPostalCode;
+	}
+
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.MULTI_LINE_STYLE);
+	}
 
 	public Country getCountry() {
 		return fCountry;
@@ -71,12 +74,13 @@ public class Address
 	public void setStreet(String street) {
 		fStreet = street;
 	}
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
 
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
+	public boolean equals(Object o) {
+		return EqualsBuilder.reflectionEquals(this, o);
+	}
+
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
 
 }

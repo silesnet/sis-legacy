@@ -15,69 +15,73 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Utility class to help manage filterMap in bound to session.
- *
+ * 
  * @author Richard Sikora
  */
 public class FilterUtils {
 
-    protected static final Log log = LogFactory.getLog(FilterUtils.class);
+	protected static final Log log = LogFactory.getLog(FilterUtils.class);
 
-    //~ Methods ----------------------------------------------------------------
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-    @SuppressWarnings("unchecked")
-    public static String getFilterParameter(HttpServletRequest request,
-        String attributeName) {
-        // get filterMap from session
-        Map<String, String> sisFilterMap = (Map<String, String>) request.getSession()
-                                                                            .getAttribute("sisFilterMap");
-        Assert.notNull(sisFilterMap, "sisFilterMap not present in session!");
+	@SuppressWarnings("unchecked")
+	public static String getFilterParameter(HttpServletRequest request,
+			String attributeName) {
+		// get filterMap from session
+		Map<String, String> sisFilterMap = (Map<String, String>) request
+				.getSession().getAttribute("sisFilterMap");
+		Assert.notNull(sisFilterMap, "sisFilterMap not present in session!");
 
-        // get filter attribute value from session map
-        String returnValue = sisFilterMap.get(attributeName);
+		// get filter attribute value from session map
+		String returnValue = sisFilterMap.get(attributeName);
 
-        // return value or empty string if attribute not set
-        if (returnValue == null)
-            returnValue = "";
+		// return value or empty string if attribute not set
+		if (returnValue == null)
+			returnValue = "";
 
-        return returnValue;
-    }
-    
-    
-    /**
-     * Retrieves filter parameters from request sessions
-     * sisFilterMap with given prefix.
-     * 
-     * @param request
-     * @param filterPrefix
-     * @return Map of filter parameters from sessions sisFilterMap starting with prefix.
-     * 			Resulting param names are trimed by prefix.
-     */
-    @SuppressWarnings("unchecked")
-	public static Map<String, String> getFilterMap(HttpServletRequest request, String filterPrefix) {
+		return returnValue;
+	}
+
+	/**
+	 * Retrieves filter parameters from request sessions sisFilterMap with given
+	 * prefix.
+	 * 
+	 * @param request
+	 * @param filterPrefix
+	 * @return Map of filter parameters from sessions sisFilterMap starting with
+	 * prefix. Resulting param names are trimed by prefix.
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, String> getFilterMap(HttpServletRequest request,
+			String filterPrefix) {
 		Map<String, String> resultMap = new HashMap<String, String>();
-        // get filterMap from session
-        Map<String, String> sisFilterMap = (Map<String, String>) request.getSession().getAttribute("sisFilterMap");
-        // adjust prefix if needed
-        if (filterPrefix == null)
-        	filterPrefix="";
-        // iterate sisFilterMap extracting requested filer params into resulting map
-        for(String paramName: sisFilterMap.keySet()) {
-        	if ("".equals(filterPrefix) || paramName.startsWith(filterPrefix)) {
-        		// found requested filter param
-        		resultMap.put(paramName.substring(filterPrefix.length()), sisFilterMap.get(paramName));
-        	}
-        }
+		// get filterMap from session
+		Map<String, String> sisFilterMap = (Map<String, String>) request
+				.getSession().getAttribute("sisFilterMap");
+		// adjust prefix if needed
+		if (filterPrefix == null)
+			filterPrefix = "";
+		// iterate sisFilterMap extracting requested filer params into resulting
+		// map
+		for (String paramName : sisFilterMap.keySet()) {
+			if ("".equals(filterPrefix) || paramName.startsWith(filterPrefix)) {
+				// found requested filter param
+				resultMap.put(paramName.substring(filterPrefix.length()),
+						sisFilterMap.get(paramName));
+			}
+		}
 		return resultMap;
-    }
-    
-    
-    /** @deprecated
-     *  WORKS only on GET params!
-     *  On Tomcat without <Connector URIEncoding="UTF-8"....> set in server.xml
-     */
-    public static Map<String, String> getParamMap(HttpServletRequest request, String paramPrefix) {
+	}
+
+	/**
+	 * @deprecated WORKS only on GET params! On Tomcat without <Connector
+	 * URIEncoding="UTF-8"....> set in server.xml
+	 */
+	public static Map<String, String> getParamMap(HttpServletRequest request,
+			String paramPrefix) {
 		Map<String, String> paramMap = new HashMap<String, String>();
-		
+
 		String query = request.getQueryString();
 		log.debug("Query: " + query);
 		// leave if no query present
@@ -105,16 +109,22 @@ public class FilterUtils {
 					String unprefixed = p[0].substring(paramPrefix.length());
 					// insert param into result map
 					try {
-						paramMap.put(URLDecoder.decode(unprefixed, "UTF-8"),URLDecoder.decode(p[1], "UTF-8"));
-					} catch (UnsupportedEncodingException e) {
+						paramMap.put(URLDecoder.decode(unprefixed, "UTF-8"),
+								URLDecoder.decode(p[1], "UTF-8"));
+					}
+					catch (UnsupportedEncodingException e) {
 						// on errors skip silently
 					}
-				} else {
+				}
+				else {
 					// only name found
 					// insert param name into result map
 					try {
-						paramMap.put(URLDecoder.decode(param.substring(paramPrefix.length()), "UTF-8"), null);
-					} catch (UnsupportedEncodingException e) {
+						paramMap.put(URLDecoder.decode(param
+								.substring(paramPrefix.length()), "UTF-8"),
+								null);
+					}
+					catch (UnsupportedEncodingException e) {
 						// on errors skip silently
 					}
 				}

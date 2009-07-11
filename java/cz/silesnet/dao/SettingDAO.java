@@ -6,7 +6,7 @@ import cz.silesnet.model.Setting;
 
 /**
  * An interface to manipulate Labels for stored objects.
- *
+ * 
  * @author Richard Sikora
  */
 

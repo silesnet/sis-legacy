@@ -11,13 +11,13 @@ import cz.silesnet.model.enums.WirelessFrequency;
 
 /**
  * Wireless node entity.
- *
+ * 
  * @author Richard Sikora
  */
 public class Wireless extends Node {
 
 	private static final long serialVersionUID = -9020138605893290201L;
-	
+
 	private WirelessEnum type = WirelessEnum.AP;
 
 	private WirelessFrequency frequency;
@@ -70,22 +70,22 @@ public class Wireless extends Node {
 		return mac;
 	}
 
-    public String getMacFormatted() {
-        // return formatted mac with ':' eg. 12:EF:45:44:12:65
-        return StringUtils.isNotBlank(mac)
-            ? StringUtils.chomp(mac.replaceAll("(..)", "$1:"), ":")
-            : mac;
-    }
+	public String getMacFormatted() {
+		// return formatted mac with ':' eg. 12:EF:45:44:12:65
+		return StringUtils.isNotBlank(mac) ? StringUtils.chomp(mac.replaceAll(
+				"(..)", "$1:"), ":") : mac;
+	}
 
 	public void setMac(String mac) {
-        // remove all not needed chars from given mac
-		this.mac = mac != null ? mac.toUpperCase().replaceAll("[^0-9A-F]", "") : null ;
+		// remove all not needed chars from given mac
+		this.mac = mac != null ? mac.toUpperCase().replaceAll("[^0-9A-F]", "")
+				: null;
 	}
 
 	public Boolean isMacAuthorization() {
 		return macAuthorization;
 	}
-	
+
 	public Boolean getMacAuthorization() {
 		return macAuthorization;
 	}
@@ -141,26 +141,27 @@ public class Wireless extends Node {
 	public void setCustomVendor(String customVendor) {
 		this.customVendor = customVendor;
 	}
-	
-    public String getVendor() {
-    	// custom vendor takes precedence
-    	return StringUtils.isNotBlank(customVendor) ? customVendor : macVendor;
-    }
+
+	public String getVendor() {
+		// custom vendor takes precedence
+		return StringUtils.isNotBlank(customVendor) ? customVendor : macVendor;
+	}
 
 	public String getWep() {
 		return wep;
 	}
 
 	public String getShortWep() {
-        if (StringUtils.isNotBlank(wep)) {
-            // substring starting with '*' or '-' followed by anythink but ' ' or \n
-            Pattern wepPattern = Pattern.compile("[\\*-]([^ \\n]*)");
-            Matcher wepMatcher = wepPattern.matcher(wep);
-            if (wepMatcher.find())
-                return wepMatcher.group(1);
-        }
-        return wep;
-    }
+		if (StringUtils.isNotBlank(wep)) {
+			// substring starting with '*' or '-' followed by anythink but ' '
+			// or \n
+			Pattern wepPattern = Pattern.compile("[\\*-]([^ \\n]*)");
+			Matcher wepMatcher = wepPattern.matcher(wep);
+			if (wepMatcher.find())
+				return wepMatcher.group(1);
+		}
+		return wep;
+	}
 
 	public void setWep(String wep) {
 		this.wep = wep;

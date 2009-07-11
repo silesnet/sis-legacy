@@ -15,43 +15,45 @@ import org.springframework.validation.Validator;
 
 /**
  * Validator for network nodes.
- *
+ * 
  * @author Richard Sikora
  */
-public class NodeWirelessEditValidator
-    implements Validator {
+public class NodeWirelessEditValidator implements Validator {
 
-    //~ Instance fields --------------------------------------------------------
+	// ~ Instance fields
+	// --------------------------------------------------------
 
-    protected final Log                             log = LogFactory
-                .getLog(getClass());
-        @SuppressWarnings("unused")
-        private NodeManager                         nmgr;
-        @SuppressWarnings("unused")
-        private LabelManager                        lmgr;
+	protected final Log log = LogFactory.getLog(getClass());
 
-        //~ Methods ----------------------------------------------------------------
+	@SuppressWarnings("unused")
+	private NodeManager nmgr;
 
-        // injected by Spring
-        public void setLabelManager(LabelManager labelManager) {
-            lmgr = labelManager;
-        }
+	@SuppressWarnings("unused")
+	private LabelManager lmgr;
 
-        // injected by Spring
-        public void setNodeManager(NodeManager nodeManager) {
-            nmgr = nodeManager;
-        }
+	// ~ Methods
+	// ----------------------------------------------------------------
 
-        public boolean supports(Class clazz) {
-            return clazz.equals(Node.class) || clazz.equals(Wireless.class);
-        }
+	// injected by Spring
+	public void setLabelManager(LabelManager labelManager) {
+		lmgr = labelManager;
+	}
 
-        public void validate(Object object, Errors errors) {
-            Node node = (Node) object;
-            log.debug("Validating node " + node);
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name",
-                "nodeEdit.error.name.blank-or-null", "Value required.");
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "MAC",
-                "nodeEdit.error.mac.blank-or-null", "Value required.");
-        }
-    }
+	// injected by Spring
+	public void setNodeManager(NodeManager nodeManager) {
+		nmgr = nodeManager;
+	}
+
+	public boolean supports(Class clazz) {
+		return clazz.equals(Node.class) || clazz.equals(Wireless.class);
+	}
+
+	public void validate(Object object, Errors errors) {
+		Node node = (Node) object;
+		log.debug("Validating node " + node);
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name",
+				"nodeEdit.error.name.blank-or-null", "Value required.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "MAC",
+				"nodeEdit.error.mac.blank-or-null", "Value required.");
+	}
+}

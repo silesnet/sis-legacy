@@ -9,17 +9,17 @@ import cz.silesnet.model.enums.ReverseEnumMap;
  * @author Richard Sikora
  * 
  */
-public enum InvoiceFormat implements EnumPersistenceMapping<InvoiceFormat>{
-	LINK	(10, "enum.format.link"),
-	DUO		(20, "enum.format.duo"),
-	HTML	(30, "enum.format.html"),
-	PDF		(40, "enum.format.pdf");
+public enum InvoiceFormat implements EnumPersistenceMapping<InvoiceFormat> {
+	LINK(10, "enum.format.link"), DUO(20, "enum.format.duo"), HTML(30,
+			"enum.format.html"), PDF(40, "enum.format.pdf");
 
 	private int id;
+
 	private String name;
 
 	// has to declare it by hand
-	private static ReverseEnumMap<InvoiceFormat> sReverseMap = new ReverseEnumMap<InvoiceFormat>(InvoiceFormat.class);
+	private static ReverseEnumMap<InvoiceFormat> sReverseMap = new ReverseEnumMap<InvoiceFormat>(
+			InvoiceFormat.class);
 
 	private InvoiceFormat(int id, String name) {
 		this.id = id;
@@ -29,11 +29,11 @@ public enum InvoiceFormat implements EnumPersistenceMapping<InvoiceFormat>{
 	public String getName() {
 		return name;
 	}
-	
+
 	public String toString() {
 		return getName();
 	}
-	
+
 	public int getId() {
 		return id;
 	}

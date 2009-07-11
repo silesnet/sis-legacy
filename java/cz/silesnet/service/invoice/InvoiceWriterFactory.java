@@ -1,6 +1,5 @@
 package cz.silesnet.service.invoice;
 
-
 import cz.silesnet.model.Bill;
 
 /**
@@ -25,5 +24,5 @@ public class InvoiceWriterFactory {
 			return new PdfInvoiceWriter(invoice);
 		return null;
 	}
-	
+
 }

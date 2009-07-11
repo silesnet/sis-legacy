@@ -7,7 +7,8 @@ import cz.silesnet.model.enums.BillingStatus;
  * 
  * @author Richard Sikora
  */
-public class BillingStatusHibernateUserType  extends IntEnumHibernateUserType<BillingStatus>{
+public class BillingStatusHibernateUserType extends
+		IntEnumHibernateUserType<BillingStatus> {
 
 	public BillingStatusHibernateUserType() {
 		super(BillingStatus.INVOICE);

@@ -12,25 +12,26 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
 /**
- * Delegates requests to another web server. Mainly used for
- * php rendered pages.
+ * Delegates requests to another web server. Mainly used for php rendered pages.
  * 
  * @author Richard Sikora
- *
+ * 
  */
 public class PhpController extends AbstractController {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
-	protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	protected ModelAndView handleRequestInternal(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		log.debug("PhpController");
-//		URL url = new URL("http://www.silesnet.cz" + request.getRequestURI() + "?" + request.getQueryString());
+		// URL url = new URL("http://www.silesnet.cz" + request.getRequestURI()
+		// + "?" + request.getQueryString());
 		StringBuffer delegateUrl = new StringBuffer();
 		log.debug(request.getRequestURI());
 		log.debug(request.getRequestURL());
 		log.debug(request.getServletPath());
-		delegateUrl.append("http://www.silesnet.cz")
-			.append(request.getServletPath());
+		delegateUrl.append("http://www.silesnet.cz").append(
+				request.getServletPath());
 		if (request.getQueryString() != null)
 			delegateUrl.append("?" + request.getQueryString());
 		log.debug(delegateUrl);

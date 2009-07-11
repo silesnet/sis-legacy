@@ -13,21 +13,21 @@ import org.apache.commons.logging.LogFactory;
  */
 public class HttpRequestWrapper extends HttpServletRequestWrapper {
 
-    protected final Log    log  = LogFactory.getLog(getClass());
-    
+	protected final Log log = LogFactory.getLog(getClass());
+
 	public HttpRequestWrapper(HttpServletRequest request) {
 		super(request);
 	}
-	
+
 	public StringBuffer getRequestURL() {
-//		log.debug("URL: " + url);
-//		return new StringBuffer(url);
+		// log.debug("URL: " + url);
+		// return new StringBuffer(url);
 		return super.getRequestURL();
 	}
-	
-	public String	getRequestURI() {
-//		log.debug("URL: " + url);
-//		return url;
+
+	public String getRequestURI() {
+		// log.debug("URL: " + url);
+		// return url;
 		return super.getRequestURI();
 	}
 }
