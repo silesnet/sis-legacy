@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="cz.silesnet.model.Bill" table="bills">
+        <id name="id" column="id" unsaved-value="null">
+            <generator class="increment"/>
+        </id>
+		<property name="number" length="15" />
+		<property name="billingDate" column="billing_date" />
+		<property name="purgeDate" column="purge_date" />
+        <property name="customerId" column="customer_id" type="long" />
+        <property name="invoicingId" column="invoicing_id" type="long" />
+        <property name="customerName" column="customer_name" not-null="true" length="80"/>
+        <component name="period">
+			<property name="from" column="period_from" type="timestamp" not-null="true" />
+			<property name="to" column="period_to" type="timestamp" not-null="true" />
+		</component>
+		<bag name="items" table="bill_items" lazy="false" cascade="all-delete-orphan">
+			<key column="bill_id" />
+			<composite-element class="cz.silesnet.model.BillItem">
+				<parent name="bill" />
+				<property name="text" length="100" />
+				<property name="amount" />
+				<property name="price" />
+				<property name="isDisplayUnit" column="is_display_unit" />
+			</composite-element>
+		</bag> 
+		<property name="vat" />
+        <property name="hashCode" column="hash_code" not-null="true" length="50"/>
+        <property name="isConfirmed" column="is_confirmed" />
+        <property name="isSent" column="is_sent" />
+        <property name="isDelivered" column="is_delivered" />
+        <property name="isArchived" column="is_archived" />
+        <property name="deliverByMail" column="deliver_by_mail" />
+    </class>
+</hibernate-mapping>
