@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="java"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry excluding="WEB-INF/classes/" kind="src" path="webapp"/>
+	<classpathentry excluding="cz/silesnet/utils/MethodSecurityAspect.aj" kind="src" output="target/classes" path="java"/>
+	<classpathentry kind="src" output="target/test-classes" path="test"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/spring.jar" sourcepath="W:/testing/java/inst/spring-framework-2.0-m3-with-dependencies/spring-framework-2.0-m3/src"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/commons-logging.jar"/>
@@ -38,7 +37,6 @@
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/bcprov-jdk15-136.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/quartz-1.6.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="con" path="org.eclipse.ajdt.core.ASPECTJRT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.6.0_11">
 		<attributes>
 			<attribute name="owner.project.facets" value="jst.java"/>
