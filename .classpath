@@ -2,9 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="java"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry excluding="WEB-INF/classes/" kind="src" path="web"/>
+	<classpathentry excluding="WEB-INF/classes/" kind="src" path="webapp"/>
 	<classpathentry kind="src" path="web/WEB-INF/classes"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/spring.jar" sourcepath="W:/testing/java/inst/spring-framework-2.0-m3-with-dependencies/spring-framework-2.0-m3/src"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-logging.jar"/>
@@ -41,5 +40,10 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/quartz-1.6.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="con" path="org.eclipse.ajdt.core.ASPECTJRT_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.6.0_11">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.java"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target"/>
 </classpath>
