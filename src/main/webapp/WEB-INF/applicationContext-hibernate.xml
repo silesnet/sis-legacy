@@ -17,7 +17,7 @@
         <property name="dataSource"><ref local="dataSource"/></property>
         <property name="mappingLocations">
         	<value>
-        		classpath:cz/silesnet/dao/hibernate/mappings/*.hbm.xml
+        		classpath:hibernate-mappings/*.hbm.xml
         	</value>
        	</property>
         <property name="hibernateProperties">

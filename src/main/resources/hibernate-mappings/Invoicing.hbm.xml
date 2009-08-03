@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="cz.silesnet.model.Invoicing" table="invoicings">
+        <id name="id" column="id" unsaved-value="null">
+            <generator class="increment"/>
+        </id>
+        <property name="historyId" column="history_id" not-null="true" unique="true" />
+        <property name="name" length="80" not-null="true"/>
+        <property name="country" type="cz.silesnet.dao.hibernate.support.CountryHibernateUserType" />
+		<property name="invoicingDate" column="invoicing_date" type="timestamp" />
+		<property name="numberingBase" length="15" />
+    </class>
+</hibernate-mapping>
