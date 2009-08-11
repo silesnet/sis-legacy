@@ -9,6 +9,7 @@ import cz.silesnet.model.User;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import org.joda.time.DateTime;
 
 /**
  * Service responsible for managing objects history. Objects need to implement
@@ -46,5 +47,7 @@ public interface HistoryManager {
 	public List<HistoryItem> getSystemBillingAudit();
 
 	public void clearBillingAudit();
+	
+	int removeLoginHistoryOlderThan(int moths);
 
 }

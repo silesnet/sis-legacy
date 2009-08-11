@@ -1,24 +1,7 @@
 package cz.silesnet.service.impl;
 
-import cz.silesnet.dao.HistoryItemDAO;
-
-import cz.silesnet.model.Customer;
-import cz.silesnet.model.Historic;
-import cz.silesnet.model.HistoryItem;
-import cz.silesnet.model.Invoicing;
-import cz.silesnet.model.Label;
-import cz.silesnet.model.User;
-
-import cz.silesnet.service.HistoryManager;
-import cz.silesnet.service.LabelManager;
-import cz.silesnet.utils.DiffUtils;
-import cz.silesnet.utils.SecurityUtils;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.util.Assert;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +9,24 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
+import org.springframework.util.Assert;
+
+import cz.silesnet.dao.HistoryItemDAO;
+import cz.silesnet.model.Customer;
+import cz.silesnet.model.Historic;
+import cz.silesnet.model.HistoryItem;
+import cz.silesnet.model.Invoicing;
+import cz.silesnet.model.Label;
+import cz.silesnet.model.User;
+import cz.silesnet.service.HistoryManager;
+import cz.silesnet.service.LabelManager;
+import cz.silesnet.utils.DiffUtils;
+import cz.silesnet.utils.SecurityUtils;
 
 /**
  * Concrete HistoryManager implementation using HistoryItemDAO implementation.
@@ -288,5 +289,11 @@ public class HistoryManagerImpl implements HistoryManager {
 
 	public void clearBillingAudit() {
 		dao.clearBillingAudit();
+	}
+
+	@Override
+	public int removeLoginHistoryOlderThan(int months) {
+		assertThat(months, is(greaterThanOrEqualTo(6)));
+		return dao.removeLoginHistoryOlderThan(new DateTime().minusMonths(months));
 	}
 }

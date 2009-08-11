@@ -6,6 +6,8 @@ import cz.silesnet.model.User;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 /**
  * DAO interface to manipulate history items data.
  * 
@@ -34,4 +36,6 @@ public interface HistoryItemDAO extends DAO {
 	public void saveHistoryItem(HistoryItem historyItem);
 
 	public void clearBillingAudit();
+
+	public int removeLoginHistoryOlderThan(DateTime dateTime);
 }

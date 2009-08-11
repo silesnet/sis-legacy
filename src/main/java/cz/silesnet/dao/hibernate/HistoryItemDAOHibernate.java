@@ -7,6 +7,7 @@ import cz.silesnet.model.User;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -92,5 +93,11 @@ public class HistoryItemDAOHibernate extends HibernateDaoSupport implements
 	public void clearBillingAudit() {
 		// FIXME 1 is hardcode value for billing audit
 		getHibernateTemplate().deleteAll(getHistory(Long.valueOf(1)));
+	}
+
+	@Override
+	public int removeLoginHistoryOlderThan(DateTime dateTime) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
