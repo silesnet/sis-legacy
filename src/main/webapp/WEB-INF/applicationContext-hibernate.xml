@@ -4,6 +4,17 @@
 
 <beans>
 
+	<!-- FIXME should use import, not define configurer twice! -->
+	
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+        	<list>
+	        	<value>classpath:jdbc.properties</value>
+	        	<value>classpath:applicationContext.properties</value>
+        	</list>
+		</property>
+	</bean>
+
 	<!-- hibernate specific beans -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
     	depends-on="propertyConfigurer">

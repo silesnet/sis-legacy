@@ -1,8 +1,33 @@
 package cz.silesnet.dao.hibernate;
 
-import junit.framework.TestCase;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-public class HistoryItemDAOHibernateTest extends TestCase {
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.joda.time.DateTime;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import cz.silesnet.DatabaseTestCase;
+import cz.silesnet.dao.HistoryItemDAO;
+
+public class HistoryItemDAOHibernateTest extends DatabaseTestCase {
+
+	private HistoryItemDAO auditDao;
+
+	@Override
+	protected void initializeAfterContextLoaded(ApplicationContext ac) {
+		auditDao = new HistoryItemDAOHibernate();
+		((HibernateDaoSupport) auditDao).setSessionFactory(sessionFactory());
+	}
+
+	@Override
+	protected IDataSet getDataSet() throws Exception {
+		return new FlatXmlDataSet(
+				new ClassPathResource("db/audit-items-01.xml").getFile());
+	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -13,6 +38,8 @@ public class HistoryItemDAOHibernateTest extends TestCase {
 	}
 
 	public void testRemoveLoginHistoryOlderThan() throws Exception {
-		fail("Not yet implemented.");
+		int removedCount = auditDao.removeLoginHistoryOlderThan(new DateTime(
+				"2009-08-12"));
+		assertThat(removedCount, is(1));
 	}
 }

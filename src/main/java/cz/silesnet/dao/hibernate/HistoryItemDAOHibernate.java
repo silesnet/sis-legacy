@@ -1,18 +1,17 @@
 package cz.silesnet.dao.hibernate;
 
-import cz.silesnet.dao.HistoryItemDAO;
-import cz.silesnet.model.HistoryItem;
-import cz.silesnet.model.Label;
-import cz.silesnet.model.User;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
-
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import java.util.ArrayList;
-import java.util.List;
+import cz.silesnet.dao.HistoryItemDAO;
+import cz.silesnet.model.HistoryItem;
+import cz.silesnet.model.Label;
+import cz.silesnet.model.User;
 
 /**
  * Hibernate HistoryItemDAO implementation.
@@ -96,8 +95,10 @@ public class HistoryItemDAOHibernate extends HibernateDaoSupport implements
 	}
 
 	@Override
-	public int removeLoginHistoryOlderThan(DateTime dateTime) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int removeLoginHistoryOlderThan(DateTime date) {
+		log.info("Removing login history older than: " + date);
+		// TODO fill the code
+		int size = getHibernateTemplate().find("from HistoryItem").size();
+		return size;
 	}
 }
