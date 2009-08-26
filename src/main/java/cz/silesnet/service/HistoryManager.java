@@ -1,15 +1,14 @@
 package cz.silesnet.service;
 
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.Historic;
 import cz.silesnet.model.HistoryItem;
 import cz.silesnet.model.Invoicing;
 import cz.silesnet.model.User;
-
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-import org.joda.time.DateTime;
 
 /**
  * Service responsible for managing objects history. Objects need to implement
@@ -47,7 +46,7 @@ public interface HistoryManager {
 	public List<HistoryItem> getSystemBillingAudit();
 
 	public void clearBillingAudit();
-	
+
 	int removeLoginHistoryOlderThan(int moths);
 
 }

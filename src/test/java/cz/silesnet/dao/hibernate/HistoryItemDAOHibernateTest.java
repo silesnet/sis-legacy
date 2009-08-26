@@ -39,7 +39,7 @@ public class HistoryItemDAOHibernateTest extends DatabaseTestCase {
 
 	public void testRemoveLoginHistoryOlderThan() throws Exception {
 		int removedCount = auditDao.removeLoginHistoryOlderThan(new DateTime(
-				"2009-08-12"));
-		assertThat(removedCount, is(1));
+				"2009-08-13"));
+		assertThat(removedCount, is(2)); // see details in audit-items-01.xml
 	}
 }

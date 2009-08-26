@@ -1,12 +1,12 @@
 package cz.silesnet.dao;
 
-import cz.silesnet.model.HistoryItem;
-import cz.silesnet.model.Label;
-import cz.silesnet.model.User;
-
 import java.util.List;
 
 import org.joda.time.DateTime;
+
+import cz.silesnet.model.HistoryItem;
+import cz.silesnet.model.Label;
+import cz.silesnet.model.User;
 
 /**
  * DAO interface to manipulate history items data.
@@ -14,6 +14,8 @@ import org.joda.time.DateTime;
  * @author Richard Sikora
  */
 public interface HistoryItemDAO extends DAO {
+
+	public static Long SYSTEM_HISTORY_ID = Long.valueOf(0);
 
 	// ~ Methods
 	// ----------------------------------------------------------------

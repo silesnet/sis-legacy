@@ -1,8 +1,8 @@
 package cz.silesnet.dao;
 
-import cz.silesnet.model.Label;
-
 import java.util.List;
+
+import cz.silesnet.model.Label;
 
 /**
  * An interface to manipulate Labels for stored objects.
@@ -10,6 +10,8 @@ import java.util.List;
  * @author Richard Sikora
  */
 public interface LabelDAO extends DAO {
+
+	public static Long LOGIN_HISTORY_TYPE_LABEL_ID = Long.valueOf(17);
 
 	// ~ Methods
 	// ----------------------------------------------------------------

@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import cz.silesnet.dao.HistoryItemDAO;
+import cz.silesnet.dao.LabelDAO;
 import cz.silesnet.model.HistoryItem;
 import cz.silesnet.model.Label;
 import cz.silesnet.model.User;
@@ -29,6 +30,7 @@ public class HistoryItemDAOHibernate extends HibernateDaoSupport implements
 	// ~ Methods
 	// ----------------------------------------------------------------
 
+	@SuppressWarnings("unchecked")
 	public List<HistoryItem> getHistory(Long historyId) {
 		return (ArrayList<HistoryItem>) getHibernateTemplate()
 				.find(
@@ -51,6 +53,7 @@ public class HistoryItemDAOHibernate extends HibernateDaoSupport implements
 		return Long.valueOf(1);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<HistoryItem> getOpenLoginItems(String sessionId) {
 		// FIXME 17, and mOnline can not be hardcoded, use global const
 		return (ArrayList<HistoryItem>) getHibernateTemplate()
@@ -97,8 +100,11 @@ public class HistoryItemDAOHibernate extends HibernateDaoSupport implements
 	@Override
 	public int removeLoginHistoryOlderThan(DateTime date) {
 		log.info("Removing login history older than: " + date);
-		return getHibernateTemplate().bulkUpdate(
-				"delete from HistoryItem item where item.timeStamp < ?",
-				date.toDate());
+		return getHibernateTemplate()
+				.bulkUpdate(
+						"delete from HistoryItem where historyId = ? and historyTypeLabel.id = ? and timeStamp < ?",
+						new Object[] { SYSTEM_HISTORY_ID,
+								LabelDAO.LOGIN_HISTORY_TYPE_LABEL_ID,
+								date.toDate() });
 	}
 }
