@@ -18,6 +18,8 @@ import cz.silesnet.model.User;
  */
 public interface HistoryManager {
 
+	public static final int MIN_MONTHS_LOGIN_HISTORY_AGE = 6;
+
 	// ~ Methods
 	// ----------------------------------------------------------------
 
@@ -47,6 +49,6 @@ public interface HistoryManager {
 
 	public void clearBillingAudit();
 
-	int removeLoginHistoryOlderThan(int moths);
+	int removeMonthsOldLoginHistory(int moths);
 
 }

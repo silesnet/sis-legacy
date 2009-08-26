@@ -292,8 +292,12 @@ public class HistoryManagerImpl implements HistoryManager {
 	}
 
 	@Override
-	public int removeLoginHistoryOlderThan(int months) {
-		assertThat(months, is(greaterThanOrEqualTo(6)));
-		return dao.removeLoginHistoryOlderThan(new DateTime().minusMonths(months));
+	public int removeMonthsOldLoginHistory(int months) {
+		assertThat(months,
+				is(greaterThanOrEqualTo(MIN_MONTHS_LOGIN_HISTORY_AGE)));
+		int removedCount = dao.removeLoginHistoryOlderThan(new DateTime()
+				.minusMonths(months));
+		log.info("Removed " + removedCount + " login history records.");
+		return removedCount;
 	}
 }
