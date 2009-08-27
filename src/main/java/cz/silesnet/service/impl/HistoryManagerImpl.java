@@ -1,6 +1,6 @@
 package cz.silesnet.service.impl;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
@@ -44,6 +44,8 @@ public class HistoryManagerImpl implements HistoryManager {
 
 	private LabelManager lmgr;
 
+	private int logHistoryRemoveMonthsAfter = HistoryManager.MIN_MONTHS_LOGIN_HISTORY_AGE;
+
 	// ~ Methods
 	// ----------------------------------------------------------------
 
@@ -64,6 +66,10 @@ public class HistoryManagerImpl implements HistoryManager {
 	// injected by Spring context
 	public void setLabelManager(LabelManager labelManager) {
 		lmgr = labelManager;
+	}
+
+	public void setLogHistoryRemoveMonthsAfter(int logHistoryRemoveMonthsAfter) {
+		this.logHistoryRemoveMonthsAfter = logHistoryRemoveMonthsAfter;
 	}
 
 	public List<HistoryItem> getLoginHistory() {
@@ -291,13 +297,17 @@ public class HistoryManagerImpl implements HistoryManager {
 		dao.clearBillingAudit();
 	}
 
-	@Override
-	public int removeMonthsOldLoginHistory(int months) {
+	protected int removeMonthsOldLoginHistory(int months) {
 		assertThat(months,
 				is(greaterThanOrEqualTo(MIN_MONTHS_LOGIN_HISTORY_AGE)));
 		int removedCount = dao.removeLoginHistoryOlderThan(new DateTime()
 				.minusMonths(months));
 		log.info("Removed " + removedCount + " login history records.");
 		return removedCount;
+	}
+
+	@Override
+	public void removeOldLoginHistory() {
+		removeMonthsOldLoginHistory(logHistoryRemoveMonthsAfter);
 	}
 }

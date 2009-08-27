@@ -49,6 +49,6 @@ public interface HistoryManager {
 
 	public void clearBillingAudit();
 
-	int removeMonthsOldLoginHistory(int moths);
+	public void removeOldLoginHistory();
 
 }
