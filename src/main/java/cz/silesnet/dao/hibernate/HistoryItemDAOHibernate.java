@@ -97,7 +97,6 @@ public class HistoryItemDAOHibernate extends HibernateDaoSupport implements
 		getHibernateTemplate().deleteAll(getHistory(Long.valueOf(1)));
 	}
 
-	@Override
 	public int removeLoginHistoryOlderThan(DateTime date) {
 		log.info("Removing login history older than: " + date);
 		return getHibernateTemplate()

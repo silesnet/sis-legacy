@@ -306,7 +306,6 @@ public class HistoryManagerImpl implements HistoryManager {
 		return removedCount;
 	}
 
-	@Override
 	public void removeOldLoginHistory() {
 		removeMonthsOldLoginHistory(logHistoryRemoveMonthsAfter);
 	}
