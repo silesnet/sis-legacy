@@ -313,7 +313,7 @@
 	<bean id="removeOldLoginHistoryTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="removeOldLoginHistoryJobDetail" />
 		<!-- four minutes after midnight -->
-		<property name="cronExpression" value="0 4 0 * * ?" />
+		<property name="cronExpression" value="0 4 0 1 * ?" />
 	</bean>
 
 	<bean id="removeOldLoginHistoryJobDetail"
