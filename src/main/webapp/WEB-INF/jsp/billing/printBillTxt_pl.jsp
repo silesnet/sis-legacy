@@ -144,7 +144,7 @@
   <TD Align="Left" width="48%" valign="top">
 	<table width="80%">
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Wystawił(a):</td></tr>
-		<tr><td align="center">Iwona Heczko<br /><br /><br /><br /></td></tr>
+		<tr><td align="center">Iwona Heczko<br /><img src="${ctx}/img/bill_signature_pl.gif" /></td></tr>
 		<tr><td align="center"><font size="1">Podpis osoby upoważnionej<br />do wystawienia faktury VAT</font></td></tr>
 	</table>
   </TD>
