@@ -26,7 +26,7 @@
         <property name="publicId" column="public_id" length="20" not-null="true" unique="true" />
         <property name="DIC" length="20" />
         <property name="symbol" length="20" />
-		<bag name="services" lazy="false" cascade="all-delete-orphan" order-by="is_connectivity desc, period_from">
+		<bag name="services" lazy="false" cascade="all-delete-orphan" order-by="period_from">
 			<key column="customer_id" />
 			<one-to-many class="cz.silesnet.model.Service" />
         </bag>

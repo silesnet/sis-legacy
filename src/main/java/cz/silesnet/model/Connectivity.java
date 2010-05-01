@@ -14,101 +14,101 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class Connectivity implements HistoricToString, Serializable {
 
-	// ~ Instance fields
-	// --------------------------------------------------------
+  // ~ Instance fields
+  // --------------------------------------------------------
 
-	private static final long serialVersionUID = -2833510950229610422L;
+  private static final long serialVersionUID = -2833510950229610422L;
 
-	private Integer fDownload;
+  private Integer fDownload;
 
-	private Integer fUpload;
+  private Integer fUpload;
 
-	private Boolean fIsAggregated = false;
+  private Boolean fIsAggregated = false;
 
-	private Integer fAggregationId;
+  private Integer fAggregationId = 0;
 
-	// ~ Constructors
-	// -----------------------------------------------------------
+  // ~ Constructors
+  // -----------------------------------------------------------
 
-	public Connectivity() {
-		super();
-	}
+  public Connectivity() {
+    super();
+  }
 
-	/**
-	 * @param download
-	 * @param upload
-	 */
-	public Connectivity(Integer download, Integer upload) {
-		this(download, upload, false, 0);
-	}
+  /**
+   * @param download
+   * @param upload
+   */
+  public Connectivity(Integer download, Integer upload) {
+    this(download, upload, false, 0);
+  }
 
-	/**
-	 * @param download
-	 * @param upload
-	 * @param aggregated
-	 * @param id
-	 */
-	public Connectivity(Integer download, Integer upload, Boolean aggregated,
-			Integer id) {
-		this();
-		fDownload = download;
-		fUpload = upload;
-		fIsAggregated = aggregated;
-		fAggregationId = id;
-	}
+  /**
+   * @param download
+   * @param upload
+   * @param aggregated
+   * @param id
+   */
+  public Connectivity(Integer download, Integer upload, Boolean aggregated, Integer id) {
+    this();
+    fDownload = download;
+    fUpload = upload;
+    fIsAggregated = aggregated;
+    fAggregationId = id;
+  }
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	public void setAggregationId(Integer aggregationId) {
-		fAggregationId = aggregationId;
-	}
+  public void setAggregationId(Integer aggregationId) {
+    fAggregationId = aggregationId;
+  }
 
-	public Integer getAggregationId() {
-		return fAggregationId;
-	}
+  public Integer getAggregationId() {
+    return fAggregationId;
+  }
 
-	public void setDownload(Integer download) {
-		fDownload = download;
-	}
+  public void setDownload(Integer download) {
+    fDownload = download;
+  }
 
-	public Integer getDownload() {
-		return fDownload;
-	}
+  public Integer getDownload() {
+    return fDownload;
+  }
 
-	public String getHistoricToString() {
-		return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(
-				getDownload()).append(getUpload()).append(getIsAggregated())
-				.append(getAggregationId()).toString();
-	}
+  public String getHistoricToString() {
+    return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(getDownload()).append(
+        getUpload()).append(getIsAggregated()).append(getAggregationId()).toString();
+  }
 
-	public void setIsAggregated(Boolean isAggregated) {
-		fIsAggregated = isAggregated;
-	}
+  public void setIsAggregated(Boolean isAggregated) {
+    fIsAggregated = isAggregated;
+  }
 
-	public Boolean getIsAggregated() {
-		return fIsAggregated;
-	}
+  public Boolean getIsAggregated() {
+    return fIsAggregated;
+  }
 
-	public void setUpload(Integer upload) {
-		fUpload = upload;
-	}
+  public void setUpload(Integer upload) {
+    fUpload = upload;
+  }
 
-	public Integer getUpload() {
-		return fUpload;
-	}
+  public Integer getUpload() {
+    return fUpload;
+  }
 
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
-	}
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+  }
 
-	public boolean equals(Object o) {
-		return EqualsBuilder.reflectionEquals(this, o);
-	}
+  @Override
+  public boolean equals(Object o) {
+    return EqualsBuilder.reflectionEquals(this, o);
+  }
 
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
-	}
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this);
+  }
 
 }

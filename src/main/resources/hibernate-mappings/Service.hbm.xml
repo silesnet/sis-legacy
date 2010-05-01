@@ -17,12 +17,10 @@
         <property name="additionalName" length="50" />
         <property name="price" not-null="true"/>
 		<property name="frequency" type="cz.silesnet.dao.hibernate.support.FrequencyHibernateUserType" />
-		<property name="isConnectivity" column="is_connectivity" />
 		<component name="connectivity">
 			<property name="download" />
 			<property name="upload" />
 			<property name="isAggregated" column="is_aggregated" />
-			<property name="aggregationId" column="aggregation_id" />
 		</component>
         <property name="info" length="150"/>
     </class>
