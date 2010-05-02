@@ -44,7 +44,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
     s1.setPrice(460);
     Calendar serviceFrom = new GregorianCalendar(2005, Calendar.JANUARY, 1);
     s1.setPeriod(new Period(serviceFrom.getTime(), null));
-    s1.setIsConnectivity(false);
     c.getServices().add(s1);
 
     // prepare fake customer
@@ -111,7 +110,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
     Calendar serviceFrom = new GregorianCalendar(2005, Calendar.JANUARY, 1);
     Calendar serviceTo = new GregorianCalendar(2005, Calendar.JANUARY, 1);
     s1.setPeriod(new Period(serviceFrom.getTime(), null));
-    s1.setIsConnectivity(false);
     c.getServices().add(s1);
     String hashCode = null;
 
@@ -219,7 +217,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
     s2.getPeriod().setFrom(serviceFrom.getTime());
     s2.getPeriod().setTo(null);
     s2.setFrequency(Frequency.ANNUAL);
-    s2.setIsConnectivity(false);
     c.getServices().add(s2);
 
     // one_time service
@@ -230,7 +227,6 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
     s3.getPeriod().setFrom(serviceFrom.getTime());
     s3.getPeriod().setTo(null);
     s3.setFrequency(Frequency.ONE_TIME);
-    s3.setIsConnectivity(false);
     c.getServices().add(s3);
 
     bill = bMgr.generate(c, due.getTime(), null);

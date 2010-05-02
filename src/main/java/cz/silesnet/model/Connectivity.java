@@ -27,7 +27,7 @@ public class Connectivity implements HistoricToString, Serializable {
 
   private Integer fAggregationId = 0;
 
-  private String fBps = "k";
+  private String fBps = "M";
 
   // ~ Constructors
   // -----------------------------------------------------------
@@ -127,9 +127,11 @@ public class Connectivity implements HistoricToString, Serializable {
 
   public String getLinkSpeedText() {
     StringBuilder speed = new StringBuilder();
-    if (fDownload != null && fUpload != null) {
-      speed.append(fDownload).append("/").append(fUpload).append(" ");
-      speed.append(getUnit());
+    if (fDownload != null) {
+      speed.append(fDownload);
+      if (fUpload != null)
+        speed.append("/").append(fUpload);
+      speed.append(" ").append(getUnit());
     }
     return speed.toString();
   }

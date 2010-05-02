@@ -75,4 +75,14 @@ public class ServiceTest extends TestCase {
     service.getConnectivity().setUpload(1);
     assertTrue(service.getIsConnectivity());
   }
+
+  public void testShortInfo() throws Exception {
+    Service service = new Service();
+    service.setName("Wireless");
+    service.getConnectivity().setDownload(4);
+    service.getConnectivity().setUpload(2);
+    service.getConnectivity().setBps("M");
+    service.getConnectivity().setIsAggregated(true);
+    assertEquals("Wireless 4/2 Mbps (&)", service.getShortInfo());
+  }
 }

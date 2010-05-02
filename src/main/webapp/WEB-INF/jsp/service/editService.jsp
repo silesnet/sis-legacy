@@ -44,16 +44,19 @@
 
 <h3><fmt:message key="Service.fConnectivity" /></h3>
 <table class="editForm">
-	<%-- IsConnectivity --%>
-	<app:formCheckboxLine path="isConnectivity" label="Service.fIsConnectivity" required="true" />
 	<%-- Connectivity download --%>
-	<app:formInputLine path="connectivity.download" label="Service.fConnectivity.fDownload" size="5" valueType="kbps" />
+	<app:formInputLine path="connectivity.download" label="Service.fConnectivity.fDownload" size="5" />
 	<%-- Connectivity upload --%>
-	<app:formInputLine path="connectivity.upload" label="Service.fConnectivity.fUpload" size="5" valueType="kbps" />
+	<app:formInputLine path="connectivity.upload" label="Service.fConnectivity.fUpload" size="5" />
+	<%-- Bps --%>
+	<tr><td>&nbsp;</td>
+	<td><spring:bind path="connectivity.bps">
+		<input type="radio" name="connectivity.bps" value="M" ${service.connectivity.bps == 'M' ? 'checked ' : ''} />Mbsp&nbsp;
+		<input type="radio" name="connectivity.bps" value="k" ${service.connectivity.bps != 'M' ? 'checked ' : ''} />kbps
+	</spring:bind></td>
+	</tr>
 	<%-- Connectivity isAggregated --%>
 	<app:formCheckboxLine path="connectivity.isAggregated" label="Service.fConnectivity.fIsAggregated" required="true" />
-	<%-- Connectivity aggregationId --%>
-	<app:formInputLine path="connectivity.aggregationId" label="Service.fConnectivity.fAggregationId" size="5" />
 </table>
 
 </td></tr></table>

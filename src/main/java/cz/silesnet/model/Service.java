@@ -81,7 +81,7 @@ public class Service extends Entity implements HistoricToString {
   public Boolean getIsConnectivity() {
     if (fConnectivity == null)
       return false;
-    return fConnectivity.getDownload() != null && fConnectivity.getUpload() != null;
+    return fConnectivity.getDownload() != null;
   }
 
   public void setName(String name) {
@@ -114,9 +114,8 @@ public class Service extends Entity implements HistoricToString {
 
   public String getShortInfo() {
     StringBuffer shortName = new StringBuffer(getLongName());
-    if (getIsConnectivity() && getConnectivity() != null) {
-      shortName.append(" ").append(getConnectivity().getDownload()).append("/").append(
-          getConnectivity().getUpload());
+    if (getIsConnectivity()) {
+      shortName.append(" ").append(getConnectivity().getLinkSpeedText());
       if (getConnectivity().getIsAggregated())
         shortName.append(" (&)");
     }
