@@ -27,6 +27,8 @@ public class Connectivity implements HistoricToString, Serializable {
 
   private Integer fAggregationId = 0;
 
+  private String fBps = "k";
+
   // ~ Constructors
   // -----------------------------------------------------------
 
@@ -96,6 +98,14 @@ public class Connectivity implements HistoricToString, Serializable {
     return fUpload;
   }
 
+  public String getBps() {
+    return fBps;
+  }
+
+  public void setBps(String fBps) {
+    this.fBps = fBps;
+  }
+
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
@@ -109,6 +119,19 @@ public class Connectivity implements HistoricToString, Serializable {
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
+  }
+
+  public String getUnit() {
+    return fBps + "bps";
+  }
+
+  public String getLinkSpeedText() {
+    StringBuilder speed = new StringBuilder();
+    if (fDownload != null && fUpload != null) {
+      speed.append(fDownload).append("/").append(fUpload).append(" ");
+      speed.append(getUnit());
+    }
+    return speed.toString();
   }
 
 }

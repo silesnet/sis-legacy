@@ -33,8 +33,6 @@ public class Service extends Entity implements HistoricToString {
 
   private Frequency fFrequency = Frequency.MONTHLY;
 
-  private Boolean fIsConnectivity = true;
-
   private Connectivity fConnectivity = new Connectivity();
 
   private String fInfo;
@@ -80,12 +78,10 @@ public class Service extends Entity implements HistoricToString {
     return fInfo;
   }
 
-  public void setIsConnectivity(Boolean isConnectivity) {
-    fIsConnectivity = isConnectivity;
-  }
-
   public Boolean getIsConnectivity() {
-    return fIsConnectivity;
+    if (fConnectivity == null)
+      return false;
+    return fConnectivity.getDownload() != null && fConnectivity.getUpload() != null;
   }
 
   public void setName(String name) {
@@ -129,20 +125,13 @@ public class Service extends Entity implements HistoricToString {
 
   public String getBillItemText(Country country) {
     StringBuffer invoiceLine = new StringBuffer(getLongName());
-    Connectivity con = getConnectivity();
-    if (getIsConnectivity() && con != null) {
-      // we have connectivity so pretty print it
-      if (con.getIsAggregated() && Country.PL.equals(country)) {
+    if (getIsConnectivity()) {
+      Connectivity con = getConnectivity();
+      if (con.getIsAggregated() && Country.PL.equals(country))
         invoiceLine.append(" do");
-      }
-      invoiceLine.append(" " + con.getDownload());
-      if (con.getUpload() != null) {
-        invoiceLine.append("/" + con.getUpload());
-      }
-      invoiceLine.append(" kbps");
-      if (con.getIsAggregated() && Country.CZ.equals(country)) {
+      invoiceLine.append(" ").append(con.getLinkSpeedText());
+      if (con.getIsAggregated() && Country.CZ.equals(country))
         invoiceLine.append(" FUP");
-      }
     }
     return invoiceLine.toString();
   }
