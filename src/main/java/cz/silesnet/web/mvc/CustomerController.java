@@ -2,6 +2,7 @@ package cz.silesnet.web.mvc;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -245,17 +246,21 @@ public class CustomerController extends AbstractCRUDController {
     log.debug("Showing customers overview.");
     Map<String, Long> summary_CZ = cMgr.getSummaryFor(Country.CZ);
     Map<String, Long> summary_PL = cMgr.getSummaryFor(Country.PL);
-    Map<String, Long> summary = new HashMap<String, Long>();
+    Map<String, Long> summary = new LinkedHashMap<String, Long>();
     addSummaryKeys("overviewCustomers.totalCustomers", summary, summary_CZ, summary_PL);
     addSummaryKeys("overviewCustomers.totalDownload", summary, summary_CZ, summary_PL);
     addSummaryKeys("overviewCustomers.totalUpload", summary, summary_CZ, summary_PL);
     addSummaryKeys("overviewCustomers.totalPrice.CZK", summary, summary_CZ, summary_PL);
 
     DecimalFormat format = new DecimalFormat();
+    DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+    formatSymbols.setDecimalSeparator('.');
+    formatSymbols.setGroupingSeparator(' ');
+    format.setDecimalFormatSymbols(formatSymbols);
     HashMap<String, Object> model = new HashMap<String, Object>();
-    model.put("overviewCustomers", formatSummaryKeys(summary_CZ, format).entrySet());
-    model.put("overviewCustomersCZ", formatSummaryKeys(summary_PL, format).entrySet());
-    model.put("overviewCustomersPL", formatSummaryKeys(summary, format).entrySet());
+    model.put("overviewCustomers", formatSummaryKeys(summary, format).entrySet());
+    model.put("overviewCustomersCZ", formatSummaryKeys(summary_CZ, format).entrySet());
+    model.put("overviewCustomersPL", formatSummaryKeys(summary_PL, format).entrySet());
     model.put("exchangeRate", settingMgr.get("exchangeRate.PLN_CZK"));
     return new ModelAndView("customer/overviewCustomers", model);
   }
@@ -270,11 +275,11 @@ public class CustomerController extends AbstractCRUDController {
     for (Map.Entry<String, Long> entry : summary.entrySet()) {
       String value = null;
       if (entry.getKey().endsWith(".PLN_CZK"))
-        value = format.format((double) entry.getValue() / 100.0);
+        value = "" + ((double) entry.getValue()) / 100.0;
       else
         value = format.format(entry.getValue());
 
-      if (entry.getKey().endsWith(".Download") || entry.getKey().endsWith(".Upload")) {
+      if (entry.getKey().endsWith("Download") || entry.getKey().endsWith("Upload")) {
         formattedSummary.put(entry.getKey(), value + " Mbps");
       } else if (entry.getKey().endsWith(".CZK")) {
         formattedSummary.put(entry.getKey(), value + " "

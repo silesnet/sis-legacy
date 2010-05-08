@@ -202,7 +202,7 @@ public class CustomerManagerImpl implements CustomerManager {
       long price_CZK = (long) (price_PLN * ratePLN_CZK);
       sumForCountry.put("overviewCustomers.totalPrice.CZK", price_CZK);
       sumForCountry.put("overviewCustomers.totalPrice.PLN", price_PLN);
-      sumForCountry.put("exchangeRate.PLN_CZK", (long) ratePLN_CZK * 100);
+      sumForCountry.put("exchangeRate.PLN_CZK", (long) (ratePLN_CZK * 100.0));
     }
     return sumForCountry;
   }
