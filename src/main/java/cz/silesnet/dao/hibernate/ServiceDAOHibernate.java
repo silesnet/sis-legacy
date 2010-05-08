@@ -1,98 +1,88 @@
 package cz.silesnet.dao.hibernate;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hibernate.Hibernate;
+import org.hibernate.SQLQuery;
+import org.hibernate.classic.Session;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
 import cz.silesnet.dao.ServiceDAO;
 import cz.silesnet.model.Service;
 import cz.silesnet.model.enums.Country;
-
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Concrete implementation of ServiceDAO using Hibernate.
  * 
  * @author Richard Sikora
  */
-public class ServiceDAOHibernate extends HibernateDaoSupport implements
-		ServiceDAO {
+public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceDAO {
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	public List<Service> getAllOrphans() {
-		return (ArrayList<Service>) getHibernateTemplate()
-				.find(
-						"from cz.silesnet.model.Service as s where s.customerId is null");
-	}
+  public List<Service> getAllOrphans() {
+    return getHibernateTemplate().find(
+        "from cz.silesnet.model.Service as s where s.customerId is null");
+  }
 
-	public Service get(Long serviceId) {
-		return (Service) getHibernateTemplate().get(Service.class, serviceId);
-	}
+  public Service get(Long serviceId) {
+    return (Service) getHibernateTemplate().get(Service.class, serviceId);
+  }
 
-	public void remove(Service service) {
-		getHibernateTemplate().delete(service);
-	}
+  public void remove(Service service) {
+    getHibernateTemplate().delete(service);
+  }
 
-	public void save(Service service) {
-		getHibernateTemplate().saveOrUpdate(service);
-	}
+  public void save(Service service) {
+    getHibernateTemplate().saveOrUpdate(service);
+  }
 
-	public int getTotalPrice(Country c) {
-		getHibernateTemplate().enableFilter("activeFilter").setParameter(
-				"isActive", true);
-		Integer total = c == null ? (Integer) getHibernateTemplate().find(
-				"select sum(s.price) from Service as s, Customer c"
-						+ " where c.id=s.customerId").get(0)
-				: (Integer) getHibernateTemplate()
-						.find(
-								"select sum(s.price) from Service s, Customer c"
-										+ " where (c.id=s.customerId) and (c.contact.address.country=?)",
-								c).get(0);
-		return total != null ? total : 0;
-	}
+  public Map<String, Long> calculateSummaryFor(Country c) {
+    Map<String, Long> sum = new LinkedHashMap<String, Long>();
+    Session session = getSessionFactory().getCurrentSession();
+    SQLQuery query = session.createSQLQuery("select sum(case\n" +
+        "  when s.bps = 'M' then s.download * 1000\n" +
+        "  when s.bps = 'k' then s.download\n" +
+        "  else 0\n" +
+        "end) as download,\n" +
+        "sum(case\n" +
+        "  when s.bps = 'M' then s.upload * 1000\n" +
+        "  when s.bps = 'k' then s.upload\n" +
+        "  else 0\n" +
+        "end) as upload,\n" +
+        "sum(s.price) as price,\n" +
+        "count(c.id) as customers\n" +
+        "from services as s, customers c\n" +
+        "where c.id=s.customer_id\n" +
+        "and c.country = " + c.getId() + "\n" +
+        "and c.is_active")
+        .addScalar("download", Hibernate.LONG)
+        .addScalar("upload", Hibernate.LONG)
+        .addScalar("price", Hibernate.LONG)
+        .addScalar("customers", Hibernate.LONG);
+    Object[] result = (Object[]) query.uniqueResult();
+    sum.put("overviewCustomers.totalCustomers", (Long) result[3]);
+    sum.put("overviewCustomers.totalDownload", (Long) result[0] / 1000);
+    sum.put("overviewCustomers.totalUpload", (Long) result[1] / 1000);
+    sum.put("overviewCustomers.totalPrice.CZK", (Long) result[2]);
+    return sum;
+  }
 
-	public int getTotalDownload(Country c) {
-		getHibernateTemplate().enableFilter("activeFilter").setParameter(
-				"isActive", true);
-		Integer total = c == null ? (Integer) getHibernateTemplate().find(
-				"select sum(s.connectivity.download) from Service as s, Customer c"
-						+ " where c.id=s.customerId").get(0)
-				: (Integer) getHibernateTemplate()
-						.find(
-								"select sum(s.connectivity.download) from Service s, Customer c"
-										+ " where c.id=s.customerId and c.contact.address.country=?",
-								c).get(0);
-		return total != null ? total : 0;
-	}
+  public void evict(Service service) {
+    getHibernateTemplate().evict(service);
+  }
 
-	public int getTotalUpload(Country c) {
-		getHibernateTemplate().enableFilter("activeFilter").setParameter(
-				"isActive", true);
-		Integer total = c == null ? (Integer) getHibernateTemplate().find(
-				"select sum(s.connectivity.upload) from Service as s, Customer c"
-						+ " where c.id=s.customerId").get(0)
-				: (Integer) getHibernateTemplate()
-						.find(
-								"select sum(s.connectivity.upload) from Service s, Customer c"
-										+ " where c.id=s.customerId and c.contact.address.country=?",
-								c).get(0);
-		return total != null ? total : 0;
-	}
-
-	public void evict(Service service) {
-		getHibernateTemplate().evict(service);
-	}
-
-	public List<Service> getByExample(Service s) {
-		if (s == null)
-			return null;
-		if (s.getPeriod() != null && s.getPeriod().getTo() != null) {
-			return (ArrayList<Service>) getHibernateTemplate().find(
-					"from Service as s where s.period.to <= ?",
-					s.getPeriod().getTo());
-		}
-		return (ArrayList<Service>) getHibernateTemplate().find("from Service");
-	}
+  public List<Service> getByExample(Service s) {
+    if (s == null)
+      return null;
+    if (s.getPeriod() != null && s.getPeriod().getTo() != null) {
+      return getHibernateTemplate().find("from Service as s where s.period.to <= ?",
+          s.getPeriod().getTo());
+    }
+    return getHibernateTemplate().find("from Service");
+  }
 
 }

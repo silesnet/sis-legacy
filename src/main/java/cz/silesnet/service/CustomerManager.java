@@ -16,44 +16,45 @@ import cz.silesnet.model.enums.Country;
  */
 public interface CustomerManager {
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	public List<Customer> getAll();
+  public List<Customer> getAll();
 
-	public List<Customer> getByExample(Customer customer);
+  public List<Customer> getByExample(Customer customer);
 
-	public List<Customer> getByExample(Customer customer, Service service);
+  public List<Customer> getByExample(Customer customer, Service service);
 
-	public void delete(Customer customer);
+  public void delete(Customer customer);
 
-	public Customer get(Long customerId);
+  public Customer get(Long customerId);
 
-	public void insert(Customer customer);
+  public void insert(Customer customer);
 
-	public void update(Customer customer);
+  public void update(Customer customer);
 
-	public void updateAll(List<Customer> customers);
+  public void updateAll(List<Customer> customers);
 
-	public Map<String, String> getOverview(Country c);
+  public Map<String, Long> getSummaryFor(Country c);
 
-	public void exportCusotmersToWinDuo(List<Customer> customers,
-			PrintWriter writer);
+  public void exportCusotmersToWinDuo(List<Customer> customers,
+      PrintWriter writer);
 
-	public Service getService(Long serviceId);
+  public Service getService(Long serviceId);
 
-	public void insertService(Service service);
+  public void insertService(Service service);
 
-	public void updateService(Service service);
+  public void updateService(Service service);
 
-	public void deleteService(Service service);
+  public void deleteService(Service service);
 
-	public void deactivateCandidates();
+  public void deactivateCandidates();
 
-	public List<Bill> fetchBills(Customer customer);
+  public List<Bill> fetchBills(Customer customer);
 
-	public void updateSymbol(Customer customer);
+  public void updateSymbol(Customer customer);
 
-	public void exportCusotmersToInsert(List<Customer> customers,
-			PrintWriter writer);
+  public void exportCusotmersToInsert(List<Customer> customers,
+      PrintWriter writer);
+
 }
