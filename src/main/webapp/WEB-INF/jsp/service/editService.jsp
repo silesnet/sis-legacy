@@ -51,7 +51,7 @@
 	<%-- Bps --%>
 	<tr><td>&nbsp;</td>
 	<td><spring:bind path="connectivity.bps">
-		<input type="radio" name="connectivity.bps" value="M" ${service.connectivity.bps == 'M' ? 'checked ' : ''} />Mbsp&nbsp;
+		<input type="radio" name="connectivity.bps" value="M" ${service.connectivity.bps == 'M' ? 'checked ' : ''} />Mbps&nbsp;
 		<input type="radio" name="connectivity.bps" value="k" ${service.connectivity.bps != 'M' ? 'checked ' : ''} />kbps
 	</spring:bind></td>
 	</tr>
