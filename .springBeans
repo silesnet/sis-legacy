@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.2.5.200907122100-CI-R3339-B400]]></pluginVersion>
+	<pluginVersion><![CDATA[2.3.0.200912012120-CI-R3533-B557]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
-	<enableImports><![CDATA[false]]></enableImports>
+	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
+		<config>src/main/webapp/WEB-INF/sis-dao.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-db.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-email.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-hibernate.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-messages.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-properties.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-schedule.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-security.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-service.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-servlet.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-transaction.xml</config>
+		<config>src/main/webapp/WEB-INF/sis-application.xml</config>
 	</configs>
 	<configSets>
 		<configSet>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <bean id="userDAO" class="cz.silesnet.dao.hibernate.UserDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="labelDAO" class="cz.silesnet.dao.hibernate.LabelDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="nodeDAO" class="cz.silesnet.dao.hibernate.NodeDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="historyItemDAO" class="cz.silesnet.dao.hibernate.HistoryItemDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="serviceDAO" class="cz.silesnet.dao.hibernate.ServiceDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="customerDAO" class="cz.silesnet.dao.hibernate.CustomerDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="billDAO" class="cz.silesnet.dao.hibernate.BillDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="settingDAO" class="cz.silesnet.dao.hibernate.SettingDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+</beans>

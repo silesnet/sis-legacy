@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <!-- have messaging in property files available -->
+  <!-- TODO set cache to bigger amount of seconds -->
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basenames">
+      <value>/WEB-INF/i18n/entity-fields,/WEB-INF/i18n/messages,/WEB-INF/i18n/i18n-fields,/WEB-INF/i18n/billing,/WEB-INF/i18n/acegi-security</value>
+    </property>
+    <property name="cacheSeconds">
+      <value>0</value>
+    </property>
+    <property name="defaultEncoding">
+      <value>UTF-8</value>
+    </property>
+    <property name="fallbackToSystemLocale">
+      <value>false</value>
+    </property>
+  </bean>
+
+  <bean id="messagesUtils" class="cz.silesnet.utils.MessagesUtils" />
+
+</beans>

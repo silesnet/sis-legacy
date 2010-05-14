@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <!-- Production mailSender -->
+  <bean id="mailSenderProduction" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host">
+      <value>${email.smtp}</value>
+    </property>
+  </bean>
+
+  <!-- configure signed email generator  -->
+  <bean id="signedEmailGenerator" class="cz.silesnet.service.impl.SignedEmailGeneratorBC" init-method="configure">
+    <property name="certificatePath" value="${crypto.cert.path}" />
+    <property name="privateKeyPath" value="${crypto.pk.path}" />
+    <property name="privateKeyAlias" value="${crypto.pk.alias}" />
+    <property name="privateKeyPassword" value="${crypto.pk.password}" />
+  </bean>
+
+</beans>

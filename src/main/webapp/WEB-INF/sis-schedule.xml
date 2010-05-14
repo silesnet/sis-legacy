@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="triggers">
+      <list>
+        <ref local="processSendingQueueTrigger" />
+        <ref local="removeOldLoginHistoryTrigger" />
+        <ref local="deactivateCandidatesTrigger" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="deactivateCandidatesTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="deactivateCanditatesJobDetail" />
+    <property name="cronExpression" value="0 5 0 * * ?" />
+    <!--
+      producion setting, each day 5 minutes past midnight <property name="cronExpression" value="0 5 0 * * ?"/>
+    -->
+  </bean>
+
+  <bean id="deactivateCanditatesJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="customerManager" />
+    <property name="targetMethod" value="deactivateCandidates" />
+    <property name="concurrent" value="false" />
+  </bean>
+
+  <bean id="processSendingQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="processSendingQueueJobDetail" />
+    <property name="cronExpression" value="0/20 * * * * ?" />
+  </bean>
+
+  <bean id="processSendingQueueJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="billingManager" />
+    <property name="targetMethod" value="sendNextInvoice" />
+    <property name="concurrent" value="false" />
+  </bean>
+
+  <bean id="removeOldLoginHistoryTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="removeOldLoginHistoryJobDetail" />
+    <!-- four minutes after midnight -->
+    <property name="cronExpression" value="0 4 0 1 * ?" />
+  </bean>
+
+  <bean id="removeOldLoginHistoryJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="historyManager" />
+    <property name="targetMethod" value="removeOldLoginHistory" />
+    <property name="concurrent" value="false" />
+  </bean>
+  
+</beans>
