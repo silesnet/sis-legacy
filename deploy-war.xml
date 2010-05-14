@@ -19,8 +19,8 @@
 			<exclude name="cz/**/*.*"/>
 			<exclude name="WEB-INF/web.xml"/>
 			<exclude name="sis.war"/>
-			<exclude name="jdbc.properties"/>
-			<exclude name="applicationContext.properties"/>
+			<exclude name="sis-sis-jdbc.properties"/>
+			<exclude name="sis-application.properties"/>
 			<exclude name="log4j.xml"/>
 			<exclude name="uitags/*"/>
 			<exclude name="displaytag*.properties"/>
@@ -41,8 +41,8 @@
 		</copy>
 		<copy todir="target/WEB-INF/classes">
 			<fileset dir="target">
-				<include name="jdbc.properties"/>
-				<include name="applicationContext.properties"/>
+				<include name="sis-sis-jdbc.properties"/>
+				<include name="sis-application.properties"/>
 				<include name="log4j.xml"/>
 				<include name="uitags/*"/>
 				<include name="displaytag*.properties"/>

@@ -6,8 +6,8 @@
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
         	<list>
-	        	<value>classpath:jdbc.properties</value>
-	        	<value>classpath:applicationContext.properties</value>
+	        	<value>classpath:sis-jdbc.properties</value>
+	        	<value>classpath:sis-application.properties</value>
         	</list>
 		</property>
 	</bean>

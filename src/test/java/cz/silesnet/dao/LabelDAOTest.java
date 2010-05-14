@@ -1,90 +1,113 @@
 package cz.silesnet.dao;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.CoreMatchers.*;
+
 import cz.silesnet.model.Label;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.testng.annotations.Test;
+import org.unitils.UnitilsTestNG;
+import org.unitils.orm.hibernate.HibernateUnitils;
+import org.unitils.spring.annotation.SpringApplicationContext;
+import org.unitils.spring.annotation.SpringBean;
 
 import java.util.ArrayList;
 
-public class LabelDAOTest extends BaseDAOTestCase {
+@SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml"})
+public class LabelDAOTest extends UnitilsTestNG {
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+    private final Log log = LogFactory.getLog(getClass());
 
-	public void testGetters() {
-		LabelDAO dao = (LabelDAO) ctx.getBean("labelDAO");
+    private ApplicationContext ctx;
 
-		Label lab = new Label();
-		lab.setName("Test Type");
-		lab.setParentId(Long.valueOf(0));
+    @SpringBean("labelDAO")
+    private LabelDAO dao;
 
-		// save root of Test Type labels
-		dao.saveLabel(lab);
+    @Test
+    public void testGetters() {
+//        LabelDAO dao = (LabelDAO) ctx.getBean("labelDAO");
 
-		// store parent label id
-		assertNotSame(lab.getId(), 0);
+        Label lab = new Label();
+        lab.setName("Test Type");
+        lab.setParentId(0L);
 
-		long parentid = lab.getId();
+        // save root of Test Type labels
+        dao.saveLabel(lab);
 
-		// have some sublabels
-		lab.setId(null);
-		lab.setName("TT Label 1");
-		lab.setParentId(parentid);
-		dao.saveLabel(lab);
+        // store parent label id
+        assertThat(lab.getParentId(), is(0L));
 
-		lab.setId(null);
-		lab.setName("TT Label 2");
-		lab.setParentId(parentid);
-		dao.saveLabel(lab);
+        long parentid = lab.getId();
 
-		lab.setId(null);
-		lab.setName("TT Label 3");
-		lab.setParentId(parentid);
-		dao.saveLabel(lab);
+        // have some sublabels
+        lab.setId(null);
+        lab.setName("TT Label 1");
+        lab.setParentId(parentid);
+        dao.saveLabel(lab);
 
-		lab.setId(null);
-		lab.setName("TT Label 4");
-		lab.setParentId(parentid);
-		dao.saveLabel(lab);
+        lab.setId(null);
+        lab.setName("TT Label 2");
+        lab.setParentId(parentid);
+        dao.saveLabel(lab);
 
-		lab = null;
+        lab.setId(null);
+        lab.setName("TT Label 3");
+        lab.setParentId(parentid);
+        dao.saveLabel(lab);
 
-		// try to get all sublabels from id we stored
+        lab.setId(null);
+        lab.setName("TT Label 4");
+        lab.setParentId(parentid);
+        dao.saveLabel(lab);
 
-		// first get parent label by id
-		lab = dao.getLabelById(parentid);
-		assertNotNull(lab);
-		log.debug("Retrieved root Test Type label : " + lab);
+        lab = null;
 
-		// now get sublabels
-		ArrayList<Label> sublabels = (ArrayList<Label>) dao.getSubLabels(lab
-				.getId());
-		assertNotSame(sublabels.size(), 0);
-		log.debug("Retrieved sublabels of Test Type : " + sublabels);
+        // try to get all sublabels from id we stored
 
-		// do some clean up
-		for (Label l : sublabels)
-			dao.removeLabel(l);
+        // first get parent label by id
+        lab = dao.getLabelById(parentid);
+        assertThat(lab, is(notNullValue()));
+        log.debug("Retrieved root Test Type label : " + lab);
 
-		// remove also root Test Type label
-		dao.removeLabel(lab);
-	}
+        // now get sublabels
+        ArrayList<Label> sublabels = (ArrayList<Label>) dao.getSubLabels(lab
+                .getId());
+        assertThat(sublabels.size(), is(not(0)));
+        log.debug("Retrieved sublabels of Test Type : " + sublabels);
 
-	public void testSaveRemoveLabel() {
-		LabelDAO dao = (LabelDAO) ctx.getBean("labelDAO");
+        // do some clean up
+        for (Label l : sublabels)
+            dao.removeLabel(l);
 
-		Label lab = new Label();
-		lab.setName("AP Type");
-		lab.setParentId(Long.valueOf(0));
+        // remove also root Test Type label
+        dao.removeLabel(lab);
+    }
 
-		// save label
-		dao.saveLabel(lab);
+    @Test
+    public void testSaveRemoveLabel() {
+//        LabelDAO dao = (LabelDAO) ctx.getBean("labelDAO");
 
-		// store label id
-		long labelid = lab.getId();
+        Label lab = new Label();
+        lab.setName("AP Type");
+        lab.setParentId(Long.valueOf(0));
 
-		// remove label
-		dao.removeLabel(lab);
+        // save label
+        dao.saveLabel(lab);
 
-		// when tryin to get not existing label return null
-		assertNull(dao.getLabelById(labelid));
-	}
+        // store label id
+        long labelid = lab.getId();
+
+        // remove label
+        dao.removeLabel(lab);
+
+        // when tryin to get not existing label return null
+        assertThat(dao.getLabelById(labelid), is(nullValue()));
+    }
+
+    @Test
+    public void testMapping() throws Exception {
+        HibernateUnitils.assertMappingWithDatabaseConsistent();
+    }
 }
