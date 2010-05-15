@@ -1,17 +1,14 @@
 
 CREATE SEQUENCE audit_item_id_seq
     START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
+    INCREMENT BY 1;
 
 CREATE TABLE audit_items (
     id bigint NOT NULL,
     history_id bigint NOT NULL,
     history_type_label_id bigint,
     user_id bigint,
-    time_stamp timestamp without time zone NOT NULL,
+    time_stamp timestamp NOT NULL,
     field_name character varying(255) NOT NULL,
     old_value character varying(255),
     new_value character varying(255)
@@ -28,11 +25,11 @@ CREATE TABLE bill_items (
 CREATE TABLE bills (
     id bigint NOT NULL,
     number character varying(15),
-    billing_date timestamp without time zone,
-    purge_date timestamp without time zone,
+    billing_date timestamp,
+    purge_date timestamp,
     customer_id bigint NOT NULL,
-    period_from timestamp without time zone NOT NULL,
-    period_to timestamp without time zone NOT NULL,
+    period_from timestamp NOT NULL,
+    period_to timestamp NOT NULL,
     vat integer,
     hash_code character varying(50) NOT NULL,
     is_confirmed boolean,
@@ -42,7 +39,7 @@ CREATE TABLE bills (
     deliver_by_mail boolean,
     customer_name character varying(80),
     invoicing_id bigint,
-    synchronized timestamp without time zone
+    synchronized timestamp
 );
 
 CREATE TABLE customers (
@@ -59,9 +56,9 @@ CREATE TABLE customers (
     dic character varying(20),
     contract_no character varying(50) NOT NULL,
     connection_spot character varying(100),
-    inserted_on timestamp without time zone NOT NULL,
+    inserted_on timestamp NOT NULL,
     frequency integer,
-    lastly_billed timestamp without time zone,
+    lastly_billed timestamp,
     is_billed_after boolean,
     deliver_by_email boolean,
     deliver_copy_email character varying(100),
@@ -77,8 +74,8 @@ CREATE TABLE customers (
     format integer,
     deliver_signed boolean,
     symbol character varying(20),
-    updated timestamp without time zone,
-    synchronized timestamp without time zone,
+    updated timestamp,
+    synchronized timestamp,
     account_no character varying(17),
     bank_no character varying(4),
     variable integer
@@ -89,7 +86,7 @@ CREATE TABLE invoicings (
     history_id bigint NOT NULL,
     name character varying(80) NOT NULL,
     country integer,
-    invoicing_date timestamp without time zone,
+    invoicing_date timestamp,
     numberingbase character varying(15)
 );
 
@@ -125,8 +122,8 @@ CREATE TABLE nodes (
 CREATE TABLE services (
     id bigint NOT NULL,
     customer_id bigint,
-    period_from timestamp without time zone NOT NULL,
-    period_to timestamp without time zone,
+    period_from timestamp NOT NULL,
+    period_to timestamp,
     name character varying(70) NOT NULL,
     price integer NOT NULL,
     frequency integer,
@@ -154,6 +151,6 @@ CREATE TABLE users (
 );
 
 CREATE TABLE vendors (
-    mac_prefix text NOT NULL,
-    vendor text NOT NULL
+    mac_prefix varchar(10) NOT NULL,
+    vendor varchar(50) NOT NULL
 );
