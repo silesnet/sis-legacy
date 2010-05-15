@@ -1,7 +1,8 @@
 package cz.silesnet.dao;
 
 import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.unitils.reflectionassert.ReflectionAssert.*;
+import static org.hamcrest.Matchers.*;
 
 import cz.silesnet.model.Label;
 import org.apache.commons.logging.Log;
@@ -9,86 +10,25 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.testng.annotations.Test;
 import org.unitils.UnitilsTestNG;
+import org.unitils.dbunit.annotation.DataSet;
 import org.unitils.orm.hibernate.HibernateUnitils;
+import org.unitils.reflectionassert.ReflectionComparatorMode;
 import org.unitils.spring.annotation.SpringApplicationContext;
 import org.unitils.spring.annotation.SpringBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml"})
 public class LabelDAOTest extends UnitilsTestNG {
 
     private final Log log = LogFactory.getLog(getClass());
 
-    private ApplicationContext ctx;
-
     @SpringBean("labelDAO")
     private LabelDAO dao;
 
     @Test
-    public void testGetters() {
-//        LabelDAO dao = (LabelDAO) ctx.getBean("labelDAO");
-
-        Label lab = new Label();
-        lab.setName("Test Type");
-        lab.setParentId(0L);
-
-        // save root of Test Type labels
-        dao.saveLabel(lab);
-
-        // store parent label id
-        assertThat(lab.getParentId(), is(0L));
-
-        long parentid = lab.getId();
-
-        // have some sublabels
-        lab.setId(null);
-        lab.setName("TT Label 1");
-        lab.setParentId(parentid);
-        dao.saveLabel(lab);
-
-        lab.setId(null);
-        lab.setName("TT Label 2");
-        lab.setParentId(parentid);
-        dao.saveLabel(lab);
-
-        lab.setId(null);
-        lab.setName("TT Label 3");
-        lab.setParentId(parentid);
-        dao.saveLabel(lab);
-
-        lab.setId(null);
-        lab.setName("TT Label 4");
-        lab.setParentId(parentid);
-        dao.saveLabel(lab);
-
-        lab = null;
-
-        // try to get all sublabels from id we stored
-
-        // first get parent label by id
-        lab = dao.getLabelById(parentid);
-        assertThat(lab, is(notNullValue()));
-        log.debug("Retrieved root Test Type label : " + lab);
-
-        // now get sublabels
-        ArrayList<Label> sublabels = (ArrayList<Label>) dao.getSubLabels(lab
-                .getId());
-        assertThat(sublabels.size(), is(not(0)));
-        log.debug("Retrieved sublabels of Test Type : " + sublabels);
-
-        // do some clean up
-        for (Label l : sublabels)
-            dao.removeLabel(l);
-
-        // remove also root Test Type label
-        dao.removeLabel(lab);
-    }
-
-    @Test
     public void testSaveRemoveLabel() {
-//        LabelDAO dao = (LabelDAO) ctx.getBean("labelDAO");
-
         Label lab = new Label();
         lab.setName("AP Type");
         lab.setParentId(Long.valueOf(0));
@@ -106,8 +46,21 @@ public class LabelDAOTest extends UnitilsTestNG {
         assertThat(dao.getLabelById(labelid), is(nullValue()));
     }
 
+    @DataSet("LabelDAOTest-find.xml")
     @Test
-    public void testMapping() throws Exception {
-        HibernateUnitils.assertMappingWithDatabaseConsistent();
+    public void findById() throws Exception {
+        Label label = new Label();
+        label.setId(11L);
+        label.setParentId(10L);
+        label.setName("Label 1");
+        
+        Label persistedLabel = dao.getLabelById(11L);
+        assertReflectionEquals(label, persistedLabel);
+    }
+
+    @Test
+    public void defaultLabels() throws Exception {
+        List<Label> labels = dao.getSubLabels(300L);
+        assertThat(labels.size(), is(greaterThanOrEqualTo(2)));
     }
 }
