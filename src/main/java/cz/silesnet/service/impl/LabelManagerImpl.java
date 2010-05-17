@@ -54,7 +54,7 @@ public class LabelManagerImpl implements LabelManager {
 
 	@SuppressWarnings("unchecked")
 	public List<Label> getAll() {
-		return dao.getAll();
+		return dao.findAll();
 	}
 
 	public List<Label> getByExample(Label example) {

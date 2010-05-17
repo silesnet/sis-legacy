@@ -31,7 +31,7 @@ public class LabelDAOTest extends UnitilsTestNG {
     public void testSaveRemoveLabel() {
         Label lab = new Label();
         lab.setName("AP Type");
-        lab.setParentId(Long.valueOf(0));
+        lab.setParentId(0L);
 
         // save label
         dao.saveLabel(lab);
@@ -42,7 +42,7 @@ public class LabelDAOTest extends UnitilsTestNG {
         // remove label
         dao.removeLabel(lab);
 
-        // when tryin to get not existing label return null
+        // when trying to get not existing label return null
         assertThat(dao.getLabelById(labelid), is(nullValue()));
     }
 
