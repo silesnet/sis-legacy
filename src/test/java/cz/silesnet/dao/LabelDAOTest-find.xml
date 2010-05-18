@@ -1,4 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../db-xsd/dataset.xsd">
     <LABELS ID="11" PARENT_ID="10" NAME="Label 1" />
+    <LABELS ID="12" PARENT_ID="10" NAME="Label 2" />
+    <LABELS ID="13" PARENT_ID="10" NAME="Label 3" />
+    <LABELS ID="14" PARENT_ID="10" NAME="xLabel 4" />
 </dataset>

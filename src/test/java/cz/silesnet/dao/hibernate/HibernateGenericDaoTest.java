@@ -2,13 +2,11 @@ package cz.silesnet.dao.hibernate;
 
 import cz.silesnet.dao.GenericDao;
 import org.hibernate.criterion.DetachedCriteria;
-import org.mockito.Matchers;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +18,6 @@ import static org.mockito.Mockito.*;
  * User: sikorric
  * Date: May 17, 2010
  * Time: 4:57:25 PM
- * To change this template use File | Settings | File Templates.
  */
 public class HibernateGenericDaoTest {
 
@@ -31,7 +28,8 @@ public class HibernateGenericDaoTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        hibernateDao = new HibernateGenericDao<Object>() {};
+        hibernateDao = new HibernateGenericDao<Object>() {
+        };
         dao = hibernateDao;
         template = mock(HibernateTemplate.class);
         hibernateDao.setHibernateTemplate(template);
@@ -58,7 +56,14 @@ public class HibernateGenericDaoTest {
     @Test
     public void findByCriteria() throws Exception {
         List<Object> allEntities = Arrays.asList(entity);
-        when(template.findByCriteria((DetachedCriteria) anyObject())).thenReturn(allEntities);
-        assertThat(hibernateDao.findByCriteria(hibernateDao.newCriteria()).get(0), is(entity));
+        DetachedCriteria criteria = hibernateDao.newCriteria();
+        when(template.findByCriteria(criteria)).thenReturn(allEntities);
+        assertThat(hibernateDao.findByCriteria(criteria).get(0), is(entity));
+    }
+
+    @Test
+    public void newCriteria() throws Exception {
+        DetachedCriteria criteria = hibernateDao.newCriteria();
+        assertThat(criteria, is(not(nullValue())));
     }
 }

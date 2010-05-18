@@ -12,8 +12,8 @@ import cz.silesnet.model.Label;
  */
 public interface LabelDAO extends DAO {
 
-	public static Long LOGIN_HISTORY_TYPE_LABEL_ID = Long.valueOf(17);
-
+	public static Long LOGIN_HISTORY_TYPE_LABEL_ID = 17L;
+    
 	public Label getLabelById(Long labelId);
 
 	public List<Label> findAll();

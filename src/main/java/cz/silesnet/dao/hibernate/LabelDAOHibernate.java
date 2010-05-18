@@ -6,6 +6,7 @@ import cz.silesnet.model.Label;
 import cz.silesnet.utils.SearchUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 
 import java.util.List;
@@ -22,7 +23,8 @@ public class LabelDAOHibernate extends HibernateGenericDao<Label> implements Lab
     }
 
     public List<Label> getSubLabels(Long labelId) {
-        return findByCriteria(Expression.eq("parentId", labelId));
+        return findByCriteria(newCriteria()
+                .add(Expression.eq("parentId", labelId)));
     }
 
     public void removeLabel(Label label) {
@@ -33,16 +35,18 @@ public class LabelDAOHibernate extends HibernateGenericDao<Label> implements Lab
         store(label);
     }
 
+    public List<Label> findAll() {
+        return findByCriteria(newCriteria()
+                .addOrder(Order.asc("name")));
+    }
+
     public List<Label> getByExmaple(Label example) {
         DetachedCriteria criteria = newCriteria();
-        SearchUtils.addEqRestriction(criteria, "parent_id", example.getParentId());
-        SearchUtils.addIlikeRestrictionI18n(criteria, "name", example.getName());
-        criteria.addOrder(SqlHibernateOrder.asc(SearchUtils.getTranslateOrder("name")));
+        if (example.getParentId() != null)
+            criteria.add(Expression.eq("parentId", example.getParentId()));
+        if (example.getName() != null)
+            criteria.add(Expression.ilike("name", example.getName(), MatchMode.START));
+        criteria.addOrder(Order.asc("name"));
         return findByCriteria(criteria);
     }
-
-    public List<Label> findAll() {
-        return findByCriteria(Order.asc("name"));
-    }
-
 }
