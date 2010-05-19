@@ -66,7 +66,7 @@ public class ServiceTest extends TestCase {
   public void testIsNotConnectivity() throws Exception {
     Service service = new Service();
     service.getConnectivity().setDownload(1);
-    assertFalse(service.getIsConnectivity());
+    assertTrue(service.getIsConnectivity());
   }
 
   public void testIsConnectivity() throws Exception {
