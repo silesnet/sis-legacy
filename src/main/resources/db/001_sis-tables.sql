@@ -3,6 +3,10 @@ CREATE SEQUENCE audit_item_id_seq
     START WITH 1
     INCREMENT BY 1;
 
+-- just for HSQLDB testing!
+create table dual_audit_item_id_seq (zero integer);
+insert into dual_audit_item_id_seq values (0);
+
 CREATE TABLE audit_items (
     id bigint NOT NULL,
     history_id bigint NOT NULL,
