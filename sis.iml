@@ -14,16 +14,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Maven: org.springframework:spring:2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-hibernate3:2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.hibernate:hibernate:3.2.3.ga" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-beans:2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-core:2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-context:2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-dao:2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-jdbc:2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-web:2.0-m2" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-aop:1.2.6" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.springframework:spring:2.0.3" level="project" />
     <orderEntry type="library" exported="" name="Maven: commons-logging:commons-logging:1.1" level="project" />
     <orderEntry type="library" exported="" name="Maven: log4j:log4j:1.2.12" level="project" />
     <orderEntry type="library" exported="" name="Maven: logkit:logkit:1.0.1" level="project" />

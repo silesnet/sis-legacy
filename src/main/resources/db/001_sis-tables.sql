@@ -7,6 +7,9 @@ CREATE SEQUENCE audit_item_id_seq
 create table dual_audit_item_id_seq (zero integer);
 insert into dual_audit_item_id_seq values (0);
 
+-- just for HSQLDB testing!
+CREATE ALIAS TRANSLATE FOR "cz.silesnet.utils.HsqlSupport.translate";
+
 CREATE TABLE audit_items (
     id bigint NOT NULL,
     history_id bigint NOT NULL,

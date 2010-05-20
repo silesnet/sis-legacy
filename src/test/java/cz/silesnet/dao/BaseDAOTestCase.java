@@ -13,15 +13,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public abstract class BaseDAOTestCase extends TestCase {
 
-    // ~ Instance fields
-    // --------------------------------------------------------
-
     protected final Log log = LogFactory.getLog(getClass());
-
     protected ApplicationContext ctx = null;
-
-    // ~ Constructors
-    // -----------------------------------------------------------
 
     public BaseDAOTestCase() {
         String[] paths = {"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml"};

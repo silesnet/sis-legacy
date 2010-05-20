@@ -25,7 +25,7 @@ public abstract class DatabaseTestCase extends DataSourceBasedDBTestCase {
 	}
 
 	private void loadApplicationContext() {
-		String[] paths = { "/WEB-INF/applicationContext-hibernate.xml" };
+		String[] paths = {"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml"};
 		ctx = new ClassPathXmlApplicationContext(paths);
 		initializeAfterContextLoaded(ctx);
 	}

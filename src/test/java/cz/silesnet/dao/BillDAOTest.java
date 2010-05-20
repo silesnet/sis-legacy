@@ -1,84 +1,70 @@
 package cz.silesnet.dao;
 
-import org.springframework.orm.ObjectRetrievalFailureException;
-
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.PrepareMixture;
-import cz.silesnet.service.CustomerManager;
+import org.springframework.orm.ObjectRetrievalFailureException;
+import org.testng.annotations.Test;
 
-public class BillDAOTest extends BaseDAOTestCase {
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
-	public void testCRUD() {
-		BillDAO dao = (BillDAO) ctx.getBean("billDAO");
-		CustomerManager cmgr = (CustomerManager) ctx.getBean("customerManager");
-		assertNotNull(dao);
-		assertNotNull(cmgr);
+public abstract class BillDAOTest extends DaoTestSupport<BillDAO> {
 
-		Customer customer = PrepareMixture.getCustomer();
-		Customer c = customer;
-		// String customerName = c.getName();
-		cmgr.insert(c);
+    @Test
+    public void CRUD() {
+        Customer customer = new Customer();
+        customer.setId(10L);
+        customer.setName("Customer 1");
 
-		Bill b = PrepareMixture.getBillSimple();
-		b.setInvoicedCustomer(c);
-		String billHash = b.getHashCode();
+        Bill b = PrepareMixture.getBillSimple();
+        b.setInvoicedCustomer(customer);
+        String billHash = b.getHashCode();
 
-		log.debug("Persist bill.");
-		dao.save(b);
-		assertNotNull(b.getId());
-		Long billId = b.getId();
+        dao.save(b);
+        assertThat(b.getId(), is(not(nullValue())));
+        Long billId = b.getId();
 
-		// update
-		b.getItems().get(0).setText("Modified First Line");
-		b.setIsConfirmed(true);
-		String secondLine = b.getItems().get(1).getText();
+        // update
+        b.getItems().get(0).setText("Modified First Line");
+        b.setIsConfirmed(true);
+        String secondLine = b.getItems().get(1).getText();
 
-		// persist changes
-		log.debug("Update bill.");
-		dao.save(b);
+        // persist changes
+        dao.save(b);
 
-		// try to retrieve it
-		b = null;
-		c = null;
-		b = dao.get(billId);
-		assertNotNull(b);
-		assertEquals("Modified First Line", b.getItems().get(0).getText());
-		assertEquals(secondLine, b.getItems().get(1).getText());
+        // try to retrieve it
+        b = dao.get(billId);
+        assertThat(b, is(not(nullValue())));
+        assertThat(b.getItems().get(0).getText(), is("Modified First Line"));
+        assertThat(b.getItems().get(1).getText(), is(secondLine));
+        assertThat(b.getInvoicedCustomer(), is(not(nullValue())));
 
-		c = b.getInvoicedCustomer();
-		assertNull(c);
-		// assertTrue(customerName.equals(c.getName()));
+        b = null;
+        try {
+            b = dao.get("hashxxWRONG");
+            throw new Error("Retrieved bill by non existing hashcode");
+        }
+        catch (ObjectRetrievalFailureException e) {
+            // expected
+        }
+        assertThat(b, is(nullValue()));
 
-		log.debug("Get by hashCode.");
-		b = null;
-		try {
-			b = dao.get("hashxxWRONG");
-			fail("Retrieved bill by non existing hashcode");
-		}
-		catch (ObjectRetrievalFailureException e) {
-			log.debug("Got expected exception " + e);
-		}
-		assertNull(b);
+        b = dao.get(billHash);
+        assertThat(b.getId(), is(billId));
 
-		b = dao.get(billHash);
-		assertNotNull(b);
-		assertTrue(b.getId().equals(billId));
+        // tidy up
+        dao.remove(b);
 
-		log.debug("Tidy up.");
-		// tidy up
-		dao.remove(b);
-		cmgr.delete(customer);
+        b = null;
+        try {
+            b = dao.get(billId);
+            throw new Error("Retrieved deleted bill!");
+        }
+        catch (ObjectRetrievalFailureException e) {
+            // expected
+        }
+        assertThat(b, is(nullValue()));
+    }
 
-		b = null;
-		try {
-			b = dao.get(billId);
-			fail("Retrieved deleted bill!");
-		}
-		catch (ObjectRetrievalFailureException e) {
-			log.debug("Got expected exception " + e);
-		}
-		assertNull(b);
-
-	}
 }

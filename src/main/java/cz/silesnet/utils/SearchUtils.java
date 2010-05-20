@@ -49,14 +49,14 @@ public class SearchUtils {
 	public static void addIlikeRestriction(DetachedCriteria crit, String col,
 			String value) {
 		if (value != null)
-			crit.add(Restrictions.sqlRestriction(col + " ilike('" + value
+			crit.add(Restrictions.sqlRestriction(col + " like('" + value
 					+ "%')"));
 	}
 
 	public static void addIlikeInRestriction(DetachedCriteria crit, String col,
 			String value) {
 		if (value != null)
-			crit.add(Restrictions.sqlRestriction(col + " ilike('%" + value
+			crit.add(Restrictions.sqlRestriction(col + " like('%" + value
 					+ "%')"));
 	}
 
