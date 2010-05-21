@@ -8,7 +8,7 @@
     <property name="target">
       <bean class="cz.silesnet.service.impl.UserManagerImpl">
         <property name="userDAO">
-          <ref local="userDAO" />
+          <ref bean="userDAO" />
         </property>
         <property name="historyManager">
           <ref local="historyManager" />
@@ -30,7 +30,7 @@
     <property name="target">
       <bean class="cz.silesnet.service.impl.LabelManagerImpl">
         <property name="labelDAO">
-          <ref local="labelDAO" />
+          <ref bean="labelDAO" />
         </property>
       </bean>
     </property>
@@ -40,7 +40,7 @@
     <property name="target">
       <bean class="cz.silesnet.service.impl.NodeManagerImpl">
         <property name="nodeDAO">
-          <ref local="nodeDAO" />
+          <ref bean="nodeDAO" />
         </property>
         <property name="historyManager">
           <ref local="historyManager" />
@@ -53,7 +53,7 @@
     <property name="target">
       <bean class="cz.silesnet.service.impl.HistoryManagerImpl">
         <property name="historyItemDAO">
-          <ref local="historyItemDAO" />
+          <ref bean="historyItemDAO" />
         </property>
         <property name="labelManager">
           <ref local="labelManager" />
@@ -76,13 +76,13 @@
     <property name="target">
       <bean class="cz.silesnet.service.impl.CustomerManagerImpl">
         <property name="customerDAO">
-          <ref local="customerDAO" />
+          <ref bean="customerDAO" />
         </property>
         <property name="billDAO">
-          <ref local="billDAO" />
+          <ref bean="billDAO" />
         </property>
         <property name="serviceDAO">
-          <ref local="serviceDAO" />
+          <ref bean="serviceDAO" />
         </property>
         <property name="historyManager">
           <ref local="historyManager" />
@@ -108,22 +108,22 @@
     <property name="target">
       <bean class="cz.silesnet.service.impl.BillingManagerImpl">
         <property name="billDAO">
-          <ref local="billDAO" />
+          <ref bean="billDAO" />
         </property>
         <property name="customerManager">
           <ref bean="customerManager" />
         </property>
         <property name="historyManager">
-          <ref local="historyManager" />
+          <ref bean="historyManager" />
         </property>
         <property name="settingManager">
-          <ref local="settingManager" />
+          <ref bean="settingManager" />
         </property>
         <property name="mailSender">
-          <ref local="mailSenderProduction" />
+          <ref bean="mailSenderProduction" />
         </property>
         <property name="signedEmailGenerator">
-          <ref local="signedEmailGenerator" />
+          <ref bean="signedEmailGenerator" />
         </property>
         <property name="emailFromAddressCs" value="${email.from.cs}" />
         <property name="emailFromAddressPl" value="${email.from.pl}" />
@@ -150,7 +150,7 @@
     <property name="target">
       <bean class="cz.silesnet.service.impl.SettingManagerImpl">
         <property name="settingDAO">
-          <ref local="settingDAO" />
+          <ref bean="settingDAO" />
         </property>
       </bean>
     </property>

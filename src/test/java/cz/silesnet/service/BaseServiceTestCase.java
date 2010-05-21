@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.unitils.spring.annotation.SpringApplicationContext;
 
 /**
  * Base test case for services testing. Instantiates log and context.
@@ -27,8 +28,7 @@ public abstract class BaseServiceTestCase extends TestCase {
 	// -----------------------------------------------------------
 
 	public BaseServiceTestCase() {
-		String[] paths = { "/WEB-INF/applicationContext-hibernate.xml",
-				"/WEB-INF/applicationContext.xml" };
+		String[] paths = {"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml"};
 		ctx = new ClassPathXmlApplicationContext(paths);
 	}
 }

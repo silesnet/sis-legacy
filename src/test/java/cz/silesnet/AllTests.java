@@ -44,12 +44,6 @@ public class AllTests {
 		// $JUnit-BEGIN$
 
 		// cz.silesnet.dao tests
-		suite.addTestSuite(BillDAOTest.class);
-		suite.addTestSuite(CustomerDAOTest.class);
-		suite.addTestSuite(HistoryItemDAOTest.class);
-		suite.addTestSuite(LabelDAOTest.class);
-		suite.addTestSuite(NodeDAOTest.class);
-		suite.addTestSuite(ServiceDAOTest.class);
 		suite.addTestSuite(SettingDAOTest.class);
 		suite.addTestSuite(UserDAOTest.class);
 
