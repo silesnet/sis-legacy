@@ -43,8 +43,7 @@ public class MessagesUtilsTest extends TestCase {
 	}
 
 	protected void setUp() {
-		String[] paths = { "/WEB-INF/applicationContext-hibernate.xml",
-				"/WEB-INF/applicationContext.xml" };
+		String[] paths = { "context/sis-messages.xml" };
 		ctx = new ClassPathXmlApplicationContext(paths);
 	}
 }

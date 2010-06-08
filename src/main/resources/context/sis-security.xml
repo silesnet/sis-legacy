@@ -235,7 +235,7 @@
 
   <bean id="loginListener" class="cz.silesnet.web.LoginListener">
     <property name="userManager">
-      <ref local="userManager" />
+      <ref bean="userManager" />
     </property>
   </bean>
 
@@ -246,7 +246,8 @@
   -->
 
   <!--
-    Turn it on for production <bean id="methodSecurityAspect" class="cz.silesnet.utils.MethodSecurityAspect"
+    Turn it on for production
+    <bean id="methodSecurityAspect" class="cz.silesnet.utils.MethodSecurityAspect"
     factory-method="aspectOf"> <property name="securityInterceptor" ref="methodSecurityInterceptor" /> </bean>
   -->
 

@@ -1,4 +1,5 @@
 INSERT INTO users (id, login, passwd, name, roles) VALUES (1, 'anonymous', '', 'anonymousUser', 'ROLE_ANONYMOUS');
+INSERT INTO users (id, login, passwd, name, roles) VALUES (2, 'system', '', 'System', 'ROLE_ANONYMOUS,ROLE_ADMIN');
 
 INSERT INTO labels (id, parent_id, name, number) VALUES (300, 0, 'responsible', 0);
 INSERT INTO labels (id, parent_id, name, number) VALUES (313, 300, 'Iwona', 20);
