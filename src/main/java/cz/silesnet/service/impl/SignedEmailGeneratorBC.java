@@ -73,30 +73,12 @@ public class SignedEmailGeneratorBC implements SignedEmailGenerator {
 		isConfigured = false;
 		try {
 			configureInternal();
-			isConfigured = true;
+            log.info("SignedEmailGenerator CONFIGURED!");
 		}
-		catch (CertificateException e) {
-			e.printStackTrace();
+		catch (Exception e) {
+//			e.printStackTrace();
+            log.warn("SignedEmailGenerator NOT CONFIGURED: " + e.getMessage());
 		}
-		catch (NoSuchProviderException e) {
-			e.printStackTrace();
-		}
-		catch (KeyStoreException e) {
-			e.printStackTrace();
-		}
-		catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		catch (UnrecoverableKeyException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (isConfigured)
-			log.info("SignedEmailGenerator CONFIGURED!");
-		else
-			log.warn("SignedEmailGenerator NOT CONFIGURED!");
 	}
 
 	private void configureInternal() throws CertificateException,
