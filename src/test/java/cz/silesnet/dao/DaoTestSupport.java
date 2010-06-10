@@ -1,5 +1,7 @@
 package cz.silesnet.dao;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeMethod;
 import org.unitils.UnitilsTestNG;
 
@@ -12,6 +14,7 @@ import org.unitils.UnitilsTestNG;
 public abstract class DaoTestSupport<D> extends UnitilsTestNG {
 
     protected D dao;
+    protected final Log log = LogFactory.getLog(getClass());
 
     protected abstract D configureDao();
 

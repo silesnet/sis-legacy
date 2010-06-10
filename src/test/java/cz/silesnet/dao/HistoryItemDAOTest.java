@@ -1,93 +1,113 @@
 package cz.silesnet.dao;
 
 import cz.silesnet.model.HistoryItem;
-
+import cz.silesnet.model.Label;
 import cz.silesnet.utils.SecurityUtils;
+import org.joda.time.DateTime;
+import org.testng.annotations.Test;
+import org.unitils.dbunit.annotation.DataSet;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class HistoryItemDAOTest extends BaseDAOTestCase {
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+@DataSet("/cz/silesnet/dao/HistoryItemDAOTest.xml")
+public abstract class HistoryItemDAOTest extends DaoTestSupport<HistoryItemDAO> {
 
-	public void testGetHistory() {
-		HistoryItemDAO dao = (HistoryItemDAO) ctx.getBean("historyItemDAO");
-		LabelDAO ldao = (LabelDAO) ctx.getBean("labelDAO");
+    private Label label;
 
-		Long historyId = dao.getNewHistoryId();
+    private Label getLabel() {
+        if (label == null) {
+            label = new Label();
+            label.setId(16L);
+            label.setParentId(10L);
+            label.setName("TestHistory");
+        }
+        return label;
+    }
 
-		HistoryItem hi = new HistoryItem();
-		hi.setHistoryId(historyId);
-		hi.setTimeStamp(new Date());
-		hi.setUser(SecurityUtils.getUser());
-		hi.setHistoryTypeLabel(ldao.getLabelById(Long.valueOf(16)));
-		hi.setFieldName("fSomeField1");
-		hi.setOldValue("old field value1");
-		hi.setNewValue("new field value1");
-		dao.saveHistoryItem(hi);
+    @Test
+    public void testGetHistory() {
+        Long historyId = dao.getNewHistoryId();
 
-		hi.setId(null);
-		hi.setHistoryId(historyId);
-		hi.setTimeStamp(new Date());
-		hi.setUser(SecurityUtils.getUser());
-		hi.setHistoryTypeLabel(ldao.getLabelById(Long.valueOf(16)));
-		hi.setFieldName("fSomeField2");
-		hi.setOldValue("old field value2");
-		hi.setNewValue("new field value2");
-		dao.saveHistoryItem(hi);
+        HistoryItem hi = new HistoryItem();
+        hi.setHistoryId(historyId);
+        hi.setTimeStamp(new Date());
+        hi.setUser(SecurityUtils.getUser());
+        hi.setHistoryTypeLabel(getLabel());
+        hi.setFieldName("fSomeField1");
+        hi.setOldValue("old field value1");
+        hi.setNewValue("new field value1");
+        dao.saveHistoryItem(hi);
 
-		hi.setId(null);
-		hi.setHistoryId(historyId);
-		hi.setTimeStamp(new Date());
-		hi.setUser(SecurityUtils.getUser());
-		hi.setHistoryTypeLabel(ldao.getLabelById(Long.valueOf(16)));
-		hi.setFieldName("fSomeField3");
-		hi.setOldValue("old field value3");
-		hi.setNewValue("new field value3");
-		dao.saveHistoryItem(hi);
+        hi.setId(null);
+        hi.setHistoryId(historyId);
+        hi.setTimeStamp(new Date());
+        hi.setUser(SecurityUtils.getUser());
+        hi.setHistoryTypeLabel(getLabel());
+        hi.setFieldName("fSomeField2");
+        hi.setOldValue("old field value2");
+        hi.setNewValue("new field value2");
+        dao.saveHistoryItem(hi);
 
-		log.debug("Retrieving history of id: " + historyId);
+        hi.setId(null);
+        hi.setHistoryId(historyId);
+        hi.setTimeStamp(new Date());
+        hi.setUser(SecurityUtils.getUser());
+        hi.setHistoryTypeLabel(getLabel());
+        hi.setFieldName("fSomeField3");
+        hi.setOldValue("old field value3");
+        hi.setNewValue("new field value3");
+        dao.saveHistoryItem(hi);
 
-		ArrayList<HistoryItem> history = (ArrayList<HistoryItem>) dao
-				.getHistory(historyId);
+        log.debug("Retrieving history of id: " + historyId);
 
-		assertNotNull(history);
+        ArrayList<HistoryItem> history = (ArrayList<HistoryItem>) dao
+                .getHistory(historyId);
 
-		log.debug("Retrieved history" + history);
+        assertThat(history, is(not(nullValue())));
 
-		// clean up
-		for (HistoryItem h : history)
-			dao.removeHistoryItem(h);
-	}
+        log.debug("Retrieved history" + history);
 
-	public void testGetNewHistoryId() {
-		HistoryItemDAO dao = (HistoryItemDAO) ctx.getBean("historyItemDAO");
+        // clean up
+        for (HistoryItem h : history)
+            dao.removeHistoryItem(h);
+    }
 
-		Long newHistoryId = dao.getNewHistoryId();
-		log.debug("New historyId returned " + newHistoryId);
-	}
+    @Test
+    public void testGetNewHistoryId() {
+        Long newHistoryId = dao.getNewHistoryId();
+        log.debug("New historyId returned " + newHistoryId);
+    }
 
-	public void testSaveRemoveHistoryItem() {
-		HistoryItemDAO dao = (HistoryItemDAO) ctx.getBean("historyItemDAO");
-		LabelDAO ldao = (LabelDAO) ctx.getBean("labelDAO");
+    @Test
+    public void testSaveRemoveHistoryItem() {
 
-		HistoryItem hi = new HistoryItem();
-		hi.setHistoryId(Long.valueOf(1));
-		hi.setTimeStamp(new Date());
-		hi.setUser(SecurityUtils.getUser());
-		hi.setHistoryTypeLabel(ldao.getLabelById(Long.valueOf(16)));
-		hi.setFieldName("fSomeField");
-		hi.setOldValue("old field value");
-		hi.setNewValue("new field value");
+        HistoryItem hi = new HistoryItem();
+        hi.setHistoryId(1L);
+        hi.setTimeStamp(new Date());
+        hi.setUser(SecurityUtils.getUser());
+        hi.setHistoryTypeLabel(getLabel());
+        hi.setFieldName("fSomeField");
+        hi.setOldValue("old field value");
+        hi.setNewValue("new field value");
 
-		log.debug("Persistnig history item: " + hi);
-		dao.saveHistoryItem(hi);
+        log.debug("Persistnig history item: " + hi);
+        dao.saveHistoryItem(hi);
 
-		log.debug("Persisted history item: " + hi);
+        log.debug("Persisted history item: " + hi);
 
-		log.debug("Deleting history item: " + hi);
-		dao.removeHistoryItem(hi);
-	}
+        log.debug("Deleting history item: " + hi);
+        dao.removeHistoryItem(hi);
+    }
+
+    @Test
+    public void testRemoveLoginHistoryOlderThan() throws Exception {
+        int removedCount = dao.removeLoginHistoryOlderThan(new DateTime("2009-08-13"));
+        assertThat(removedCount, is(2)); // see details in HistoryItemDAOTest.xml
+    }
 }
