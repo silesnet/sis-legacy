@@ -1,64 +1,66 @@
 package cz.silesnet.dao;
 
-import java.util.List;
-
 import cz.silesnet.model.PrepareMixture;
 import cz.silesnet.model.Setting;
+import org.testng.annotations.Test;
 
-public class SettingDAOTest extends BaseDAOTestCase {
+import java.util.List;
 
-	public void testCRUD() {
-		// get dao implementation from application context
-		SettingDAO dao = (SettingDAO) ctx.getBean("settingDAO");
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-		// have mixture
-		Setting s = PrepareMixture.getSetting();
-		String sName = s.getName();
-		String sValue = s.getValue();
+public abstract class SettingDAOTest extends DaoTestSupport<SettingDAO> {
 
-		log.debug(s);
-		// persist
-		dao.save(s);
-		assertNotNull(s.getId());
-		log.debug("Persisted setting :" + s);
-		// store id
-		Long sId = s.getId();
-		// drop original setting
-		s = null;
-		// retrieve persisted by id
-		s = dao.get(sId);
-		assertNotNull(s.getId());
-		assertTrue(sId.equals(s.getId()));
-		assertTrue(sName.equals(s.getName()));
-		assertTrue(sValue.equals(s.getValue()));
-		log.debug("Retrieved by Id :" + s);
-		// drop original setting
-		s = null;
-		// retrieve persisted by name
-		s = dao.getByName(sName);
-		assertNotNull(s.getId());
-		assertTrue(sId.equals(s.getId()));
-		assertTrue(sName.equals(s.getName()));
-		assertTrue(sValue.equals(s.getValue()));
-		log.debug("Retrieved by Name :" + s);
-		// get all
-		List<Setting> settings = dao.getAll();
-		assertTrue(settings.size() >= 1);
+    @Test
+    public void testCRUD() {
 
-		Setting s2 = dao.getByName("xx");
-		assertTrue(s2 == null);
+        // have mixture
+        Setting s = PrepareMixture.getSetting();
+        String sName = s.getName();
+        String sValue = s.getValue();
 
-		// remove test setting
-		dao.remove(s);
+        log.debug(s);
+        // persist
+        dao.save(s);
+        assertThat(s.getId(), is(not(nullValue())));
 
-		// try get removed by name
-		s2 = dao.getByName(sName);
-		assertTrue(s2 == null);
+        log.debug("Persisted setting :" + s);
+        // store id
+        Long sId = s.getId();
+        // drop original setting
+        s = null;
+        // retrieve persisted by id
+        s = dao.get(sId);
+        assertThat(s.getId(), is(not(nullValue())));
+        assertThat(sId.equals(s.getId()), is(true));
+        assertThat(s.getName(), is(sName));
+        assertThat(s.getValue(), is(sValue));
+        log.debug("Retrieved by Id :" + s);
+        // drop original setting
+        s = null;
+        // retrieve persisted by name
+        s = dao.getByName(sName);
+        assertThat(s.getId(), is(not(nullValue())));
+        assertThat(sId.equals(s.getId()), is(true));
+        assertThat(s.getName(), is(sName));
+        assertThat(s.getValue(), is(sValue));
+        log.debug("Retrieved by Name :" + s);
+        // get all
+        List<Setting> settings = dao.getAll();
+        assertThat(settings.size() >= 1, is(true));
 
-		// try get removed by id
-		s2 = dao.get(sId);
-		assertTrue(s2 == null);
+        Setting s2 = dao.getByName("xx");
+        assertThat(s2, is(nullValue()));
+        // remove test setting
+        dao.remove(s);
 
-	}
+        // try get removed by name
+        s2 = dao.getByName(sName);
+        assertThat(s2, is(nullValue()));
+
+        // try get removed by id
+        s2 = dao.get(sId);
+        assertThat(s2, is(nullValue()));
+    }
 
 }
