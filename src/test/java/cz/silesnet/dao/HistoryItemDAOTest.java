@@ -44,7 +44,7 @@ public abstract class HistoryItemDAOTest extends DaoTestSupport<HistoryItemDAO> 
         hi.setNewValue("new field value1");
         dao.saveHistoryItem(hi);
 
-        hi.setId(null);
+        hi = new HistoryItem();
         hi.setHistoryId(historyId);
         hi.setTimeStamp(new Date());
         hi.setUser(SecurityUtils.getUser());
@@ -54,7 +54,7 @@ public abstract class HistoryItemDAOTest extends DaoTestSupport<HistoryItemDAO> 
         hi.setNewValue("new field value2");
         dao.saveHistoryItem(hi);
 
-        hi.setId(null);
+        hi = new HistoryItem();
         hi.setHistoryId(historyId);
         hi.setTimeStamp(new Date());
         hi.setUser(SecurityUtils.getUser());
@@ -66,8 +66,7 @@ public abstract class HistoryItemDAOTest extends DaoTestSupport<HistoryItemDAO> 
 
         log.debug("Retrieving history of id: " + historyId);
 
-        ArrayList<HistoryItem> history = (ArrayList<HistoryItem>) dao
-                .getHistory(historyId);
+        ArrayList<HistoryItem> history = (ArrayList<HistoryItem>) dao.getHistory(historyId);
 
         assertThat(history, is(not(nullValue())));
 
