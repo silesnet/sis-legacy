@@ -6,17 +6,20 @@ import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.service.impl.BillingManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jmock.Mock;
-import org.jmock.MockObjectTestCase;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.testng.annotations.Test;
 
 import java.util.*;
 
-public class BillingManagerBillsTest extends MockObjectTestCase {
+import static org.mockito.Mockito.mock;
+import static org.testng.Assert.*;
+
+public class BillingManagerBillsTest {
 
     protected final Log log = LogFactory.getLog(getClass());
 
+    @Test
     public void testPrepareBills() {
         // prepare customer
         Customer c = new Customer();
@@ -45,9 +48,8 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 
         // mock historyManager in BillingManager
         BillingManagerImpl bMgrI = new BillingManagerImpl();
-        Mock hMgr = new Mock(HistoryManager.class);
-        bMgrI.setHistoryManager((HistoryManager) hMgr.proxy());
-        hMgr.expects(atLeastOnce()).method(ANYTHING);
+        HistoryManager historyManager = mock(HistoryManager.class);
+        bMgrI.setHistoryManager(historyManager);
         BillingManager bMgr = bMgrI;
 
         Calendar due = new GregorianCalendar(2006, Calendar.MARCH, 10);
@@ -78,6 +80,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 
     }
 
+    @Test
     public void testPrepareBill() {
 
         int precision = BillingManagerImpl.sPrecison;
@@ -259,6 +262,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
     }
 
     @SuppressWarnings("static-access")
+    @Test
     public void testGetBillItemAmount() {
         BillingManagerImpl bMgr = new BillingManagerImpl();
 
@@ -425,6 +429,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 
     }
 
+    @Test
     public void testBillingPeriods() {
         // set some vars
         BillingManagerImpl bMgr = new BillingManagerImpl();
@@ -596,6 +601,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
 
     }
 
+    @Test
     public void testMailSender() {
         String[] paths = {"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml",
                 "context/sis-dao.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml"};
@@ -616,6 +622,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
         // bMgr.email(bill);
     }
 
+    @Test
     public void testVAT() {
         BillItem bi = new BillItem("Text 1", 1.0F, 838);
         Bill b = PrepareMixture.getBillSimple();
@@ -669,6 +676,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
         assertTrue(billRoundedVat == 160.0F);
     }
 
+    @Test
     public void testHashCode2() {
         // compose new invoice uuid from customer db id and invoice db id
         // "1" 5 digit customer id 8 digits of invoice id -> hex
@@ -683,6 +691,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
         log.info(Long.toHexString(id2));
     }
 
+    @Test
     public void testHashCode3() {
         Long customerId = new Long("14") + 1000000;
         Long customerId2 = new Long("14");
@@ -695,6 +704,7 @@ public class BillingManagerBillsTest extends MockObjectTestCase {
         log.info(hashCode2);
     }
 
+    @Test
     public void testGetByStatus() {
         String[] paths = {"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml",
                 "context/sis-dao.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml"};

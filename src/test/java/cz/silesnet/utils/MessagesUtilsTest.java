@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import cz.silesnet.model.enums.Country;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.util.Locale;
 
@@ -16,18 +18,13 @@ import java.util.Locale;
  * @author Vlastn�k
  * 
  */
-public class MessagesUtilsTest extends TestCase {
-
-	// ~ Instance fields
-	// --------------------------------------------------------
+public class MessagesUtilsTest {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
 	protected ApplicationContext ctx = null;
 
-	// ~ Methods
-	// ----------------------------------------------------------------
-
+    @Test
 	public void testMessages() {
 		log.debug(MessagesUtils.getMessage(
 				"listWireless.label.filter.anyDomain", Locale.ENGLISH));
@@ -42,6 +39,7 @@ public class MessagesUtilsTest extends TestCase {
 
 	}
 
+    @BeforeTest
 	protected void setUp() {
 		String[] paths = { "context/sis-messages.xml" };
 		ctx = new ClassPathXmlApplicationContext(paths);

@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,10 +15,11 @@ import org.apache.commons.logging.LogFactory;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Frequency;
 
-public class CustomerDeactivateTest extends TestCase {
+public class CustomerDeactivateTest {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
+    @Test
 	public void testDeactivateCandidate() {
 		Customer customer = new Customer();
 		Billing billing = new Billing();
@@ -106,6 +108,7 @@ public class CustomerDeactivateTest extends TestCase {
 		}
 	}
 
+    @Test
 	public void testDeactivateDate() {
 		Customer customer = new Customer();
 		Billing billing = new Billing();
@@ -131,6 +134,7 @@ public class CustomerDeactivateTest extends TestCase {
 		assertFalse(customer.isDeactivateCandidate(due));
 	}
 
+    @Test
 	public void testCutDayTimeMin() throws Exception {
 		Calendar calendar = new GregorianCalendar(2009, Calendar.JANUARY, 1);
 		long millis = calendar.getTimeInMillis();
@@ -143,6 +147,7 @@ public class CustomerDeactivateTest extends TestCase {
 		assertFalse(date.before(cutDayTime));
 	}
 
+    @Test
 	public void testCutDayTimeMax() throws Exception {
 		Calendar calendar = new GregorianCalendar(2009, Calendar.JANUARY, 1);
 		long millis = calendar.getTimeInMillis();

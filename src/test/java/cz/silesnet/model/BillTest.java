@@ -1,12 +1,11 @@
 package cz.silesnet.model;
 
-import junit.framework.TestCase;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
-public class BillTest extends TestCase {
+public class BillTest {
 
-	/*
-	 * Test method for 'cz.silesnet.model.Bill.getNumber()'
-	 */
+    @Test
 	public void testGetNumber() {
 		Bill bill = new Bill();
 		bill.setNumber("200812");
@@ -18,29 +17,33 @@ public class BillTest extends TestCase {
 		assertTrue("20080012".equals(bill.getNumber()));
 		assertTrue("12".equals(bill.getNumberShortPL()));
 		assertTrue("12/2008".equals(bill.getNumberPL()));
-
 	}
 
+    @Test
 	public void testNet() throws Exception {
 		Bill bill = prepareMixture();
 		assertEquals(19.5F, bill.getNet());
 	}
 
+    @Test
 	public void testNetRounded() throws Exception {
 		Bill bill = prepareMixture();
 		assertEquals(20, bill.getNetRounded());
 	}
 
+    @Test
 	public void testVatRounded() throws Exception {
 		Bill bill = prepareMixture();
 		assertEquals(4, bill.getVatRounded());
 	}
 
+    @Test
 	public void testBrt() throws Exception {
 		Bill bill = prepareMixture();
 		assertEquals(24, bill.getBrt());
 	}
 
+    @Test
 	public void testItemBrt() throws Exception {
 		Bill bill = prepareMixture();
 		assertEquals(8.806F, bill.getItems().get(0).getBrt());

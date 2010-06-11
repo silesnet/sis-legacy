@@ -3,12 +3,11 @@ package cz.silesnet.service;
 //import org.acegisecurity.Authentication;
 //import org.acegisecurity.AuthenticationManager;
 import org.acegisecurity.providers.TestingAuthenticationToken;
+import org.testng.annotations.Test;
 
 public class AcegiAuthenticateTest extends BaseServiceTestCase {
 
-	// ~ Methods
-	// ----------------------------------------------------------------
-
+    @Test
 	public void testAcegiAuthenticate() {
 		// AuthenticationManager am = (AuthenticationManager)
 		// ctx.getBean("authenticationManager");

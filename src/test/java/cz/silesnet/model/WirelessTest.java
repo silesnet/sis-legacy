@@ -4,14 +4,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import cz.silesnet.model.enums.WirelessFrequency;
+import org.testng.annotations.Test;
 
-import junit.framework.TestCase;
-
-public class WirelessTest extends TestCase {
+import static org.testng.Assert.*;
+public class WirelessTest {
 	protected final Log log = LogFactory.getLog(getClass());
 
+    @Test
 	public void testFrequencyMap() {
-
 		Wireless w = new Wireless();
 		w.setFrequency(WirelessFrequency.F2412);
 		log.debug(w.getFrequency());

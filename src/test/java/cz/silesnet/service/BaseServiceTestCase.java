@@ -15,7 +15,7 @@ import org.unitils.spring.annotation.SpringApplicationContext;
  * @author Richard Sikora
  * 
  */
-public abstract class BaseServiceTestCase extends TestCase {
+public abstract class BaseServiceTestCase {
 
 	// ~ Instance fields
 	// --------------------------------------------------------
