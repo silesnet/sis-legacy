@@ -6,42 +6,40 @@ import cz.silesnet.model.Wireless;
 import cz.silesnet.model.enums.WirelessEnum;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 /**
  * Testing Node class hierary DAO.
  * 
  * @author Richard Sikora
  */
-public class NodeDAOTest extends BaseDAOTestCase {
+public abstract class NodeDAOTest extends DaoTestSupport<NodeDAO> {
 
-	// ~ Methods
-	// ----------------------------------------------------------------
-
+    @Test
 	public void testNodeGetters() {
-		NodeDAO dao = (NodeDAO) ctx.getBean("nodeDAO");
-		assertNotNull(dao);
-
-		LabelDAO ldao = (LabelDAO) ctx.getBean("labelDAO");
-		assertNotNull(ldao);
 
 		log.debug("Received nodeDAO implementation from Spring context.");
 
 		// have 2 different nodes
 		Wireless node = new Wireless();
 
-		Long highparentid = Long.valueOf(1000000);
+		Long highparentid = 1000000L;
 
 		// save some APs
-		node.setId(null);
-		node.setHistoryId(Long.valueOf(1));
+		node.setHistoryId(1L);
 		node.setParentId(highparentid);
 		node.setType(WirelessEnum.AP);
 		node.setName("snet-AP1");
 		dao.saveNode(node);
 
-		node.setId(null);
+        node = new Wireless();
+        node.setParentId(highparentid);
+        node.setType(WirelessEnum.AP);
 		node.setName("snet-AP2");
 		node.setHistoryId(2L);
 		dao.saveNode(node);
@@ -49,42 +47,52 @@ public class NodeDAOTest extends BaseDAOTestCase {
 		// save parent id
 		Long parentid = node.getId();
 
-		node.setId(null);
+        node = new Wireless();
+        node.setParentId(highparentid);
+        node.setType(WirelessEnum.AP);
 		node.setName("snet-AP3");
 		node.setHistoryId(3L);
 		dao.saveNode(node);
 
 		// save some ClientAPs
-		node.setId(null);
+        node = new Wireless();
 		node.setType(WirelessEnum.SA);
 		node.setParentId(parentid);
 		node.setName("snet-SA1");
 		node.setHistoryId(4L);
 		dao.saveNode(node);
 
-		node.setId(null);
+        node = new Wireless();
+		node.setType(WirelessEnum.SA);
+		node.setParentId(parentid);
 		node.setName("snet-SA2");
 		node.setHistoryId(5L);
 		dao.saveNode(node);
 
-		node.setId(null);
+        node = new Wireless();
+		node.setType(WirelessEnum.SA);
+		node.setParentId(parentid);
 		node.setName("snet-SA3");
 		node.setHistoryId(6L);
 		dao.saveNode(node);
 
-		node.setId(null);
+        node = new Wireless();
+		node.setType(WirelessEnum.SA);
+		node.setParentId(parentid);
 		node.setName("snet-SA4");
 		node.setHistoryId(7L);
 		dao.saveNode(node);
 
-		node.setId(null);
+        node = new Wireless();
+		node.setType(WirelessEnum.SA);
+		node.setParentId(parentid);
 		node.setName("snet-SA5");
 		node.setHistoryId(8L);
 		dao.saveNode(node);
 
 		// get last node by name
 		Node nodebyname = dao.getNodeByName(node.getName());
-		assertNotNull(nodebyname);
+        assertThat(nodebyname, is(not(nullValue())));
 
 		log.debug("Last node retrieved by name: " + nodebyname);
 
@@ -104,21 +112,18 @@ public class NodeDAOTest extends BaseDAOTestCase {
 			dao.removeNode(ncap);
 	}
 
+    @Test
 	public void testSaveRemoveNode() {
-		NodeDAO dao = (NodeDAO) ctx.getBean("nodeDAO");
-		assertNotNull(dao);
-
-		LabelDAO ldao = (LabelDAO) ctx.getBean("labelDAO");
-		assertNotNull(ldao);
 
 		log.debug("Received nodeDAO implementation from Spring context.");
 
-		Label domainLabel = ldao.getLabelById(Long.valueOf(22));
+        Label domainLabel = new Label();
+        domainLabel.setId(22L);
 
 		// have Node
 		Wireless node = new Wireless();
-		node.setHistoryId(Long.valueOf(1));
-		node.setParentId(Long.valueOf(10000));
+		node.setHistoryId(1L);
+		node.setParentId(10000L);
 		node.setType(WirelessEnum.AP);
 		node.setName("snet-AP");
 		node.setInfo("Comment on node 1");
@@ -151,7 +156,7 @@ public class NodeDAOTest extends BaseDAOTestCase {
 
 		try {
 			dao.getNodeById(nodeid);
-			fail("Retrieved already deleted node");
+			assertThat("Retrieved already deleted node", true, is(false));
 		}
 		catch (ObjectRetrievalFailureException e) {
 			log.debug("Caught expected exception : " + e);
