@@ -6,15 +6,15 @@ import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.userdetails.UserDetails;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.testng.annotations.Test;
 
-public class UserDAOTest extends BaseDAOTestCase {
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
 
+    @Test
 	public void testGetUserByLoginName() {
-		UserDAO dao = (UserDAO) ctx.getBean("userDAO");
-
 		// have new user
 		User u = new User();
 		u.setLoginName("user1");
@@ -31,20 +31,20 @@ public class UserDAOTest extends BaseDAOTestCase {
 
 		User u2 = dao.getUserByLoginName(u.getLoginName());
 
-		assertNotNull(u2);
-		assertEquals(u.getId(), u2.getId());
+        assertThat(u2, is(not(nullValue())));
+        assertThat(u.getId(), is(u2.getId()));
 
 		User u3 = null;
 
 		try {
 			u3 = dao.getUserByLoginName("fido");
-			fail("this user does not exist.");
+			assertThat("this user does not exist.", true, is(false));
 		}
 		catch (ObjectRetrievalFailureException e) {
 			log.debug("caught expected exception: " + e);
 		}
 
-		assertNull(u3);
+        assertThat(u3, is(nullValue()));
 
 		// remove saved user
 		log.debug("Removing user: " + u.getId());
@@ -52,10 +52,8 @@ public class UserDAOTest extends BaseDAOTestCase {
 		dao.removeUser(Long.valueOf(u.getId()));
 	}
 
+    @Test
 	public void testSaveRemoveUser() {
-		// get bean instantiated by spring in context def
-		UserDAO dao = (UserDAO) ctx.getBean("userDAO");
-
 		// have new user
 		User u = new User();
 		u.setLoginName("user1");
@@ -73,8 +71,8 @@ public class UserDAOTest extends BaseDAOTestCase {
 		dao.removeUser(Long.valueOf(u.getId()));
 	}
 
+    @Test
 	public void testUserDetails() {
-		UserDAO dao = (UserDAO) ctx.getBean("userDAO");
 
 		User user = new User();
 		user.setLoginName("fido");
