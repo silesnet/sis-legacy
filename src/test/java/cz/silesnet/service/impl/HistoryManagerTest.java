@@ -6,6 +6,7 @@ import cz.silesnet.model.enums.WirelessEnum;
 import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.NodeManager;
 import org.testng.annotations.Test;
+import org.unitils.spring.annotation.SpringBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +16,14 @@ import static org.testng.Assert.assertNotNull;
 
 public class HistoryManagerTest extends BaseServiceTestCase {
 
+    @SpringBean("nodeManager")
+    private NodeManager nmgr;
+
+    @SpringBean("historyManager")
+    private HistoryManager hmgr;
+
     @Test
     public void testSetGetHistory() {
-        NodeManager nmgr = (NodeManager) ctx.getBean("nodeManager");
-        HistoryManager hmgr = (HistoryManager) ctx.getBean("historyManager");
-
-        assertNotNull(nmgr);
-        assertNotNull(hmgr);
-
         // have node
         Wireless node = new Wireless();
         node.setType(WirelessEnum.AP);

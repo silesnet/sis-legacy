@@ -7,18 +7,20 @@ import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.CustomerManager;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
+import org.unitils.spring.annotation.SpringBean;
 
 import static org.testng.Assert.*;
 
 public class BillingManagerTest extends BaseServiceTestCase {
 
+    @SpringBean("billingManager")
+    private BillingManager bmgr;
+
+    @SpringBean("customerManager")
+    private CustomerManager cmgr;
+
     @Test
     public void testCRUD() {
-        BillingManager bmgr = (BillingManager) ctx.getBean("billingManager");
-        CustomerManager cmgr = (CustomerManager) ctx.getBean("customerManager");
-        assertNotNull(bmgr);
-        assertNotNull(cmgr);
-
         Customer customer = PrepareMixture.getCustomer();
         Customer c = customer;
         // String customerName = c.getName();

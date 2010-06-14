@@ -7,6 +7,7 @@ import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
+import org.unitils.spring.annotation.SpringBean;
 
 import java.util.List;
 
@@ -14,13 +15,14 @@ import static org.testng.Assert.*;
 
 public class CustomerManagerTest extends BaseServiceTestCase {
 
+    @SpringBean("customerManager")
+    private CustomerManager cmgr;
+
+    @SpringBean("historyManager")
+    private HistoryManager hmgr;
+
     @Test
     public void testCRUD() {
-        // get managers from context
-        CustomerManager cmgr = (CustomerManager) ctx.getBean("customerManager");
-        HistoryManager hmgr = (HistoryManager) ctx.getBean("historyManager");
-
-        assertNotNull(cmgr);
 
         Customer c = PrepareMixture.getCustomer();
 
@@ -129,9 +131,6 @@ public class CustomerManagerTest extends BaseServiceTestCase {
 
     @Test
     public void TmptestDeactivateCandidates() {
-        CustomerManager cmgr = (CustomerManager) ctx.getBean("customerManager");
-        assertNotNull(cmgr);
-
         cmgr.deactivateCandidates();
     }
 

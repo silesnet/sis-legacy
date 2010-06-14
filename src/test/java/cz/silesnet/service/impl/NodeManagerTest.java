@@ -4,6 +4,7 @@ import cz.silesnet.model.Node;
 import cz.silesnet.model.Wireless;
 import cz.silesnet.service.NodeManager;
 import org.testng.annotations.Test;
+import org.unitils.spring.annotation.SpringBean;
 
 import java.util.List;
 
@@ -14,15 +15,17 @@ import java.util.List;
  */
 public class NodeManagerTest extends BaseServiceTestCase {
 
+    @SpringBean("nodeManager")
+    private NodeManager nmgr;
+
     @Test
     public void testCRUD() {
-        NodeManager nmgr = (NodeManager) ctx.getBean("nodeManager");
 
         Wireless node = new Wireless();
 
         node.setName("Testing node");
         node.setMac("12345");
-        node.setParentId(Long.valueOf(0));
+        node.setParentId(0L);
 
         log.debug("Inserting node: " + node);
         nmgr.insertNode(node);
@@ -37,7 +40,6 @@ public class NodeManagerTest extends BaseServiceTestCase {
 
     @Test
     public void testGetLevelOfNodes() {
-        NodeManager nmgr = (NodeManager) ctx.getBean("nodeManager");
 
         List<Node> nodes = nmgr.getLevelOfNodes(0);
         log.debug("Root network nodes: " + nodes);

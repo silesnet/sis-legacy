@@ -4,6 +4,7 @@ import cz.silesnet.model.PrepareMixture;
 import cz.silesnet.model.Setting;
 import cz.silesnet.service.SettingManager;
 import org.testng.annotations.Test;
+import org.unitils.spring.annotation.SpringBean;
 
 import java.util.List;
 
@@ -12,10 +13,11 @@ import static org.testng.Assert.assertTrue;
 
 public class SettingManagerTest extends BaseServiceTestCase {
 
+    @SpringBean("settingManager")
+    private SettingManager smgr;
+
     @Test
     public void testCRUD() {
-        SettingManager smgr = (SettingManager) ctx.getBean("settingManager");
-        assertNotNull(smgr);
         // have mixture
         Setting s = PrepareMixture.getSetting();
         String sName = s.getName();
