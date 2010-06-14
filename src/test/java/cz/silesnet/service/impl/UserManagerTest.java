@@ -1,6 +1,7 @@
-package cz.silesnet.service;
+package cz.silesnet.service.impl;
 
 import cz.silesnet.model.User;
+import cz.silesnet.service.UserManager;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 

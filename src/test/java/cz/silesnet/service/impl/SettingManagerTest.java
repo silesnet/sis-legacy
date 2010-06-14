@@ -1,7 +1,8 @@
-package cz.silesnet.service;
+package cz.silesnet.service.impl;
 
 import cz.silesnet.model.PrepareMixture;
 import cz.silesnet.model.Setting;
+import cz.silesnet.service.SettingManager;
 import org.testng.annotations.Test;
 
 import java.util.List;

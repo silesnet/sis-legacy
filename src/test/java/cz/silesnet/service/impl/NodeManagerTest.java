@@ -1,7 +1,8 @@
-package cz.silesnet.service;
+package cz.silesnet.service.impl;
 
 import cz.silesnet.model.Node;
 import cz.silesnet.model.Wireless;
+import cz.silesnet.service.NodeManager;
 import org.testng.annotations.Test;
 
 import java.util.List;

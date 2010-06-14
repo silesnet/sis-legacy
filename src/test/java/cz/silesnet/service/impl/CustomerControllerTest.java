@@ -1,4 +1,4 @@
-package cz.silesnet.service;
+package cz.silesnet.service.impl;
 
 import org.acegisecurity.AccessDeniedException;
 import org.acegisecurity.Authentication;

@@ -1,8 +1,10 @@
-package cz.silesnet.service;
+package cz.silesnet.service.impl;
 
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.PrepareMixture;
 import cz.silesnet.model.enums.Frequency;
+import cz.silesnet.service.CustomerManager;
+import cz.silesnet.service.HistoryManager;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
 

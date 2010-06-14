@@ -1,8 +1,10 @@
-package cz.silesnet.service;
+package cz.silesnet.service.impl;
 
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.PrepareMixture;
+import cz.silesnet.service.BillingManager;
+import cz.silesnet.service.CustomerManager;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
 

@@ -1,9 +1,10 @@
-package cz.silesnet.service;
+package cz.silesnet.service.impl;
 
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
-import cz.silesnet.service.impl.BillingManagerImpl;
+import cz.silesnet.service.BillingManager;
+import cz.silesnet.service.HistoryManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;

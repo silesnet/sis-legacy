@@ -1,15 +1,14 @@
-package cz.silesnet.service.impl;
+package cz.silesnet.service;
 
 import cz.silesnet.dao.HistoryItemDAO;
 import cz.silesnet.service.HistoryManager;
+import cz.silesnet.service.impl.HistoryManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.mockito.ArgumentCaptor;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
