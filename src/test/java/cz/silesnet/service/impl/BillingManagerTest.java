@@ -1,5 +1,7 @@
 package cz.silesnet.service.impl;
 
+import cz.silesnet.dao.BillDAO;
+import cz.silesnet.dao.CustomerDAO;
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.PrepareMixture;
@@ -18,6 +20,9 @@ public class BillingManagerTest extends BaseServiceTestCase {
 
     @SpringBean("customerManager")
     private CustomerManager cmgr;
+
+    @SpringBean("customerDAO")
+    private CustomerDAO cdao;
 
     @Test
     public void testCRUD() {
@@ -42,6 +47,7 @@ public class BillingManagerTest extends BaseServiceTestCase {
         // persist changes
         log.debug("Update bill.");
         bmgr.update(b);
+        cdao.evict(c);
 
         // try to retrieve it
         b = null;
@@ -52,6 +58,7 @@ public class BillingManagerTest extends BaseServiceTestCase {
         assertTrue(secondLine.equals(b.getItems().get(1).getText()));
 
         c = b.getInvoicedCustomer();
+        log.debug(c.getName());
         assertNull(c);
         // assertTrue(customerName.equals(c.getName()));
 
