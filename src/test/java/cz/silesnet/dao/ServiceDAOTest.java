@@ -49,6 +49,7 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
         service.setPeriod(new Period(null, cal.getTime()));
         
         List<Service> services = dao.getByExample(service);
+        log.debug(dao.get(12L));
         assertThat(services.size(), is(1));
         assertThat(services.get(0).getName(), is("Service 3"));
     }

@@ -1,21 +1,20 @@
 package cz.silesnet.dao.hibernate;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import cz.silesnet.dao.ServiceDAO;
+import cz.silesnet.model.Service;
+import cz.silesnet.model.enums.Country;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import cz.silesnet.dao.ServiceDAO;
-import cz.silesnet.model.Service;
-import cz.silesnet.model.enums.Country;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Concrete implementation of ServiceDAO using Hibernate.
- * 
+ *
  * @author Richard Sikora
  */
 public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceDAO {
@@ -25,7 +24,7 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
 
   public List<Service> getAllOrphans() {
     return getHibernateTemplate().find(
-        "from cz.silesnet.model.Service as s where s.customerId is null");
+        "from cz.silesnet.model.Service as s where not exists (from cz.silesnet.model.Customer as c where c.id = s.customerId)");
   }
 
   public Service get(Long serviceId) {
