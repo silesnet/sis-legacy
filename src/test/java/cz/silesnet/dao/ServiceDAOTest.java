@@ -49,7 +49,7 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
 
     List<Service> services = dao.getByExample(service);
     Service service2 = dao.get(12L);
-    log.debug(service2);
+//    log.debug(service2);
     assertThat("error in fixture configuration! (dbunit.org)", service2.getPeriod().getTo(), is(not(nullValue())));
     assertThat(services.size(), is(1));
     assertThat(services.get(0).getName(), is("Service 3"));
