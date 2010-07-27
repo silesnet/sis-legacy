@@ -1,5 +1,6 @@
 package cz.silesnet.service;
 
+import cz.silesnet.model.User;
 import org.acegisecurity.event.authentication.InteractiveAuthenticationSuccessEvent;
 import org.acegisecurity.ui.session.HttpSessionDestroyedEvent;
 
@@ -15,7 +16,7 @@ public interface UserManager {
 	// ~ Methods
 	// ----------------------------------------------------------------
 
-	public List getUsers();
+	public List<User> getUsers();
 
 	public void dispatchSessionDestroyedEvent(
 			HttpSessionDestroyedEvent sessionEvent);
