@@ -19,51 +19,52 @@ import static org.mockito.Mockito.*;
  * Date: May 17, 2010
  * Time: 4:57:25 PM
  */
+@Test(groups = "integration")
 public class HibernateGenericDaoTest {
 
-    private GenericDao<Object> dao;
-    private HibernateGenericDao<Object> hibernateDao;
-    private HibernateTemplate template;
-    private final Object entity = new Object();
+  private GenericDao<Object> dao;
+  private HibernateGenericDao<Object> hibernateDao;
+  private HibernateTemplate template;
+  private final Object entity = new Object();
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        hibernateDao = new HibernateGenericDao<Object>() {
-        };
-        dao = hibernateDao;
-        template = mock(HibernateTemplate.class);
-        hibernateDao.setHibernateTemplate(template);
-    }
+  @BeforeMethod
+  public void setUp() throws Exception {
+    hibernateDao = new HibernateGenericDao<Object>() {
+    };
+    dao = hibernateDao;
+    template = mock(HibernateTemplate.class);
+    hibernateDao.setHibernateTemplate(template);
+  }
 
-    @Test
-    public void find() throws Exception {
-        when(template.get(Object.class, 1L)).thenReturn(entity);
-        assertThat(dao.find(1L), is(entity));
-    }
+  @Test
+  public void find() throws Exception {
+    when(template.get(Object.class, 1L)).thenReturn(entity);
+    assertThat(dao.find(1L), is(entity));
+  }
 
-    @Test
-    public void store() throws Exception {
-        dao.store(entity);
-        verify(template).saveOrUpdate(entity);
-    }
+  @Test
+  public void store() throws Exception {
+    dao.store(entity);
+    verify(template).saveOrUpdate(entity);
+  }
 
-    @Test
-    public void remove() throws Exception {
-        dao.remove(entity);
-        verify(template).delete(entity);
-    }
+  @Test
+  public void remove() throws Exception {
+    dao.remove(entity);
+    verify(template).delete(entity);
+  }
 
-    @Test
-    public void findByCriteria() throws Exception {
-        List<Object> allEntities = Arrays.asList(entity);
-        DetachedCriteria criteria = hibernateDao.newCriteria();
-        when(template.findByCriteria(criteria)).thenReturn(allEntities);
-        assertThat(hibernateDao.findByCriteria(criteria).get(0), is(entity));
-    }
+  @Test
+  public void findByCriteria() throws Exception {
+    List<Object> allEntities = Arrays.asList(entity);
+    DetachedCriteria criteria = hibernateDao.newCriteria();
+    when(template.findByCriteria(criteria)).thenReturn(allEntities);
+    assertThat(hibernateDao.findByCriteria(criteria).get(0), is(entity));
+  }
 
-    @Test
-    public void newCriteria() throws Exception {
-        DetachedCriteria criteria = hibernateDao.newCriteria();
-        assertThat(criteria, is(not(nullValue())));
-    }
+  @Test
+  public void newCriteria() throws Exception {
+    DetachedCriteria criteria = hibernateDao.newCriteria();
+    assertThat(criteria, is(not(nullValue())));
+  }
 }

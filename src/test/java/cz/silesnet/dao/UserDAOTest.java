@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@Test(groups = "integration")
 public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
 
     @Test

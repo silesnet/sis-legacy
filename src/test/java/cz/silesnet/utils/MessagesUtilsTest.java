@@ -13,6 +13,7 @@ import java.util.Locale;
 /**
  * @author Vlastn�k
  */
+@Test(groups = "integration")
 public class MessagesUtilsTest {
 
   protected final Log log = LogFactory.getLog(getClass());

@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 
 import static org.testng.Assert.*;
 
+@Test(groups = "integration")
 public class CustomerControllerTest {
 
     protected final Log log = LogFactory.getLog(getClass());

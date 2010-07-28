@@ -11,6 +11,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+@Test(groups = "integration")
 public abstract class CustomerDAOTest extends DaoTestSupport<CustomerDAO> {
 
     @Test

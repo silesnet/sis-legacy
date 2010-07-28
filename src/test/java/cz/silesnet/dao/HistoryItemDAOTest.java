@@ -16,6 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @DataSet("/cz/silesnet/dao/HistoryItemDAOTest.xml")
+@Test(groups = "integration")
 public abstract class HistoryItemDAOTest extends DaoTestSupport<HistoryItemDAO> {
 
     private Label label;

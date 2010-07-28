@@ -2,8 +2,6 @@ package cz.silesnet.dao.hibernate;
 
 import cz.silesnet.dao.CustomerDAO;
 import cz.silesnet.dao.CustomerDAOTest;
-import cz.silesnet.dao.ServiceDAO;
-import cz.silesnet.dao.ServiceDAOTest;
 import org.hibernate.SessionFactory;
 import org.unitils.orm.hibernate.annotation.HibernateSessionFactory;
 import org.unitils.spring.annotation.SpringApplicationContext;
@@ -15,15 +13,15 @@ import org.unitils.spring.annotation.SpringApplicationContext;
  */
 @SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml"})
 public class CustomerDAOHibernateTest extends CustomerDAOTest {
-    @HibernateSessionFactory
-    private SessionFactory sessionFactory;
+  @HibernateSessionFactory
+  private SessionFactory sessionFactory;
 
-    @Override
-    protected CustomerDAO configureDao() {
-        CustomerDAOHibernate hibernateDao = new CustomerDAOHibernate();
-        hibernateDao.setSessionFactory(sessionFactory);
-        hibernateDao.afterPropertiesSet();
-        return hibernateDao;
-    }
+  @Override
+  protected CustomerDAO configureDao() {
+    CustomerDAOHibernate hibernateDao = new CustomerDAOHibernate();
+    hibernateDao.setSessionFactory(sessionFactory);
+    hibernateDao.afterPropertiesSet();
+    return hibernateDao;
+  }
 
 }

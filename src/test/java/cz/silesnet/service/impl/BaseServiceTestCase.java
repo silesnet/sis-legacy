@@ -2,6 +2,7 @@ package cz.silesnet.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.testng.annotations.Test;
 import org.unitils.UnitilsTestNG;
 import org.unitils.database.annotations.Transactional;
 import org.unitils.database.util.TransactionMode;
@@ -14,6 +15,7 @@ import org.unitils.spring.annotation.SpringApplicationContext;
  */
 @SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml"})
 @Transactional(TransactionMode.ROLLBACK)
+@Test(groups = "integration")
 public abstract class BaseServiceTestCase extends UnitilsTestNG {
 
   protected final Log log = LogFactory.getLog(getClass());

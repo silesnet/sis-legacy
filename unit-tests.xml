@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="sis-unit">
+  <test name="unit">
+    <groups>
+      <run>
+        <exclude name="integration" />
+      </run>
+    </groups>
+    <packages>
+      <package name="cz.silesnet.*" />
+    </packages>
+  </test>
+</suite>
