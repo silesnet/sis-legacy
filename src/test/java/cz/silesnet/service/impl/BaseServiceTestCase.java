@@ -2,9 +2,9 @@ package cz.silesnet.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.unitils.UnitilsTestNG;
+import org.unitils.database.annotations.Transactional;
+import org.unitils.database.util.TransactionMode;
 import org.unitils.spring.annotation.SpringApplicationContext;
 
 /**
@@ -13,8 +13,9 @@ import org.unitils.spring.annotation.SpringApplicationContext;
  * @author Richard Sikora
  */
 @SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml"})
+@Transactional(TransactionMode.ROLLBACK)
 public abstract class BaseServiceTestCase extends UnitilsTestNG {
 
-    protected final Log log = LogFactory.getLog(getClass());
+  protected final Log log = LogFactory.getLog(getClass());
 
 }

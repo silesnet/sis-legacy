@@ -13,6 +13,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.dbunit:dbunit:2.2.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit-addons:junit-addons:1.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: xerces:xercesImpl:2.6.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: xerces:xmlParserAPIs:2.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring:2.0.3" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.12" level="project" />
