@@ -1,25 +1,19 @@
 package cz.silesnet.utils;
 
-import java.util.Date;
-
-import junit.framework.TestCase;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import cz.silesnet.model.Address;
-import cz.silesnet.model.Connectivity;
-import cz.silesnet.model.Contact;
-import cz.silesnet.model.Label;
-import cz.silesnet.model.Period;
-import cz.silesnet.model.Service;
+import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.testng.annotations.Test;
 
-public class HistoricToStringTest extends TestCase {
+import java.util.Date;
 
-  protected final Log log = LogFactory.getLog(getClass());
+public class HistoricToStringTest {
 
+  protected final Log log = LogFactory.getLog(HistoricToStringTest.class);
+
+  @Test
   public void testToString() {
 
     Label serviceLabel = new Label();
