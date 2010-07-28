@@ -11,7 +11,6 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
 @DataSet("/cz/silesnet/dao/LabelDAOTest.xml")
-@Test(groups = "integration")
 public abstract class LabelDAOTest extends DaoTestSupport<LabelDAO> {
 
   @Test

@@ -3,7 +3,6 @@ package cz.silesnet.dao.hibernate;
 import cz.silesnet.dao.BillDAO;
 import cz.silesnet.dao.BillDAOTest;
 import org.hibernate.SessionFactory;
-import org.testng.annotations.Test;
 import org.unitils.orm.hibernate.annotation.HibernateSessionFactory;
 import org.unitils.spring.annotation.SpringApplicationContext;
 
@@ -14,6 +13,7 @@ import org.unitils.spring.annotation.SpringApplicationContext;
  */
 @SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml"})
 public class BillDAOHibernateTest extends BillDAOTest {
+
   @HibernateSessionFactory
   private SessionFactory sessionFactory;
 

@@ -9,7 +9,6 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Test(groups = "integration")
 public abstract class SettingDAOTest extends DaoTestSupport<SettingDAO> {
   @Test
   public void testCRUD() {

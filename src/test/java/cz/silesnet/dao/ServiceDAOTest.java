@@ -15,7 +15,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @DataSet("/cz/silesnet/dao/ServiceDAOTest.xml")
-@Test(groups = "integration")
 public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
 
   @Test

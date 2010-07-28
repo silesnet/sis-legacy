@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@Test(groups = "integration")
 public abstract class BillDAOTest extends DaoTestSupport<BillDAO> {
 
   @Test

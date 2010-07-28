@@ -17,7 +17,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Richard Sikora
  */
-@Test(groups = "integration")
 public abstract class NodeDAOTest extends DaoTestSupport<NodeDAO> {
 
   @Test
