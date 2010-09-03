@@ -5,7 +5,7 @@
   <artifactId>sis</artifactId>
   <packaging>war</packaging>
   <name>SIS</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <description>SilesNet IS</description>
   <dependencies>
     <dependency>
