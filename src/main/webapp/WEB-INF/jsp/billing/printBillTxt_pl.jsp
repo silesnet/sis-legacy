@@ -17,7 +17,7 @@
   	<img src="${ctx}/img/logo_silesnet.gif" />
 		<br />
 		SilesNet Polska Sp. z o.o.<br />
-		1 Maja 1/2, 55-010 Radwanice<br />
+		43-400 Cieszyn, ul. Bielska 68<br />
 		Tel.: 500 67 33 11, NIP: 896-138-01-08<br />
 		Bank Zachodni WBK S.A. 1 O. w Cieszynie,<br />
 		65109017820000000103270891<br /><br /><br />
@@ -26,7 +26,7 @@
   <TD Align="Right" width="48%" valign="top">
 	<table width="70%">
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Miejsce wystawienia:</td></tr>
-		<tr><td align="center">Radwanice</td></tr>
+		<tr><td align="center">Cieszyn</td></tr>
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Data sprzedaży:</td></tr>
 		<tr><td align="center"><fmt:formatDate value="${bill.billingDate}" pattern="dd.MM.yyyy" /></td></tr>
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Data wystawienia:</td></tr>
@@ -40,8 +40,8 @@
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Sprzedawca:</td></tr>
 		<tr><td>
 			SilesNet Polska Sp. z o.o.<br />
-			1 Maja 1/2<br />
-			55-010 Radwanice<br />
+			ul. Bielska 68<br />
+			43-400 Cieszyn<br />
 			NIP: 896-138-01-08<br />
 		</td></tr>
 	</table>

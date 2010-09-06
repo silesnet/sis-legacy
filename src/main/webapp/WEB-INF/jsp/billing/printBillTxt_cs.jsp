@@ -248,7 +248,7 @@ Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit sml
     <TD Width="25%">
       <TABLE BORDER=0>
         <TR><TH ALIGN="Left">Vystavil:</TH><TD>Alžběta Kolberová</TD><TR>
-        <TR><TH ALIGN="Left">Telefon:</TH><TD>558 713 924</TD><TR>
+        <TR><TH ALIGN="Left">Telefon:</TH><TD>558 711 585</TD><TR>
         <TR><TH ALIGN="Left">eMail:</TH><TD>kolberova@silesnet.cz</TD><TR>
       </TABLE>
     </TD>

@@ -19,7 +19,7 @@
 	<app:viewTextLine path="symbol" label="Customer.fSymbol" styleClass="even" />
 	<c:set var="mapLink" value="" />
 	<c:if test="${customer.contact.address.country.name == 'enum.country.cz'}">
-		<c:set var="mapLink" value="http://www.mapy.cz/#mm=FP@sa=s@st=s@ssq=${customer.contact.address.street}, ${customer.contact.address.city}" />
+		<c:set var="mapLink" value="http://maps.google.cz/maps?hl=cs&amp;q=${customer.contact.address.street}, ${customer.contact.address.city}" />
 	</c:if>
 	<app:viewTextLine path="contact.address.street" label="Customer.fContact.fAddress.fStreet" link="${mapLink}" target="_blank" styleClass="odd" />
 	<app:viewTextLine path="contact.address.city" label="Customer.fContact.fAddress.fCity" styleClass="even" />
