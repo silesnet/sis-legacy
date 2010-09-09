@@ -7,16 +7,19 @@
   <name>SIS</name>
   <version>1.1-SNAPSHOT</version>
   <description>SilesNet IS</description>
+  <properties>
+    <spring.version>2.5.6.SEC02</spring.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring</artifactId>
-      <version>2.0.3</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-hibernate3</artifactId>
-      <version>2.0.3</version>
+      <version>2.0.8</version>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -63,6 +66,11 @@
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcmail-jdk15</artifactId>
       <version>1.38</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.integration</groupId>
+      <artifactId>spring-integration-mail</artifactId>
+      <version>1.0.4.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
