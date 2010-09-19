@@ -12,7 +12,7 @@ import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.is;
 
 @DataSet("/cz/silesnet/dao/HistoryItemDAOTest.xml")

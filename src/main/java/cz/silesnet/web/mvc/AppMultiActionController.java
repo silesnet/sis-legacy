@@ -1,79 +1,76 @@
 package cz.silesnet.web.mvc;
 
 import cz.silesnet.service.HistoryManager;
-
 import cz.silesnet.utils.SecurityUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * Application for various system actions
- * 
+ *
  * @author Richard Sikora
  */
 public class AppMultiActionController extends MultiActionController {
 
-	// ~ Instance fields
-	// --------------------------------------------------------
+  // ~ Instance fields
+  // --------------------------------------------------------
 
-	protected final Log log = LogFactory.getLog(getClass());
+  protected final Log log = LogFactory.getLog(getClass());
 
-	private HistoryManager hmgr;
+  private HistoryManager hmgr;
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	// injected by Spring
-	public void setHistoryManager(HistoryManager historyManager) {
-		hmgr = historyManager;
-	}
+  // injected by Spring
 
-	public ModelAndView redirectDiar(HttpServletRequest request,
-			HttpServletResponse response) {
-		String destURL = "/php/diar/index.php?" + request.getQueryString();
-		log.debug("Redirecting to Diar: " + destURL);
+  public void setHistoryManager(HistoryManager historyManager) {
+    hmgr = historyManager;
+  }
 
-		return new ModelAndView(new RedirectView(destURL, true));
-	}
+  public ModelAndView redirectDiar(HttpServletRequest request,
+                                   HttpServletResponse response) {
+    String destURL = "/php/diar/index.php?" + request.getQueryString();
+    log.debug("Redirecting to Diar: " + destURL);
 
-	public ModelAndView redirectMantis(HttpServletRequest request,
-			HttpServletResponse response) {
-		log
-				.debug("Redirecting to mantis.silesnet.cz and trying to auto log in.");
+    return new ModelAndView(new RedirectView(destURL, true));
+  }
 
-		RedirectView destView = new RedirectView(
-				"http://mantis.silesnet.cz/login.php", true);
-		Properties props = new Properties();
+  public ModelAndView redirectMantis(HttpServletRequest request,
+                                     HttpServletResponse response) {
+    log
+        .debug("Redirecting to mantis.silesnet.cz and trying to auto log in.");
 
-		// get username
-		String userName = SecurityUtils.getUser().getLoginName();
+    RedirectView destView = new RedirectView(
+        "http://mantis.silesnet.cz/login.php", true);
+    Properties props = new Properties();
 
-		log.debug("Retrieved username: " + userName);
-		props.put("username", userName);
-		props.put("password", "sis.sis.sis");
-		destView.setAttributes(props);
+    // get username
+    String userName = SecurityUtils.getUser().getLoginName();
 
-		return new ModelAndView(destView);
-	}
+    log.debug("Retrieved username: " + userName);
+    props.put("username", userName);
+    props.put("password", "sis.sis.sis");
+    destView.setAttributes(props);
 
-	public ModelAndView viewLastLogin(HttpServletRequest request,
-			HttpServletResponse response) {
-		HashMap<String, Object> model = new HashMap<String, Object>();
+    return new ModelAndView(destView);
+  }
 
-		log.debug("View last login list.");
-		model.put("historyRecord", hmgr.getLoginHistory());
+  public ModelAndView viewLastLogin(HttpServletRequest request,
+                                    HttpServletResponse response) {
+    HashMap<String, Object> model = new HashMap<String, Object>();
 
-		return new ModelAndView("app/lastLogin", model);
-	}
+    log.debug("View last login list.");
+    model.put("historyRecord", hmgr.getLoginHistory());
+
+    return new ModelAndView("app/lastLogin", model);
+  }
 }

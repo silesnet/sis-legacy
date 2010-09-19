@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<labels id="1" parent_id="0" name="label1" />
-	<labels id="17" parent_id="0" name="login history" />
-	
-	<users id="1" login="root" passwd="abcd" name="ROOT" roles="A,B" />
+  <labels id="1" parent_id="0" name="label1" />
+  <labels id="17" parent_id="0" name="login history" />
 
-	<audit_items id="1" history_id="0" history_type_label_id="17"
-		user_id="1" time_stamp="2009-08-11" field_name="field" old_value="old"
-		new_value="new" /> <!-- good delete candidate => DELETED -->
-	<audit_items id="2" history_id="0" history_type_label_id="1"
-		user_id="1" time_stamp="2009-08-11" field_name="field" old_value="old"
-		new_value="new" /> <!-- wrong history type label => not deleted -->
-	<audit_items id="3" history_id="0" history_type_label_id="17"
-		user_id="1" time_stamp="2009-08-12" field_name="field" old_value="old"
-		new_value="new" /> <!-- good delete candidate => DELETED -->
-	<audit_items id="4" history_id="1" history_type_label_id="17"
-		user_id="1" time_stamp="2009-08-12" field_name="field" old_value="old"
-		new_value="new" /> <!-- wrong history_id => not deleted -->
-	<audit_items id="5" history_id="0" history_type_label_id="17"
-		user_id="1" time_stamp="2009-08-13" field_name="field" old_value="old"
-		new_value="new" /> <!--  the date is equal to delete from date => not deleted -->
+  <users id="1" login="root" passwd="abcd" name="ROOT" roles="A,B" />
+
+  <audit_items id="1" history_id="0" history_type_label_id="17"
+               user_id="1" time_stamp="2009-08-11" field_name="field" old_value="old"
+               new_value="new" />
+  <!-- good delete candidate => DELETED -->
+  <audit_items id="2" history_id="0" history_type_label_id="1"
+               user_id="1" time_stamp="2009-08-11" field_name="field" old_value="old"
+               new_value="new" />
+  <!-- wrong history type label => not deleted -->
+  <audit_items id="3" history_id="0" history_type_label_id="17"
+               user_id="1" time_stamp="2009-08-12" field_name="field" old_value="old"
+               new_value="new" />
+  <!-- good delete candidate => DELETED -->
+  <audit_items id="4" history_id="1" history_type_label_id="17"
+               user_id="1" time_stamp="2009-08-12" field_name="field" old_value="old"
+               new_value="new" />
+  <!-- wrong history_id => not deleted -->
+  <audit_items id="5" history_id="0" history_type_label_id="17"
+               user_id="1" time_stamp="2009-08-13" field_name="field" old_value="old"
+               new_value="new" />
+  <!--  the date is equal to delete from date => not deleted -->
 
 </dataset>

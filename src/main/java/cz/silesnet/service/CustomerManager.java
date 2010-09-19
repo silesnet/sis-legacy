@@ -1,17 +1,17 @@
 package cz.silesnet.service;
 
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Map;
-
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.Service;
 import cz.silesnet.model.enums.Country;
 
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Customer manager interface declaring service methods on customers.
- * 
+ *
  * @author Richard Sikora
  */
 public interface CustomerManager {
@@ -38,7 +38,7 @@ public interface CustomerManager {
   public Map<String, Long> getSummaryFor(Country c);
 
   public void exportCusotmersToWinDuo(List<Customer> customers,
-      PrintWriter writer);
+                                      PrintWriter writer);
 
   public Service getService(Long serviceId);
 
@@ -55,6 +55,6 @@ public interface CustomerManager {
   public void updateSymbol(Customer customer);
 
   public void exportCusotmersToInsert(List<Customer> customers,
-      PrintWriter writer);
+                                      PrintWriter writer);
 
 }

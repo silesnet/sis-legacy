@@ -1,18 +1,16 @@
 package cz.silesnet.service.invoice;
 
-import java.io.PrintWriter;
-
 import javax.mail.internet.MimeBodyPart;
+import java.io.PrintWriter;
 
 /**
  * Interface for different invoice presentation formats. Writer can be used for
  * generating MimeBodyPart or to write to PrintWriter (eg. file)
- * 
+ *
  * @author Richard Sikora
- * 
  */
 public interface InvoiceWriter {
-	public MimeBodyPart getMimeBodyPart();
+  public MimeBodyPart getMimeBodyPart();
 
-	public void writeTo(PrintWriter writer);
+  public void writeTo(PrintWriter writer);
 }

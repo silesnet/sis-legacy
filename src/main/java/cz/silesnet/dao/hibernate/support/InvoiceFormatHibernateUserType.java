@@ -4,16 +4,16 @@ import cz.silesnet.service.invoice.InvoiceFormat;
 
 /**
  * Class for InvoiceFormat enum Hibernate mapping.
- * 
+ *
  * @author Richard Sikora
  */
 public class InvoiceFormatHibernateUserType extends
-		IntEnumHibernateUserType<InvoiceFormat> {
+    IntEnumHibernateUserType<InvoiceFormat> {
 
-	// ~ Constructors
-	// -----------------------------------------------------------
+  // ~ Constructors
+  // -----------------------------------------------------------
 
-	public InvoiceFormatHibernateUserType() {
-		super(InvoiceFormat.LINK);
-	}
+  public InvoiceFormatHibernateUserType() {
+    super(InvoiceFormat.LINK);
+  }
 }

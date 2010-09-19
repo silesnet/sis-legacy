@@ -1,11 +1,9 @@
 package cz.silesnet.service.impl;
 
 import cz.silesnet.dao.NodeDAO;
-
 import cz.silesnet.model.Node;
 import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.NodeManager;
-
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -13,111 +11,113 @@ import java.util.List;
 
 /**
  * Node manager implementation mostly using DAO.
- * 
+ *
  * @author Richard Sikora
  */
 public class NodeManagerImpl implements NodeManager {
 
-	// ~ Instance fields
-	// --------------------------------------------------------
+  // ~ Instance fields
+  // --------------------------------------------------------
 
-	private NodeDAO dao;
+  private NodeDAO dao;
 
-	private HistoryManager hmgr;
+  private HistoryManager hmgr;
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	// wired by Spring
-	public void setHistoryManager(HistoryManager historyManager) {
-		hmgr = historyManager;
-	}
+  // wired by Spring
 
-	public List<Node> getLeveOfNodesByDomain(long parentId, long domainLabelId) {
-		return dao.getSubNodesByDomain(parentId, domainLabelId);
-	}
+  public void setHistoryManager(HistoryManager historyManager) {
+    hmgr = historyManager;
+  }
 
-	public ArrayList<Node> getLevelOfNodes(long parentId) {
-		return (ArrayList<Node>) dao.getSubNodes(Long.valueOf(parentId));
-	}
+  public List<Node> getLeveOfNodesByDomain(long parentId, long domainLabelId) {
+    return dao.getSubNodesByDomain(parentId, domainLabelId);
+  }
 
-	public Node getNodeById(long nodeId) {
-		return dao.getNodeById(Long.valueOf(nodeId));
-	}
+  public ArrayList<Node> getLevelOfNodes(long parentId) {
+    return (ArrayList<Node>) dao.getSubNodes(Long.valueOf(parentId));
+  }
 
-	public Node getNodeByName(String nodeName) {
-		return dao.getNodeByName(nodeName);
-	}
+  public Node getNodeById(long nodeId) {
+    return dao.getNodeById(Long.valueOf(nodeId));
+  }
 
-	// wired by Spring
-	public void setNodeDAO(NodeDAO nodeDAO) {
-		this.dao = nodeDAO;
-	}
+  public Node getNodeByName(String nodeName) {
+    return dao.getNodeByName(nodeName);
+  }
 
-	public void deleteNode(Node node) {
-		// before removing node get rid of its history
-		hmgr.deleteHistory(node);
+  // wired by Spring
 
-		dao.removeNode(node);
-	}
+  public void setNodeDAO(NodeDAO nodeDAO) {
+    this.dao = nodeDAO;
+  }
 
-	public void insertNode(Node node) {
-		// make sure we will insert new node
-		node.setId(null);
+  public void deleteNode(Node node) {
+    // before removing node get rid of its history
+    hmgr.deleteHistory(node);
 
-		// set new historyId
-		node.setHistoryId(hmgr.getNewHistoryId());
+    dao.removeNode(node);
+  }
 
-		// save history
-		hmgr.insertHistory(null, node);
+  public void insertNode(Node node) {
+    // make sure we will insert new node
+    node.setId(null);
 
-		// persist new node with historyId set
-		dao.saveNode(node);
-	}
+    // set new historyId
+    node.setHistoryId(hmgr.getNewHistoryId());
 
-	public void updateNode(Node node) {
-		// let's first get original copy of it
-		Node formerNode = dao.getNodeById(node.getId());
+    // save history
+    hmgr.insertHistory(null, node);
 
-		// detatch formerNode from hibernate session
-		dao.evictNode(formerNode);
+    // persist new node with historyId set
+    dao.saveNode(node);
+  }
 
-		// get sure we have valid historyId in node
-		Assert.notNull(formerNode.getHistoryId(),
-				"Persisted node without historyId.");
+  public void updateNode(Node node) {
+    // let's first get original copy of it
+    Node formerNode = dao.getNodeById(node.getId());
 
-		// just in the case something weird is going on outside
-		Assert.isTrue(formerNode.getHistoryId().equals(node.getHistoryId()),
-				"Outside (illegal) historyId change.");
+    // detatch formerNode from hibernate session
+    dao.evictNode(formerNode);
 
-		// save diff
-		hmgr.insertHistory(formerNode, node);
+    // get sure we have valid historyId in node
+    Assert.notNull(formerNode.getHistoryId(),
+        "Persisted node without historyId.");
 
-		// save node
-		dao.saveNode(node);
-	}
+    // just in the case something weird is going on outside
+    Assert.isTrue(formerNode.getHistoryId().equals(node.getHistoryId()),
+        "Outside (illegal) historyId change.");
 
-	public Node get(Long id) {
-		return getNodeById(id);
-	}
+    // save diff
+    hmgr.insertHistory(formerNode, node);
 
-	public List<Node> getAll() {
-		return dao.getAll();
-	}
+    // save node
+    dao.saveNode(node);
+  }
 
-	public List<Node> getByExample(Node example) {
-		return dao.getByExample(example);
-	}
+  public Node get(Long id) {
+    return getNodeById(id);
+  }
 
-	public void insert(Node entity) {
-		insertNode(entity);
-	}
+  public List<Node> getAll() {
+    return dao.getAll();
+  }
 
-	public void update(Node entity) {
-		updateNode(entity);
-	}
+  public List<Node> getByExample(Node example) {
+    return dao.getByExample(example);
+  }
 
-	public void delete(Node entity) {
-		deleteNode(entity);
-	}
+  public void insert(Node entity) {
+    insertNode(entity);
+  }
+
+  public void update(Node entity) {
+    updateNode(entity);
+  }
+
+  public void delete(Node entity) {
+    deleteNode(entity);
+  }
 }

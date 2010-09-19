@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Packaging Generator" default="deploywar" basedir=".">
-	<property name="class.src.dir" value="target/cz"/>
-	<property name="class.dest.dir" value="target/WEB-INF/classes/cz"/>
-	<property name="deploy.path" value="W:\testing\java\tomcat-5.5.9\webapps"/>
+  <property name="class.src.dir" value="target/cz" />
+  <property name="class.dest.dir" value="target/WEB-INF/classes/cz" />
+  <property name="deploy.path" value="W:\testing\java\tomcat-5.5.9\webapps" />
 
-	<target name="deploywar" depends="war">
-		<delete dir="${deploy.path}/sis"/>
-		<copy todir="${deploy.path}" preservelastmodified="true">
-			<fileset dir="target">
-				<include name="sis.war"/>
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="war" depends="copyclasses">
-		<war destfile="target/sis.war" webxml="target/WEB-INF/web.xml">
-		<fileset dir="target">
-			<exclude name="cz/**/*.*"/>
-			<exclude name="WEB-INF/web.xml"/>
-			<exclude name="sis.war"/>
-			<exclude name="sis-sis-jdbc.properties"/>
-			<exclude name="sis-application.properties"/>
-			<exclude name="log4j.xml"/>
-			<exclude name="uitags/*"/>
-			<exclude name="displaytag*.properties"/>
-			<include name="**/*.*"/>
-		</fileset>
-		</war>
-	</target>
-	
-	<target name="copyclasses">
-		<mkdir dir="${class.dest.dir}"/>
-		<copy todir="${class.dest.dir}">
-			<fileset dir="${class.src.dir}">
-				<exclude name="**/*Test.class"/>
-				<exclude name="**/*Tests.class"/>
-				<exclude name="**/*TestCase.class"/>
-				<include name="**/*.*"/>
-			</fileset>
-		</copy>
-		<copy todir="target/WEB-INF/classes">
-			<fileset dir="target">
-				<include name="sis-sis-jdbc.properties"/>
-				<include name="sis-application.properties"/>
-				<include name="log4j.xml"/>
-				<include name="uitags/*"/>
-				<include name="displaytag*.properties"/>
-			</fileset>
-		</copy>
-		<delete file="target/WEB-INF/lib/servlet-api-2.4.jar"/>
-		<delete file="target/WEB-INF/lib/readme.txt"/>
-	</target>
-	
-	<target name="copydeploy">
-		<delete dir="${deploy.path}/sis" />
-		<mkdir dir="${deploy.path}/sis" />
-	
-	</target>
+  <target name="deploywar" depends="war">
+    <delete dir="${deploy.path}/sis" />
+    <copy todir="${deploy.path}" preservelastmodified="true">
+      <fileset dir="target">
+        <include name="sis.war" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="war" depends="copyclasses">
+    <war destfile="target/sis.war" webxml="target/WEB-INF/web.xml">
+      <fileset dir="target">
+        <exclude name="cz/**/*.*" />
+        <exclude name="WEB-INF/web.xml" />
+        <exclude name="sis.war" />
+        <exclude name="sis-sis-jdbc.properties" />
+        <exclude name="sis-application.properties" />
+        <exclude name="log4j.xml" />
+        <exclude name="uitags/*" />
+        <exclude name="displaytag*.properties" />
+        <include name="**/*.*" />
+      </fileset>
+    </war>
+  </target>
+
+  <target name="copyclasses">
+    <mkdir dir="${class.dest.dir}" />
+    <copy todir="${class.dest.dir}">
+      <fileset dir="${class.src.dir}">
+        <exclude name="**/*Test.class" />
+        <exclude name="**/*Tests.class" />
+        <exclude name="**/*TestCase.class" />
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+    <copy todir="target/WEB-INF/classes">
+      <fileset dir="target">
+        <include name="sis-sis-jdbc.properties" />
+        <include name="sis-application.properties" />
+        <include name="log4j.xml" />
+        <include name="uitags/*" />
+        <include name="displaytag*.properties" />
+      </fileset>
+    </copy>
+    <delete file="target/WEB-INF/lib/servlet-api-2.4.jar" />
+    <delete file="target/WEB-INF/lib/readme.txt" />
+  </target>
+
+  <target name="copydeploy">
+    <delete dir="${deploy.path}/sis" />
+    <mkdir dir="${deploy.path}/sis" />
+
+  </target>
 </project>

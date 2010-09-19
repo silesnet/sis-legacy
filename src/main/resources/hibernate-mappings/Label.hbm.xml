@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="cz.silesnet.model.Label" table="labels">
-        <id name="id" column="id" unsaved-value="null">
-            <generator class="increment"/>
-        </id>
-        <property name="parentId" column="parent_id" not-null="false"/>
-        <property name="name" column="name" not-null="true"/>
-    </class>
+  <class name="cz.silesnet.model.Label" table="labels">
+    <id name="id" column="id" unsaved-value="null">
+      <generator class="increment" />
+    </id>
+    <property name="parentId" column="parent_id" not-null="false" />
+    <property name="name" column="name" not-null="true" />
+  </class>
 </hibernate-mapping>

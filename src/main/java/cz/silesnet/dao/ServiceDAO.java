@@ -1,14 +1,14 @@
 package cz.silesnet.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import cz.silesnet.model.Service;
 import cz.silesnet.model.enums.Country;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * DAO persistence interface for service entity classes.
- * 
+ *
  * @author Richard Sikora
  */
 public interface ServiceDAO extends DAO {

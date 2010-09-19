@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 @DataSet("/cz/silesnet/dao/ServiceDAOTest.xml")

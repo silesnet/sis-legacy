@@ -1,7 +1,6 @@
 package cz.silesnet.service.impl;
 
 import cz.silesnet.dao.LabelDAO;
-
 import cz.silesnet.model.Label;
 import cz.silesnet.service.LabelManager;
 
@@ -11,65 +10,66 @@ import java.util.List;
 
 /**
  * LabelManager implementation for manipulating labels in order 2 mark objects.
- * 
+ *
  * @author Richard Sikora
  */
 public class LabelManagerImpl implements LabelManager {
 
-	// ~ Instance fields
-	// --------------------------------------------------------
+  // ~ Instance fields
+  // --------------------------------------------------------
 
-	private LabelDAO dao;
+  private LabelDAO dao;
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	public Label getLabelById(Long labelId) {
-		return dao.getLabelById(labelId);
-	}
+  public Label getLabelById(Long labelId) {
+    return dao.getLabelById(labelId);
+  }
 
-	// used by spring DI
-	public void setLabelDAO(LabelDAO labelDAO) {
-		this.dao = labelDAO;
-	}
+  // used by spring DI
 
-	public List getSubLabels(Label label) {
-		return dao.getSubLabels(label.getId());
-	}
+  public void setLabelDAO(LabelDAO labelDAO) {
+    this.dao = labelDAO;
+  }
 
-	public HashMap<Long, String> getSubLabelsMap(long parentId) {
-		ArrayList<Label> llist = (ArrayList<Label>) dao.getSubLabels(parentId);
-		HashMap<Long, String> lmap = new HashMap<Long, String>();
+  public List getSubLabels(Label label) {
+    return dao.getSubLabels(label.getId());
+  }
 
-		// fill map with id, name of received labels
-		for (Label l : llist)
-			lmap.put(l.getId(), l.getName());
+  public HashMap<Long, String> getSubLabelsMap(long parentId) {
+    ArrayList<Label> llist = (ArrayList<Label>) dao.getSubLabels(parentId);
+    HashMap<Long, String> lmap = new HashMap<Long, String>();
 
-		return lmap;
-	}
+    // fill map with id, name of received labels
+    for (Label l : llist)
+      lmap.put(l.getId(), l.getName());
 
-	public Label get(Long id) {
-		return dao.getLabelById(id);
-	}
+    return lmap;
+  }
 
-	@SuppressWarnings("unchecked")
-	public List<Label> getAll() {
-		return dao.findAll();
-	}
+  public Label get(Long id) {
+    return dao.getLabelById(id);
+  }
 
-	public List<Label> getByExample(Label example) {
-		return dao.getByExmaple(example);
-	}
+  @SuppressWarnings("unchecked")
+  public List<Label> getAll() {
+    return dao.findAll();
+  }
 
-	public void insert(Label entity) {
-		dao.saveLabel(entity);
-	}
+  public List<Label> getByExample(Label example) {
+    return dao.getByExmaple(example);
+  }
 
-	public void update(Label entity) {
-		dao.saveLabel(entity);
-	}
+  public void insert(Label entity) {
+    dao.saveLabel(entity);
+  }
 
-	public void delete(Label entity) {
-		dao.removeLabel(entity);
-	}
+  public void update(Label entity) {
+    dao.saveLabel(entity);
+  }
+
+  public void delete(Label entity) {
+    dao.removeLabel(entity);
+  }
 }

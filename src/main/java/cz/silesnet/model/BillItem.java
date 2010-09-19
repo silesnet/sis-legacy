@@ -1,135 +1,136 @@
 package cz.silesnet.model;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 /**
  * Bill item entity object.
- * 
+ *
  * @author Richard Sikora
  */
 public class BillItem implements Serializable {
 
-	// ~ Instance fields
-	// --------------------------------------------------------
+  // ~ Instance fields
+  // --------------------------------------------------------
 
-	private static final long serialVersionUID = 4071067933886947302L;
+  private static final long serialVersionUID = 4071067933886947302L;
 
-	private Bill fBill;
+  private Bill fBill;
 
-	private String fText;
+  private String fText;
 
-	private float fAmount;
+  private float fAmount;
 
-	private int fPrice;
+  private int fPrice;
 
-	private Boolean fIsDisplayUnit = true;
+  private Boolean fIsDisplayUnit = true;
 
-	// ~ Constructors
-	// -----------------------------------------------------------
-	public BillItem() {
-		super();
-	}
+  // ~ Constructors
+  // -----------------------------------------------------------
 
-	public BillItem(String text, float amount, int price) {
-		super();
-		fText = text;
-		fAmount = amount;
-		fPrice = price;
-	}
+  public BillItem() {
+    super();
+  }
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  public BillItem(String text, float amount, int price) {
+    super();
+    fText = text;
+    fAmount = amount;
+    fPrice = price;
+  }
 
-	public void setPrice(int price) {
-		fPrice = price;
-	}
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	public int getPrice() {
-		return fPrice;
-	}
+  public void setPrice(int price) {
+    fPrice = price;
+  }
 
-	public void setText(String text) {
-		fText = text;
-	}
+  public int getPrice() {
+    return fPrice;
+  }
 
-	public String getText() {
-		return fText;
-	}
+  public void setText(String text) {
+    fText = text;
+  }
 
-	public int getLinePrice() {
-		return Math.round(fAmount * fPrice);
-	}
+  public String getText() {
+    return fText;
+  }
 
-	public float getLinePriceVat() {
-		if (getBill() == null)
-			throw new IllegalStateException(
-					"Bill item without bill, can not get VAT value.");
-		return (float) (getLinePrice() * (100 + getBill().getVat())) / 100;
-	}
+  public int getLinePrice() {
+    return Math.round(fAmount * fPrice);
+  }
 
-	public float getLineVat() {
-		return getLinePriceVat() - getLinePrice();
-	}
+  public float getLinePriceVat() {
+    if (getBill() == null)
+      throw new IllegalStateException(
+          "Bill item without bill, can not get VAT value.");
+    return (float) (getLinePrice() * (100 + getBill().getVat())) / 100;
+  }
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this,
-				ToStringStyle.MULTI_LINE_STYLE);
-	}
+  public float getLineVat() {
+    return getLinePriceVat() - getLinePrice();
+  }
 
-	public Float getAmount() {
-		return fAmount;
-	}
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this,
+        ToStringStyle.MULTI_LINE_STYLE);
+  }
 
-	public void setAmount(float amount) {
-		fAmount = amount;
-	}
+  public Float getAmount() {
+    return fAmount;
+  }
 
-	public Bill getBill() {
-		return fBill;
-	}
+  public void setAmount(float amount) {
+    fAmount = amount;
+  }
 
-	public void setBill(Bill bill) {
-		fBill = bill;
-	}
+  public Bill getBill() {
+    return fBill;
+  }
 
-	public Boolean getIsDisplayUnit() {
-		return fIsDisplayUnit;
-	}
+  public void setBill(Bill bill) {
+    fBill = bill;
+  }
 
-	public void setIsDisplayUnit(Boolean isDisplayUnit) {
-		fIsDisplayUnit = isDisplayUnit;
-	}
+  public Boolean getIsDisplayUnit() {
+    return fIsDisplayUnit;
+  }
 
-	@Override
-	public boolean equals(Object o) {
-		return EqualsBuilder.reflectionEquals(this, o);
-	}
+  public void setIsDisplayUnit(Boolean isDisplayUnit) {
+    fIsDisplayUnit = isDisplayUnit;
+  }
 
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
-	}
+  @Override
+  public boolean equals(Object o) {
+    return EqualsBuilder.reflectionEquals(this, o);
+  }
 
-	public float getNet() {
-		return fAmount * fPrice;
-	}
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this);
+  }
 
-	public float getVat() {
-		if (getBill() == null)
-			throw new IllegalStateException(
-					"Bill item without bill, can not get VAT value.");
-		double vat = getNet() * (getBill().getVat() / 100.0);
-		return (float) vat;
-	}
+  public float getNet() {
+    return fAmount * fPrice;
+  }
 
-	public float getBrt() {
-		return getNet() + getVat();
-	}
+  public float getVat() {
+    if (getBill() == null)
+      throw new IllegalStateException(
+          "Bill item without bill, can not get VAT value.");
+    double vat = getNet() * (getBill().getVat() / 100.0);
+    return (float) vat;
+  }
+
+  public float getBrt() {
+    return getNet() + getVat();
+  }
 
 }

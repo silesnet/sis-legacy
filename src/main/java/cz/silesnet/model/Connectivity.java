@@ -1,15 +1,15 @@
 package cz.silesnet.model;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 /**
  * Class that holds connectivity info of service.
- * 
+ *
  * @author Richard Sikora
  */
 public class Connectivity implements HistoricToString, Serializable {

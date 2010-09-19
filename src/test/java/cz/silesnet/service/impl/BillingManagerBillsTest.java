@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
 public class BillingManagerBillsTest {

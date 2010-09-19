@@ -6,9 +6,8 @@ import org.unitils.dbunit.annotation.DataSet;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 @DataSet("/cz/silesnet/dao/LabelDAOTest.xml")
 public abstract class LabelDAOTest extends DaoTestSupport<LabelDAO> {

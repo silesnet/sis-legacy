@@ -7,7 +7,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 
 public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
 

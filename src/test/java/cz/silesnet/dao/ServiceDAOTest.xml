@@ -1,21 +1,32 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../db-xsd/dataset.xsd">
-    <!--Active-->
-    <CUSTOMERS ID="10" HISTORY_ID="10" PUBLIC_ID="12345" CONTRACT_NO="10/2010" INSERTED_ON="2010-05-19" NAME="Customer 1" COUNTRY="10" IS_ACTIVE="true" />
-    <CUSTOMERS ID="11" HISTORY_ID="11" PUBLIC_ID="12346" CONTRACT_NO="11/2010" INSERTED_ON="2010-05-19" NAME="Customer 2" COUNTRY="10" IS_ACTIVE="true" />
-    <!--Inactive-->
-    <CUSTOMERS ID="12" HISTORY_ID="12" PUBLIC_ID="12347" CONTRACT_NO="12/2010" INSERTED_ON="2010-05-19" NAME="Customer 3" COUNTRY="10" IS_ACTIVE="false" />
-    <!--PL-->
-    <CUSTOMERS ID="13" HISTORY_ID="13" PUBLIC_ID="12348" CONTRACT_NO="13/2010" INSERTED_ON="2010-05-19" NAME="Customer 4" COUNTRY="20" IS_ACTIVE="true" />
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../db-xsd/dataset.xsd">
+  <!--Active-->
+  <CUSTOMERS ID="10" HISTORY_ID="10" PUBLIC_ID="12345" CONTRACT_NO="10/2010" INSERTED_ON="2010-05-19" NAME="Customer 1"
+             COUNTRY="10" IS_ACTIVE="true" />
+  <CUSTOMERS ID="11" HISTORY_ID="11" PUBLIC_ID="12346" CONTRACT_NO="11/2010" INSERTED_ON="2010-05-19" NAME="Customer 2"
+             COUNTRY="10" IS_ACTIVE="true" />
+  <!--Inactive-->
+  <CUSTOMERS ID="12" HISTORY_ID="12" PUBLIC_ID="12347" CONTRACT_NO="12/2010" INSERTED_ON="2010-05-19" NAME="Customer 3"
+             COUNTRY="10" IS_ACTIVE="false" />
+  <!--PL-->
+  <CUSTOMERS ID="13" HISTORY_ID="13" PUBLIC_ID="12348" CONTRACT_NO="13/2010" INSERTED_ON="2010-05-19" NAME="Customer 4"
+             COUNTRY="20" IS_ACTIVE="true" />
 
-    <!--Active-->
-    <SERVICES ID="10" CUSTOMER_ID="10" NAME="Service 1" PRICE="100" DOWNLOAD="2" UPLOAD="1" BPS="M" PERIOD_FROM="2010-01-01" />
-    <SERVICES ID="11" CUSTOMER_ID="10" NAME="Service 2" PRICE="100" DOWNLOAD="1" UPLOAD="1" BPS="M"  PERIOD_FROM="2010-01-01" />
-    <SERVICES ID="12" CUSTOMER_ID="11" NAME="Service 3" PRICE="100" DOWNLOAD="1000" UPLOAD="1000" BPS="k"  PERIOD_FROM="2010-01-02" PERIOD_TO="2010-12-31" />
-    <!--Inactive-->
-    <SERVICES ID="13" CUSTOMER_ID="12" NAME="Service 4" PRICE="10" DOWNLOAD="1000" UPLOAD="500" BPS="k"  PERIOD_FROM="2010-01-01" />
-    <!--PL-->
-    <SERVICES ID="14" CUSTOMER_ID="13" NAME="Service 5" PRICE="100" DOWNLOAD="1000" UPLOAD="1000" BPS="k"  PERIOD_FROM="2010-01-01" />
-    <!--Orphan-->
-    <SERVICES ID="15" CUSTOMER_ID="0" NAME="Service 6" PRICE="1" DOWNLOAD="1" UPLOAD="1" BPS="M"  PERIOD_FROM="2010-01-01" />
+  <!--Active-->
+  <SERVICES ID="10" CUSTOMER_ID="10" NAME="Service 1" PRICE="100" DOWNLOAD="2" UPLOAD="1" BPS="M"
+            PERIOD_FROM="2010-01-01" />
+  <SERVICES ID="11" CUSTOMER_ID="10" NAME="Service 2" PRICE="100" DOWNLOAD="1" UPLOAD="1" BPS="M"
+            PERIOD_FROM="2010-01-01" />
+  <SERVICES ID="12" CUSTOMER_ID="11" NAME="Service 3" PRICE="100" DOWNLOAD="1000" UPLOAD="1000" BPS="k"
+            PERIOD_FROM="2010-01-02" PERIOD_TO="2010-12-31" />
+  <!--Inactive-->
+  <SERVICES ID="13" CUSTOMER_ID="12" NAME="Service 4" PRICE="10" DOWNLOAD="1000" UPLOAD="500" BPS="k"
+            PERIOD_FROM="2010-01-01" />
+  <!--PL-->
+  <SERVICES ID="14" CUSTOMER_ID="13" NAME="Service 5" PRICE="100" DOWNLOAD="1000" UPLOAD="1000" BPS="k"
+            PERIOD_FROM="2010-01-01" />
+  <!--Orphan-->
+  <SERVICES ID="15" CUSTOMER_ID="0" NAME="Service 6" PRICE="1" DOWNLOAD="1" UPLOAD="1" BPS="M"
+            PERIOD_FROM="2010-01-01" />
 </dataset>

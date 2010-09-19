@@ -1,30 +1,9 @@
 package cz.silesnet.service.impl;
 
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
-import java.util.Map;
-
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.validator.GenericValidator;
-import org.springframework.util.Assert;
-
 import cz.silesnet.dao.BillDAO;
 import cz.silesnet.dao.CustomerDAO;
 import cz.silesnet.dao.ServiceDAO;
-import cz.silesnet.model.Address;
-import cz.silesnet.model.Bill;
-import cz.silesnet.model.Contact;
-import cz.silesnet.model.Customer;
-import cz.silesnet.model.Service;
+import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.CustomerManager;
@@ -32,11 +11,22 @@ import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.SettingManager;
 import cz.silesnet.utils.MessagesUtils;
 import cz.silesnet.utils.SearchUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.GenericValidator;
+import org.springframework.util.Assert;
+
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Concrete implementation of CustomerManager usig CustomerDAO for CRUD
  * operations.
- * 
+ *
  * @author Richard Sikora
  */
 public class CustomerManagerImpl implements CustomerManager {
@@ -125,8 +115,8 @@ public class CustomerManagerImpl implements CustomerManager {
         "Persisted customer without historyId.");
     Assert
         .isTrue(formerCustomer.getHistoryId().equals(
-        customer.getHistoryId()),
-        "Outside (illegal) historyId change.");
+            customer.getHistoryId()),
+            "Outside (illegal) historyId change.");
 
     // update symbol if needed
     updateSymbol(customer);
@@ -215,7 +205,7 @@ public class CustomerManagerImpl implements CustomerManager {
   }
 
   public void exportCusotmersToWinDuo(List<Customer> customers,
-      PrintWriter writer) {
+                                      PrintWriter writer) {
     if (customers == null)
       return;
     if (writer == null)
@@ -230,13 +220,13 @@ public class CustomerManagerImpl implements CustomerManager {
       // ICO, DIC, Name, SupplementaryName
       writer.printf("%s\t%s\t%s\t%s\t", sanate(c.getExportPublicId()),
           sanate(c.getDIC()), c.getName(), sanate(c
-          .getSupplementaryName()));
+              .getSupplementaryName()));
       // Street, City, PSC, Country
       writer.printf("%s\t%s\t%s\t%s\t", c.getContact().getAddress()
           .getStreet(), c.getContact().getAddress().getCity(),
           sanate(c.getContact().getAddress().getPostalCode()),
           MessagesUtils.getMessage(c.getContact().getAddress()
-          .getCountry().getName(), new Locale("cs")));
+              .getCountry().getName(), new Locale("cs")));
       // Account, Bank, Person
       writer.printf("\t\t%s\t", sanate(c.getContact().getName()));
       // Predcisli, Phone1, Phone2, Fax
@@ -428,7 +418,7 @@ public class CustomerManagerImpl implements CustomerManager {
   }
 
   public void exportCusotmersToInsert(List<Customer> customers,
-      PrintWriter writer) {
+                                      PrintWriter writer) {
     if (customers == null)
       return;
     if (writer == null)
@@ -440,12 +430,12 @@ public class CustomerManagerImpl implements CustomerManager {
     String exportBy = MessagesUtils.getMessage("billExport.by", locale);
     String infoLine = MessagesUtils.getMessage(
         "billExport.invoice.infoLine", new Object[]{timeStamp,
-        exportBy}, locale);
+            exportBy}, locale);
     // headers
     writer
         .printf(
-        "[INFO]\r\n%s\r\n\r\n[NAGLOWEK]\n\"KONTRAHENCI\"\n\n[ZAWARTOSC]\n",
-        infoLine);
+            "[INFO]\r\n%s\r\n\r\n[NAGLOWEK]\n\"KONTRAHENCI\"\n\n[ZAWARTOSC]\n",
+            infoLine);
     String customerName = null;
     String customerLongName = null;
     for (Customer customer : customers) {
@@ -475,11 +465,11 @@ public class CustomerManagerImpl implements CustomerManager {
       Address a = customer.getContact().getAddress();
       writer
           .printf(
-          "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",,,\"%s\",,,,,,,,,,,,,,,",
-          a.getCity(), a.getPostalCode(), a.getStreet(),
-          customer.getDIC(), customer.getPublicId(), customer
-          .getContact().getPhone(), customer
-          .getContact().getEmail());
+              "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",,,\"%s\",,,,,,,,,,,,,,,",
+              a.getCity(), a.getPostalCode(), a.getStreet(),
+              customer.getDIC(), customer.getPublicId(), customer
+                  .getContact().getPhone(), customer
+                  .getContact().getEmail());
       // trailer
       writer.printf("\"Polska\",\"PL\",0");
       writer.println();

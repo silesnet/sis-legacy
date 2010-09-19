@@ -4,23 +4,27 @@
 
 <beans>
 
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
-    </bean>
-    
-    <!-- Transaction template for Managers, from:
-	 	 http://blog.exis.com/colin/archives/2004/07/31/concise-transaction-definitions-spring-11/ -->
-    <bean id="txProxyTemplate" abstract="true"
-    	  class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager"><ref bean="transactionManager"/></property>
-        <property name="transactionAttributes">
-            <props>
-                <prop key="insert*">PROPAGATION_REQUIRED</prop>
-                <prop key="update*">PROPAGATION_REQUIRED</prop>
-                <prop key="delete*">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
-            </props>
-        </property>
-    </bean>
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <!-- Transaction template for Managers, from:
+       http://blog.exis.com/colin/archives/2004/07/31/concise-transaction-definitions-spring-11/ -->
+  <bean id="txProxyTemplate" abstract="true"
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+    <property name="transactionManager">
+      <ref bean="transactionManager" />
+    </property>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="insert*">PROPAGATION_REQUIRED</prop>
+        <prop key="update*">PROPAGATION_REQUIRED</prop>
+        <prop key="delete*">PROPAGATION_REQUIRED</prop>
+        <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+      </props>
+    </property>
+  </bean>
 
 </beans>

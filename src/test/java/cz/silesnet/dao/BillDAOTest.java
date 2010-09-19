@@ -6,7 +6,7 @@ import cz.silesnet.model.PrepareMixture;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 public abstract class BillDAOTest extends DaoTestSupport<BillDAO> {

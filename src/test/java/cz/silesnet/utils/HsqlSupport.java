@@ -7,8 +7,8 @@ package cz.silesnet.utils;
  * Time: 7:20:47 PM
  */
 public class HsqlSupport {
-    public static String translate(String value, String from, String to) {
-        return org.apache.commons.lang.StringUtils.replaceChars(value, from, to).toLowerCase();
-    }
+  public static String translate(String value, String from, String to) {
+    return org.apache.commons.lang.StringUtils.replaceChars(value, from, to).toLowerCase();
+  }
 
 }

@@ -1,16 +1,16 @@
 package cz.silesnet.model;
 
+import cz.silesnet.model.enums.Country;
+import cz.silesnet.model.enums.Frequency;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import cz.silesnet.model.enums.Country;
-import cz.silesnet.model.enums.Frequency;
-
 /**
  * Prepare domain objects used in tests.
- * 
+ *
  * @author Richard Sikora
  */
 public class PrepareMixture {

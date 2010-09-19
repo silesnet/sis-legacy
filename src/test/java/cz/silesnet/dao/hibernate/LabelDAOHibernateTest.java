@@ -15,14 +15,14 @@ import org.unitils.spring.annotation.SpringApplicationContext;
 @SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml"})
 public class LabelDAOHibernateTest extends LabelDAOTest {
 
-    @HibernateSessionFactory
-    private SessionFactory sessionFactory;
+  @HibernateSessionFactory
+  private SessionFactory sessionFactory;
 
-    @Override
-    protected LabelDAO configureDao() {
-        LabelDAOHibernate hibernateDao = new LabelDAOHibernate();
-        hibernateDao.setSessionFactory(sessionFactory);
-        hibernateDao.afterPropertiesSet();
-        return hibernateDao;
-    }
+  @Override
+  protected LabelDAO configureDao() {
+    LabelDAOHibernate hibernateDao = new LabelDAOHibernate();
+    hibernateDao.setSessionFactory(sessionFactory);
+    hibernateDao.afterPropertiesSet();
+    return hibernateDao;
+  }
 }

@@ -15,32 +15,32 @@ import java.util.List;
  */
 public abstract class HibernateGenericDao<E> extends HibernateDaoSupport implements GenericDao<E> {
 
-    private final Class<E> entityClass;
+  private final Class<E> entityClass;
 
-    @SuppressWarnings("unchecked")
-    public HibernateGenericDao() {
-        this.entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
+  @SuppressWarnings("unchecked")
+  public HibernateGenericDao() {
+    this.entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+  }
 
-    @SuppressWarnings("unchecked")
-    public E find(long id) {
-        return (E) getHibernateTemplate().get(entityClass, id);
-    }
+  @SuppressWarnings("unchecked")
+  public E find(long id) {
+    return (E) getHibernateTemplate().get(entityClass, id);
+  }
 
-    public void store(E entity) {
-        getHibernateTemplate().saveOrUpdate(entity);
-    }
+  public void store(E entity) {
+    getHibernateTemplate().saveOrUpdate(entity);
+  }
 
-    public void remove(E entity) {
-        getHibernateTemplate().delete(entity);
-    }
+  public void remove(E entity) {
+    getHibernateTemplate().delete(entity);
+  }
 
-    @SuppressWarnings("unchecked")
-    public List<E> findByCriteria(DetachedCriteria criteria) {
-        return getHibernateTemplate().findByCriteria(criteria);
-    }
+  @SuppressWarnings("unchecked")
+  public List<E> findByCriteria(DetachedCriteria criteria) {
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-    public DetachedCriteria newCriteria() {
-        return DetachedCriteria.forClass(entityClass);
-    }
+  public DetachedCriteria newCriteria() {
+    return DetachedCriteria.forClass(entityClass);
+  }
 }

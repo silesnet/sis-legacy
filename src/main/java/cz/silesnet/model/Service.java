@@ -1,14 +1,13 @@
 package cz.silesnet.model;
 
+import cz.silesnet.model.enums.Country;
+import cz.silesnet.model.enums.Frequency;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import cz.silesnet.model.enums.Country;
-import cz.silesnet.model.enums.Frequency;
-
 /**
  * Entity class to hold services served to customers.
- * 
+ *
  * @author Richard Sikora
  */
 public class Service extends Entity implements HistoricToString {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
-	"http://www.springframework.org/dtd/spring-beans.dtd">
+    "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
 
@@ -22,7 +22,8 @@
     -->
   </bean>
 
-  <bean id="deactivateCanditatesJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+  <bean id="deactivateCanditatesJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
     <property name="targetObject" ref="customerManager" />
     <property name="targetMethod" value="deactivateCandidates" />
     <property name="concurrent" value="false" />
@@ -33,7 +34,8 @@
     <property name="cronExpression" value="0/20 * * * * ?" />
   </bean>
 
-  <bean id="processSendingQueueJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+  <bean id="processSendingQueueJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
     <property name="targetObject" ref="billingManager" />
     <property name="targetMethod" value="sendNextInvoice" />
     <property name="concurrent" value="false" />
@@ -45,10 +47,11 @@
     <property name="cronExpression" value="0 4 0 1 * ?" />
   </bean>
 
-  <bean id="removeOldLoginHistoryJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+  <bean id="removeOldLoginHistoryJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
     <property name="targetObject" ref="historyManager" />
     <property name="targetMethod" value="removeOldLoginHistory" />
     <property name="concurrent" value="false" />
   </bean>
-  
+
 </beans>

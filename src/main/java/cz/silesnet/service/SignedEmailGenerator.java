@@ -5,9 +5,9 @@ import javax.mail.internet.MimeBodyPart;
 
 /**
  * Interface definig functionality of signed email generator.
- * 
+ *
  * @author Richard Sikora
  */
 public interface SignedEmailGenerator {
-	public Multipart generate(MimeBodyPart bodyPart);
+  public Multipart generate(MimeBodyPart bodyPart);
 }

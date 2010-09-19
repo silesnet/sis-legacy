@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:aop="http://www.springframework.org/schema/aop"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd"
->
+    >
 
   <!-- Defining filter order -->
   <bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
@@ -35,7 +35,7 @@
         CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
         PATTERN_TYPE_APACHE_ANT
         /**=REQUIRES_SECURE_CHANNEL
-			</value>
+      </value>
     </property>
   </bean>
 
@@ -122,7 +122,8 @@
   <!-- can use PlaintextPasswordEncoder instead of ShaPasswordEncoder -->
   <bean id="passwordEncoder" class="org.acegisecurity.providers.encoding.ShaPasswordEncoder" />
 
-  <bean id="anonymousAuthenticationProvider" class="org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider">
+  <bean id="anonymousAuthenticationProvider"
+        class="org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider">
     <property name="key">
       <value>anonymousKey</value>
     </property>
@@ -191,7 +192,7 @@
         /billing/confirmdelivery.html*=ROLE_ANONYMOUS
         /billing/*=ROLE_ACCOUNTING
         /**=ROLE_USER
-			</value>
+      </value>
     </property>
   </bean>
 

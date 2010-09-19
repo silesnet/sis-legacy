@@ -5,13 +5,13 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
  * HttpServletResponse wrapper mailny for URL rewriting.
- * 
+ *
  * @author Richard Sikora
  */
 public class HttpResponseWrapper extends HttpServletResponseWrapper {
 
-	public HttpResponseWrapper(HttpServletResponse response) {
-		super(response);
-	}
+  public HttpResponseWrapper(HttpServletResponse response) {
+    super(response);
+  }
 
 }

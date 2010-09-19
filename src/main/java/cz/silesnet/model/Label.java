@@ -2,47 +2,47 @@ package cz.silesnet.model;
 
 /**
  * Class for labeling stored objects.
- * 
+ *
  * @author Richard Sikora
  */
 public class Label extends Entity implements HistoricToString {
 
-	public static final long SHIRES = 250;
+  public static final long SHIRES = 250;
 
-	public static final long RESPONSIBLES = 300;
+  public static final long RESPONSIBLES = 300;
 
-	// ~ Static fields/initializers
-	// ---------------------------------------------
+  // ~ Static fields/initializers
+  // ---------------------------------------------
 
-	private static final long serialVersionUID = -3182140785402097375L;
+  private static final long serialVersionUID = -3182140785402097375L;
 
-	// ~ Instance fields
-	// --------------------------------------------------------
+  // ~ Instance fields
+  // --------------------------------------------------------
 
-	private Long fParentId;
+  private Long fParentId;
 
-	private String fName;
+  private String fName;
 
-	// ~ Methods
-	// ----------------------------------------------------------------
+  // ~ Methods
+  // ----------------------------------------------------------------
 
-	public String getHistoricToString() {
-		return getName();
-	}
+  public String getHistoricToString() {
+    return getName();
+  }
 
-	public void setName(String name) {
-		fName = name;
-	}
+  public void setName(String name) {
+    fName = name;
+  }
 
-	public String getName() {
-		return fName;
-	}
+  public String getName() {
+    return fName;
+  }
 
-	public void setParentId(Long parentId) {
-		fParentId = parentId;
-	}
+  public void setParentId(Long parentId) {
+    fParentId = parentId;
+  }
 
-	public Long getParentId() {
-		return fParentId;
-	}
+  public Long getParentId() {
+    return fParentId;
+  }
 }

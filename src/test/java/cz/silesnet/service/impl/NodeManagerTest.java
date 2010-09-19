@@ -15,33 +15,33 @@ import java.util.List;
  */
 public class NodeManagerTest extends BaseServiceTestCase {
 
-    @SpringBean("nodeManager")
-    private NodeManager nmgr;
+  @SpringBean("nodeManager")
+  private NodeManager nmgr;
 
-    @Test
-    public void testCRUD() {
+  @Test
+  public void testCRUD() {
 
-        Wireless node = new Wireless();
+    Wireless node = new Wireless();
 
-        node.setName("Testing node");
-        node.setMac("12345");
-        node.setParentId(0L);
+    node.setName("Testing node");
+    node.setMac("12345");
+    node.setParentId(0L);
 
-        log.debug("Inserting node: " + node);
-        nmgr.insertNode(node);
+    log.debug("Inserting node: " + node);
+    nmgr.insertNode(node);
 
-        node.setName("Updated name");
-        log.debug("Updating node: " + node);
-        nmgr.updateNode(node);
+    node.setName("Updated name");
+    log.debug("Updating node: " + node);
+    nmgr.updateNode(node);
 
-        log.debug("Deleting node: " + node);
-        nmgr.deleteNode(node);
-    }
+    log.debug("Deleting node: " + node);
+    nmgr.deleteNode(node);
+  }
 
-    @Test
-    public void testGetLevelOfNodes() {
+  @Test
+  public void testGetLevelOfNodes() {
 
-        List<Node> nodes = nmgr.getLevelOfNodes(0);
-        log.debug("Root network nodes: " + nodes);
-    }
+    List<Node> nodes = nmgr.getLevelOfNodes(0);
+    log.debug("Root network nodes: " + nodes);
+  }
 }

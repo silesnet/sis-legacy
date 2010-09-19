@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 
 public abstract class SettingDAOTest extends DaoTestSupport<SettingDAO> {
   @Test

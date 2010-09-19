@@ -3,12 +3,12 @@
     "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-        	<list>
-	        	<value>classpath:sis-jdbc.properties</value>
-	        	<value>classpath:sis-application.properties</value>
-        	</list>
-		</property>
-	</bean>
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>classpath:sis-jdbc.properties</value>
+        <value>classpath:sis-application.properties</value>
+      </list>
+    </property>
+  </bean>
 </beans>

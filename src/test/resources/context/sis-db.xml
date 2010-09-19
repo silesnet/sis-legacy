@@ -3,5 +3,5 @@
     "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="dataSource" class="org.unitils.database.UnitilsDataSourceFactoryBean" depends-on="propertyConfigurer"/>
+  <bean id="dataSource" class="org.unitils.database.UnitilsDataSourceFactoryBean" depends-on="propertyConfigurer" />
 </beans>

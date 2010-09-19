@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Packaging Generator" default="deploy_all_static" basedir=".">
-	<property name="deploy.path" value="W:\testing\java\tomcat-5.5.9\webapps\sis"/>
+  <property name="deploy.path" value="W:\testing\java\tomcat-5.5.9\webapps\sis" />
 
-	<target name="deploy_all_static" depends="copy_web,copy_root" />
+  <target name="deploy_all_static" depends="copy_web,copy_root" />
 
-	<target name="copy_web">
-		<copy todir="${deploy.path}/WEB-INF" preservelastmodified="true">
-			<fileset dir="target/WEB-INF">
-				<include name="i18n/**/*.*"/>
-				<include name="jsp/**/*.*"/>
-				<include name="tags/**/*.*"/>
-			</fileset>
-		</copy>
-	</target>
+  <target name="copy_web">
+    <copy todir="${deploy.path}/WEB-INF" preservelastmodified="true">
+      <fileset dir="target/WEB-INF">
+        <include name="i18n/**/*.*" />
+        <include name="jsp/**/*.*" />
+        <include name="tags/**/*.*" />
+      </fileset>
+    </copy>
+  </target>
 
-	<target name="copy_root">
-		<copy todir="${deploy.path}" preservelastmodified="true">
-			<fileset dir="target">
-				<include name="css/**/*.*"/>
-				<include name="doc/**/*.*"/>
-				<include name="img/**/*.*"/>
-				<include name="js/**/*.*"/>
-				<include name="*.jsp"/>
-			</fileset>
-		</copy>
-	</target>
+  <target name="copy_root">
+    <copy todir="${deploy.path}" preservelastmodified="true">
+      <fileset dir="target">
+        <include name="css/**/*.*" />
+        <include name="doc/**/*.*" />
+        <include name="img/**/*.*" />
+        <include name="js/**/*.*" />
+        <include name="*.jsp" />
+      </fileset>
+    </copy>
+  </target>
 
 </project>

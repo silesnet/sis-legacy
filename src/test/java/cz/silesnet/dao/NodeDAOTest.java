@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 
 /**
  * Testing Node class hierary DAO.
