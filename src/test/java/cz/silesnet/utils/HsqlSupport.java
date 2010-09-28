@@ -1,5 +1,7 @@
 package cz.silesnet.utils;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by IntelliJ IDEA.
  * User: sikorric
@@ -11,4 +13,10 @@ public class HsqlSupport {
     return org.apache.commons.lang.StringUtils.replaceChars(value, from, to).toLowerCase();
   }
 
+
+  // NOT ACTUALLY USED
+  public static boolean ilike(final String value, final String pattern) {
+    Pattern ilike = Pattern.compile(pattern.replaceAll("%", ".*"), Pattern.CASE_INSENSITIVE);
+    return ilike.matcher(value).matches();
+  }
 }
