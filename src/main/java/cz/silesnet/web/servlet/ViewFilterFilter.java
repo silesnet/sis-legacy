@@ -51,7 +51,7 @@ public class ViewFilterFilter implements Filter {
     // get parameters from request starting with _filter
     // Map<String, String> reqFilterParamsMap =
     // FilterUtils.getParamMap(request, "_filter");
-    Map<String, String> reqFilterParamsMap = WebUtils
+    Map<String, Object> reqFilterParamsMap = WebUtils
         .getParametersStartingWith(request, "_filter.");
     log.debug("Got filterParametersMap from current request: "
         + reqFilterParamsMap);
