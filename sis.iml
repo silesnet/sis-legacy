@@ -55,6 +55,7 @@
     <orderEntry type="library" name="Maven: commons-validator:commons-validator:1.1.4" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-all:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.16" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.hibernate:hibernate-annotations:3.2.1.ga" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.opensymphony.quartz:quartz:1.6.1" level="project" />
