@@ -14,11 +14,9 @@ public abstract class AbstractInvoiceWriter implements InvoiceWriter {
 
   protected Bill bill;
 
-  public AbstractInvoiceWriter(Bill bill) {
+  protected AbstractInvoiceWriter(Bill bill) {
     this.bill = bill;
   }
-
-  public abstract MimeBodyPart getMimeBodyPart();
 
   public abstract void writeTo(PrintWriter writer);
 

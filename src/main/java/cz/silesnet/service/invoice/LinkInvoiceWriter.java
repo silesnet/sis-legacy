@@ -18,20 +18,7 @@ public class LinkInvoiceWriter extends AbstractInvoiceWriter {
     // TODO Auto-generated constructor stub
   }
 
-  public MimeBodyPart getMimeBodyPart() {
-    MimeBodyPart mimeBodyPart = new MimeBodyPart();
-    try {
-      mimeBodyPart.setText("From Link writer getMimeBodyPart(): "
-          + bill.getNumber());
-    }
-    catch (MessagingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return mimeBodyPart;
-  }
-
   public void writeTo(PrintWriter writer) {
-    writer.println("From Link writer writeTo(): " + bill.getNumber());
+    // TODO
   }
 }

@@ -14,13 +14,8 @@ public class HtmlInvoiceWriter extends AbstractInvoiceWriter {
 
   public HtmlInvoiceWriter(Bill bill) {
     super(bill);
-    // TODO Auto-generated constructor stub
   }
 
-  public MimeBodyPart getMimeBodyPart() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
   public void writeTo(PrintWriter writer) {
     // TODO Auto-generated method stub

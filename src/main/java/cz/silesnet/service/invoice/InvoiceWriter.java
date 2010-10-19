@@ -10,7 +10,5 @@ import java.io.PrintWriter;
  * @author Richard Sikora
  */
 public interface InvoiceWriter {
-  public MimeBodyPart getMimeBodyPart();
-
   public void writeTo(PrintWriter writer);
 }
