@@ -1,6 +1,7 @@
-package cz.silesnet.service.invoice;
+package cz.silesnet.service.invoice.impl;
 
 import cz.silesnet.model.Bill;
+import cz.silesnet.service.invoice.InvoiceWriter;
 
 import javax.mail.internet.MimeBodyPart;
 import java.io.PrintWriter;
@@ -18,6 +19,6 @@ public abstract class AbstractInvoiceWriter implements InvoiceWriter {
     this.bill = bill;
   }
 
-  public abstract void writeTo(PrintWriter writer);
+  public abstract void write(PrintWriter writer);
 
 }

@@ -37,6 +37,10 @@ public enum InvoiceFormat implements EnumPersistenceMapping<InvoiceFormat> {
     return id;
   }
 
+  public String shortName() {
+    return super.toString();
+  }
+
   public InvoiceFormat valueOf(int id) {
     return sReverseMap.get(id);
   }

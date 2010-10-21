@@ -10,5 +10,5 @@ import java.io.PrintWriter;
  * @author Richard Sikora
  */
 public interface InvoiceWriter {
-  public void writeTo(PrintWriter writer);
+  public void write(PrintWriter writer);
 }

@@ -1,6 +1,8 @@
-package cz.silesnet.service.invoice;
+package cz.silesnet.service.invoice.impl;
 
 import cz.silesnet.model.Bill;
+import cz.silesnet.service.invoice.InvoiceWriter;
+import cz.silesnet.service.invoice.impl.AbstractInvoiceWriter;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -14,18 +16,18 @@ import java.util.Map;
  * Date: 19.10.2010
  * Time: 20:36:24
  */
-public class FreeMarkerInvoiceWriter extends AbstractInvoiceWriter {
+public class FreeMarkerInvoiceWriter implements InvoiceWriter {
 
-  protected Template template;
+  private Bill bill;
+  private Template template;
   private static final String INVOICE_MODEL_NAME = "invoice";
 
   protected FreeMarkerInvoiceWriter(Bill bill, Template template) {
-    super(bill);
+    this.bill = bill;
     this.template = template;
   }
 
-  @Override
-  public void writeTo(final PrintWriter writer) {
+  public void write(final PrintWriter writer) {
     Map<String, Object> model = new HashMap<String, Object>();
     model.put(INVOICE_MODEL_NAME, bill);
     try {

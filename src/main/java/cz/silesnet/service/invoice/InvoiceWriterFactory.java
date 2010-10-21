@@ -2,11 +2,13 @@ package cz.silesnet.service.invoice;
 
 import cz.silesnet.model.Bill;
 
+import java.io.IOException;
+
 /**
  * Factory delivering different types of invoice writers.
  *
  * @author Richard Sikora
  */
 public interface InvoiceWriterFactory {
-  InvoiceWriter instanceOf(Bill invoice, InvoiceFormat format);
+  InvoiceWriter instanceOf(Bill invoice, InvoiceFormat format) throws IOException;
 }
