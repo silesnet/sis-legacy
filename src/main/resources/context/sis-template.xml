@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+  <bean id="freeMarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+    <property name="templateLoaderPath" value="template" />
+  </bean>
+
+  <bean id="invoiceWriterFactory" class="cz.silesnet.service.invoice.impl.FreeMarkerInvoiceWriterFactory">
+    <property name="configuration" ref="freeMarkerConfiguration" />
+  </bean>
+</beans>
