@@ -10,5 +10,5 @@ import java.io.IOException;
  * @author Richard Sikora
  */
 public interface InvoiceWriterFactory {
-  InvoiceWriter instanceOf(Bill invoice, InvoiceFormat format) throws IOException;
+  InvoiceWriter instanceOf(Invoice invoice) throws IOException;
 }
