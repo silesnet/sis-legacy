@@ -1,0 +1,25 @@
+Szanowny kliencie,
+
+w zalaczniku przesylamy fakture wystawiona za usluge dostepu do internetu za okres ${invoice.period}.
+Faktura ta jest posylana jedynie w wersji elektronicznej.
+
+
+
+Kliknieciem na ponizszy link mozna fakture otworzyc i jednoczesnie potwierdzic jej odbior.
+http://www.silesnet.cz/billing/confirmDelivery.html?uuid=${invoice.uuid}
+
+
+Dziekujemy za korzystanie z naszych uslug.
+
+
+Z powazaniem,
+
+Iwona Heczko
+
+SilesNet Polska Sp. z o.o.
+skrytka poczt. 219
+43-400 Cieszyn
+
+e-mail  :  iwona.heczko@silesnet.pl
+e-site  :  www.silesnet.pl
+telefon :  +48 500 67 33 11

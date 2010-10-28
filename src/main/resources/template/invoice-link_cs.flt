@@ -1,0 +1,36 @@
+Vážený zákazníku,
+
+zasíláme Vám fakturu za poskytování internetových služeb za období ${invoice.period}.
+Faktura je zaslána pouze prostřednictvím této elektronické zprávy.
+
+
+
+Kliknutím na následující odkaz si fakturu vyzvednete a zároveň nám takto potvrdíte její převzetí.
+http://www.silesnet.cz/billing/confirmDelivery.html?uuid=${invoice.uuid}
+
+
+Děkujeme za využívání našich služeb.
+
+
+Ing. Gražyna Hlinšťáková
+
+e-mail: hlinstakova@silesnet.cz
+web: www.silesnet.cz
+tel.: 558 711 585, 777 27 28 28
+
+SilesNet s. r. o.
+Ostravská 584/12
+737 01 Český Těšín
+<#if invoice.signedDelivery>
+
+
+Tento e-mail je elektronicky podepsán.
+
+V případě, že nemáte nainstalovaný kvalifikovaný kořenový certifikát společnosti I.CA, můžete si jej stáhnout v různých formátech z těchto odkazů:
+http://www.ica.cz/RootCERT_Qican.der
+http://www.ica.cz/RootCERT_Qican.pem
+http://www.ica.cz/RootCERT_Qican.txt
+http://www.ica.cz/root_QCC.cmf
+
+Pro vice informací kontaktujte prosím naší kancelář.
+</#if>

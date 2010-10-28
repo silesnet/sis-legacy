@@ -3,7 +3,7 @@
     "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
   <bean id="freeMarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
-    <property name="templateLoaderPath" value="template" />
+    <property name="templateLoaderPaths" value="${template.folders}" />
     <property name="defaultEncoding" value="UTF-8" />
     <property name="freemarkerVariables">
       <map>
