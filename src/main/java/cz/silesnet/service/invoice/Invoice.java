@@ -32,4 +32,8 @@ public class Invoice {
   public String getNumber() {
     return bill.getNumber();
   }
+
+  public boolean isSignedDelivery() {
+    return customer.getBilling().getDeliverSigned();
+  }
 }

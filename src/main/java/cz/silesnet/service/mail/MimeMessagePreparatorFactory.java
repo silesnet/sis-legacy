@@ -1,6 +1,7 @@
-package cz.silesnet.service.impl.mail;
+package cz.silesnet.service.mail;
 
-import cz.silesnet.model.Bill;
+import cz.silesnet.model.Invoicing;
+import cz.silesnet.service.invoice.Invoice;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
 /**
@@ -9,5 +10,5 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
  * Time: 19:58:52
  */
 public interface MimeMessagePreparatorFactory {
-  MimeMessagePreparator getInstance(Bill bill);
+  MimeMessagePreparator newInstance(Invoice invoice);
 }
