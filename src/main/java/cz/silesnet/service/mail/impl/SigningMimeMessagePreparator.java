@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
+import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -31,7 +32,8 @@ public class SigningMimeMessagePreparator implements MimeMessagePreparator {
       mimeMessage.setContent(multipart, multipart.getContentType());
       log.debug("Email successfuly SIGNED.");
     } catch (RuntimeException e) {
-      log.info("Email SIGNING FAILED for: " + mimeMessage.getFrom()[0].toString());
+      log.info("Email SIGNING FAILED for: " + mimeMessage.getRecipients(MimeMessage.RecipientType.TO)[0].toString());
+      log.info(e);
     }
   }
 }

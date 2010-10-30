@@ -65,6 +65,7 @@ public class SignedEmailGeneratorBC implements SignedEmailGenerator {
     try {
       configureInternal();
       log.info("SignedEmailGenerator CONFIGURED!");
+      isConfigured = true;
     }
     catch (Exception e) {
 //			e.printStackTrace();
