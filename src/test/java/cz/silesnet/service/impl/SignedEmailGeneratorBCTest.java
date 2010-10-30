@@ -41,6 +41,17 @@ public class SignedEmailGeneratorBCTest {
 
   }
 
+  private void dumpCaCert() throws Exception {
+    KeyStore caStore = loadKeyStore("crypto/ca.pfx", "ca");
+    KeyPair caPair = getKeyPairFromKeyStore(caStore, "ca", "ca");
+    X509Certificate caCert = (X509Certificate) caStore.getCertificate("ca");
+
+    PEMWriter writer = new PEMWriter(new FileWriter("src/test/resources/crypto/ca.pem"));
+    writer.writeObject(caCert);
+    writer.close();
+
+  }
+
   private void createCertificate() throws Exception {
     Security.addProvider(new BouncyCastleProvider());
 
