@@ -7,9 +7,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 
 /**
  * User: der3k
@@ -24,7 +26,7 @@ public class SigningMimeMessagePreparator implements MimeMessagePreparator {
     this.signer = signer;
   }
 
-  public void prepare(final MimeMessage mimeMessage) throws Exception {
+  public void prepare(final MimeMessage mimeMessage) throws IOException, MessagingException {
     MimeBodyPart bodyPart = new MimeBodyPart();
     bodyPart.setText(mimeMessage.getContent().toString());
     try {

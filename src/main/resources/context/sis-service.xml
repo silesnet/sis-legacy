@@ -122,11 +122,10 @@
         <property name="mailSender">
           <ref bean="mailSenderProduction" />
         </property>
-        <property name="signedEmailGenerator">
-          <ref bean="signedEmailGenerator" />
+        <property name="messagePreparatorFactory">
+          <ref bean="emailPreparatorFactory" />
         </property>
         <property name="emailFromAddressCs" value="${email.from.cs}" />
-        <property name="emailFromAddressPl" value="${email.from.pl}" />
         <property name="emailSendingDelay" value="${email.delay}" />
       </bean>
     </property>

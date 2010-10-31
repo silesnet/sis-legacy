@@ -5,7 +5,12 @@ import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
-import cz.silesnet.service.*;
+import cz.silesnet.service.BillingManager;
+import cz.silesnet.service.CustomerManager;
+import cz.silesnet.service.HistoryManager;
+import cz.silesnet.service.SettingManager;
+import cz.silesnet.service.invoice.Invoice;
+import cz.silesnet.service.mail.MimeMessagePreparatorFactory;
 import cz.silesnet.utils.MessagesUtils;
 import org.apache.commons.beanutils.BeanToPropertyValueTransformer;
 import org.apache.commons.collections.CollectionUtils;
@@ -22,8 +27,6 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.orm.ObjectRetrievalFailureException;
 
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -50,13 +53,11 @@ public class BillingManagerImpl implements BillingManager {
 
   private SettingManager setMgr;
 
+  private MimeMessagePreparatorFactory messagePreparatorFactory;
+
   private JavaMailSender mailSender;
 
-  private SignedEmailGenerator signedEmailGenerator;
-
   private String emailFromAddressCs;
-
-  private String emailFromAddressPl;
 
   private int emailSendingDelay = 5;
 
@@ -73,11 +74,6 @@ public class BillingManagerImpl implements BillingManager {
 
   public void setCustomerManager(CustomerManager mgr) {
     cMgr = mgr;
-  }
-
-  public void setSignedEmailGenerator(
-      SignedEmailGenerator signedEmailGenerator) {
-    this.signedEmailGenerator = signedEmailGenerator;
   }
 
   public void setEmailSendingDelay(int emailSendingDelay) {
@@ -100,16 +96,16 @@ public class BillingManagerImpl implements BillingManager {
     log.debug("PurgeDateDays set to: " + sPurgeDateDays);
   }
 
+  public void setMessagePreparatorFactory(final MimeMessagePreparatorFactory messagePreparatorFactory) {
+    this.messagePreparatorFactory = messagePreparatorFactory;
+  }
+
   public void setMailSender(JavaMailSender mailSender) {
     this.mailSender = mailSender;
   }
 
   public void setEmailFromAddressCs(String email) {
     this.emailFromAddressCs = email;
-  }
-
-  public void setEmailFromAddressPl(String email) {
-    this.emailFromAddressPl = email;
   }
 
   public Bill get(Long billId) {
@@ -635,101 +631,19 @@ public class BillingManagerImpl implements BillingManager {
   }
 
   public void email(final Bill bill) throws MailException {
-    final Customer c = dao.fetchCustomer(bill);
-    Invoicing tmpInvoicing = null;
-    try {
-      tmpInvoicing = getInvoicing(bill.getInvoicingId());
-    }
-    catch (IllegalArgumentException e) {
-      // old invoice without invoicing set
-    }
-    catch (ObjectRetrievalFailureException e) {
-      // deleted invoicing
-    }
-    final Invoicing invoicing = tmpInvoicing;
-    final Locale locale = c.getContact().getAddress().getCountry()
-        .getLocale();
-    if (c == null)
-      throw new IllegalArgumentException("Bill without customer set.");
     if (mailSender == null)
       throw new IllegalStateException("JavaMailSender not set.");
-    final String emailFrom = Country.PL.equals(c.getContact().getAddress()
-        .getCountry()) ? emailFromAddressPl : emailFromAddressCs;
-    MimeMessagePreparator msgPreparator = new MimeMessagePreparator() {
-      public void prepare(MimeMessage msg) throws MessagingException {
-        MimeMessageHelper email = new MimeMessageHelper(msg);
-        email.setFrom(emailFrom);
-        email.setTo(c.getContact().getEmail());
-        if (!GenericValidator.isBlankOrNull(c.getBilling()
-            .getDeliverCopyEmail()))
-          email
-              .setCc(c.getBilling().getDeliverCopyEmail().split(
-                  ","));
-        email.setSentDate(new Date());
-        email.getMimeMessage().addHeader("X-Priority", "1");
-        email.getMimeMessage().addHeader("X-MSMail-Priority", "High");
-        email.setSubject(MessagesUtils.getMessage("billEmail.subject",
-            new Object[]{bill.getNumber(),
-                bill.getPeriod().getPeriodString()}, locale));
-        StringBuffer text = new StringBuffer();
-        text.append(MessagesUtils.getMessage("billEmail.text.header",
-            bill.getPeriod().getPeriodString(), locale));
-        text.append(MessagesUtils.getMessage("billEmail.text.prefix",
-            locale));
-        text.append(MessagesUtils.getMessage("billEmail.text.link",
-            bill.getHashCode(), locale));
-        text.append(MessagesUtils.getMessage("billEmail.text.suffix",
-            locale));
-        text.append(MessagesUtils.getMessage("billEmail.text.contact",
-            locale));
-        // handle message signing
-        Multipart multiPart = null;
-        if (c.getBilling().getDeliverSigned()
-            && Country.CZ.equals(c.getContact().getAddress()
-            .getCountry())) {
-          // sign email
-          String eSignFooter = MessagesUtils.getMessage(
-              "billEmail.text.esignfooter", locale);
-          MimeBodyPart bodyPart = new MimeBodyPart();
-          bodyPart.setText(text.toString() + eSignFooter);
-          try {
-            multiPart = signedEmailGenerator.generate(bodyPart);
-          }
-          catch (IllegalStateException e) {
-            // just log that SignedEmailGenerator is not configured
-            // and audit signign error
-            if (invoicing != null) {
-              hmgr.insertSystemBillingAudit(invoicing, c,
-                  "mainBilling.msg.emailSignError",
-                  "mainBilling.status.notSigned");
-            }
-            log
-                .warn("Email SIGNING FAILED: SignedEmailGenerator is not configured!");
-          }
-          catch (SignedEmailGenerateException e) {
-            // autit email signing failure
-            if (invoicing != null) {
-              hmgr.insertSystemBillingAudit(invoicing, c,
-                  "mainBilling.msg.emailSignError",
-                  "mainBilling.status.notSigned");
-            }
-            log.info("Email SIGNING FAILED for " + c.getName());
-          }
-        }
-        if (multiPart != null) {
-          // successfuly signed!
-          msg.setContent(multiPart, multiPart.getContentType());
-          log.debug("Email successfuly SIGNED.");
-        } else {
-          // use plain email otherwise
-          email.setText(text.toString());
-        }
-      }
-    };
-    // execute send
-    mailSender.send(msgPreparator);
-    log.info("Email SENT for " + c.getName() + " (" + bill.getNumber()
-        + ")");
+    Invoice invoice = createNewInvoice(bill);
+    MimeMessagePreparator messagePreparator = messagePreparatorFactory.newInstance(invoice);
+    mailSender.send(messagePreparator);
+    log.info("Email SENT for " + invoice.getEmail() + " (" + invoice.getNumber() + ")");
+  }
+
+  private Invoice createNewInvoice(final Bill bill) {
+    final Customer customer = dao.fetchCustomer(bill);
+    if (customer == null)
+      throw new IllegalArgumentException("Bill without customer set.");
+    return new Invoice(bill, customer);
   }
 
   private void emailReminder(final Bill bill) throws MailException {
