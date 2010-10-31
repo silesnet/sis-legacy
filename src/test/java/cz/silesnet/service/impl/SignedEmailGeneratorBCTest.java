@@ -49,7 +49,6 @@ public class SignedEmailGeneratorBCTest {
     PEMWriter writer = new PEMWriter(new FileWriter("src/test/resources/crypto/ca.pem"));
     writer.writeObject(caCert);
     writer.close();
-
   }
 
   private void createCertificate() throws Exception {
@@ -57,6 +56,7 @@ public class SignedEmailGeneratorBCTest {
 
     KeyStore sisStore = loadKeyStore("crypto/sis.pfx", "sis");
     KeyPair sisPair = getKeyPairFromKeyStore(sisStore, "sis", "sis");
+    X509Certificate sisCert = (X509Certificate) sisStore.getCertificate("sis");
 
     KeyStore caStore = loadKeyStore("crypto/ca.pfx", "ca");
     KeyPair caPair = getKeyPairFromKeyStore(caStore, "ca", "ca");
@@ -68,7 +68,7 @@ public class SignedEmailGeneratorBCTest {
     generator.setIssuerDN(caCert.getSubjectX500Principal());
     generator.setNotBefore(new Date(System.currentTimeMillis() - 50000));
     generator.setNotAfter(new Date(System.currentTimeMillis() + 3153600000000L));
-    generator.setSubjectDN(new X500Principal("CN=SIS"));
+    generator.setSubjectDN(sisCert.getSubjectX500Principal());
     generator.setPublicKey(sisPair.getPublic());
     generator.setSignatureAlgorithm("SHA256WithRSAEncryption");
 
@@ -80,7 +80,7 @@ public class SignedEmailGeneratorBCTest {
     generator.addExtension(X509Extensions.ExtendedKeyUsage, true, new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
     generator.addExtension(X509Extensions.SubjectAlternativeName, false, new GeneralNames(new GeneralName(GeneralName.rfc822Name, "info@localhost")));
 
-    X509Certificate certificate = generator.generateX509Certificate(sisPair.getPrivate(), "BC");
+    X509Certificate certificate = generator.generateX509Certificate(caPair.getPrivate(), "BC");
     X509Certificate[] certificateChain = {certificate, caCert};
 
     PEMWriter writer = new PEMWriter(new FileWriter("src/test/resources/crypto/sis-ca.pem"));

@@ -14,6 +14,7 @@
   <import resource="sis-security.xml" />
   <import resource="sis-schedule.xml" />
   <import resource="sis-messages.xml" />
+  <import resource="sis-template.xml" />
   <import resource="sis-email.xml" />
 
 </beans>
