@@ -38,7 +38,8 @@ public class InvoiceMimeMessagePreparator implements MimeMessagePreparator {
     email.setSubject(message("billEmail.subject", invoice.getNumber(), invoice.getPeriod()));
     email.getMimeMessage().addHeader("X-Priority", "1");
     email.getMimeMessage().addHeader("X-MSMail-Priority", "High");
-    email.setText(renderText());
+    mimeMessage.setText(renderText(), "windows-1250");
+//    email.setText(renderText());
   }
 
   private String message(String key) {

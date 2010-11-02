@@ -3,6 +3,7 @@ package cz.silesnet.service.invoice;
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.enums.Country;
+import cz.silesnet.utils.StringUtils;
 
 /**
  * User: der3k
@@ -42,7 +43,7 @@ public class Invoice {
 
   public String[] getCopyToEmails() {
     String copy = customer.getBilling().getDeliverCopyEmail();
-    if (copy == null) {
+    if (copy == null || copy.trim().length() == 0) {
       return EMPTY_COPY_TO_EMAILS;
     } else {
       return copy.split(",");

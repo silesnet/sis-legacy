@@ -517,6 +517,8 @@ public class BillingManagerImpl implements BillingManager {
             "mainBilling.msg.emailAddressError",
             "mainBilling.status.byMail");
         log.warn("Bill email parse exception: " + c.getName());
+        log.warn(e.getCause());
+
         // set delivering by mail
         bill.setDeliverByMail(true);
       }
