@@ -198,9 +198,11 @@ public class Billing implements HistoricToString, Serializable {
   }
 
   public String getBankAccount() {
-    if (StringUtils.isNotBlank(fAccountNumber)
-        && StringUtils.isNotBlank(fBankCode)) {
-      return fAccountNumber + "/" + fBankCode;
+    if (StringUtils.isNotBlank(fAccountNumber)) {
+      StringBuilder number = new StringBuilder(fAccountNumber);
+      if (StringUtils.isNotBlank(fBankCode))
+        number.append("/").append(fBankCode);
+      return number.toString();
     } else {
       return "";
     }

@@ -50,7 +50,7 @@
 	<app:viewLabelLine path="shire" label="Customer.fBilling.shire" styleClass="odd" />
 	<app:viewLabelLine path="responsible" label="Customer.fBilling.responsible" styleClass="even" />
 	<app:viewTextLine path="isActive" label="Customer.fBilling.fIsActive" i18n="true" styleClass="odd" />
-    <app:viewLabelLine path="status" label="Customer.fBilling.fStatus" i18n="true" styleClass="even" />
+  <app:viewLabelLine path="status" label="Customer.fBilling.fStatus" i18n="true" styleClass="even" />
 	<app:viewTextLine path="bankAccount" label="Customer.fBilling.fAccount" styleClass="odd" />
 </s:nestedPath>
 <s:nestedPath path="customer">
