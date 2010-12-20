@@ -40,7 +40,7 @@ public class CustomerController extends AbstractCRUDController {
 
   private static final int DIVISION_LENGTH = 32;
 
-  private static final int ACCOUNT_NUMBER_LENGTH = 17;
+  private static final int ACCOUNT_NUMBER_LENGTH = 26;
 
   private static final int BANK_CODE_LENGTH = 4;
 
