@@ -138,7 +138,12 @@
   		Pozostało do zapłaty:&nbsp;<app:currency value="${bill.totalPriceVatNotRounded}" />&nbsp;PLN<br />
   		W terminie:&nbsp;<fmt:formatDate value="${bill.purgeDate}" pattern="dd.MM.yyyy" />
   	</b></font>
-  	<br /><br />
+  	<p><b>
+      Powyższa faktura dotyczy abonamentu za miesiąc w którym została wystawiona.
+  	<br />
+      W tytule płatności prosimy podać numer(y) faktury której płatność dotyczy.
+    </b></p>
+    <br />
   </td></tr>
   <tr>
   <TD Align="Left" width="48%" valign="top">
