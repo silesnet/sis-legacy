@@ -39,6 +39,7 @@ import java.util.*;
  * @author Richard Sikora
  */
 public class BillingManagerImpl implements BillingManager {
+  private static final int VAT_PL = 23;
 
   // ~ Instance fields
   // --------------------------------------------------------
@@ -360,7 +361,7 @@ public class BillingManagerImpl implements BillingManager {
     bill.setVat(sVat);
     // FIXME should not be so hardcoded
     if (Country.PL.equals(customer.getContact().getAddress().getCountry()))
-      bill.setVat(22);
+      bill.setVat(VAT_PL);
     bill.setDeliverByMail(customer.getBilling().getDeliverByMail());
     return bill;
   }
