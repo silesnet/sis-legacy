@@ -42,8 +42,6 @@ public interface HistoryManager {
 
   public List<HistoryItem> getSystemBillingAudit();
 
-  public void clearBillingAudit();
-
   public void removeOldLoginHistory();
 
 }

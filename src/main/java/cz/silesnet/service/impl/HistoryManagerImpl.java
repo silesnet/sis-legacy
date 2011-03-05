@@ -288,10 +288,6 @@ public class HistoryManagerImpl implements HistoryManager {
     return dao.getHistory(Long.valueOf(1));
   }
 
-  public void clearBillingAudit() {
-    dao.clearBillingAudit();
-  }
-
   protected int removeMonthsOldLoginHistory(int months) {
     assertThat(months,
         is(greaterThanOrEqualTo(MIN_MONTHS_LOGIN_HISTORY_AGE)));

@@ -89,11 +89,6 @@ public class HistoryItemDAOHibernate extends HibernateDaoSupport implements
     getHibernateTemplate().saveOrUpdate(historyItem);
   }
 
-  public void clearBillingAudit() {
-    // FIXME 1 is hardcode value for billing audit
-    getHibernateTemplate().deleteAll(getHistory(Long.valueOf(1)));
-  }
-
   public int removeLoginHistoryOlderThan(DateTime date) {
     log.info("Removing login history older than: " + date);
     return getHibernateTemplate()

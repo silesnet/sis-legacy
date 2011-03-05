@@ -351,15 +351,6 @@ public class BillingController extends MultiActionController {
         + invoicing.getId()));
   }
 
-  public ModelAndView clearAudit(HttpServletRequest request, HttpServletResponse response) {
-    log.debug("Clearing billing audit.");
-    hmgr.clearBillingAudit();
-    MessagesUtils.setCodedSuccessMessage(request,
-        "mainBilling.clearAudit.success");
-    return new ModelAndView(new RedirectView(request.getContextPath()
-        + "/billing/view.html?action=mainBilling"));
-  }
-
   public ModelAndView toggleSendingInvoices(HttpServletRequest request, HttpServletResponse response) {
     boolean newSettingValue = ServletRequestUtils.getBooleanParameter(
         request, "sendingInvoicesFlag", false);

@@ -37,7 +37,5 @@ public interface HistoryItemDAO extends DAO {
 
   public void saveHistoryItem(HistoryItem historyItem);
 
-  public void clearBillingAudit();
-
   public int removeLoginHistoryOlderThan(DateTime dateTime);
 }
