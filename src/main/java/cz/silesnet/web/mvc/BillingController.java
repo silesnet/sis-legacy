@@ -51,8 +51,7 @@ public class BillingController extends MultiActionController {
     hmgr = historyManager;
   }
 
-  public ModelAndView mainBilling(HttpServletRequest request,
-                                  HttpServletResponse response) {
+  public ModelAndView mainBilling(HttpServletRequest request, HttpServletResponse response) {
     // show main billing page with some info and actions available
     log.debug("Main billing.");
     Map<String, Object> model = new HashMap<String, Object>();
@@ -60,8 +59,7 @@ public class BillingController extends MultiActionController {
     Invoicing invoicing = null;
     try {
       invoicing = getRequestedInvoicing(request);
-    }
-    catch (NullPointerException e) {
+    } catch (NullPointerException e) {
       // no real invocing required, never mind we can handle this
     }
     Country country = null;
@@ -130,34 +128,29 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/mainBilling", model);
   }
 
-  public ModelAndView confirmBill(HttpServletRequest request,
-                                  HttpServletResponse response) {
+  public ModelAndView confirmBill(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Confirming selected bills.");
     List<Bill> bills = getSelectedBills(request);
     for (Bill bill : bills) {
       bill.setIsConfirmed(true);
       bMgr.update(bill);
     }
-    MessagesUtils.setCodedSuccessMessage(request,
-        "listBills.confirm.success");
+    MessagesUtils.setCodedSuccessMessage(request, "listBills.confirm.success");
     return goBack(request, response);
   }
 
-  public ModelAndView unconfirmBill(HttpServletRequest request,
-                                    HttpServletResponse response) {
+  public ModelAndView unconfirmBill(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Unconfirming selected bills.");
     List<Bill> bills = getSelectedBills(request);
     for (Bill bill : bills) {
       bill.setIsConfirmed(false);
       bMgr.update(bill);
     }
-    MessagesUtils.setCodedSuccessMessage(request,
-        "listBills.unconfirm.success");
+    MessagesUtils.setCodedSuccessMessage(request, "listBills.unconfirm.success");
     return goBack(request, response);
   }
 
-  public ModelAndView deliverBill(HttpServletRequest request,
-                                  HttpServletResponse response) {
+  public ModelAndView deliverBill(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Delivering selected bills.");
     List<Bill> bills = getSelectedBills(request);
     for (Bill bill : bills) {
@@ -165,13 +158,11 @@ public class BillingController extends MultiActionController {
       bill.setIsDelivered(true);
       bMgr.update(bill);
     }
-    MessagesUtils.setCodedSuccessMessage(request,
-        "listBills.deliver.success");
+    MessagesUtils.setCodedSuccessMessage(request, "listBills.deliver.success");
     return goBack(request, response);
   }
 
-  public ModelAndView confirmDelivery(HttpServletRequest request,
-                                      HttpServletResponse response) {
+  public ModelAndView confirmDelivery(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Confirming bill delivery from customer.");
     Map<String, Object> model = new HashMap<String, Object>();
     String uuid = null;
@@ -179,8 +170,7 @@ public class BillingController extends MultiActionController {
     String view = "billing/notFoundBill";
     try {
       uuid = ServletRequestUtils.getStringParameter(request, "uuid");
-    }
-    catch (ServletRequestBindingException e) {
+    } catch (ServletRequestBindingException e) {
     }
     if (uuid != null) {
       // we have uuid try to get bill
@@ -205,8 +195,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView(view, model);
   }
 
-  public ModelAndView emailBill(HttpServletRequest request,
-                                HttpServletResponse response) throws ServletRequestBindingException {
+  public ModelAndView emailBill(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     log.debug("Emailing bill.");
     Bill bill = getRequestedBill(request);
     try {
@@ -214,13 +203,11 @@ public class BillingController extends MultiActionController {
       // set success message
       MessagesUtils.setCodedSuccessMessage(request,
           "mainBilling.sendingEmailSuccess", bill.getNumber());
-    }
-    catch (MailParseException e) {
+    } catch (MailParseException e) {
       // wrong address
       MessagesUtils.setCodedFailureMessage(request,
           "mainBilling.sendingEmailAddressFailure", bill.getNumber());
-    }
-    catch (MailException e) {
+    } catch (MailException e) {
       // sending error
       MessagesUtils.setCodedFailureMessage(request,
           "mainBilling.sendingEmailFailure", bill.getNumber());
@@ -228,8 +215,7 @@ public class BillingController extends MultiActionController {
     return goBack(request, response);
   }
 
-  public ModelAndView emailBills(HttpServletRequest request,
-                                 HttpServletResponse response) throws ServletRequestBindingException {
+  public ModelAndView emailBills(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     log.debug("Emailing bills to customers.");
     List<Bill> bills = getSelectedBills(request);
     bMgr.emailAll(bills);
@@ -238,8 +224,7 @@ public class BillingController extends MultiActionController {
     return goBack(request, response);
   }
 
-  public ModelAndView printBillTxt(HttpServletRequest request,
-                                   HttpServletResponse response) throws ServletRequestBindingException {
+  public ModelAndView printBillTxt(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     log.debug("Printing bill text.");
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
@@ -250,8 +235,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/printBillTxt_" + localeString, model);
   }
 
-  public ModelAndView printBillsTxt(HttpServletRequest request,
-                                    HttpServletResponse response) throws ServletRequestBindingException {
+  public ModelAndView printBillsTxt(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     log.debug("Printing text bills.");
     Map<String, Object> model = new HashMap<String, Object>();
     List<Bill> bills = getSelectedBills(request);
@@ -268,8 +252,7 @@ public class BillingController extends MultiActionController {
   }
 
   @SuppressWarnings("unchecked")
-  public ModelAndView detailBill(HttpServletRequest request,
-                                 HttpServletResponse response) throws ServletRequestBindingException {
+  public ModelAndView detailBill(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     log.debug("Bill detail.");
     // get bill id from request
     Long id = ServletRequestUtils.getRequiredLongParameter(request,
@@ -292,8 +275,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/viewBill", model);
   }
 
-  public ModelAndView prepareBills(HttpServletRequest request,
-                                   HttpServletResponse response) {
+  public ModelAndView prepareBills(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Prepare bills STARTED...");
     Date due = null;
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -302,8 +284,7 @@ public class BillingController extends MultiActionController {
           request, "billingDate");
       dateFormat.setLenient(false);
       due = dateFormat.parse(dueStr);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       // set failure message and go back to mainBilling
       MessagesUtils.setCodedFailureMessage(request,
           "mainBilling.dateParseFailure");
@@ -314,8 +295,7 @@ public class BillingController extends MultiActionController {
         "billsNumbering", "");
     try {
       Long.valueOf(numbering);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       // set failure message ang go back to mainBilling
       MessagesUtils.setCodedFailureMessage(request,
           "mainBilling.numberingParseFailure");
@@ -340,8 +320,7 @@ public class BillingController extends MultiActionController {
         + invoicing.getId()));
   }
 
-  public ModelAndView sendConfirmed(HttpServletRequest request,
-                                    HttpServletResponse response) {
+  public ModelAndView sendConfirmed(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Sending confirmed bills.");
     // get confirmed bills
     Invoicing invoicing = getRequestedInvoicing(request);
@@ -357,8 +336,7 @@ public class BillingController extends MultiActionController {
         + "/billing/view.html?action=mainBilling"));
   }
 
-  public ModelAndView exportSentToWinduo(HttpServletRequest request,
-                                         HttpServletResponse response) throws IOException {
+  public ModelAndView exportSentToWinduo(HttpServletRequest request, HttpServletResponse response) throws IOException {
     log.debug("Exporting sent bills in Winduo import format.");
     Invoicing invoicing = getRequestedInvoicing(request);
     // set response encoding properly
@@ -375,8 +353,7 @@ public class BillingController extends MultiActionController {
     return null;
   }
 
-  public ModelAndView exportSentToInsert(HttpServletRequest request,
-                                         HttpServletResponse response) throws IOException {
+  public ModelAndView exportSentToInsert(HttpServletRequest request, HttpServletResponse response) throws IOException {
     log.debug("Exporting sent bills in Insert XML format.");
     Invoicing invoicing = getRequestedInvoicing(request);
     // set response encoding properly
@@ -393,8 +370,7 @@ public class BillingController extends MultiActionController {
     return null;
   }
 
-  public ModelAndView resendUndelivered(HttpServletRequest request,
-                                        HttpServletResponse response) throws IOException {
+  public ModelAndView resendUndelivered(HttpServletRequest request, HttpServletResponse response) throws IOException {
     log.debug("Resendig undelivered bills by email.");
     // get sent and undelivered bills
     Invoicing invoicing = getRequestedInvoicing(request);
@@ -433,8 +409,7 @@ public class BillingController extends MultiActionController {
     return null;
   }
 
-  public ModelAndView archiveDelivered(HttpServletRequest request,
-                                       HttpServletResponse response) {
+  public ModelAndView archiveDelivered(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Archiving delivered bills.");
     // get confirmed, sent and delivered for archivation
     Invoicing invoicing = getRequestedInvoicing(request);
@@ -450,8 +425,7 @@ public class BillingController extends MultiActionController {
         + "/billing/view.html?action=mainBilling"));
   }
 
-  public ModelAndView deleteUnconfirmed(HttpServletRequest request,
-                                        HttpServletResponse response) {
+  public ModelAndView deleteUnconfirmed(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Deleting unconfirmed bills.");
     // get unconfirmed bills and delete em
     Invoicing invoicing = getRequestedInvoicing(request);
@@ -465,8 +439,7 @@ public class BillingController extends MultiActionController {
         + "/billing/view.html?action=mainBilling"));
   }
 
-  public ModelAndView clearAudit(HttpServletRequest request,
-                                 HttpServletResponse response) {
+  public ModelAndView clearAudit(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Clearing billing audit.");
     hmgr.clearBillingAudit();
     MessagesUtils.setCodedSuccessMessage(request,
@@ -475,8 +448,7 @@ public class BillingController extends MultiActionController {
         + "/billing/view.html?action=mainBilling"));
   }
 
-  public ModelAndView toggleSendingInvoices(HttpServletRequest request,
-                                            HttpServletResponse response) {
+  public ModelAndView toggleSendingInvoices(HttpServletRequest request, HttpServletResponse response) {
     boolean newSettingValue = ServletRequestUtils.getBooleanParameter(
         request, "sendingInvoicesFlag", false);
     Country country = getRequestedCountry(request);
@@ -487,8 +459,7 @@ public class BillingController extends MultiActionController {
     return goBack(request, response);
   }
 
-  public ModelAndView showPreparedUnconfirmed(HttpServletRequest request,
-                                              HttpServletResponse response) {
+  public ModelAndView showPreparedUnconfirmed(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Showing prepared and not confirmed bills.");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("listBillsTitle", "listBills.title.unconfirmed");
@@ -502,8 +473,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/listBills", model);
   }
 
-  public ModelAndView showPreparedConfirmed(HttpServletRequest request,
-                                            HttpServletResponse response) {
+  public ModelAndView showPreparedConfirmed(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Showing prepared and confirmed bills.");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("listBillsTitle", "listBills.title.confirmed");
@@ -519,8 +489,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/listBills", model);
   }
 
-  public ModelAndView showSentUndelivered(HttpServletRequest request,
-                                          HttpServletResponse response) {
+  public ModelAndView showSentUndelivered(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Showing sent and not delivered bills.");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("listBillsTitle", "listBills.title.undelivered");
@@ -534,8 +503,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/listBills", model);
   }
 
-  public ModelAndView showSentDelivered(HttpServletRequest request,
-                                        HttpServletResponse response) {
+  public ModelAndView showSentDelivered(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Showing sent and delivered bills.");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("listBillsTitle", "listBills.title.delivered");
@@ -549,8 +517,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/listBills", model);
   }
 
-  public ModelAndView showSentMail(HttpServletRequest request,
-                                   HttpServletResponse response) {
+  public ModelAndView showSentMail(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Showing bills to be sent via mail.");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("listBillsTitle", "listBills.title.sentMail");
@@ -564,8 +531,7 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/listBills", model);
   }
 
-  public ModelAndView showList(HttpServletRequest request,
-                               HttpServletResponse response) {
+  public ModelAndView showList(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Showing bills list.");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("listBillsTitle", "listBills.title.list");
