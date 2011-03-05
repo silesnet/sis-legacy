@@ -46,8 +46,6 @@ public interface BillingManager {
 
   public void update(Bill bill);
 
-  public void updateAll(List<Bill> bills);
-
   /**
    * Generate bills that are to be issued due to given date. Bills are not
    * persisted, they need to be confirmed first.

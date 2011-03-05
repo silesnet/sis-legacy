@@ -351,22 +351,6 @@ public class BillingController extends MultiActionController {
         + invoicing.getId()));
   }
 
-  public ModelAndView archiveDelivered(HttpServletRequest request, HttpServletResponse response) {
-    log.debug("Archiving delivered bills.");
-    // get confirmed, sent and delivered for archivation
-    Invoicing invoicing = getRequestedInvoicing(request);
-    List<Bill> bills = bMgr.getByStatus(invoicing, true, true, true, false);
-    // set archivation
-    for (Bill bill : bills)
-      bill.setIsArchived(true);
-    // persist change
-    bMgr.updateAll(bills);
-    MessagesUtils.setCodedSuccessMessage(request,
-        "mainBilling.archiveDelivered.success");
-    return new ModelAndView(new RedirectView(request.getContextPath()
-        + "/billing/view.html?action=mainBilling"));
-  }
-
   public ModelAndView deleteUnconfirmed(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Deleting unconfirmed bills.");
     // get unconfirmed bills and delete em

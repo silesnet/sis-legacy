@@ -155,10 +155,6 @@ public class BillingManagerImpl implements BillingManager {
     dao.save(bill);
   }
 
-  public void updateAll(List<Bill> bills) {
-    dao.saveAll(bills);
-  }
-
   public List<Bill> generateAll(Invoicing invoicing,
                                 List<Customer> customers, Date due, String lastInvoiceNo) {
     // fail fast
