@@ -181,7 +181,7 @@ public class BillingController extends MultiActionController {
       // persist delivery
       bMgr.update(bill);
       // show it
-      fetchIvoicedCustomer(bill);
+      fetchInvoicedCustomer(bill);
       String localeString = bill.getInvoicedCustomer().getContact()
           .getAddress().getCountry().getLocale().toString();
       view = "billing/printBillTxt_" + localeString;
@@ -228,7 +228,7 @@ public class BillingController extends MultiActionController {
     log.debug("Printing bill text.");
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
-    fetchIvoicedCustomer(bill);
+    fetchInvoicedCustomer(bill);
     String localeString = bill.getInvoicedCustomer().getContact()
         .getAddress().getCountry().getLocale().toString();
     model.put("bills", new Bill[]{bill});
@@ -240,7 +240,7 @@ public class BillingController extends MultiActionController {
     Map<String, Object> model = new HashMap<String, Object>();
     List<Bill> bills = getSelectedBills(request);
     for (Bill bill : bills) {
-      fetchIvoicedCustomer(bill);
+      fetchInvoicedCustomer(bill);
     }
     String localeString = "cs";
     if (bills.size() > 0) {
@@ -467,10 +467,14 @@ public class BillingController extends MultiActionController {
     return new ModelAndView("billing/listBills", model);
   }
 
-  private Bill getRequestedBill(HttpServletRequest request)
-      throws ServletRequestBindingException {
-    return bMgr.get(ServletRequestUtils.getRequiredLongParameter(request,
-        "billId"));
+  public ModelAndView goBack(HttpServletRequest request, HttpServletResponse response) {
+    log.debug("Going back.");
+    String returnUrl = NavigationUtils.getReturnUrl(request, "/billing/view.html?action=mainBilling");
+    return new ModelAndView(new RedirectView(returnUrl));
+  }
+
+  private Bill getRequestedBill(HttpServletRequest request) throws ServletRequestBindingException {
+    return bMgr.get(ServletRequestUtils.getRequiredLongParameter(request, "billId"));
   }
 
   private List<Bill> getSelectedBills(HttpServletRequest request) {
@@ -481,20 +485,17 @@ public class BillingController extends MultiActionController {
   }
 
   private Invoicing getRequestedInvoicing(HttpServletRequest request) {
-    long invoicingId = ServletRequestUtils.getLongParameter(request,
-        "invoicingId", 0);
+    long invoicingId = ServletRequestUtils.getLongParameter(request, "invoicingId", 0);
     if (invoicingId == 0)
-      throw new NullPointerException("No real invocing required.");
+      throw new NullPointerException("No real invoicing required.");
     Invoicing invoicing = bMgr.getInvoicing(invoicingId);
     if (invoicing == null)
-      throw new NullPointerException(
-          "Requested invoicing does not exist.");
+      throw new NullPointerException("Requested invoicing does not exist.");
     return invoicing;
   }
 
   private Country getRequestedCountry(HttpServletRequest request) {
-    String countryId = ServletRequestUtils.getStringParameter(request,
-        "country", "cz");
+    String countryId = ServletRequestUtils.getStringParameter(request, "country", "cz");
     if ("pl".equals(countryId))
       return Country.PL;
     if ("sk".equals(countryId))
@@ -504,20 +505,12 @@ public class BillingController extends MultiActionController {
 
   @SuppressWarnings("unchecked")
   private Iterable<String> getSelectedBillsIdSet(HttpServletRequest request) {
-    Map<String, Object> selectedBillsMap = WebUtils
-        .getParametersStartingWith(request, "selectedBills_");
+    Map<String, Object> selectedBillsMap = WebUtils.getParametersStartingWith(request, "selectedBills_");
     return selectedBillsMap.keySet();
   }
 
-  private void fetchIvoicedCustomer(Bill bill) {
+  private void fetchInvoicedCustomer(Bill bill) {
     bill.setInvoicedCustomer(bMgr.fetchCustomer(bill));
   }
 
-  public ModelAndView goBack(HttpServletRequest request,
-                             HttpServletResponse response) {
-    log.debug("Going back.");
-    String returnUrl = NavigationUtils.getReturnUrl(request,
-        "/billing/view.html?action=mainBilling");
-    return new ModelAndView(new RedirectView(returnUrl));
-  }
 }
