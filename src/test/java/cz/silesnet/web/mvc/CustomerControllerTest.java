@@ -9,13 +9,11 @@ import cz.silesnet.service.LabelManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.servlet.ModelAndView;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -58,5 +56,12 @@ public class CustomerControllerTest {
     ModelAndView result = controller.showForm(request, null);
     System.out.println(result);
     assert true;
+  }
+
+  @Test
+  public void billingMonth() throws Exception {
+    String format = "%02d";
+    Assert.assertEquals(String.format(format, 1), "01");
+    Assert.assertEquals(String.format(format, 11), "11");
   }
 }

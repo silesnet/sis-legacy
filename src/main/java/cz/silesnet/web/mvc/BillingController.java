@@ -26,7 +26,6 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -52,80 +51,43 @@ public class BillingController extends MultiActionController {
   }
 
   public ModelAndView mainBilling(HttpServletRequest request, HttpServletResponse response) {
-    // show main billing page with some info and actions available
     log.debug("Main billing.");
     Map<String, Object> model = new HashMap<String, Object>();
-    // get requested invoicing, can be null
-    Invoicing invoicing = null;
-    try {
-      invoicing = getRequestedInvoicing(request);
-    } catch (NullPointerException e) {
-      // no real invocing required, never mind we can handle this
-    }
-    Country country = null;
-    if (invoicing == null) {
-      // get requested country if no invoicing requested, default to CZ
-      country = getRequestedCountry(request);
-    } else {
-      // set country from requested invoicing
-      country = invoicing.getCountry();
-    } // country is determined now
-    // get all invoicings for specified country
+
+    Invoicing invoicing = getRequestedInvoicingOrNull(request);
+    Country country = resolveCountry(request, invoicing);
     List<Invoicing> invoicings = bMgr.getInvoicings(country);
-    // when no invoicing requested then try to set default one (first from
-    // the list)
     if (invoicing == null && invoicings.size() > 0)
       invoicing = invoicings.get(0);
-    // put invoicing related objects into model
     model.put("country", country.getShortName());
     model.put("invoicing", invoicing);
     model.put("invoicings", invoicings);
 
-    // calculate next possible billing date
-    // the first of next month
     Calendar cal = new GregorianCalendar();
-    // cal.setFirstDayOfWeek(Calendar.MONDAY);
-    // cal.add(Calendar.MONTH, 1);
-    // cal.set(Calendar.DAY_OF_MONTH, 1);
-    // if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
-    // cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ) {
-    // // !!! use of add() is critical here, if used roll() need then call
-    // getTime()
-    // // so date fields get computed before setting it to monday!!!
-    // cal.add(Calendar.WEEK_OF_MONTH, 1);
-    // cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-    // }
-    // cal.add(Calendar.MONTH, 1);
     cal.set(Calendar.DAY_OF_MONTH, 1);
     model.put("billingDate", cal.getTime());
-    model.put("billingMonth", ((new DecimalFormat("00")).format(cal
-        .get(Calendar.MONTH) + 1)));
-    model.put("scripts", new String[]{"calendar.js"});
+    model.put("billingMonth", String.format("%02d", cal.get(Calendar.MONTH) + 1));
 
-    // add Invoice sendign status string
-    model.put("countUnconfirmed", bMgr.getCountByStatus(invoicing, false,
-        null, null, null, null));
-    model.put("countConfirmed", bMgr.getCountByStatus(invoicing, true,
-        false, false, null, null));
-    model.put("countUndelivered", bMgr.getCountByStatus(invoicing, true,
-        true, false, null, null));
-    model.put("countDelivered", bMgr.getCountByStatus(invoicing, true,
-        true, true, null, null));
-    model.put("countSnail", bMgr.getCountByStatus(invoicing, true, null,
-        null, null, true));
-    model.put("countSent", bMgr.getCountByStatus(invoicing, true, true,
-        null, null, null));
-    model.put("countToSend", bMgr.getCountByStatus(invoicing, true, false,
-        false, null, null));
-    model.put("countAll", bMgr.getCountByStatus(invoicing, true, null,
-        null, null, null));
+    model.put("countUnconfirmed", bMgr.getCountByStatus(invoicing, false, null, null, null, null));
+    model.put("countConfirmed", bMgr.getCountByStatus(invoicing, true, false, false, null, null));
+    model.put("countUndelivered", bMgr.getCountByStatus(invoicing, true, true, false, null, null));
+    model.put("countDelivered", bMgr.getCountByStatus(invoicing, true, true, true, null, null));
+    model.put("countSnail", bMgr.getCountByStatus(invoicing, true, null, null, null, true));
+    model.put("countSent", bMgr.getCountByStatus(invoicing, true, true, null, null, null));
+    model.put("countToSend", bMgr.getCountByStatus(invoicing, true, false, false, null, null));
+    model.put("countAll", bMgr.getCountByStatus(invoicing, true, null, null, null, null));
     model.put("sumAll", bMgr.getInvoicingSum(invoicing));
     model.put("invoiceSendingEnabled", bMgr.getSendingEnabled(country));
-    if (!AbstractCRUDController.isTablePagination(request)
-        && invoicing != null)
-      request.getSession().setAttribute("billingAudit",
-          hmgr.getHistory(invoicing));
+
+    model.put("scripts", new String[]{"calendar.js"});
+    if (!AbstractCRUDController.isTablePagination(request) && invoicing != null)
+      request.getSession().setAttribute("billingAudit", hmgr.getHistory(invoicing));
+
     return new ModelAndView("billing/mainBilling", model);
+  }
+
+  private Country resolveCountry(final HttpServletRequest request, final Invoicing invoicing) {
+    return invoicing == null ? getRequestedCountry(request) : invoicing.getCountry();
   }
 
   public ModelAndView confirmBill(HttpServletRequest request, HttpServletResponse response) {
@@ -482,6 +444,14 @@ public class BillingController extends MultiActionController {
     for (String idString : getSelectedBillsIdSet(request))
       bills.add(bMgr.get(Long.valueOf(idString)));
     return bills;
+  }
+
+  private Invoicing getRequestedInvoicingOrNull(final HttpServletRequest request) {
+    Invoicing invoicing = null;
+    try {
+      invoicing = getRequestedInvoicing(request);
+    } catch (NullPointerException e) { /* ignored */ }
+    return invoicing;
   }
 
   private Invoicing getRequestedInvoicing(HttpServletRequest request) {
