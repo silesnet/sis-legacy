@@ -147,16 +147,11 @@ public class BillingManagerImpl implements BillingManager {
     dao.remove(bill);
   }
 
-  public void deleteAll(List<Bill> bills) {
-    dao.removeAll(bills);
-  }
-
   public void update(Bill bill) {
     dao.save(bill);
   }
 
-  public List<Bill> generateAll(Invoicing invoicing,
-                                List<Customer> customers, Date due, String lastInvoiceNo) {
+  public List<Bill> generateAll(Invoicing invoicing, List<Customer> customers, Date due, String lastInvoiceNo) {
     // fail fast
     if (due == null || lastInvoiceNo == null)
       throw new NullPointerException(
@@ -206,8 +201,7 @@ public class BillingManagerImpl implements BillingManager {
       try {
         // generate invoice for the customer, can be null
         newInvoice = generate(customer, due, nextInvoiceNo.toString());
-      }
-      catch (RuntimeException e) {
+      } catch (RuntimeException e) {
         // some periods are invalid
         log.info("Skipping customer (INVOICING ERROR): "
             + customer.getName());
@@ -312,7 +306,7 @@ public class BillingManagerImpl implements BillingManager {
       // add the item to the invoice
       BillItem invoiceItem = new BillItem(service
           .getBillItemText(customer.getContact().getAddress()
-          .getCountry()), itemAmount, service.getPrice());
+              .getCountry()), itemAmount, service.getPrice());
       invoiceItem.setBill(bill);
       bill.getItems().add(invoiceItem);
       // update real invoice period sides and counter
@@ -464,8 +458,7 @@ public class BillingManagerImpl implements BillingManager {
         // increment emailed bills counter
         if (emailedCounter != null)
           emailedCounter.setValue(emailedCounter.intValue() + 1);
-      }
-      catch (MailParseException e) {
+      } catch (MailParseException e) {
         // bill parse email error, autid it
         hmgr.insertSystemBillingAudit(invoicing, c,
             "mainBilling.msg.emailAddressError",
@@ -508,8 +501,7 @@ public class BillingManagerImpl implements BillingManager {
           emailReminder(bill);
           // increment emailed bills counter
           emailedCounter++;
-        }
-        catch (MailParseException e) {
+        } catch (MailParseException e) {
           // bill parse email error, autid it
           if (invoicing != null)
             hmgr.insertSystemBillingAudit(invoicing, customer,
@@ -517,8 +509,7 @@ public class BillingManagerImpl implements BillingManager {
                 "mainBilling.status.skipped");
           log.warn("Bill email parse exception: "
               + customer.getName());
-        }
-        catch (MailException e) {
+        } catch (MailException e) {
           // bill send email error, autid it
           if (invoicing != null)
             hmgr.insertSystemBillingAudit(invoicing, customer,
@@ -531,8 +522,7 @@ public class BillingManagerImpl implements BillingManager {
         log.debug("Sleeping for " + emailSendingDelay + "s...");
         try {
           Thread.sleep(emailSendingDelay * 1000);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
           log.debug("Exception occured while sleeping: " + e);
         }
       }
@@ -557,15 +547,13 @@ public class BillingManagerImpl implements BillingManager {
         email(bill);
         // increment emailed bills counter
         emailedCounter++;
-      }
-      catch (MailParseException e) {
+      } catch (MailParseException e) {
         // bill parse email error, autid it
         // hmgr.insertSystemBillingAudit(customer,
         // "mainBilling.msg.emailAddressError",
         // "mainBilling.status.skipped");
         log.warn("Bill email parse exception: " + customer.getName());
-      }
-      catch (MailException e) {
+      } catch (MailException e) {
         // bill send email error, autid it
         // hmgr.insertSystemBillingAudit(customer,
         // "mainBilling.msg.emailSendingError",
@@ -576,8 +564,7 @@ public class BillingManagerImpl implements BillingManager {
       log.debug("Sleeping for " + emailSendingDelay + "s...");
       try {
         Thread.sleep(emailSendingDelay * 1000);
-      }
-      catch (InterruptedException e) {
+      } catch (InterruptedException e) {
         log.debug("Exception occured while sleeping: " + e);
       }
     }
@@ -635,7 +622,7 @@ public class BillingManagerImpl implements BillingManager {
         StringBuffer text = new StringBuffer();
         text.append(MessagesUtils.getMessage(
             "billEmail.reminder.text.header", bill.getPeriod()
-                .getPeriodString(), locale));
+            .getPeriodString(), locale));
         text.append(MessagesUtils.getMessage(
             "billEmail.reminder.text.prefix", locale));
         text.append(MessagesUtils.getMessage("billEmail.text.link",
@@ -657,8 +644,7 @@ public class BillingManagerImpl implements BillingManager {
     Bill bill = null;
     try {
       bill = dao.get(uuid);
-    }
-    catch (ObjectRetrievalFailureException e) {
+    } catch (ObjectRetrievalFailureException e) {
     }
     if (bill != null) {
       // we have bill to confirm delivery
@@ -901,7 +887,7 @@ public class BillingManagerImpl implements BillingManager {
       writer.printf("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",",
           escapeQuotes(customerName), escapeQuotes(customerLongName),
           a.getCity(), a.getPostalCode(), a.getStreet(), customer
-              .getDIC());
+          .getDIC());
       // dates
       String invoicingTimeStamp = dFmt.format(b.getBillingDate())
           .substring(0, 8)
@@ -917,7 +903,7 @@ public class BillingManagerImpl implements BillingManager {
           .printf(
               "%s,0.0000,%.4f,0,0,1,0,\"%s\",,,0.0000,0.0000,\"PLN\",1.0000,,,,,0,0,0,,0.0000,,0.0000,\"Polska\",\"PL\",0",
               dFmt.format(b.getPurgeDate()), b
-                  .getTotalPriceVatNotRounded(), exportBy);
+              .getTotalPriceVatNotRounded(), exportBy);
       writer.print("\r\n\r\n");
       // add invoice items, header first
       writer.print("[ZAWARTOSC]\r\n");

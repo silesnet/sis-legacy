@@ -42,8 +42,6 @@ public interface BillingManager {
 
   public void delete(Bill bill);
 
-  public void deleteAll(List<Bill> bills);
-
   public void update(Bill bill);
 
   /**

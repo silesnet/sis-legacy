@@ -351,20 +351,6 @@ public class BillingController extends MultiActionController {
         + invoicing.getId()));
   }
 
-  public ModelAndView deleteUnconfirmed(HttpServletRequest request, HttpServletResponse response) {
-    log.debug("Deleting unconfirmed bills.");
-    // get unconfirmed bills and delete em
-    Invoicing invoicing = getRequestedInvoicing(request);
-    List<Bill> bills = bMgr.getByStatus(invoicing, false, null, null, null);
-    bMgr.deleteAll(bills);
-    // autdit it and set success message
-    MessagesUtils.setCodedSuccessMessage(request,
-        "mainBilling.deleteUnconfirmed.success");
-    // return to main billing
-    return new ModelAndView(new RedirectView(request.getContextPath()
-        + "/billing/view.html?action=mainBilling"));
-  }
-
   public ModelAndView clearAudit(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Clearing billing audit.");
     hmgr.clearBillingAudit();
