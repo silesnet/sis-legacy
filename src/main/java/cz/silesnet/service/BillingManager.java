@@ -75,8 +75,6 @@ public interface BillingManager {
   /**
    * Persist, send and export given bills.
    */
-  public List<Bill> sendAll(List<Bill> bills);
-
   public Bill send(Bill bill, MutableInt emailedCounter);
 
   public void reSendAll(Invoicing invoicing, List<Bill> bills);

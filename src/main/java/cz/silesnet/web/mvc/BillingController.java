@@ -320,22 +320,6 @@ public class BillingController extends MultiActionController {
         + invoicing.getId()));
   }
 
-  public ModelAndView sendConfirmed(HttpServletRequest request, HttpServletResponse response) {
-    log.debug("Sending confirmed bills.");
-    // get confirmed bills
-    Invoicing invoicing = getRequestedInvoicing(request);
-    List<Bill> bills = bMgr
-        .getByStatus(invoicing, true, false, false, null);
-    // sent em
-    List<Bill> sentBills = bMgr.sendAll(bills);
-    // persist bills change (status: sent, not confirmed)
-    bMgr.updateAll(sentBills);
-    MessagesUtils.setCodedSuccessMessage(request,
-        "mainBilling.sendConfirmed.success");
-    return new ModelAndView(new RedirectView(request.getContextPath()
-        + "/billing/view.html?action=mainBilling"));
-  }
-
   public ModelAndView exportSentToWinduo(HttpServletRequest request, HttpServletResponse response) throws IOException {
     log.debug("Exporting sent bills in Winduo import format.");
     Invoicing invoicing = getRequestedInvoicing(request);

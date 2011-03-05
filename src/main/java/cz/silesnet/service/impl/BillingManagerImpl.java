@@ -454,49 +454,6 @@ public class BillingManagerImpl implements BillingManager {
     return new Period(cFrom.getTime(), cTo.getTime());
   }
 
-  public List<Bill> sendAll(List<Bill> bills) {
-    // hmgr.insertSystemBillingAudit(null, "mainBilling.msg.sendingStarted",
-    // "******");
-    // int allBillsSize = bills.size();
-    // send all given bills
-    MutableInt emailedCounter = new MutableInt(0);
-    Iterator<Bill> bIter = bills.iterator();
-    while (bIter.hasNext()) {
-      Bill bill = bIter.next();
-      Customer customer = dao.fetchCustomer(bill);
-      try {
-        send(bill, emailedCounter);
-      }
-      catch (MailException e) {
-        // email can not be sent, mail parse exceptions are already
-        // caught by send()
-        // hmgr.insertSystemBillingAudit(customer,
-        // "mainBilling.msg.emailSendingError",
-        // "mainBilling.status.error");
-        log.warn("Bill email sending exception: " + customer.getName());
-        // remove bill from processing
-        bIter.remove();
-      }
-      // due to anti-spam protection wait for certain time
-      log.debug("Sleeping for " + emailSendingDelay + "s...");
-      try {
-        Thread.sleep(emailSendingDelay * 1000);
-      }
-      catch (InterruptedException e) {
-        log.debug("Exception occured while sleeping: " + e);
-      }
-    }
-    // audit emailed bills
-    // hmgr.insertSystemBillingAudit(null,
-    // "mainBilling.msg.sendingEmailsFinished", emailedCounter + "/" +
-    // allBillsSize);
-    // audit sending finished
-    // hmgr.insertSystemBillingAudit(null,
-    // "mainBilling.msg.sendingFinished", bills.size() + "/" + allBillsSize
-    // + " ***");
-    return bills;
-  }
-
   public Bill send(Bill bill, MutableInt emailedCounter) {
     Customer c = dao.fetchCustomer(bill);
     Invoicing invoicing = getInvoicing(bill.getInvoicingId());
