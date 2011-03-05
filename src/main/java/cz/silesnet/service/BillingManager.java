@@ -92,17 +92,6 @@ public interface BillingManager {
    */
   public Bill confirmDelivery(String uuid);
 
-  /**
-   * Exports ginven bills to write in WinDuo format.
-   *
-   * @param bills  list of bills to export
-   * @param writer initialized writer for output data
-   */
-  public void exportAllToWinduo(Invoicing invoicing, List<Bill> bills,
-                                PrintWriter writer);
-
-  public void exportToWinDuo(Bill bill, PrintWriter writer);
-
   public void sendNextInvoice();
 
   public boolean getSendingEnabled(Country country);

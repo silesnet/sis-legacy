@@ -320,23 +320,6 @@ public class BillingController extends MultiActionController {
         + invoicing.getId()));
   }
 
-  public ModelAndView exportSentToWinduo(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    log.debug("Exporting sent bills in Winduo import format.");
-    Invoicing invoicing = getRequestedInvoicing(request);
-    // set response encoding properly
-    response.setCharacterEncoding("Cp1250");
-    // use text/plain to display in browser
-    response.setContentType("text/csv;charset=windows-1250");
-    // dump sent bills to response writer
-    // bMgr.exportAllToWinduo(bMgr.getByStatus(null, true, null, false),
-    // response.getWriter());
-    // because sending is now delayed let's export all confirmed and not
-    // archived
-    bMgr.exportAllToWinduo(invoicing, bMgr.getByStatus(invoicing, true,
-        null, null, null), response.getWriter());
-    return null;
-  }
-
   public ModelAndView exportSentToInsert(HttpServletRequest request, HttpServletResponse response) throws IOException {
     log.debug("Exporting sent bills in Insert XML format.");
     Invoicing invoicing = getRequestedInvoicing(request);
@@ -366,31 +349,6 @@ public class BillingController extends MultiActionController {
     return new ModelAndView(new RedirectView(request.getContextPath()
         + "/billing/view.html?action=mainBilling&invoicingId="
         + invoicing.getId()));
-  }
-
-  // FIXME
-
-  public ModelAndView exportToWinduo(HttpServletRequest request,
-                                     HttpServletResponse response) throws IOException,
-      ServletRequestBindingException {
-    log.debug("Exporting bill in Winduo import format.");
-    Long id = ServletRequestUtils.getRequiredLongParameter(request,
-        "billId");
-    log.debug("Received bill id: " + id);
-    // set response encoding properly
-    response.setCharacterEncoding("Cp1250");
-    // use text/plain to display in browser
-    response.setContentType("text/csv;charset=windows-1250");
-    // dump bill to response writer
-    List<Bill> bills = new ArrayList<Bill>();
-    bills.add(bMgr.get(id));
-    // FIXME do it via exportBillToWinDuo(bill, writer), need implement it
-    // first
-    // koz exportBills generates entries in billing audit!
-    bMgr.exportAllToWinduo(
-        bMgr.getInvoicing(bills.get(0).getInvoicingId()), bills,
-        response.getWriter());
-    return null;
   }
 
   public ModelAndView archiveDelivered(HttpServletRequest request, HttpServletResponse response) {
