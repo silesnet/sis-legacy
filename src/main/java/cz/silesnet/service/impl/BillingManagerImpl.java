@@ -151,7 +151,7 @@ public class BillingManagerImpl implements BillingManager {
     dao.save(bill);
   }
 
-  public List<Bill> generateAll(Invoicing invoicing, List<Customer> customers, Date due, String lastInvoiceNo) {
+  private List<Bill> generateAll(Invoicing invoicing, List<Customer> customers, Date due, String lastInvoiceNo) {
     // fail fast
     if (due == null || lastInvoiceNo == null)
       throw new NullPointerException(
@@ -278,7 +278,7 @@ public class BillingManagerImpl implements BillingManager {
     return invoices;
   }
 
-  public Bill generate(Customer customer, Date due, String number) {
+  private Bill generate(Customer customer, Date due, String number) {
     // get ivoice period for customer according to his lastly billed date
     Period invoicePeriod = getIvoicePeriod(customer.getBilling(), due);
     // no valid invoice period or no services means no invoice
@@ -737,7 +737,6 @@ public class BillingManagerImpl implements BillingManager {
   @SuppressWarnings("unchecked")
   public void invoice(Invoicing invoicing) {
     // get customers to invoice
-    // prepare example customer
     Customer exampleCustomer = new Customer();
     exampleCustomer.setBilling(new Billing());
     exampleCustomer.getBilling().setFrequency(null);
@@ -748,8 +747,7 @@ public class BillingManagerImpl implements BillingManager {
     exampleCustomer.setContact(new Contact());
     exampleCustomer.getContact().setAddress(new Address());
     // get customers from invocing country
-    exampleCustomer.getContact().getAddress().setCountry(
-        invoicing.getCountry());
+    exampleCustomer.getContact().getAddress().setCountry(invoicing.getCountry());
     List<Customer> customersToInvoice = cMgr.getByExample(exampleCustomer);
     // generate bills for selected customers
     List<Bill> bills = generateAll(invoicing, customersToInvoice, invoicing

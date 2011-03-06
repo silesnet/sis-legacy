@@ -92,8 +92,7 @@ public class BillingController extends MultiActionController {
 
   public ModelAndView confirmBill(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Confirming selected bills.");
-    List<Bill> bills = getSelectedBills(request);
-    for (Bill bill : bills) {
+    for (Bill bill : getSelectedBills(request)) {
       bill.setIsConfirmed(true);
       bMgr.update(bill);
     }
@@ -103,8 +102,7 @@ public class BillingController extends MultiActionController {
 
   public ModelAndView unconfirmBill(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Unconfirming selected bills.");
-    List<Bill> bills = getSelectedBills(request);
-    for (Bill bill : bills) {
+    for (Bill bill : getSelectedBills(request)) {
       bill.setIsConfirmed(false);
       bMgr.update(bill);
     }
@@ -114,8 +112,7 @@ public class BillingController extends MultiActionController {
 
   public ModelAndView deliverBill(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Delivering selected bills.");
-    List<Bill> bills = getSelectedBills(request);
-    for (Bill bill : bills) {
+    for (Bill bill : getSelectedBills(request)) {
       bill.setIsSent(true);
       bill.setIsDelivered(true);
       bMgr.update(bill);
@@ -127,34 +124,26 @@ public class BillingController extends MultiActionController {
   public ModelAndView confirmDelivery(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Confirming bill delivery from customer.");
     Map<String, Object> model = new HashMap<String, Object>();
-    String uuid = null;
-    Bill bill = null;
     String view = "billing/notFoundBill";
-    try {
-      uuid = ServletRequestUtils.getStringParameter(request, "uuid");
-    } catch (ServletRequestBindingException e) {
-    }
-    if (uuid != null) {
-      // we have uuid try to get bill
+    String uuid = ServletRequestUtils.getStringParameter(request, "uuid", null);
+    Bill bill = null;
+    if (uuid != null)
       bill = bMgr.confirmDelivery(uuid);
-    }
     if (bill != null) {
-      // we have delivery confirmed bill
-      // persist delivery
       bMgr.update(bill);
-      // show it
       fetchInvoicedCustomer(bill);
-      String localeString = bill.getInvoicedCustomer().getContact()
-          .getAddress().getCountry().getLocale().toString();
+      String localeString = getShortLocale(bill);
       view = "billing/printBillTxt_" + localeString;
       model.put("bills", new Bill[]{bill});
-      log.info("DELIVERY of bill no " + bill.getNumber()
-          + " CONFIRMED by " + bill.getInvoicedCustomer().getName());
+      log.info("DELIVERY of bill no " + bill.getNumber() + " CONFIRMED by " + bill.getInvoicedCustomer().getName());
     } else {
-      // show sorry msg
       model.put("uuid", uuid);
     }
     return new ModelAndView(view, model);
+  }
+
+  private String getShortLocale(final Bill bill) {
+    return bill.getInvoicedCustomer().getContact().getAddress().getCountry().getLocale().toString();
   }
 
   public ModelAndView emailBill(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
@@ -163,16 +152,13 @@ public class BillingController extends MultiActionController {
     try {
       bMgr.email(bill);
       // set success message
-      MessagesUtils.setCodedSuccessMessage(request,
-          "mainBilling.sendingEmailSuccess", bill.getNumber());
+      MessagesUtils.setCodedSuccessMessage(request, "mainBilling.sendingEmailSuccess", bill.getNumber());
     } catch (MailParseException e) {
       // wrong address
-      MessagesUtils.setCodedFailureMessage(request,
-          "mainBilling.sendingEmailAddressFailure", bill.getNumber());
+      MessagesUtils.setCodedFailureMessage(request, "mainBilling.sendingEmailAddressFailure", bill.getNumber());
     } catch (MailException e) {
       // sending error
-      MessagesUtils.setCodedFailureMessage(request,
-          "mainBilling.sendingEmailFailure", bill.getNumber());
+      MessagesUtils.setCodedFailureMessage(request, "mainBilling.sendingEmailFailure", bill.getNumber());
     }
     return goBack(request, response);
   }
@@ -181,8 +167,7 @@ public class BillingController extends MultiActionController {
     log.debug("Emailing bills to customers.");
     List<Bill> bills = getSelectedBills(request);
     bMgr.emailAll(bills);
-    MessagesUtils.setCodedSuccessMessage(request,
-        "mainBilling.sendingEmailsSuccess");
+    MessagesUtils.setCodedSuccessMessage(request, "mainBilling.sendingEmailsSuccess");
     return goBack(request, response);
   }
 
@@ -191,8 +176,7 @@ public class BillingController extends MultiActionController {
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
     fetchInvoicedCustomer(bill);
-    String localeString = bill.getInvoicedCustomer().getContact()
-        .getAddress().getCountry().getLocale().toString();
+    String localeString = getShortLocale(bill);
     model.put("bills", new Bill[]{bill});
     return new ModelAndView("billing/printBillTxt_" + localeString, model);
   }
@@ -201,13 +185,11 @@ public class BillingController extends MultiActionController {
     log.debug("Printing text bills.");
     Map<String, Object> model = new HashMap<String, Object>();
     List<Bill> bills = getSelectedBills(request);
-    for (Bill bill : bills) {
+    for (Bill bill : bills)
       fetchInvoicedCustomer(bill);
-    }
     String localeString = "cs";
     if (bills.size() > 0) {
-      localeString = bills.get(0).getInvoicedCustomer().getContact()
-          .getAddress().getCountry().getLocale().toString();
+      localeString = getShortLocale(bills.get(0));
     }
     model.put("bills", bills);
     return new ModelAndView("billing/printBillTxt_" + localeString, model);
@@ -216,70 +198,64 @@ public class BillingController extends MultiActionController {
   @SuppressWarnings("unchecked")
   public ModelAndView detailBill(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     log.debug("Bill detail.");
-    // get bill id from request
-    Long id = ServletRequestUtils.getRequiredLongParameter(request,
-        "billId");
-    log.debug("Received bill id: " + id);
-    // get bill
-    Bill bill = bMgr.get(id);
-    // prepare model using binders for convenience
-    ServletRequestDataBinder binder = new ServletRequestDataBinder(bill,
-        "bill");
-    binder.registerCustomEditor(Date.class, new CustomDateEditor(
-        new SimpleDateFormat("dd.MM.yyyy"), true));
+    Bill bill = getRequestedBill(request);
+    ServletRequestDataBinder binder = new ServletRequestDataBinder(bill, "bill");
+    binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd.MM.yyyy"), true));
     Map model = binder.getBindingResult().getModel();
     Customer customer = bMgr.fetchCustomer(bill);
-    if (Country.PL == customer.getContact().getAddress().getCountry()) {
+    if (Country.PL == customer.getContact().getAddress().getCountry())
       model.put("money_key", "money.label.pl");
-    } else {
+    else
       model.put("money_key", "money.label.cz");
-    }
     return new ModelAndView("billing/viewBill", model);
   }
 
   public ModelAndView prepareBills(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Prepare bills STARTED...");
-    Date due = null;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-    try {
-      String dueStr = ServletRequestUtils.getRequiredStringParameter(
-          request, "billingDate");
-      dateFormat.setLenient(false);
-      due = dateFormat.parse(dueStr);
-    } catch (Exception e) {
-      // set failure message and go back to mainBilling
-      MessagesUtils.setCodedFailureMessage(request,
-          "mainBilling.dateParseFailure");
-      return mainBilling(request, response);
-    }
-    log.debug("Bills due date: " + due);
-    String numbering = ServletRequestUtils.getStringParameter(request,
-        "billsNumbering", "");
-    try {
-      Long.valueOf(numbering);
-    } catch (NumberFormatException e) {
-      // set failure message ang go back to mainBilling
-      MessagesUtils.setCodedFailureMessage(request,
-          "mainBilling.numberingParseFailure");
-      return mainBilling(request, response);
-    }
-    log.debug("Bills numbering: " + numbering);
-    // create Invoicing and invoice customers
+    Date due = getBillingDate(request);
+    if (due == null)
+      failAndGoToMainBilling("mainBilling.dateParseFailure", request, response);
+    String numbering = getBillingNumbering(request);
+    if (numbering == null)
+      failAndGoToMainBilling("mainBilling.numberingParseFailure", request, response);
+
     Invoicing invoicing = new Invoicing();
     invoicing.setCountry(getRequestedCountry(request));
     invoicing.setInvoicingDate(due);
     invoicing.setName(invoicing.getProposedName());
     invoicing.setNumberingBase(numbering);
-    // persist the invoicing
     bMgr.insertInvoicing(invoicing);
     bMgr.invoice(invoicing);
     log.debug("Prepare bills FINISHED.");
-    MessagesUtils.setCodedSuccessMessage(request,
-        "mainBilling.prepareBills.success", new Object[]{dateFormat
-            .format(due)});
-    return new ModelAndView(new RedirectView(request.getContextPath()
-        + "/billing/view.html?action=mainBilling&invoicingId="
-        + invoicing.getId()));
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    MessagesUtils.setCodedSuccessMessage(request, "mainBilling.prepareBills.success", new Object[]{dateFormat.format(due)});
+    return new ModelAndView(new RedirectView(request.getContextPath() + "/billing/view.html?action=mainBilling&invoicingId=" + invoicing.getId()));
+  }
+
+  private Date getBillingDate(HttpServletRequest request) {
+    Date date = null;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    dateFormat.setLenient(false);
+    try {
+      String dueStr = ServletRequestUtils.getRequiredStringParameter(request, "billingDate");
+      date = dateFormat.parse(dueStr);
+    } catch (Exception e) { /* IGNORED*/ }
+    log.debug("Bills due date: " + date);
+    return date;
+  }
+
+  private String getBillingNumbering(HttpServletRequest request) {
+    String numbering = ServletRequestUtils.getStringParameter(request, "billsNumbering", null);
+    try {
+      Long.valueOf(numbering);
+    } catch (NumberFormatException e) { /* IGNORE */ }
+    log.debug("Bills numbering: " + numbering);
+    return numbering;
+  }
+
+  private ModelAndView failAndGoToMainBilling(String messageKey, HttpServletRequest request, HttpServletResponse response) {
+    MessagesUtils.setCodedFailureMessage(request, messageKey);
+    return mainBilling(request, response);
   }
 
   public ModelAndView exportSentToInsert(HttpServletRequest request, HttpServletResponse response) throws IOException {

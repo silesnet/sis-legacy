@@ -45,30 +45,6 @@ public interface BillingManager {
   public void update(Bill bill);
 
   /**
-   * Generate bills that are to be issued due to given date. Bills are not
-   * persisted, they need to be confirmed first.
-   *
-   * @param due       due date.
-   * @param numbering
-   * @return list of bills that are applicable due given date. Bill includes
-   *         periodical and one-time services as bill items.
-   */
-  public List<Bill> generateAll(Invoicing invoicing,
-                                List<Customer> customers, Date due, String numbering);
-
-  /**
-   * Invoice all customers.
-   *
-   * @param due
-   * @param invoiceNumberingBase
-   */
-
-  public void invoiceAllCustomers(Invoicing invoicing, Date due,
-                                  String invoiceNumberingBase);
-
-  public Bill generate(Customer customer, Date due, String number);
-
-  /**
    * Persist, send and export given bills.
    */
   public Bill send(Bill bill, MutableInt emailedCounter);
