@@ -151,7 +151,7 @@ public class BillingManagerImpl implements BillingManager {
     dao.save(bill);
   }
 
-  private List<Bill> generateAll(Invoicing invoicing, List<Customer> customers, Date due, String lastInvoiceNo) {
+  public List<Bill> generateAll(Invoicing invoicing, List<Customer> customers, Date due, String lastInvoiceNo) {
     // fail fast
     if (due == null || lastInvoiceNo == null)
       throw new NullPointerException(
@@ -278,7 +278,7 @@ public class BillingManagerImpl implements BillingManager {
     return invoices;
   }
 
-  private Bill generate(Customer customer, Date due, String number) {
+  public Bill generate(Customer customer, Date due, String number) {
     // get ivoice period for customer according to his lastly billed date
     Period invoicePeriod = getIvoicePeriod(customer.getBilling(), due);
     // no valid invoice period or no services means no invoice
