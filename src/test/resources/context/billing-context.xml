@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+  <bean id="billingContextCz" class="cz.silesnet.model.invoice.BillingContextBean">
+    <property name="vatPercent" value="20" />
+    <property name="vatRounding" value="SCALE_OF_2_HALF_UP_ROUNDING" />
+    <property name="totalRounding" value="SCALE_OF_0_HALF_UP_ROUNDING" />
+    <property name="purgeDays" value="14" />
+  </bean>
+</beans>

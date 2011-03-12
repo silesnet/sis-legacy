@@ -41,9 +41,6 @@ import java.util.*;
 public class BillingManagerImpl implements BillingManager {
   private static final int VAT_PL = 23;
 
-  // ~ Instance fields
-  // --------------------------------------------------------
-
   protected final Log log = LogFactory.getLog(getClass());
 
   private BillDAO dao;
@@ -67,11 +64,6 @@ public class BillingManagerImpl implements BillingManager {
   private static int sVat = 19;
 
   private static int sPurgeDateDays = 14;
-
-  // private UUIDGenerator uuidGen = UUIDGenerator.getInstance();
-
-  // ~ Methods
-  // ----------------------------------------------------------------
 
   public void setCustomerManager(CustomerManager mgr) {
     cMgr = mgr;
