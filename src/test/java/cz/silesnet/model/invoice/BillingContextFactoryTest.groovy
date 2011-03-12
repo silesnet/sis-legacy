@@ -4,6 +4,7 @@ import spock.lang.Specification
 
 import cz.silesnet.model.enums.Country
 import cz.silesnet.model.Invoicing
+import org.springframework.context.support.ClassPathXmlApplicationContext
 
 /**
  * User: der3k
@@ -20,5 +21,15 @@ class BillingContextFactoryTest extends Specification {
       invoicing.getCountry() >> Country.CZ
     then:
       factory.billingContextFor(invoicing) == context
+  }
+
+  def 'instantiates fro Spring XML configuration'() {
+    def spring = new ClassPathXmlApplicationContext('context/billing-context.xml')
+    def factory = spring.getBean('billingContextFactory', BillingContextFactory)
+    def invoicing = new Invoicing()
+    invoicing.setCountry(Country.CZ)
+  expect:
+    factory != null
+    factory.billingContextFor(invoicing) != null
   }
 }

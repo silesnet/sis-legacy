@@ -2,7 +2,6 @@ package cz.silesnet.model.invoice;
 
 import cz.silesnet.model.Invoicing;
 import cz.silesnet.model.enums.Country;
-import cz.silesnet.model.invoice.BillingContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +16,10 @@ public class BillingContextFactory {
 
   public void add(Country country, BillingContext context) {
     contexts.put(country, context);
+  }
+
+  public void setContextMap(Map<Country, BillingContext> contexts) {
+    this.contexts.putAll(contexts);
   }
 
   public BillingContext billingContextFor(Invoicing invoicing) {
