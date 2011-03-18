@@ -12,7 +12,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Component class for customer billing.
@@ -206,5 +208,49 @@ public class Billing implements HistoricToString, Serializable {
     } else {
       return "";
     }
+  }
+
+  public Period nextBillPeriod(Date due) {
+    if (!isInvoicingMonth(due))
+      return Period.NONE;
+    Calendar invoiceFrom = nextInvoiceFrom();
+    Calendar invoiceTo = nextInvoiceTo(due);
+    if (invoiceFrom.after(invoiceTo))
+      return Period.NONE;
+    return new Period(invoiceFrom.getTime(), invoiceTo.getTime());
+  }
+
+  protected boolean isInvoicingMonth(Date due) {
+    return ((getMonth(due) - 1) % fFrequency.getMonths()) == 0;
+  }
+
+  protected Calendar nextInvoiceFrom() {
+    Calendar invoiceFrom = calendarFor(getLastlyBilled());
+    invoiceFrom.add(Calendar.DAY_OF_MONTH, 1);
+    return invoiceFrom;
+  }
+
+  protected Calendar nextInvoiceTo(Date due) {
+    Calendar invoiceTo = firstDayOfMonth(due);
+    if (!getIsBilledAfter()) // billing forward
+      invoiceTo.add(Calendar.MONTH, fFrequency.getMonths());
+    invoiceTo.add(Calendar.DAY_OF_MONTH, -1);
+    return invoiceTo;
+  }
+
+  protected int getMonth(Date date) {
+    return calendarFor(date).get(Calendar.MONTH) + 1;
+  }
+
+  protected Calendar firstDayOfMonth(Date date) {
+    Calendar first = calendarFor(date);
+    first.set(Calendar.DAY_OF_MONTH, 1);
+    return first;
+  }
+
+  private Calendar calendarFor(Date date) {
+    Calendar calendar = GregorianCalendar.getInstance();
+    calendar.setTime(date);
+    return calendar;
   }
 }

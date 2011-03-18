@@ -457,6 +457,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.APRIL, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     lastlyBilled.set(2006, Calendar.APRIL, 15);
     due.set(2006, Calendar.APRIL, 10);
@@ -467,6 +468,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.APRIL, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     // billing forward, Q
     b.setFrequency(Frequency.Q);
@@ -482,6 +484,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     // lastlyBilled not last of month, Q
     lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
@@ -493,6 +496,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     // odd due date
     lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
@@ -504,6 +508,8 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    // FIXME
+//    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     lastlyBilled.set(2006, Calendar.MAY, 15);
     due.set(2006, Calendar.MAY, 10);
@@ -514,6 +520,8 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    // FIXME
+//    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     lastlyBilled.set(2006, Calendar.MARCH, 31);
     due.set(2006, Calendar.MARCH, 10);
@@ -521,6 +529,7 @@ public class BillingManagerBillsTest {
     p = bMgr.getIvoicePeriod(b, due.getTime());
     log.debug("Billing period : " + p);
     assertNull(p);
+    assertTrue(b.nextBillPeriod(due.getTime()) == Period.NONE);
 
     lastlyBilled.set(2005, Calendar.DECEMBER, 31);
     due.set(2006, Calendar.APRIL, 2);
@@ -531,6 +540,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     // billing backward, MONTHLY
     b.setFrequency(Frequency.MONTHLY);
@@ -546,6 +556,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
     due.set(2006, Calendar.APRIL, 10);
@@ -556,6 +567,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     lastlyBilled.set(2006, Calendar.MARCH, 15);
     due.set(2006, Calendar.APRIL, 10);
@@ -566,6 +578,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     lastlyBilled.set(2006, Calendar.MARCH, 30);
     due.set(2006, Calendar.APRIL, 10);
@@ -576,6 +589,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     // billing backward, Q
     b.setFrequency(Frequency.Q);
@@ -591,6 +605,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
+    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
 
     // if due date is odd do not generate bill
     lastlyBilled.set(2006, Calendar.MARCH, 15);
@@ -599,6 +614,7 @@ public class BillingManagerBillsTest {
     p = bMgr.getIvoicePeriod(b, due.getTime());
     log.debug("Billing period : " + p);
     assertNull(p);
+    assertTrue(b.nextBillPeriod(due.getTime()) == Period.NONE);
 
   }
 

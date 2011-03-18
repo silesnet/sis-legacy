@@ -16,9 +16,7 @@ public class Invoicing extends Entity implements Historic {
   // it depends on id value in db !!!
   private static final Long sHistoryTypeLabelId = Long.valueOf(43);
 
-  private static final String[] sDiffExcludeFields = {"class$0",
-      "serialVersionUID", "sHistoryTypeLabelId", "sDiffExcludeFields",
-      "fId", "fHistoryId"};
+  private static final String[] sDiffExcludeFields = {"class$0", "serialVersionUID", "sHistoryTypeLabelId", "sDiffExcludeFields", "fId", "fHistoryId"};
 
   private Long historyId;
 
@@ -84,11 +82,9 @@ public class Invoicing extends Entity implements Historic {
 
   public String getProposedName() {
     if (country == null || invoicingDate == null)
-      throw new IllegalStateException(
-          "Country or invoicing date not set!");
+      throw new IllegalStateException("Country or invoicing date not set!");
     SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
-    return country.getShortName().toUpperCase() + " "
-        + dateFormat.format(invoicingDate);
+    return country.getShortName().toUpperCase() + " " + dateFormat.format(invoicingDate);
   }
 
 }

@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +21,9 @@ import java.util.GregorianCalendar;
  * @author Richard Sikora
  */
 public class Period implements HistoricToString, Serializable {
+  private static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
+  public static final Period NONE = new NoPeriod();
 
   private static final long serialVersionUID = -2754636726635894230L;
 
@@ -38,6 +42,7 @@ public class Period implements HistoricToString, Serializable {
   public Period() {
     super();
   }
+
 
   /**
    * @param from
@@ -82,11 +87,6 @@ public class Period implements HistoricToString, Serializable {
 
   public String getHistoricToString() {
     return getPeriodString();
-  }
-
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this,
-        ToStringStyle.MULTI_LINE_STYLE);
   }
 
   public String getPeriodString() {
@@ -233,6 +233,23 @@ public class Period implements HistoricToString, Serializable {
 
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
+  }
+
+
+  public String toString() {
+    StringBuilder period = new StringBuilder(24);
+    period.append("[")
+        .append(FORMAT.format(getFrom()))
+        .append(", ")
+        .append(FORMAT.format(getTo()))
+        .append("]");
+
+    return period.toString();
+//    return ToStringBuilder.reflectionToString(this,
+//        ToStringStyle.MULTI_LINE_STYLE);
+  }
+
+  public static class NoPeriod extends Period {
   }
 
 }
