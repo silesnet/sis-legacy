@@ -11,7 +11,7 @@ import cz.silesnet.model.Period
  * Date: 17.3.11
  * Time: 19:04
  */
-class FrequencyTest extends Specification {
+class FrequencyPeriodTest extends Specification {
 
   private static final DateFormat TIME_FORMAT = new SimpleDateFormat('HH:mm:ss.SSS')
 

@@ -2,8 +2,6 @@ package cz.silesnet.model;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -15,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static java.util.Calendar.*;
+
 /**
  * Class to hold time periods.
  *
@@ -23,7 +23,12 @@ import java.util.GregorianCalendar;
 public class Period implements HistoricToString, Serializable {
   private static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-  public static final Period NONE = new NoPeriod();
+  public static final Period NONE = new Period() {
+    @Override
+    public String toString() {
+      return "[ , ]";
+    }
+  };
 
   private static final long serialVersionUID = -2754636726635894230L;
 
@@ -235,6 +240,56 @@ public class Period implements HistoricToString, Serializable {
     return HashCodeBuilder.reflectionHashCode(this);
   }
 
+  public Period duplicate() {
+    return new Period(new Date(getFrom().getTime()), new Date(getTo().getTime()));
+  }
+
+  public Period daysLeadingToFirstOfNextMonth() {
+    if (isWithinOneMonth())
+      return Period.NONE;
+
+    Calendar from = calendarFrom(getFrom());
+    if (from.get(DAY_OF_MONTH) == 1)
+      return Period.NONE; // it is in more than o month and starts on first => no leading
+
+    Calendar to = calendarFrom(getFrom());
+    to.set(DAY_OF_MONTH, to.getActualMaximum(DAY_OF_MONTH));
+    return new Period(getFrom(), to.getTime());
+  }
+
+  public Period daysTrailingAfterLastOfPreviousMonth() {
+    if (isWithinOneMonth())
+      return Period.NONE;
+
+    Calendar to = calendarFrom(getTo());
+    if (to.get(DAY_OF_MONTH) == to.getActualMaximum(DAY_OF_MONTH))
+      return Period.NONE; // it is in more than a month and ends on last => no trailer
+
+    Calendar from = calendarFrom(getTo());
+    from.set(DAY_OF_MONTH, 1);
+    return new Period(from.getTime(), to.getTime());
+  }
+
+  public boolean isWithinOneMonth() {
+    Calendar from = calendarFrom(getFrom());
+    Calendar to = calendarFrom(getTo());
+    return from.get(MONTH) == to.get(MONTH)
+        && from.get(YEAR) == to.get(YEAR);
+  }
+
+  public boolean isWholeMonthsOnly() {
+    Calendar from = calendarFrom(getFrom());
+    Calendar to = calendarFrom(getTo());
+    return from.get(DAY_OF_MONTH) == 1
+        && to.get(DAY_OF_MONTH) == to.getActualMaximum(DAY_OF_MONTH);
+  }
+
+  private Calendar calendarFrom(final Date date) {
+    Calendar calendar = GregorianCalendar.getInstance();
+    calendar.setTime(date);
+    return calendar;
+  }
+
 
   public String toString() {
     StringBuilder period = new StringBuilder(24);
@@ -249,7 +304,21 @@ public class Period implements HistoricToString, Serializable {
 //        ToStringStyle.MULTI_LINE_STYLE);
   }
 
-  public static class NoPeriod extends Period {
+  public void adjustThisPeriodStartBy(final Period leadingDays) {
+    if (leadingDays != Period.NONE) {
+      Calendar newFrom = calendarFrom(leadingDays.getTo());
+      newFrom.add(DAY_OF_MONTH, 1);
+      if (newFrom.getTime().after(getFrom()))
+        setFrom(newFrom.getTime());
+    }
   }
 
+  public void adjustThisPeriodEndBy(final Period trailingDays) {
+    if (trailingDays != Period.NONE) {
+      Calendar newTo = calendarFrom(trailingDays.getFrom());
+      newTo.add(DAY_OF_MONTH, -1);
+      if (newTo.getTime().before(getTo()))
+        setTo(newTo.getTime());
+    }
+  }
 }

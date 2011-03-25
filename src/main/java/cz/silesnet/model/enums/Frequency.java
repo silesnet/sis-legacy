@@ -1,7 +1,12 @@
 package cz.silesnet.model.enums;
 
 import cz.silesnet.model.Period;
+import cz.silesnet.model.invoice.Percent;
+import org.joda.time.DateTime;
+import org.joda.time.PeriodType;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -73,6 +78,52 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
     return period;
   }
 
+  public Percent percentageFor(final Period period) {
+    if (period == Period.NONE)
+      return Percent.ZERO;
+
+    if (period.isWithinOneMonth()) {
+      BigDecimal daysOfMonth = BigDecimal.valueOf(daysOfMonth(period.getFrom()));
+      BigDecimal periodDays = BigDecimal.valueOf(periodDays(period));
+      BigDecimal rate = periodDays.movePointRight(2).divide(daysOfMonth, RoundingMode.HALF_UP);
+      return Percent.rate(rate.intValue());
+    }
+
+    if (period.isWholeMonthsOnly()) {
+      return Percent.rate(getMonths(period) * 100);
+    }
+
+    Period leadingDays = period.daysLeadingToFirstOfNextMonth();
+    Period trailingDays = period.daysTrailingAfterLastOfPreviousMonth();
+
+    Period months = period.duplicate();
+    months.adjustThisPeriodStartBy(leadingDays);
+    months.adjustThisPeriodEndBy(trailingDays);
+
+    return percentageFor(leadingDays)
+        .plus(percentageFor(months))
+        .plus(percentageFor(trailingDays));
+  }
+
+  private int periodDays(final Period period) {
+    org.joda.time.Period jodaPeriod = toJodaPeriod(period, PeriodType.days());
+    return jodaPeriod.getDays();
+  }
+
+  private int getMonths(final Period period) {
+    return toJodaPeriod(period, PeriodType.months()).getMonths();
+  }
+
+  private org.joda.time.Period toJodaPeriod(final Period period, final PeriodType type) {
+    DateTime from = new DateTime(period.getFrom());
+    DateTime to = new DateTime(period.getTo()).plusDays(1);
+    return new org.joda.time.Period(from, to, type);
+  }
+
+  private int daysOfMonth(final Date date) {
+    return new DateTime(date).dayOfMonth().getMaximumValue();
+  }
+
   private Period weeklyFrequencyPeriodFor(final Date due) {
     Calendar from = calendarWithZeroTimeFrom(due);
     while (from.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
@@ -116,7 +167,6 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
     calendar.set(Calendar.SECOND, 0);
     calendar.set(Calendar.MILLISECOND, 0);
   }
-
 
   private int frequencyStartingMonth(final int month) {
     int from = month;

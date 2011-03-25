@@ -9,6 +9,13 @@ import java.math.BigDecimal;
  */
 public class Amount implements Comparable<Amount> {
   private static final Rounding ROUNDING = Rounding.SCALE_OF_2_HALF_UP_ROUNDING;
+
+  public static final Amount ZERO = Amount.of(0);
+  public static final Amount ONE = Amount.of(1);
+  public static final Amount TEN = Amount.of(10);
+  public static final Amount HUNDRED = Amount.of(100);
+  public static final Amount THOUSAND = Amount.of(1000);
+
   private final BigDecimal value;
 
   public static Amount of(final BigDecimal number) {

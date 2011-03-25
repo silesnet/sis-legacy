@@ -8,9 +8,9 @@ import spock.lang.Specification
  * Time: 10:21
   */
 class AmountTest extends Specification {
+
   def 'scales to 2 with half-up rounding'() {
     def amount = Amount.of(number)
-    println amount
     expect:
       amount.value() == value
     where:
@@ -19,4 +19,17 @@ class AmountTest extends Specification {
       1.004 | 1
       1.005 | 1.01
   }
+
+  def 'has predefined values'() {
+    expect:
+      predefined == Amount.of(expected)
+    where:
+      predefined | expected
+      Amount.ZERO | '0.00'
+      Amount.ONE | '1.00'
+      Amount.TEN | '10.00'
+      Amount.HUNDRED | '100.00'
+      Amount.THOUSAND | '1000.00'
+  }
+
 }
