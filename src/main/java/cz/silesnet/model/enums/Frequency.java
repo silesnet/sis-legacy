@@ -2,7 +2,6 @@ package cz.silesnet.model.enums;
 
 import cz.silesnet.model.Period;
 import cz.silesnet.model.invoice.Percent;
-import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
 import org.joda.time.PeriodType;
 
@@ -27,7 +26,11 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
   QQ(60, "enum.frequency.qq", 6),
   ANNUAL(70, "enum.frequency.annual", 12);
 
-  private static final MathContext MATH = new MathContext(16, RoundingMode.HALF_UP);
+  private static final int PRECISION = 16;
+  private static final MathContext MATH = new MathContext(PRECISION, RoundingMode.HALF_UP);
+  private static final DurationFieldType[] WEEKS_DAYS_FIELD_TYPES = new DurationFieldType[]{DurationFieldType.weeks(), DurationFieldType.days()};
+  private static final PeriodType WEEKS_DAYS_TYPE = PeriodType.forFields(WEEKS_DAYS_FIELD_TYPES);
+  private static final BigDecimal DAYS_OF_WEEK = BigDecimal.valueOf(7);
 
   private int fId;
 
@@ -109,20 +112,20 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
   private Percent daysFrequencyPercentageFor(final Period period) {
     if (period == Period.NONE)
       return Percent.ZERO;
-    int days = toJodaPeriod(period, PeriodType.days()).getDays();
-    return Percent.rate(days * 100);
+    return Percent.rate(period.days() * 100);
   }
 
   private Percent weeksFrequencyPercentageFor(final Period period) {
     if (period == Period.NONE)
       return Percent.ZERO;
 
-    DurationFieldType[] fieldTypes =  new DurationFieldType[]{ DurationFieldType.weeks(), DurationFieldType.days()};
-    org.joda.time.Period weeksAndDays = toJodaPeriod(period, PeriodType.forFields(fieldTypes));
+    org.joda.time.Period weeksAndDays = period.toJodaPeriod(WEEKS_DAYS_TYPE);
+    Percent weeksPercent = Percent.rate(weeksAndDays.getWeeks() * 100);
+
     BigDecimal days = BigDecimal.valueOf(weeksAndDays.getDays());
-    BigDecimal daysRate = days.divide(BigDecimal.valueOf(7), MATH);
-    int daysPercentage = daysRate.movePointRight(2).setScale(0, MATH.getRoundingMode()).intValue();
-    return Percent.rate(weeksAndDays.getWeeks() * 100 + daysPercentage);
+    BigDecimal daysRate = days.divide(DAYS_OF_WEEK, MATH);
+
+    return weeksPercent.plus(rateToPercent(daysRate));
   }
 
   private Percent monthsFrequencyPercentageFor(final Period period) {
@@ -130,20 +133,17 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
       return Percent.ZERO;
 
     if (period.isWithinOneMonth()) {
-      BigDecimal daysOfMonth = BigDecimal.valueOf(daysOfMonth(period.getFrom()));
-      BigDecimal periodDays = BigDecimal.valueOf(periodDays(period));
+      BigDecimal daysOfMonth = BigDecimal.valueOf(Period.daysOfMonth(period.getFrom()));
+      BigDecimal periodDays = BigDecimal.valueOf(period.days());
       BigDecimal monthlyRate = periodDays.divide(daysOfMonth, MATH);
-      BigDecimal frequencyRate = monthlyRate.divide(BigDecimal.valueOf(this.getMonths()), MATH);
-      BigDecimal frequencyPercentageRate = frequencyRate.movePointRight(2).setScale(0, MATH.getRoundingMode());
-      return Percent.rate(frequencyPercentageRate.intValue());
+      BigDecimal rate = adjustRateToFrequencyMonths(monthlyRate);
+      return rateToPercent(rate);
     }
 
     if (period.isWholeMonthsOnly()) {
-      BigDecimal monthsInFrequency = BigDecimal.valueOf(this.getMonths());
-      BigDecimal periodMonths = BigDecimal.valueOf(getMonths(period));
-      BigDecimal frequencyRate = periodMonths.divide(monthsInFrequency, MATH);
-      BigDecimal frequencyPercentageRate = frequencyRate.movePointRight(2).setScale(0, MATH.getRoundingMode());
-      return Percent.rate(frequencyPercentageRate.intValue());
+      BigDecimal periodMonths = BigDecimal.valueOf(period.months());
+      BigDecimal rate = adjustRateToFrequencyMonths(periodMonths);
+      return rateToPercent(rate);
     }
 
     Period leadingDays = period.daysLeadingToFirstOfNextMonth();
@@ -158,22 +158,19 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
         .plus(percentageFor(trailingDays));
   }
 
-  private int periodDays(final Period period) {
-    return toJodaPeriod(period, PeriodType.days()).getDays();
+  private BigDecimal adjustRateToFrequencyMonths(final BigDecimal rate) {
+    return rate.divide(thisFrequencyMonths(), MATH);
   }
 
-  private int getMonths(final Period period) {
-    return toJodaPeriod(period, PeriodType.months()).getMonths();
+  private BigDecimal thisFrequencyMonths() {
+    return BigDecimal.valueOf(this.getMonths());
   }
 
-  private org.joda.time.Period toJodaPeriod(final Period period, final PeriodType type) {
-    DateTime from = new DateTime(period.getFrom());
-    DateTime to = new DateTime(period.getTo()).plusDays(1);
-    return new org.joda.time.Period(from, to, type);
-  }
-
-  private int daysOfMonth(final Date date) {
-    return new DateTime(date).dayOfMonth().getMaximumValue();
+  private Percent rateToPercent(final BigDecimal rate) {
+    int integerRate = rate.movePointRight(2)
+        .setScale(0, MATH.getRoundingMode())
+        .intValue();
+    return Percent.rate(integerRate);
   }
 
   private Period weeksFrequencyPeriodFor(final Date due) {

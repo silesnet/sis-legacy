@@ -4,6 +4,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
+import org.joda.time.PeriodType;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -290,20 +292,6 @@ public class Period implements HistoricToString, Serializable {
     return calendar;
   }
 
-
-  public String toString() {
-    StringBuilder period = new StringBuilder(24);
-    period.append("[")
-        .append(FORMAT.format(getFrom()))
-        .append(", ")
-        .append(FORMAT.format(getTo()))
-        .append("]");
-
-    return period.toString();
-//    return ToStringBuilder.reflectionToString(this,
-//        ToStringStyle.MULTI_LINE_STYLE);
-  }
-
   public void adjustThisPeriodStartBy(final Period leadingDays) {
     if (leadingDays != Period.NONE) {
       Calendar newFrom = calendarFrom(leadingDays.getTo());
@@ -320,5 +308,36 @@ public class Period implements HistoricToString, Serializable {
       if (newTo.getTime().before(getTo()))
         setTo(newTo.getTime());
     }
+  }
+
+  public int days() {
+    return toJodaPeriod(PeriodType.days()).getDays();
+  }
+
+  public int months() {
+    return toJodaPeriod(PeriodType.months()).getMonths();
+  }
+
+  public org.joda.time.Period toJodaPeriod(final PeriodType type) {
+    DateTime from = new DateTime(getFrom());
+    DateTime to = new DateTime(getTo()).plusDays(1);
+    return new org.joda.time.Period(from, to, type);
+  }
+
+  public static int daysOfMonth(final Date date) {
+    return new DateTime(date).dayOfMonth().getMaximumValue();
+  }
+
+  public String toString() {
+    StringBuilder period = new StringBuilder(24);
+    period.append("[")
+        .append(FORMAT.format(getFrom()))
+        .append(", ")
+        .append(FORMAT.format(getTo()))
+        .append("]");
+
+    return period.toString();
+//    return ToStringBuilder.reflectionToString(this,
+//        ToStringStyle.MULTI_LINE_STYLE);
   }
 }
