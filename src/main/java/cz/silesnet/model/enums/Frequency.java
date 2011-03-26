@@ -3,9 +3,11 @@ package cz.silesnet.model.enums;
 import cz.silesnet.model.Period;
 import cz.silesnet.model.invoice.Percent;
 import org.joda.time.DateTime;
+import org.joda.time.DurationFieldType;
 import org.joda.time.PeriodType;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +26,8 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
   Q(50, "enum.frequency.q", 3),
   QQ(60, "enum.frequency.qq", 6),
   ANNUAL(70, "enum.frequency.annual", 12);
+
+  private static final MathContext MATH = new MathContext(16, RoundingMode.HALF_UP);
 
   private int fId;
 
@@ -70,7 +74,7 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
         period = new Period(day, day);
         break;
       case WEEKLY:
-        period = weeklyFrequencyPeriodFor(due);
+        period = weeksFrequencyPeriodFor(due);
         break;
       default:
         period = monthsFrequencyPeriodFor(due);
@@ -79,18 +83,67 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
   }
 
   public Percent percentageFor(final Period period) {
+    Percent percentage;
+    switch (this) {
+      case ONE_TIME:
+        percentage = oneTimeFrequencyPercentageFor(period);
+        break;
+      case DAILY:
+        percentage = daysFrequencyPercentageFor(period);
+        break;
+      case WEEKLY:
+        percentage = weeksFrequencyPercentageFor(period);
+        break;
+      default:
+        percentage = monthsFrequencyPercentageFor(period);
+    }
+    return percentage;
+  }
+
+  private Percent oneTimeFrequencyPercentageFor(final Period period) {
+    if (period == Period.NONE)
+      return Percent.ZERO;
+    return Percent.HUNDRED;
+  }
+
+  private Percent daysFrequencyPercentageFor(final Period period) {
+    if (period == Period.NONE)
+      return Percent.ZERO;
+    int days = toJodaPeriod(period, PeriodType.days()).getDays();
+    return Percent.rate(days * 100);
+  }
+
+  private Percent weeksFrequencyPercentageFor(final Period period) {
+    if (period == Period.NONE)
+      return Percent.ZERO;
+
+    DurationFieldType[] fieldTypes =  new DurationFieldType[]{ DurationFieldType.weeks(), DurationFieldType.days()};
+    org.joda.time.Period weeksAndDays = toJodaPeriod(period, PeriodType.forFields(fieldTypes));
+    BigDecimal days = BigDecimal.valueOf(weeksAndDays.getDays());
+    BigDecimal daysRate = days.divide(BigDecimal.valueOf(7), MATH);
+    int daysPercentage = daysRate.movePointRight(2).setScale(0, MATH.getRoundingMode()).intValue();
+    return Percent.rate(weeksAndDays.getWeeks() * 100 + daysPercentage);
+  }
+
+  private Percent monthsFrequencyPercentageFor(final Period period) {
     if (period == Period.NONE)
       return Percent.ZERO;
 
     if (period.isWithinOneMonth()) {
       BigDecimal daysOfMonth = BigDecimal.valueOf(daysOfMonth(period.getFrom()));
       BigDecimal periodDays = BigDecimal.valueOf(periodDays(period));
-      BigDecimal rate = periodDays.movePointRight(2).divide(daysOfMonth, RoundingMode.HALF_UP);
-      return Percent.rate(rate.intValue());
+      BigDecimal monthlyRate = periodDays.divide(daysOfMonth, MATH);
+      BigDecimal frequencyRate = monthlyRate.divide(BigDecimal.valueOf(this.getMonths()), MATH);
+      BigDecimal frequencyPercentageRate = frequencyRate.movePointRight(2).setScale(0, MATH.getRoundingMode());
+      return Percent.rate(frequencyPercentageRate.intValue());
     }
 
     if (period.isWholeMonthsOnly()) {
-      return Percent.rate(getMonths(period) * 100);
+      BigDecimal monthsInFrequency = BigDecimal.valueOf(this.getMonths());
+      BigDecimal periodMonths = BigDecimal.valueOf(getMonths(period));
+      BigDecimal frequencyRate = periodMonths.divide(monthsInFrequency, MATH);
+      BigDecimal frequencyPercentageRate = frequencyRate.movePointRight(2).setScale(0, MATH.getRoundingMode());
+      return Percent.rate(frequencyPercentageRate.intValue());
     }
 
     Period leadingDays = period.daysLeadingToFirstOfNextMonth();
@@ -100,14 +153,13 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
     months.adjustThisPeriodStartBy(leadingDays);
     months.adjustThisPeriodEndBy(trailingDays);
 
-    return percentageFor(leadingDays)
+    return monthsFrequencyPercentageFor(leadingDays)
         .plus(percentageFor(months))
         .plus(percentageFor(trailingDays));
   }
 
   private int periodDays(final Period period) {
-    org.joda.time.Period jodaPeriod = toJodaPeriod(period, PeriodType.days());
-    return jodaPeriod.getDays();
+    return toJodaPeriod(period, PeriodType.days()).getDays();
   }
 
   private int getMonths(final Period period) {
@@ -124,7 +176,7 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
     return new DateTime(date).dayOfMonth().getMaximumValue();
   }
 
-  private Period weeklyFrequencyPeriodFor(final Date due) {
+  private Period weeksFrequencyPeriodFor(final Date due) {
     Calendar from = calendarWithZeroTimeFrom(due);
     while (from.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
       from.add(Calendar.DAY_OF_WEEK, -1);

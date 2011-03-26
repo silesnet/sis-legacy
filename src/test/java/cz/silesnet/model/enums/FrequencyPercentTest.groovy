@@ -10,7 +10,133 @@ import spock.lang.Specification
  * Time: 21:26
  */
 class FrequencyPercentTest extends Specification {
-  def 'calculates monthly percentage for period with one month'() {
+
+
+  def 'calculates one-time percentage'() {
+  expect:
+    Frequency.ONE_TIME.percentageFor(period) == percent
+  where:
+    period | percent
+    Period.NONE | Percent.ZERO
+    period('2011-01-01', '2011-01-01') | Percent.HUNDRED // day
+    period('2011-12-31', '2011-12-31') | Percent.HUNDRED
+
+    period('2011-01-01', '2011-01-02') | Percent.HUNDRED // two days
+    period('2011-12-31', '2012-01-01') | Percent.HUNDRED
+
+    period('2011-01-01', '2011-12-31') | Percent.HUNDRED // year
+    period('2010-12-31', '2012-01-01') | Percent.HUNDRED // year and two days
+  }
+
+  def 'calculates daily percentage'() {
+  expect:
+    Frequency.DAILY.percentageFor(period) == percent
+  where:
+    period | percent
+    Period.NONE | Percent.ZERO
+    period('2011-01-01', '2011-01-01') | Percent.HUNDRED
+    period('2011-12-31', '2011-12-31') | Percent.HUNDRED
+    period('2012-01-01', '2012-01-01') | Percent.HUNDRED
+
+    period('2011-01-01', '2011-01-02') | Percent.rate(200)
+    period('2011-12-31', '2012-01-01') | Percent.rate(200)
+    period('2011-01-01', '2011-01-02') | Percent.rate(200)
+
+    period('2011-01-01', '2011-12-31') | Percent.rate(36500) // year
+    period('2010-12-31', '2012-01-01') | Percent.rate(36700) // year and two days
+  }
+
+  def 'calculates weekly percentage'() {
+  expect:
+    Frequency.WEEKLY.percentageFor(period) == percent
+  where:
+    period | percent
+    Period.NONE | Percent.ZERO
+    period('2011-03-21', '2011-03-27') | Percent.HUNDRED
+    period('2011-03-28', '2011-04-03') | Percent.HUNDRED
+
+    period('2011-03-21', '2011-03-21') | Percent.rate(14) // 1/7 = 0.142
+    period('2011-03-27', '2011-03-27') | Percent.rate(14) 
+
+    period('2011-03-21', '2011-03-26') | Percent.rate(86) // 6/7 = 0.857
+    period('2011-03-22', '2011-03-27') | Percent.rate(86)
+
+    period('2011-03-21', '2011-04-03') | Percent.rate(200)
+    period('2011-03-22', '2011-04-03') | Percent.rate(186)
+    period('2011-03-21', '2011-04-02') | Percent.rate(186)
+
+    period('2011-12-26', '2012-01-01') | Percent.rate(100) // week in two years
+
+    period('2011-01-03', '2012-01-01') | Percent.rate(5200) // year (52W)
+
+    period('2011-01-02', '2012-01-02') | Percent.rate(5229) // year and 2 days (52W 2D)
+  }
+
+  def 'percentage rounds correctly'() {
+  expect:
+    Frequency.MONTHLY.percentageFor(period('2011-02-01', '2011-02-01')) == Percent.rate(4) // 0.035
+    Frequency.Q.percentageFor(period('2011-02-01', '2011-02-01')) == Percent.rate(1) // 0.011
+    Frequency.Q.percentageFor(period('2011-02-01', '2011-02-02')) == Percent.rate(2) // 0.023
+    Frequency.Q.percentageFor(period('2011-02-01', '2011-02-03')) == Percent.rate(4) // 0.035
+    Frequency.Q.percentageFor(period('2011-02-01', '2011-02-04')) == Percent.rate(5) // 0.047
+
+    Frequency.QQ.percentageFor(period('2011-02-01', '2011-02-01')) == Percent.rate(1) // 0.005
+    Frequency.ANNUAL.percentageFor(period('2011-02-01', '2011-02-01')) == Percent.rate(0) // 0.002
+    Frequency.ANNUAL.percentageFor(period('2011-02-01', '2011-02-04')) == Percent.rate(1) // 0.011
+    Frequency.ANNUAL.percentageFor(period('2011-02-01', '2011-02-05')) == Percent.rate(1) // 0.014
+    Frequency.ANNUAL.percentageFor(period('2011-02-01', '2011-02-06')) == Percent.rate(2) // 0.017
+  }
+
+  def 'calculates quarterly percentage'() {
+  expect:
+    Frequency.Q.percentageFor(period) == percent
+  where:
+    period | percent
+    Period.NONE | Percent.ZERO
+    period('2011-01-01', '2011-03-31') | Percent.HUNDRED
+    period('2011-01-01', '2011-02-14') | Percent.FIFTY // trailing days
+    period('2011-02-15', '2011-03-31') | Percent.FIFTY // leading days
+
+    period('2011-01-01', '2011-06-30') | Percent.rate(200)
+    period('2011-10-01', '2012-03-31') | Percent.rate(200) // spans 2 years
+  }
+
+  def 'calculates 2 quarters percentage'() {
+  expect:
+    Frequency.QQ.percentageFor(period) == percent
+  where:
+    period | percent
+    Period.NONE | Percent.ZERO
+    period('2011-01-01', '2011-06-30') | Percent.HUNDRED
+    period('2011-07-01', '2011-12-31') | Percent.HUNDRED
+    period('2011-01-01', '2011-03-31') | Percent.FIFTY
+    period('2011-04-01', '2011-06-30') | Percent.FIFTY
+
+    period('2011-01-01', '2011-05-15') | Percent.rate(75) // trailing days
+    period('2011-02-15', '2011-06-30') | Percent.rate(75) // leading days
+
+    period('2011-01-01', '2011-12-31') | Percent.rate(200)
+    period('2011-07-01', '2012-06-30') | Percent.rate(200) // spans 2 years
+  }
+
+  def 'calculates annual percentage'() {
+  expect:
+    Frequency.ANNUAL.percentageFor(period) == percent
+  where:
+    period | percent
+    Period.NONE | Percent.ZERO
+    period('2011-01-01', '2011-12-31') | Percent.HUNDRED
+    period('2012-01-01', '2012-12-31') | Percent.HUNDRED
+    period('2011-01-01', '2011-06-30') | Percent.FIFTY
+    period('2011-07-01', '2011-12-31') | Percent.FIFTY
+
+    period('2011-01-01', '2011-07-15') | Percent.rate(54) // trailing days
+    period('2011-03-16', '2011-12-31') | Percent.rate(79) // leading days
+
+    period('2010-01-01', '2011-12-31') | Percent.rate(200) // spans 2 years
+  }
+
+  def 'calculates monthly percentage for period within one month'() {
   expect:
     Frequency.MONTHLY.percentageFor(period) == percent
   where:
@@ -219,7 +345,7 @@ class FrequencyPercentTest extends Specification {
     def rounded = period('2011-01-31', '2011-02-01')
     rounded.adjustThisPeriodStartBy(other)
   expect:
-     rounded == expected
+    rounded == expected
   where:
     other | expected
     Period.NONE | period('2011-01-31', '2011-02-01')
@@ -233,7 +359,7 @@ class FrequencyPercentTest extends Specification {
     def rounded = period('2011-01-31', '2011-02-01')
     rounded.adjustThisPeriodEndBy(other)
   expect:
-     rounded == expected
+    rounded == expected
   where:
     other | expected
     Period.NONE | period('2011-01-31', '2011-02-01')
