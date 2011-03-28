@@ -2,6 +2,7 @@ package cz.silesnet.model.enums;
 
 import cz.silesnet.model.Period;
 import cz.silesnet.model.invoice.Percent;
+import cz.silesnet.utils.Dates;
 import org.joda.time.DurationFieldType;
 import org.joda.time.PeriodType;
 
@@ -73,7 +74,7 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
     switch (this) {
       case ONE_TIME:
       case DAILY:
-        Date day = calendarWithZeroTimeFrom(due).getTime();
+        Date day = Dates.calendarWithZeroTimeFrom(due).getTime();
         period = new Period(day, day);
         break;
       case WEEKLY:
@@ -133,7 +134,7 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
       return Percent.ZERO;
 
     if (period.isWithinOneMonth()) {
-      BigDecimal daysOfMonth = BigDecimal.valueOf(Period.daysOfMonth(period.getFrom()));
+      BigDecimal daysOfMonth = BigDecimal.valueOf(Dates.daysOfMonth(period.getFrom()));
       BigDecimal periodDays = BigDecimal.valueOf(period.days());
       BigDecimal monthlyRate = periodDays.divide(daysOfMonth, MATH);
       BigDecimal rate = adjustRateToFrequencyMonths(monthlyRate);
@@ -174,7 +175,7 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
   }
 
   private Period weeksFrequencyPeriodFor(final Date due) {
-    Calendar from = calendarWithZeroTimeFrom(due);
+    Calendar from = Dates.calendarWithZeroTimeFrom(due);
     while (from.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
       from.add(Calendar.DAY_OF_WEEK, -1);
 
@@ -185,7 +186,7 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
   }
 
   private Period monthsFrequencyPeriodFor(final Date due) {
-    Calendar from = calendarWithZeroTimeFrom(due);
+    Calendar from = Dates.calendarWithZeroTimeFrom(due);
     int startingMonth = frequencyStartingMonth(from.get(Calendar.MONTH));
     from.set(Calendar.MONTH, startingMonth);
     from.set(Calendar.DAY_OF_MONTH, 1);
@@ -195,26 +196,6 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
     to.add(Calendar.DAY_OF_MONTH, -1);
 
     return new Period(from.getTime(), to.getTime());
-  }
-
-  private Calendar calendarWithZeroTimeFrom(final Date due) {
-    Calendar calendar = calendarFrom(due);
-    setTimeToZero(calendar);
-    return calendar;
-  }
-
-  private Calendar calendarFrom(final Date due) {
-    Calendar calendar = GregorianCalendar.getInstance();
-    calendar.setTime(due);
-    calendar.setLenient(false);
-    return calendar;
-  }
-
-  private void setTimeToZero(final Calendar calendar) {
-    calendar.set(Calendar.HOUR_OF_DAY, 0);
-    calendar.set(Calendar.MINUTE, 0);
-    calendar.set(Calendar.SECOND, 0);
-    calendar.set(Calendar.MILLISECOND, 0);
   }
 
   private int frequencyStartingMonth(final int month) {

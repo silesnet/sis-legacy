@@ -3,14 +3,18 @@ package cz.silesnet.service.impl;
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
+import cz.silesnet.model.invoice.Percent;
 import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.HistoryManager;
+import cz.silesnet.utils.Dates;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.testng.annotations.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.mockito.Mockito.*;
@@ -18,6 +22,7 @@ import static org.testng.Assert.*;
 
 public class BillingManagerBillsTest {
 
+  private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   protected final Log log = LogFactory.getLog(getClass());
 
   @Test
@@ -457,7 +462,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.APRIL, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     lastlyBilled.set(2006, Calendar.APRIL, 15);
     due.set(2006, Calendar.APRIL, 10);
@@ -468,7 +473,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.APRIL, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     // billing forward, Q
     b.setFrequency(Frequency.Q);
@@ -484,7 +489,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     // lastlyBilled not last of month, Q
     lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
@@ -496,7 +501,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     // odd due date
     lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
@@ -508,8 +513,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    // FIXME
-//    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     lastlyBilled.set(2006, Calendar.MAY, 15);
     due.set(2006, Calendar.MAY, 10);
@@ -520,8 +524,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    // FIXME
-//    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     lastlyBilled.set(2006, Calendar.MARCH, 31);
     due.set(2006, Calendar.MARCH, 10);
@@ -529,7 +532,7 @@ public class BillingManagerBillsTest {
     p = bMgr.getIvoicePeriod(b, due.getTime());
     log.debug("Billing period : " + p);
     assertNull(p);
-    assertTrue(b.nextBillPeriod(due.getTime()) == Period.NONE);
+    assertEquals(b.nextBillPeriod(due.getTime()), Period.NONE);
 
     lastlyBilled.set(2005, Calendar.DECEMBER, 31);
     due.set(2006, Calendar.APRIL, 2);
@@ -540,7 +543,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.JUNE, 30);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     // billing backward, MONTHLY
     b.setFrequency(Frequency.MONTHLY);
@@ -556,7 +559,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     lastlyBilled.set(2006, Calendar.FEBRUARY, 15);
     due.set(2006, Calendar.APRIL, 10);
@@ -567,7 +570,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     lastlyBilled.set(2006, Calendar.MARCH, 15);
     due.set(2006, Calendar.APRIL, 10);
@@ -578,7 +581,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     lastlyBilled.set(2006, Calendar.MARCH, 30);
     due.set(2006, Calendar.APRIL, 10);
@@ -589,7 +592,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     // billing backward, Q
     b.setFrequency(Frequency.Q);
@@ -605,7 +608,7 @@ public class BillingManagerBillsTest {
     to.set(2006, Calendar.MARCH, 31);
     assertTrue(p.getFrom().equals(from.getTime()));
     assertTrue(p.getTo().equals(to.getTime()));
-    assertTrue(new Period(from.getTime(), to.getTime()).equals(b.nextBillPeriod(due.getTime())));
+    dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
     // if due date is odd do not generate bill
     lastlyBilled.set(2006, Calendar.MARCH, 15);
@@ -614,8 +617,29 @@ public class BillingManagerBillsTest {
     p = bMgr.getIvoicePeriod(b, due.getTime());
     log.debug("Billing period : " + p);
     assertNull(p);
-    assertTrue(b.nextBillPeriod(due.getTime()) == Period.NONE);
+    // this is actually wrong because we have 15 days left from previous
+    // quarter, the current quarter is Apr-Jun, we should bill for 16/Mar-31/Mar
+    // finishing previous (we are billing after) quarter
+    assertEquals(b.nextBillPeriod(due.getTime()),
+        new Period(new DateTime("2006-03-16").toDate(), new DateTime("2006-03-31").toDate()));
+  }
 
+  private void dumpAndCompare(Calendar from, Calendar to, Period right) {
+    Period left = new Period(from.getTime(), to.getTime());
+    System.out.println(String.format("%s == %s", formatPeriod(left), formatPeriod(right)));
+    System.out.println(String.format("%s == %s", formatPeriod(left), formatPeriod(right)));
+    left.setFrom(Dates.calendarWithZeroTimeFrom(left.getFrom()).getTime());
+    left.setTo(Dates.calendarWithZeroTimeFrom(left.getTo()).getTime());
+    assertEquals(left, right);
+  }
+
+  private String formatPeriod(Period period) {
+//    return String.format("[%s, %s]", formatDate(period.getFrom()), formatDate(period.getTo()));
+    return period.toString();
+  }
+  
+  private String formatDate(Date date) {
+    return DATE_FORMAT.format(date);
   }
 
   @Test(groups = "integration")

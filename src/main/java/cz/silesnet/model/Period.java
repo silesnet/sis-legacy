@@ -24,6 +24,7 @@ import static java.util.Calendar.*;
  */
 public class Period implements HistoricToString, Serializable {
   private static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+//  private static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 
   public static final Period NONE = new Period() {
     @Override
@@ -138,6 +139,12 @@ public class Period implements HistoricToString, Serializable {
         && (getFrom().compareTo(getTo()) <= 0) ? true : false;
   }
 
+  public boolean isCompleteAndValid() {
+    if (getFrom() == null || getTo() == null)
+      return false;
+    return !getFrom().after(getTo());
+  }
+
   public boolean contains(Date date) {
     if (date == null)
       throw new NullPointerException();
@@ -234,18 +241,6 @@ public class Period implements HistoricToString, Serializable {
     return result;
   }
 
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
-  }
-
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
-  }
-
-  public Period duplicate() {
-    return new Period(new Date(getFrom().getTime()), new Date(getTo().getTime()));
-  }
-
   public Period daysLeadingToFirstOfNextMonth() {
     if (isWithinOneMonth())
       return Period.NONE;
@@ -324,8 +319,16 @@ public class Period implements HistoricToString, Serializable {
     return new org.joda.time.Period(from, to, type);
   }
 
-  public static int daysOfMonth(final Date date) {
-    return new DateTime(date).dayOfMonth().getMaximumValue();
+  public Period duplicate() {
+    return new Period(new Date(getFrom().getTime()), new Date(getTo().getTime()));
+  }
+
+  public boolean equals(Object o) {
+    return EqualsBuilder.reflectionEquals(this, o);
+  }
+
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this);
   }
 
   public String toString() {
@@ -335,9 +338,6 @@ public class Period implements HistoricToString, Serializable {
         .append(", ")
         .append(FORMAT.format(getTo()))
         .append("]");
-
     return period.toString();
-//    return ToStringBuilder.reflectionToString(this,
-//        ToStringStyle.MULTI_LINE_STYLE);
   }
 }

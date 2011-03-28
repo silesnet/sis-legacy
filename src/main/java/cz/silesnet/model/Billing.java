@@ -3,6 +3,7 @@ package cz.silesnet.model;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.service.invoice.InvoiceFormat;
+import cz.silesnet.utils.Dates;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -211,46 +212,27 @@ public class Billing implements HistoricToString, Serializable {
   }
 
   public Period nextBillPeriod(Date due) {
-    if (!isInvoicingMonth(due))
-      return Period.NONE;
-    Calendar invoiceFrom = nextInvoiceFrom();
-    Calendar invoiceTo = nextInvoiceTo(due);
-    if (invoiceFrom.after(invoiceTo))
-      return Period.NONE;
-    return new Period(invoiceFrom.getTime(), invoiceTo.getTime());
-  }
-
-  protected boolean isInvoicingMonth(Date due) {
-    return ((getMonth(due) - 1) % fFrequency.getMonths()) == 0;
+    Calendar from = nextInvoiceFrom();
+    Calendar to = nextInvoiceTo(due);
+    Period period = new Period(from.getTime(), to.getTime());
+    return period.isCompleteAndValid() ? period : Period.NONE;
   }
 
   protected Calendar nextInvoiceFrom() {
-    Calendar invoiceFrom = calendarFor(getLastlyBilled());
+    Calendar invoiceFrom = Dates.calendarWithZeroTimeFrom(getLastlyBilled());
     invoiceFrom.add(Calendar.DAY_OF_MONTH, 1);
     return invoiceFrom;
   }
 
   protected Calendar nextInvoiceTo(Date due) {
-    Calendar invoiceTo = firstDayOfMonth(due);
-    if (!getIsBilledAfter()) // billing forward
-      invoiceTo.add(Calendar.MONTH, fFrequency.getMonths());
-    invoiceTo.add(Calendar.DAY_OF_MONTH, -1);
+    Period frequencyPeriod = getFrequency().periodFor(due);
+    Calendar invoiceTo;
+    if (getIsBilledAfter()) {
+      invoiceTo = Dates.calendarFor(frequencyPeriod.getFrom());
+      invoiceTo.add(Calendar.DAY_OF_MONTH, -1);
+    } else {
+      invoiceTo = Dates.calendarFor(frequencyPeriod.getTo());
+    }
     return invoiceTo;
-  }
-
-  protected int getMonth(Date date) {
-    return calendarFor(date).get(Calendar.MONTH) + 1;
-  }
-
-  protected Calendar firstDayOfMonth(Date date) {
-    Calendar first = calendarFor(date);
-    first.set(Calendar.DAY_OF_MONTH, 1);
-    return first;
-  }
-
-  private Calendar calendarFor(Date date) {
-    Calendar calendar = GregorianCalendar.getInstance();
-    calendar.setTime(date);
-    return calendar;
   }
 }
