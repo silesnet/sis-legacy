@@ -8,6 +8,7 @@ import cz.silesnet.model.Customer
 import cz.silesnet.model.Billing
 import cz.silesnet.model.Service
 import cz.silesnet.model.enums.Frequency
+import spock.lang.Ignore
 
 /**
  * User: der3k
@@ -50,6 +51,7 @@ class BillFactoryTest extends Specification {
     new BillFactory(invoicing, context) != null
   }
 
+  @Ignore
   def 'creates bill for given customer'() {
     def factory = new BillFactory(invoicing, context)
     def bill

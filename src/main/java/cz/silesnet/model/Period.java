@@ -333,10 +333,12 @@ public class Period implements HistoricToString, Serializable {
 
   public String toString() {
     StringBuilder period = new StringBuilder(24);
+    String from = getFrom() == null ? "" : FORMAT.format(getFrom());
+    String to = getTo() == null ? "" : FORMAT.format(getTo());
     period.append("[")
-        .append(FORMAT.format(getFrom()))
+        .append(from)
         .append(", ")
-        .append(FORMAT.format(getTo()))
+        .append(to)
         .append("]");
     return period.toString();
   }

@@ -4,6 +4,7 @@
     <groups>
       <run>
         <exclude name="integration" />
+        <exclude name="email" />
       </run>
     </groups>
     <packages>

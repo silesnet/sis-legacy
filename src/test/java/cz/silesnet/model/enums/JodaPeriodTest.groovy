@@ -12,8 +12,6 @@ import spock.lang.Specification
  */
 class JodaPeriodTest extends Specification {
   def 'calculates moths'() {
-    println period
-    println period.getDays()
   expect:
     period.getMonths() == months
   where:
@@ -37,11 +35,6 @@ class JodaPeriodTest extends Specification {
     def to = new DateTime('2011-03-05')
     def last = from.dayOfMonth().withMaximumValue().plusDays(1)
     def leadingDays = new Period(from, last, PeriodType.days())
-    println "$leadingDays ${from.dayOfMonth().getMaximumValue()}"
-    println leadingDays.getDays()
-//    def
-
-
   expect:
     true
   }
