@@ -66,7 +66,7 @@ public class BillingManagerBillsTest {
     assertNotNull(bills);
     assertTrue(bills.size() == 1);
 
-    // modify customre so no bill will be created
+    // modify customre so no billFor will be created
     c.getBilling().setIsActive(false);
     bills = bMgr.generateAll(invoicing, cs, due.getTime(), "0");
     assertNotNull(bills);
@@ -146,7 +146,7 @@ public class BillingManagerBillsTest {
     eAmount = (float) 0.5483871;
     assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision))
         / precision);
-    // assertFalse(hashCode.equals(bill.getHashCode()));
+    // assertFalse(hashCode.equals(billFor.getHashCode()));
     hashCode = bill.getHashCode();
     log.debug("Bill hashCode: " + hashCode);
     billFrom.set(2006, Calendar.MARCH, 15);
@@ -170,7 +170,7 @@ public class BillingManagerBillsTest {
     eAmount = (float) 0.29032257;
     assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision))
         / precision);
-    // assertFalse(hashCode.equals(bill.getHashCode()));
+    // assertFalse(hashCode.equals(billFor.getHashCode()));
     hashCode = bill.getHashCode();
     log.debug("Bill hashCode: " + hashCode);
     billFrom.set(2006, Calendar.MARCH, 15);
@@ -194,7 +194,7 @@ public class BillingManagerBillsTest {
     eAmount = (float) 0.7419355;
     assertTrue(bill.getItems().get(0).getAmount() == (float) (Math.round(eAmount * precision))
         / precision);
-    // assertFalse(hashCode.equals(bill.getHashCode()));
+    // assertFalse(hashCode.equals(billFor.getHashCode()));
     hashCode = bill.getHashCode();
     log.debug("Bill hashCode: " + hashCode);
     billFrom.set(2006, Calendar.MARCH, 1);
@@ -203,7 +203,7 @@ public class BillingManagerBillsTest {
     assertTrue(bill.getPeriod().getTo().equals(billTo.getTime()));
     assertTrue(bill.getBillingDate().equals(due.getTime()));
 
-    // more services in bill with different
+    // more services in billFor with different
     // periods and service.frequencies
 
     // annual service
@@ -248,7 +248,7 @@ public class BillingManagerBillsTest {
     eAmount = 1;
     assertTrue(bill.getItems().get(2).getAmount() == (float) (Math.round(eAmount * precision))
         / precision);
-    // assertFalse(hashCode.equals(bill.getHashCode()));
+    // assertFalse(hashCode.equals(billFor.getHashCode()));
     hashCode = bill.getHashCode();
     log.debug("Bill hashCode: " + hashCode);
     billFrom.set(2006, Calendar.MARCH, 1);
@@ -257,7 +257,7 @@ public class BillingManagerBillsTest {
     assertTrue(bill.getPeriod().getTo().equals(billTo.getTime()));
     assertTrue(bill.getBillingDate().equals(due.getTime()));
 
-    // adjust a bit services so price will be -1 price bill
+    // adjust a bit services so price will be -1 price billFor
     s3.setPrice(-442);
     bill = bMgr.generate(c, due.getTime(), null);
     assertNotNull(bill);
@@ -610,7 +610,7 @@ public class BillingManagerBillsTest {
     assertTrue(p.getTo().equals(to.getTime()));
     dumpAndCompare(from, to, b.nextBillPeriod(due.getTime()));
 
-    // if due date is odd do not generate bill
+    // if due date is odd do not generate billFor
     lastlyBilled.set(2006, Calendar.MARCH, 15);
     due.set(2006, Calendar.MAY, 10);
     b.setLastlyBilled(lastlyBilled.getTime());
@@ -618,7 +618,7 @@ public class BillingManagerBillsTest {
     log.debug("Billing period : " + p);
     assertNull(p);
     // this is actually wrong because we have 15 days left from previous
-    // quarter, the current quarter is Apr-Jun, we should bill for 16/Mar-31/Mar
+    // quarter, the current quarter is Apr-Jun, we should billFor for 16/Mar-31/Mar
     // finishing previous (we are billing after) quarter
     assertEquals(b.nextBillPeriod(due.getTime()),
         new Period(new DateTime("2006-03-16").toDate(), new DateTime("2006-03-31").toDate()));
@@ -660,7 +660,7 @@ public class BillingManagerBillsTest {
 
     @SuppressWarnings("unused")
     BillingManager bMgr = (BillingManager) ctx.getBean("billingManager");
-    // bMgr.email(bill);
+    // bMgr.email(billFor);
   }
 
   @Test

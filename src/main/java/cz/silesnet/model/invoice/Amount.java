@@ -63,4 +63,8 @@ public class Amount implements Comparable<Amount> {
   public String toString() {
     return value.toString();
   }
+
+  public Amount plus(final Amount amount) {
+    return new Amount(this.value.add(amount.value));
+  }
 }

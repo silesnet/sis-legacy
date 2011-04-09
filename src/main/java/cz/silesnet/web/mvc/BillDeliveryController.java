@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Controller handling customer bill delivery confirmations. Only wraps
+ * Controller handling customer billFor delivery confirmations. Only wraps
  * BillingControler and delegates to its confirmDelivery().
  *
  * @author Richard Sikora

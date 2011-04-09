@@ -180,7 +180,7 @@ public class BillingManagerImpl implements BillingManager {
       }
       if (!BillingStatus.INVOICE
           .equals(customer.getBilling().getStatus())) {
-        // skip no bill cusomers
+        // skip no billFor cusomers
         log.info("Skipping customer (BILLING DISABLED): "
             + customer.getName());
         hmgr.insertSystemBillingAudit(invoicing, customer,
@@ -286,7 +286,7 @@ public class BillingManagerImpl implements BillingManager {
     // add invoice items based on customer services
     for (Service service : customer.getServices()) {
       // skip services with zero service price as it will always produce
-      // zero bill line
+      // zero billFor line
       if (service.getPrice() == 0)
         continue;
       itemAmount = getBillItemAmount(invoicePeriod, service.getPeriod(),
@@ -321,7 +321,7 @@ public class BillingManagerImpl implements BillingManager {
       return null;
     // let's finalize the invoice then
     bill.setNumber(number);
-    // bill.setHashCode(uuidGen.generateTimeBasedUUID() + "-" +
+    // billFor.setHashCode(uuidGen.generateTimeBasedUUID() + "-" +
     // String.format("%h", customer.hashCode()));
     // create hash code from customer id and timestamp
     // NOTE: customer id has to be set! (persisted customer)
@@ -411,7 +411,7 @@ public class BillingManagerImpl implements BillingManager {
       // if to < from, unexisting period, get out of here with null
       if (cTo.compareTo(cFrom) < 0)
         return null;
-      // is here anythink to bill in this period according to billig
+      // is here anythink to billFor in this period according to billig
       // frequency
       if (((cTo.get(Calendar.MONTH) + 1) % b.getFrequency().getMonths()) != 0)
         return null;
@@ -443,7 +443,7 @@ public class BillingManagerImpl implements BillingManager {
         + ")");
     if (c == null)
       throw new IllegalArgumentException("Bill without customer set.");
-    // email bill
+    // email billFor
     if (c.getBilling().getDeliverByEmail()) {
       try {
         email(bill);
@@ -451,7 +451,7 @@ public class BillingManagerImpl implements BillingManager {
         if (emailedCounter != null)
           emailedCounter.setValue(emailedCounter.intValue() + 1);
       } catch (MailParseException e) {
-        // bill parse email error, autid it
+        // billFor parse email error, autid it
         hmgr.insertSystemBillingAudit(invoicing, c,
             "mainBilling.msg.emailAddressError",
             "mainBilling.status.byMail");
@@ -471,7 +471,7 @@ public class BillingManagerImpl implements BillingManager {
       log.info("Bill SENT by SNAIL MAIL for " + c.getName() + " ("
           + bill.getNumber() + ")");
     }
-    // update bill flags
+    // update billFor flags
     bill.setIsSent(true);
     bill.setIsDelivered(false);
     return bill;
@@ -487,14 +487,14 @@ public class BillingManagerImpl implements BillingManager {
       Customer customer = dao.fetchCustomer(bill);
       log.info("ReEmailing bill for " + customer.getName() + " ("
           + bill.getNumber() + ")");
-      // email bill
+      // email billFor
       if (customer.getBilling().getDeliverByEmail()) {
         try {
           emailReminder(bill);
           // increment emailed bills counter
           emailedCounter++;
         } catch (MailParseException e) {
-          // bill parse email error, autid it
+          // billFor parse email error, autid it
           if (invoicing != null)
             hmgr.insertSystemBillingAudit(invoicing, customer,
                 "mainBilling.msg.emailAddressError",
@@ -502,7 +502,7 @@ public class BillingManagerImpl implements BillingManager {
           log.warn("Bill email parse exception: "
               + customer.getName());
         } catch (MailException e) {
-          // bill send email error, autid it
+          // billFor send email error, autid it
           if (invoicing != null)
             hmgr.insertSystemBillingAudit(invoicing, customer,
                 "mainBilling.msg.emailSendingError",
@@ -534,19 +534,19 @@ public class BillingManagerImpl implements BillingManager {
       Customer customer = dao.fetchCustomer(bill);
       log.info("Emailing bill for " + customer.getName() + " ("
           + bill.getNumber() + ")");
-      // email bill
+      // email billFor
       try {
         email(bill);
         // increment emailed bills counter
         emailedCounter++;
       } catch (MailParseException e) {
-        // bill parse email error, autid it
+        // billFor parse email error, autid it
         // hmgr.insertSystemBillingAudit(customer,
         // "mainBilling.msg.emailAddressError",
         // "mainBilling.status.skipped");
         log.warn("Bill email parse exception: " + customer.getName());
       } catch (MailException e) {
-        // bill send email error, autid it
+        // billFor send email error, autid it
         // hmgr.insertSystemBillingAudit(customer,
         // "mainBilling.msg.emailSendingError",
         // "mainBilling.status.skipped");
@@ -639,7 +639,7 @@ public class BillingManagerImpl implements BillingManager {
     } catch (ObjectRetrievalFailureException e) {
     }
     if (bill != null) {
-      // we have bill to confirm delivery
+      // we have billFor to confirm delivery
       bill.setIsSent(true);
       bill.setIsDelivered(true);
     }
@@ -851,7 +851,7 @@ public class BillingManagerImpl implements BillingManager {
     String customerLongName = null;
     writer.printf("[INFO]\r\n%s\r\n\r\n", infoLine);
     for (Iterator<Bill> iter = bills.iterator(); iter.hasNext();) {
-      // append bill to output writer
+      // append billFor to output writer
       Bill b = iter.next();
       Customer customer = dao.fetchCustomer(b);
       // invoice header

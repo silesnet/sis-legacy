@@ -3,6 +3,7 @@ package cz.silesnet.model.enums
 import cz.silesnet.model.Period
 import cz.silesnet.model.invoice.Percent
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * User: der3k
@@ -242,6 +243,19 @@ class FrequencyPercentTest extends Specification {
     period('2010-11-30', '2011-01-01') | Percent.rate(106) // 3% + 100% + 3% = 106%
     period('2010-11-30', '2011-02-01') | Percent.rate(207) // 3% + 200% + 4% = 207%
   }
+
+  def 'percentage fails for invalid period'() {
+    when:
+      Frequency.MONTHLY.percentageFor(period)
+    then:
+      thrown IllegalArgumentException
+    where:
+    period << [new Period(),
+        new Period(date('2011-01-01'), null),
+        new Period(null, date('2011-01-01')),
+        period('2011-01-02', '2011-01-01')]
+  }
+
 
   def static Date date(String date) {
     Date.parse('yyyy-MM-dd', date)

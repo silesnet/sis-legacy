@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.*;
 
 /**
- * Entity clas holding customers bill.
+ * Entity clas holding customers billFor.
  *
  * @author Richard Sikora
  */
@@ -128,7 +128,7 @@ public class Bill extends Entity {
   }
 
   public float getBillRoundedVat() {
-    // bill VAT is roundet up to 2 digits afrer coma by definition
+    // billFor VAT is roundet up to 2 digits afrer coma by definition
     // round it to 50 cents mathematicaly
     return (float) Math.round(getBillVat() * 2) / 2;
   }

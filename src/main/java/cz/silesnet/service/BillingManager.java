@@ -51,7 +51,7 @@ public interface BillingManager {
    * @param due       due date.
    * @param numbering
    * @return list of bills that are applicable due given date. Bill includes
-   *         periodical and one-time services as bill items.
+   *         periodical and one-time services as billFor items.
    */
   public List<Bill> generateAll(Invoicing invoicing,
                                 List<Customer> customers, Date due, String numbering);
@@ -71,10 +71,10 @@ public interface BillingManager {
   public void emailAll(List<Bill> bills);
 
   /**
-   * Confirms delivery of bill acording to unique bill hashcode. Hashcode is
+   * Confirms delivery of billFor acording to unique billFor hashcode. Hashcode is
    * part of link sent by email to customer.
    *
-   * @param uuid unique hashcode of given bill.
+   * @param uuid unique hashcode of given billFor.
    * @return confirmed Bill instance, null otherwise.
    */
   public Bill confirmDelivery(String uuid);

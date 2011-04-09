@@ -1,5 +1,7 @@
 package cz.silesnet.model;
 
+import cz.silesnet.model.invoice.Amount;
+import cz.silesnet.model.invoice.Percent;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -41,6 +43,10 @@ public class BillItem implements Serializable {
     fText = text;
     fAmount = amount;
     fPrice = price;
+  }
+
+  public BillItem(final String name, final Percent percent, final Amount price) {
+    this(name, percent.toBigDecimal().floatValue(), price.value().intValue());
   }
 
   // ~ Methods
@@ -133,4 +139,7 @@ public class BillItem implements Serializable {
     return getNet() + getVat();
   }
 
+  public Amount net() {
+    return Amount.of(getNet());
+  }
 }

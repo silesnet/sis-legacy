@@ -212,6 +212,8 @@ public class Billing implements HistoricToString, Serializable {
   }
 
   public Period nextBillPeriod(Date due) {
+    if (getLastlyBilled() == null)
+      return Period.NONE;
     Calendar from = nextInvoiceFrom();
     Calendar to = nextInvoiceTo(due);
     Period period = new Period(from.getTime(), to.getTime());

@@ -87,6 +87,8 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
   }
 
   public Percent percentageFor(final Period period) {
+    if (period != Period.NONE && !period.isCompleteAndValid())
+      throw new IllegalArgumentException("period has to be complete and valid");
     Percent percentage;
     switch (this) {
       case ONE_TIME:
@@ -155,8 +157,8 @@ public enum Frequency implements EnumPersistenceMapping<Frequency> {
     months.adjustThisPeriodEndBy(trailingDays);
 
     return monthsFrequencyPercentageFor(leadingDays)
-        .plus(percentageFor(months))
-        .plus(percentageFor(trailingDays));
+        .plus(monthsFrequencyPercentageFor(months))
+        .plus(monthsFrequencyPercentageFor(trailingDays));
   }
 
   private BigDecimal adjustRateToFrequencyMonths(final BigDecimal rate) {

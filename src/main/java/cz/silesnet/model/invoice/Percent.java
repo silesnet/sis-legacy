@@ -38,6 +38,10 @@ public class Percent {
     return new Percent(this.rate.add(percent.rate));
   }
 
+  public BigDecimal toBigDecimal() {
+    return rate;
+  }
+
   @Override
   public String toString() {
     return String.format("%d %%", rate.movePointRight(2).intValue());

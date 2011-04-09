@@ -392,7 +392,7 @@ public class BillingController extends MultiActionController {
         ServletRequestDataBinder binder = new ServletRequestDataBinder(
             bill);
         // register custom editors if needed here
-        // bind session filter data to example bill
+        // bind session filter data to example billFor
         binder.bind(new MutablePropertyValues(filterMap));
         if (log.isDebugEnabled())
           log.debug("Bill findByExample object : " + bill);

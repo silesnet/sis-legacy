@@ -1,9 +1,9 @@
 package cz.silesnet.model
 
 import cz.silesnet.model.enums.Frequency
-import spock.lang.Specification
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import spock.lang.Specification
 
 /**
  * User: der3k
@@ -39,6 +39,13 @@ class BillingTest extends Specification {
     date('2011-06-05') | period('2011-04-01', '2011-05-31')
   }
 
+  def 'no new period when billing.lastlyBilled is null'() {
+    billing.setLastlyBilled(null)
+  expect:
+    billing.nextBillPeriod(new Date()) == Period.NONE
+  }
+
+
   def 'next invoice-from date'() {
     billing.setLastlyBilled(date(last))
   expect:
@@ -51,7 +58,7 @@ class BillingTest extends Specification {
     '2012-02-29' | '2012-03-01'
   }
 
-  def 'next ivoice-from date has always time set to zero'() {
+  def 'next invoice-from date has always time set to zero'() {
     billing.setLastlyBilled(last)
   expect:
     hasZeroTime(billing.nextInvoiceFrom().getTime())

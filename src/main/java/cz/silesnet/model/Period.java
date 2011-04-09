@@ -305,6 +305,19 @@ public class Period implements HistoricToString, Serializable {
     }
   }
 
+  public void unionThisPeriodWith(final Period other) {
+    if (other == Period.NONE)
+      return;
+    if (!this.isCompleteAndValid())
+      throw new IllegalStateException("this period has to be complete and valid in order to union");
+    if (!other.isCompleteAndValid())
+      throw new IllegalArgumentException("period to union against has to be complete and valid");
+    if (other.getFrom().before(this.getFrom()))
+      this.setFrom(other.getFrom());
+    if (other.getTo().after(this.getTo()))
+      this.setTo(other.getTo());
+  }
+
   public int days() {
     return toJodaPeriod(PeriodType.days()).getDays();
   }
@@ -320,7 +333,11 @@ public class Period implements HistoricToString, Serializable {
   }
 
   public Period duplicate() {
-    return new Period(new Date(getFrom().getTime()), new Date(getTo().getTime()));
+    return new Period(dateDuplicate(getFrom()), dateDuplicate(getTo()));
+  }
+
+  private Date dateDuplicate(Date date) {
+    return date != null ? new Date(date.getTime()) : null;
   }
 
   public boolean equals(Object o) {
