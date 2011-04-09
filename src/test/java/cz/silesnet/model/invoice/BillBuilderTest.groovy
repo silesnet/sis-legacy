@@ -20,6 +20,43 @@ class BillBuilderTest extends Specification {
   private static final Date INVOICING_DATE = date('2011-10-05')
   private static final String NUMBERING_BASE = '10000'
 
+  // TODO check if correct text is created for bill item
+  // TODO skip zero amount items
+
+  def 'builder would skip zero priced items'() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    def monthlyZeroService = monthlyServiceRunningFromJan2010WithPrice10()
+    monthlyZeroService.setPrice(0)
+    customer.getServices() << monthlyZeroService
+  when:
+    def builder = new BillBuilder(customer, date('2011-01-05'))
+  then:
+    builder.errors().contains('billing.noBillItems')
+  }
+
+  def 'skipped zero priced item would not affect adjusted bill period'() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    def monthlyZeroService = monthlyServiceRunningFromJan2010WithPrice10()
+    monthlyZeroService.setPrice(0)
+    monthlyZeroService.getPeriod().setFrom(date('2011-01-02')) // try to ensure bill period adjustment
+    customer.getServices() << monthlyZeroService
+  when:
+    def builder = new BillBuilder(customer, date('2011-01-05'))
+  then:
+    builder.adjustedBillPeriod == period('2011-01-01', '2011-01-31')
+  }
+
+  def 'builder would not skip zero priced one-time items'() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    def oneTimeZeroService = oneTimeServiceForJan2011WithPrice10()
+    oneTimeZeroService.setPrice(0)
+    customer.getServices() << oneTimeZeroService
+  when:
+    def builder = new BillBuilder(customer, date('2011-01-05'))
+  then:
+    builder.items.size() == 1
+  }
+
   def 'build item adjusts bill period according to billed services periods'() {
     def builder = new BillBuilder(new Customer(), new Date())
     def service = monthlyServiceRunningFromJan2010WithPrice10()
@@ -67,7 +104,7 @@ class BillBuilderTest extends Specification {
 
   def 'build item populates service price'() {
     def builder = new BillBuilder(new Customer(), new Date())
-    def service = monthlyServiceRunningFromJan2010WithPrice10()
+    def service = oneTimeServiceForJan2011WithPrice10()
     service.setPrice(price)
   expect:
     builder.buildItemFor(service, period('2011-01-01', '2011-01-31')).getPrice() == price
@@ -123,19 +160,7 @@ class BillBuilderTest extends Specification {
     Frequency.ANNUAL | true
   }
 
-  def 'billable period for one-time service is always set to bill period'() {
-    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
-    def builder = new BillBuilder(customer, date('2011-01-05'))
-    def service = new Service()
-    service.setPeriod(null)
-    service.setFrequency(Frequency.ONE_TIME)
-    def billPeriod = period('2011-01-01', '2011-01-31')
-  expect:
-    builder.billPeriod == billPeriod
-    builder.billablePeriodFor(service) == billPeriod
-  }
-
-  def 'fails to build item for non existing period'() {
+  def 'build item fails for non existing period'() {
     def builder = new BillBuilder(new Customer(), new Date())
     def service = monthlyServiceRunningFromJan2010WithPrice10()
   when:
@@ -236,6 +261,18 @@ class BillBuilderTest extends Specification {
   then:
     !builder.wouldBuild()
     builder.errors().contains("billing.negativeAmountBill")
+  }
+
+  def 'billable period for one-time service is always set to bill period'() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    def builder = new BillBuilder(customer, date('2011-01-05'))
+    def service = new Service()
+    service.setPeriod(null)
+    service.setFrequency(Frequency.ONE_TIME)
+    def billPeriod = period('2011-01-01', '2011-01-31')
+  expect:
+    builder.billPeriod == billPeriod
+    builder.billablePeriodFor(service) == billPeriod
   }
 
   static def Customer activeCustomerBilledMonthlyForwardUpToDec2010() {

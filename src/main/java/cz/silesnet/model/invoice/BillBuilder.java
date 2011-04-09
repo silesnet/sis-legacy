@@ -60,6 +60,8 @@ public class BillBuilder {
       if (billableServicePeriod.equals(Period.NONE))
         continue;
       BillItem item = buildItemFor(service, billableServicePeriod);
+      if (item == null)
+        continue;
       totalNet = totalNet.plus(item.net());
       items.add(item);
     }
@@ -76,11 +78,14 @@ public class BillBuilder {
     Frequency frequency = service.getFrequency();
     Percent percent = frequency.percentageFor(billableServicePeriod);
     BillItem item = new BillItem(service.getName(), percent, Amount.of(service.getPrice()));
-    if (frequency.equals(Frequency.ONE_TIME)) {
+    if (Frequency.ONE_TIME.equals(frequency)) {
       billedOneTimeServices.add(service);
       item.setIsDisplayUnit(false);
     } else {
-      updateAdjustedBillPeriod(billableServicePeriod);
+      if (Amount.ZERO.equals(item.net()))
+        item = null;
+      else
+        updateAdjustedBillPeriod(billableServicePeriod);
     }
     return item;
   }
