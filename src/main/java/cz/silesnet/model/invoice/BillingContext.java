@@ -13,5 +13,4 @@ public interface BillingContext {
   public Amount roundTotalOf(Amount amount);
 
   public Date purgeDateFor(Date date);
-
 }

@@ -15,12 +15,14 @@ import java.util.List;
  * Time: 21:07
  */
 public class BillBuilder {
+  private static final int HASH_CODE_BASE = 1000000;
   private final Customer customer;
   private final Billing billing;
   private final Date due;
   private final Period billPeriod;
   private Period adjustedBillPeriod;
   private final List<String> errors = new ArrayList<String>();
+  private final List<String> warnings = new ArrayList<String>();
   private final List<BillItem> items = new ArrayList<BillItem>();
   private Amount totalNet = Amount.ZERO;
   private final List<Service> billedOneTimeServices = new ArrayList<Service>();
@@ -57,11 +59,15 @@ public class BillBuilder {
   private void buildItems() {
     for (Service service : customer.getServices()) {
       Period billableServicePeriod = billablePeriodFor(service);
-      if (billableServicePeriod.equals(Period.NONE))
+      if (billableServicePeriod.equals(Period.NONE)) {
+        warnings.add("billing.serviceOutOfPeriodSkipped");
         continue;
+      }
       BillItem item = buildItemFor(service, billableServicePeriod);
-      if (item == null)
+      if (item == null) {
+        warnings.add("billing.zeroItemSkipped");
         continue;
+      }
       totalNet = totalNet.plus(item.net());
       items.add(item);
     }
@@ -77,7 +83,8 @@ public class BillBuilder {
   protected BillItem buildItemFor(final Service service, final Period billableServicePeriod) {
     Frequency frequency = service.getFrequency();
     Percent percent = frequency.percentageFor(billableServicePeriod);
-    BillItem item = new BillItem(service.getName(), percent, Amount.of(service.getPrice()));
+    String text = service.getBillItemText(customer.getContact().getAddress().getCountry());
+    BillItem item = new BillItem(text, percent, Amount.of(service.getPrice()));
     if (Frequency.ONE_TIME.equals(frequency)) {
       billedOneTimeServices.add(service);
       item.setIsDisplayUnit(false);
@@ -124,10 +131,42 @@ public class BillBuilder {
     return errors;
   }
 
-  public Bill build(Invoicing invoicing, BillingContext context) {
-    return null;
+  public List<String> warnings() {
+    return warnings;
   }
 
+  public Bill build(final Invoicing invoicing, final BillingContext context) {
+    if (built)
+      throw new IllegalStateException("can not build the bill twice");
+    if (!wouldBuild())
+      throw new IllegalStateException("builder is not buildable");
+    Bill bill = new Bill();
+    bill.setNumber("" + invoicing.nextBillNumber());
+    bill.setHashCode(currentHashCode());
+    bill.setInvoicedCustomer(customer);
+    bill.setCustomerId(customer.getId());
+    bill.setCustomerName(customer.getName());
+    bill.setDeliverByMail(customer.getBilling().getDeliverByMail());
+    bill.setBillingDate(due);
+    bill.setPeriod(adjustedBillPeriod);
+    bill.setVat(vatRateFromContext(context));
+    bill.setPurgeDate(context.purgeDateFor(due));
+    for (BillItem item : items) {
+      item.setBill(bill);
+      bill.getItems().add(item);
+    }
+    built = true;
+    return bill;
+  }
+
+  private int vatRateFromContext(final BillingContext context) {
+    return context.calculateVatFor(Amount.HUNDRED).value().intValue();
+  }
+
+  private String currentHashCode() {
+    return Long.toHexString(customer.getId() + HASH_CODE_BASE) + Long.toHexString(new Date().getTime());
+  }
+  
   public void removeBilledOneTimeServices(Iterator<Service> services) {
     checkBuild();
   }

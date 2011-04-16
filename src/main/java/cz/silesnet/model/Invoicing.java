@@ -28,6 +28,8 @@ public class Invoicing extends Entity implements Historic {
 
   private String numberingBase;
 
+  private long nextBillNumber;
+
   public void setHistoryId(Long historyId) {
     this.historyId = historyId;
   }
@@ -53,6 +55,9 @@ public class Invoicing extends Entity implements Historic {
   }
 
   public void setNumberingBase(String numberingBase) {
+    if (this.numberingBase != null)
+      throw new IllegalStateException("numbering base already set");
+    nextBillNumber = Long.valueOf(numberingBase) + 1;
     this.numberingBase = numberingBase;
   }
 
@@ -85,6 +90,12 @@ public class Invoicing extends Entity implements Historic {
       throw new IllegalStateException("Country or invoicing date not set!");
     SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
     return country.getShortName().toUpperCase() + " " + dateFormat.format(invoicingDate);
+  }
+
+  public long nextBillNumber() {
+    if (numberingBase == null)
+      throw new IllegalStateException("numbering base not set");
+    return nextBillNumber++;
   }
 
 }

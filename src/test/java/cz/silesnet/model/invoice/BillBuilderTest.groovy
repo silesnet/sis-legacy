@@ -1,12 +1,11 @@
 package cz.silesnet.model.invoice
 
-import cz.silesnet.model.Customer
-import cz.silesnet.model.Period
-import cz.silesnet.model.Service
 import cz.silesnet.model.enums.BillingStatus
 import cz.silesnet.model.enums.Country
 import cz.silesnet.model.enums.Frequency
+import org.mockito.Mockito
 import spock.lang.Specification
+import cz.silesnet.model.*
 import static spock.util.matcher.HamcrestMatchers.*
 
 /**
@@ -15,15 +14,109 @@ import static spock.util.matcher.HamcrestMatchers.*
  * Time: 8:22
  */
 class BillBuilderTest extends Specification {
-  private static final Country CZ = Country.CZ
-  private static final String DF = 'yyyy-MM-dd'
-  private static final Date INVOICING_DATE = date('2011-10-05')
-  private static final String NUMBERING_BASE = '10000'
 
-  // TODO check if correct text is created for bill item
-  // TODO skip zero amount items
+  def 'build sets purge date using billing context'() {
+    def builder = buildableBillBuilderDueOn20110105()
+    def context = contextWithVatRate20MockitoMock()
+    Mockito.when(context.purgeDateFor(date('2011-01-05'))).thenReturn(date('2011-01-19'))
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), context)
+  then:
+    bill.getPurgeDate() == date('2011-01-19')
+  }
 
-  def 'builder would skip zero priced items'() {
+  def 'build sets vat rate from billing context'() {
+    def builder = buildableBillBuilderDueOn20110105()
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getVat() == 20
+  }
+
+  def 'build fails when there are errors'() {
+    def builder = buildableBillBuilderDueOn20110105()
+    builder.errors << 'error'
+  when:
+    builder.build(null, null)
+  then:
+    thrown IllegalStateException
+  }
+
+  def 'build fails when trying to build twice'() {
+    def builder = buildableBillBuilderDueOn20110105()
+    def invoicing = invoicingWithNumberingBase2011000()
+    def context = contextWithVatRate20MockitoMock()
+    builder.build(invoicing, context)
+  when:
+    builder.build(invoicing, context)
+  then:
+    thrown IllegalStateException
+  }
+
+  def 'build populates due date'() {
+    def builder = buildableBillBuilderDueOn20110105()
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getBillingDate() == date('2011-01-05')
+  }
+
+  def 'build populates adjusted bill period'() {
+    def builder = buildableBillBuilderDueOn20110105()
+    builder.adjustedBillPeriod = period('2010-01-01', '2010-01-01')
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getPeriod() == period('2010-01-01', '2010-01-01')
+  }
+
+  def 'build populates delivery by email flag'() {
+    def builder = buildableBillBuilderDueOn20110105()
+    builder.customer.getBilling().setDeliverByMail(true)
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getDeliverByMail()
+  }
+
+  def 'build populates each item with bill reference'() {
+    def builder = buildableBillBuilderDueOn20110105()
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getItems()[0].getBill() == bill
+  }
+
+  def "build populates customer's data"() {
+    def builder = buildableBillBuilderDueOn20110105()
+    builder.customer.setId(1L)
+    builder.customer.setName('Customer Name')
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getInvoicedCustomer() == builder.customer
+    bill.getCustomerId() == 1L
+    bill.getCustomerName() == 'Customer Name'
+  }
+
+  def "build sets bill hash-code"() {
+    def builder = buildableBillBuilderDueOn20110105()
+    builder.customer.setId(1L)
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getHashCode()[0..-4] == (Long.toHexString(1000001) + Long.toHexString(new Date().getTime()))[0..-4]
+  }
+
+  def 'build sets bill number from invoicing'() {
+    def builder = buildableBillBuilderDueOn20110105()
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getNumber() == '2011001'
+  }
+
+  def 'builder would skip zero priced items except for one-time'() {
     def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
     def monthlyZeroService = monthlyServiceRunningFromJan2010WithPrice10()
     monthlyZeroService.setPrice(0)
@@ -32,6 +125,7 @@ class BillBuilderTest extends Specification {
     def builder = new BillBuilder(customer, date('2011-01-05'))
   then:
     builder.errors().contains('billing.noBillItems')
+    builder.warnings().contains('billing.zeroItemSkipped')
   }
 
   def 'skipped zero priced item would not affect adjusted bill period'() {
@@ -54,6 +148,7 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, date('2011-01-05'))
   then:
+    builder.wouldBuild()
     builder.items.size() == 1
   }
 
@@ -70,7 +165,7 @@ class BillBuilderTest extends Specification {
     builder.adjustedBillPeriod == period('2011-04-08', '2011-04-27')
   }
 
-  def 'build item ignores one-time service billed period when adjusting bill period'() {
+  def 'build item ignores billed one-time service periods when adjusting bill period'() {
     def builder = new BillBuilder(new Customer(), new Date())
     def monthly = monthlyServiceRunningFromJan2010WithPrice10()
     def oneTime = monthlyServiceRunningFromJan2010WithPrice10()
@@ -92,14 +187,19 @@ class BillBuilderTest extends Specification {
     builder.adjustedBillPeriod == builder.billPeriod
   }
 
-  def 'build item populates service name'() {
-    def builder = new BillBuilder(new Customer(), new Date())
+  def 'build item populates service bill item text'() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    customer.getContact().getAddress().setCountry(Country.CZ)
+    def builder = new BillBuilder(customer, new Date())
     def service = monthlyServiceRunningFromJan2010WithPrice10()
     service.setName(name)
+    def connectivity = new Connectivity()
+    connectivity.setDownload(1000)
+    service.setConnectivity(connectivity)
   expect:
-    builder.buildItemFor(service, period('2011-01-01', '2011-01-31')).getText() == name
+    builder.buildItemFor(service, period('2011-01-01', '2011-01-31')).getText() == service.getBillItemText(Country.CZ)
   where:
-    name << [null, "", "Test Name"]
+    name << ["", "Test Name"]
   }
 
   def 'build item populates service price'() {
@@ -169,6 +269,17 @@ class BillBuilderTest extends Specification {
     thrown(IllegalArgumentException)
   }
 
+  def 'builder skips services that have no intersection with bill period'() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    def service = monthlyServiceRunningFromJan2010WithPrice10()
+    service.getPeriod().setTo(date('2010-12-31'))
+    customer.getServices() << service
+  when:
+    def builder = new BillBuilder(customer, date('2011-01-05'))
+  then:
+    builder.warnings().contains('billing.serviceOutOfPeriodSkipped')
+  }
+
   def 'instantiates from customer and due date'() {
   expect:
     new BillBuilder(new Customer(), new Date()) != null
@@ -194,7 +305,6 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, new Date())
   then:
-    !builder.wouldBuild()
     builder.errors().contains("billing.customerNotActive")
   }
 
@@ -204,7 +314,6 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, new Date())
   then:
-    !builder.wouldBuild()
     builder.errors().contains("billing.billingDisabled")
   }
 
@@ -213,7 +322,6 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, date('2010-12-05'))
   then:
-    !builder.wouldBuild()
     builder.errors().contains("billing.noBillForPeriod")
   }
 
@@ -223,7 +331,6 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, new Date())
   then:
-    !builder.wouldBuild()
     builder.errors().contains("billing.customerHasNoServices")
   }
 
@@ -235,7 +342,6 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, date('2011-01-05'))
   then:
-    !builder.wouldBuild()
     builder.errors().contains("billing.noBillItems")
   }
 
@@ -247,7 +353,6 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, date('2011-01-05'))
   then:
-    !builder.wouldBuild()
     builder.errors().contains("billing.zeroBillWithoutOneTimeItem")
   }
 
@@ -259,24 +364,30 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, date('2011-01-05'))
   then:
-    !builder.wouldBuild()
     builder.errors().contains("billing.negativeAmountBill")
   }
 
   def 'billable period for one-time service is always set to bill period'() {
-    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
-    def builder = new BillBuilder(customer, date('2011-01-05'))
-    def service = new Service()
+    def builder = new BillBuilder(activeCustomerBilledMonthlyForwardUpToDec2010(), date('2011-01-05'))
+    def service = oneTimeServiceForJan2011WithPrice10()
     service.setPeriod(null)
-    service.setFrequency(Frequency.ONE_TIME)
     def billPeriod = period('2011-01-01', '2011-01-31')
   expect:
-    builder.billPeriod == billPeriod
+    builder.billPeriod == billPeriod // double check
     builder.billablePeriodFor(service) == billPeriod
+  }
+
+  static def BillBuilder buildableBillBuilderDueOn20110105() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    def service = monthlyServiceRunningFromJan2010WithPrice10()
+    customer.getServices() << service
+    new BillBuilder(customer, date('2011-01-05'))
   }
 
   static def Customer activeCustomerBilledMonthlyForwardUpToDec2010() {
     def customer = new Customer()
+    customer.setId(1L)
+    customer.setName('Customer Name')
     def billing = customer.getBilling()
     billing.setIsActive(true)
     billing.setFrequency(Frequency.MONTHLY)
@@ -303,11 +414,23 @@ class BillBuilderTest extends Specification {
     service
   }
 
+  static def BillingContext contextWithVatRate20MockitoMock() {
+    def context = Mockito.mock(BillingContext)
+    Mockito.when(context.calculateVatFor(Mockito.any())).thenReturn(Amount.of(20))
+    return context
+  }
+
+  static def Invoicing invoicingWithNumberingBase2011000() {
+    def invoicing = new Invoicing()
+    invoicing.setNumberingBase('2011000')
+    invoicing
+  }
+
   static def Period period(String from, String to) {
     new Period(date(from), date(to))
   }
 
   static def Date date(String date) {
-    Date.parse(DF, date)
+    Date.parse('yyyy-MM-dd', date)
   }
 }
