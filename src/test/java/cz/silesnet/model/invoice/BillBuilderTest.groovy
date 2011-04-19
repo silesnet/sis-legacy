@@ -15,6 +15,57 @@ import static spock.util.matcher.HamcrestMatchers.*
  */
 class BillBuilderTest extends Specification {
 
+  def 'customer updates billing and services from builder by calling builders method with itself'() {
+    def builder = Mockito.mock(BillBuilder)
+    def customer = new Customer()
+  when:
+    customer.updateBillingAndServicesAfterBilledWith(builder)
+  then:
+    Mockito.verify(builder).updateBillingAndServicesOf(customer)
+  }
+
+  def "builder updates customer's lastly billed date after build to adjusted bill period end"() {
+    def builder = buildableBillBuilderDueOn20110105()
+    def customer = builder.customer
+    builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  when:
+    builder.updateBillingAndServicesOf(customer)
+  then:
+    customer.getBilling().getLastlyBilled() == builder.adjustedBillPeriod.getTo()
+  }
+
+  def 'builder removes billed one time services from customer after build'() {
+    def customer = activeCustomerBilledMonthlyForwardUpToDec2010()
+    customer.setServices([monthlyServiceRunningFromJan2010WithPrice10(),
+        oneTimeServiceForJan2011WithPrice10()])
+    def builder = new BillBuilder(customer, date('2011-01-05'))
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  when:
+    builder.updateBillingAndServicesOf(customer)
+  then:
+    bill.getItems().size() == 2
+    customer.getServices().size() == 1
+    customer.getServices()[0].getFrequency() == Frequency.MONTHLY
+  }
+
+  def "builder fails to update customer's billing and services when other customer given"() {
+    def builder = buildableBillBuilderDueOn20110105()
+    builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  when:
+    builder.updateBillingAndServicesOf(new Customer())
+  then:
+    thrown IllegalArgumentException
+  }
+
+  def "builder fails to update customer's billing and services when bill was not build yet"() {
+    def builder = buildableBillBuilderDueOn20110105()
+    def customer = builder.customer
+  when:
+    builder.updateBillingAndServicesOf(customer)
+  then:
+    thrown IllegalStateException
+  }
+
   def 'build sets purge date using billing context'() {
     def builder = buildableBillBuilderDueOn20110105()
     def context = contextWithVatRate20MockitoMock()

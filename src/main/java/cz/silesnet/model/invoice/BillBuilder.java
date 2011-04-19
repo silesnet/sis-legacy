@@ -6,7 +6,6 @@ import cz.silesnet.model.enums.Frequency;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,10 +28,7 @@ public class BillBuilder {
   private boolean built;
 
   public BillBuilder(final Customer customer, final Date due) {
-    if (customer == null)
-      throw new IllegalArgumentException("customer must not be null");
-    if (due == null)
-      throw new IllegalArgumentException("due date must not be null");
+    failWhenNullArgumentEncountered(customer, due);
     this.customer = customer;
     this.billing = customer.getBilling();
     this.due = due;
@@ -73,6 +69,15 @@ public class BillBuilder {
     }
   }
 
+  private void checkPostConditions() {
+    if (items.size() == 0)
+      errors.add("billing.noBillItems");
+    if (!hasOneTimeItem() && totalNet.equals(Amount.ZERO))
+      errors.add("billing.zeroBillWithoutOneTimeItem");
+    if (totalNet.compareTo(Amount.ZERO) < 0)
+      errors.add("billing.negativeAmountBill");
+  }
+
   protected Period billablePeriodFor(Service service) {
     if (service.getFrequency().equals(Frequency.ONE_TIME))
       return billPeriod;
@@ -97,42 +102,8 @@ public class BillBuilder {
     return item;
   }
 
-  private void updateAdjustedBillPeriod(final Period billableServicePeriod) {
-    if (adjustedBillPeriod == null) {
-      adjustedBillPeriod = billableServicePeriod.duplicate();
-    } else {
-      adjustedBillPeriod.unionThisPeriodWith(billableServicePeriod);
-    }
-  }
-
-  private void ensureAdjustedBillPeriod() {
-    if (adjustedBillPeriod == null)
-      adjustedBillPeriod = billPeriod.duplicate();
-  }
-
-  private void checkPostConditions() {
-    if (items.size() == 0)
-      errors.add("billing.noBillItems");
-    if (!hasOneTimeItem() && totalNet.equals(Amount.ZERO))
-      errors.add("billing.zeroBillWithoutOneTimeItem");
-    if (totalNet.compareTo(Amount.ZERO) < 0)
-      errors.add("billing.negativeAmountBill");
-  }
-
-  private boolean hasOneTimeItem() {
-    return billedOneTimeServices.size() != 0;
-  }
-
   public boolean wouldBuild() {
     return errors.size() == 0;
-  }
-
-  public List<String> errors() {
-    return errors;
-  }
-
-  public List<String> warnings() {
-    return warnings;
   }
 
   public Bill build(final Invoicing invoicing, final BillingContext context) {
@@ -159,6 +130,39 @@ public class BillBuilder {
     return bill;
   }
 
+  public void updateBillingAndServicesOf(final Customer otherCustomer) {
+    checkBuild();
+    if (this.customer != otherCustomer)
+      throw new IllegalArgumentException("billed customer differs from given customer");
+    customer.getBilling().setLastlyBilled(adjustedBillPeriod.getTo());
+    customer.getServices().removeAll(billedOneTimeServices);
+  }
+
+  public List<String> errors() {
+    return errors;
+  }
+
+  public List<String> warnings() {
+    return warnings;
+  }
+
+  private void updateAdjustedBillPeriod(final Period billableServicePeriod) {
+    if (adjustedBillPeriod == null) {
+      adjustedBillPeriod = billableServicePeriod.duplicate();
+    } else {
+      adjustedBillPeriod.unionThisPeriodWith(billableServicePeriod);
+    }
+  }
+
+  private void ensureAdjustedBillPeriod() {
+    if (adjustedBillPeriod == null)
+      adjustedBillPeriod = billPeriod.duplicate();
+  }
+
+  private boolean hasOneTimeItem() {
+    return billedOneTimeServices.size() != 0;
+  }
+
   private int vatRateFromContext(final BillingContext context) {
     return context.calculateVatFor(Amount.HUNDRED).value().intValue();
   }
@@ -166,13 +170,15 @@ public class BillBuilder {
   private String currentHashCode() {
     return Long.toHexString(customer.getId() + HASH_CODE_BASE) + Long.toHexString(new Date().getTime());
   }
-  
-  public void removeBilledOneTimeServices(Iterator<Service> services) {
-    checkBuild();
+
+  private void failWhenNullArgumentEncountered(final Customer customer, final Date due) {
+    throwWhenNull(customer, "customer must not be null");
+    throwWhenNull(due, "due date must not be null");
   }
 
-  public void updateLastlyBilled(Billing billing) {
-    checkBuild();
+  private void throwWhenNull(final Object arg, final String message) {
+    if (arg == null)
+      throw new IllegalArgumentException(message);
   }
 
   private void checkBuild() {

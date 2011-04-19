@@ -2,6 +2,7 @@ package cz.silesnet.model;
 
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Frequency;
+import cz.silesnet.model.invoice.BillBuilder;
 import cz.silesnet.utils.SearchUtils;
 
 import java.util.*;
@@ -325,5 +326,9 @@ public class Customer extends Entity implements Historic {
       return true;
     }
     return false;
+  }
+
+  public void updateBillingAndServicesAfterBilledWith(final BillBuilder builder) {
+    builder.updateBillingAndServicesOf(this);
   }
 }
