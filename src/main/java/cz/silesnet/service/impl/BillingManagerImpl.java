@@ -5,6 +5,7 @@ import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
+import cz.silesnet.model.invoice.Amount;
 import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
@@ -40,6 +41,7 @@ import java.util.*;
  */
 public class BillingManagerImpl implements BillingManager {
   private static final int VAT_PL = 23;
+  private static final Map<String, String> MESSAGE_KEYS_MAPPING = errorsAndWarningsKeysMap();
 
   protected final Log log = LogFactory.getLog(getClass());
 
@@ -934,5 +936,26 @@ public class BillingManagerImpl implements BillingManager {
 
   private String escapeQuotes(String name) {
     return StringUtils.replace(name, "\"", "\"\"");
+  }
+
+  protected void auditBillBuildingErrors(final Invoicing invoicing, final Customer customer, final List<String> errors) {
+    for (String error : errors) {
+      String key = MESSAGE_KEYS_MAPPING.get(error);
+      if (key == null)
+        key = error;
+      hmgr.insertSystemBillingAudit(invoicing, customer, key, "mainBilling.status.skipped");
+    }
+  }
+
+  private static Map<String, String> errorsAndWarningsKeysMap() {
+    HashMap<String, String> keys = new HashMap<String, String>();
+    keys.put("billing.customerNotActive", "mainBilling.status.deactivated");
+    keys.put("billing.billingDisabled", "mainBilling.msg.billinDisabled");
+    keys.put("billing.customerHasNoServices", "mainBilling.msg.no-active-services");
+    keys.put("billing.noBillForPeriod", "mainBilling.msg.invalidPeriod");
+    keys.put("billing.noBillItems", "mainBilling.msg.no-active-services");
+    keys.put("billing.zeroBillWithoutOneTimeItem", "mainBilling.msg.zeroInvoice");
+    keys.put("billing.negativeAmountBill", "mainBilling.msg.negativeInvoice");
+    return Collections.unmodifiableMap(keys);
   }
 }

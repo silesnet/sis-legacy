@@ -3,6 +3,7 @@ package cz.silesnet.dao;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.enums.Country;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,5 +33,7 @@ public interface CustomerDAO extends DAO {
   public void saveAll(List<Customer> customers);
 
   public int getTotalCustomers(Country c);
+
+  public Iterator<Long> findActiveCustomerIdsByCountry(Country country);
 
 }

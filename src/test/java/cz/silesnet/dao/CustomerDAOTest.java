@@ -2,16 +2,37 @@ package cz.silesnet.dao;
 
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.PrepareMixture;
+import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
+import org.unitils.dbunit.annotation.DataSet;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
+@DataSet("/cz/silesnet/dao/ServiceDAOTest.xml")
 public abstract class CustomerDAOTest extends DaoTestSupport<CustomerDAO> {
+
+  @Test
+  public void testFindActiveCustomerIdsByCountry() {
+    List<Long> activeCzCustomerIds = idsToList(dao.findActiveCustomerIdsByCountry(Country.CZ));
+    List<Long> activePlCustomerIds = idsToList(dao.findActiveCustomerIdsByCountry(Country.PL));
+    assertThat(activeCzCustomerIds.size(), is(2));
+    assertThat(activePlCustomerIds.size(), is(1));
+  }
+
+  private List<Long> idsToList(Iterator<Long> ids) {
+    List<Long> list = new ArrayList<Long>();
+    while(ids.hasNext())
+      list.add(ids.next());
+    return list;
+  }
 
   @Test
   public void testCRUD() {
@@ -93,8 +114,7 @@ public abstract class CustomerDAOTest extends DaoTestSupport<CustomerDAO> {
     try {
       dao.get(cId);
       throw new Error();
-    }
-    catch (ObjectRetrievalFailureException e) {
+    } catch (ObjectRetrievalFailureException e) {
       // expected
     }
   }

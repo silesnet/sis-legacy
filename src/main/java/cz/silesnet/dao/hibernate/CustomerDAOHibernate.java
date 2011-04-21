@@ -13,6 +13,8 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,8 +22,7 @@ import java.util.List;
  *
  * @author Richard Sikora
  */
-public class CustomerDAOHibernate extends HibernateDaoSupport implements
-    CustomerDAO {
+public class CustomerDAOHibernate extends HibernateDaoSupport implements CustomerDAO {
 
   protected final Log log = LogFactory.getLog(getClass());
 
@@ -134,6 +135,14 @@ public class CustomerDAOHibernate extends HibernateDaoSupport implements
             + " where c.contact.address.country=?", c).get(
         0);
     return total != null ? total : 0;
+  }
+
+  @SuppressWarnings("unchecked")
+  public Iterator<Long> findActiveCustomerIdsByCountry(final Country country) {
+    getHibernateTemplate().enableFilter("activeFilter").setParameter("isActive", true);
+    List ids = getHibernateTemplate().find(
+        "select c.id from Customer c where c.contact.address.country=?", country);
+    return (Iterator<Long>) ids.iterator();
   }
 
 }
