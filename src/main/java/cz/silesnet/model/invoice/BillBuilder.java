@@ -2,6 +2,7 @@ package cz.silesnet.model.invoice;
 
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
+import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
 
 import java.util.ArrayList;
@@ -88,18 +89,36 @@ public class BillBuilder {
   protected BillItem buildItemFor(final Service service, final Period billableServicePeriod) {
     Frequency frequency = service.getFrequency();
     Percent percent = frequency.percentageFor(billableServicePeriod);
-    String text = service.getBillItemText(customer.getContact().getAddress().getCountry());
-    BillItem item = new BillItem(text, percent, Amount.of(service.getPrice()));
-    if (Frequency.ONE_TIME.equals(frequency)) {
-      billedOneTimeServices.add(service);
-      item.setIsDisplayUnit(false);
-    } else {
-      if (Amount.ZERO.equals(item.net()))
-        item = null;
-      else
-        updateAdjustedBillPeriod(billableServicePeriod);
-    }
+    String text = service.getBillItemText(customersCountry());
+    final BillItem item = new BillItem(text, percent, Amount.of(service.getPrice()));
+    if (isZeroAmountAndNotOneTime(item, frequency))
+      return null; // skip such item
+    if (isOneTimeService(frequency))
+      handleOneTime(item, service);
+    else
+      updateAdjustedBillPeriod(billableServicePeriod);
     return item;
+  }
+
+  private boolean isZeroAmountAndNotOneTime(final BillItem item, final Frequency frequency) {
+    return (isZeroAmount(item) && (!isOneTimeService(frequency)));
+  }
+
+  private Country customersCountry() {
+    return customer.getContact().getAddress().getCountry();
+  }
+
+  private boolean isZeroAmount(final BillItem item) {
+    return Amount.ZERO.equals(item.net());
+  }
+
+  private boolean isOneTimeService(final Frequency frequency) {
+    return Frequency.ONE_TIME.equals(frequency);
+  }
+
+  private void handleOneTime(final BillItem item, final Service service) {
+    billedOneTimeServices.add(service);
+    item.setIsDisplayUnit(false);
   }
 
   public boolean wouldBuild() {
@@ -112,20 +131,12 @@ public class BillBuilder {
     if (!wouldBuild())
       throw new IllegalStateException("builder is not buildable");
     Bill bill = new Bill();
-    bill.setNumber("" + invoicing.nextBillNumber());
+    assignNewNumberAndInvoicingReferenceTo(bill, invoicing);
+    assignCustomerReferencesTo(bill);
+    addItemsTo(bill);
+    assignDatesAndVatRateTo(bill, context);
     bill.setHashCode(currentHashCode());
-    bill.setInvoicedCustomer(customer);
-    bill.setCustomerId(customer.getId());
-    bill.setCustomerName(customer.getName());
-    bill.setDeliverByMail(customer.getBilling().getDeliverByMail());
-    bill.setBillingDate(due);
-    bill.setPeriod(adjustedBillPeriod);
-    bill.setVat(vatRateFromContext(context));
-    bill.setPurgeDate(context.purgeDateFor(due));
-    for (BillItem item : items) {
-      item.setBill(bill);
-      bill.getItems().add(item);
-    }
+    bill.setIsConfirmed(true);
     built = true;
     return bill;
   }
@@ -157,6 +168,32 @@ public class BillBuilder {
   private void ensureAdjustedBillPeriod() {
     if (adjustedBillPeriod == null)
       adjustedBillPeriod = billPeriod.duplicate();
+  }
+
+  private void assignNewNumberAndInvoicingReferenceTo(final Bill bill, final Invoicing invoicing) {
+    bill.setNumber("" + invoicing.nextBillNumber());
+    bill.setInvoicingId(invoicing.getId());
+  }
+
+  private void assignDatesAndVatRateTo(final Bill bill, final BillingContext context) {
+    bill.setPeriod(adjustedBillPeriod);
+    bill.setBillingDate(due);
+    bill.setPurgeDate(context.purgeDateFor(due));
+    bill.setVat(vatRateFromContext(context));
+  }
+
+  private void assignCustomerReferencesTo(final Bill bill) {
+    bill.setCustomerId(customer.getId());
+    bill.setCustomerName(customer.getName());
+    bill.setInvoicedCustomer(customer);
+    bill.setDeliverByMail(customer.getBilling().getDeliverByMail());
+  }
+
+  private void addItemsTo(final Bill bill) {
+    for (BillItem item : items) {
+      item.setBill(bill);
+      bill.getItems().add(item);
+    }
   }
 
   private boolean hasOneTimeItem() {

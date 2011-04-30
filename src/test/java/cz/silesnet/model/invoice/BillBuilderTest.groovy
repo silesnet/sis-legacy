@@ -84,6 +84,24 @@ class BillBuilderTest extends Specification {
     bill.getVat() == 20
   }
 
+  def 'build sets confirmed flag to true'() {
+    def builder = buildableBillBuilderDueOn20110105()
+  when:
+    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+  then:
+    bill.getIsConfirmed()
+  }
+
+  def 'build sets invoicingId'() {
+    def builder = buildableBillBuilderDueOn20110105()
+    def invoicing = invoicingWithNumberingBase2011000()
+    invoicing.setId(1000L)
+  when:
+    def bill = builder.build(invoicing, contextWithVatRate20MockitoMock())
+  then:
+    bill.getInvoicingId() == 1000L
+  }
+
   def 'build fails when there are errors'() {
     def builder = buildableBillBuilderDueOn20110105()
     builder.errors << 'error'
