@@ -120,4 +120,5 @@ public interface BillingManager {
   public void exportAllToInsert(Invoicing invoicing, List<Bill> bills,
                                 PrintWriter writer);
 
+  public void billCustomersIn(Invoicing invoicing);
 }

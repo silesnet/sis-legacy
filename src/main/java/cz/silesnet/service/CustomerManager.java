@@ -6,6 +6,7 @@ import cz.silesnet.model.Service;
 import cz.silesnet.model.enums.Country;
 
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -56,5 +57,4 @@ public interface CustomerManager {
 
   public void exportCusotmersToInsert(List<Customer> customers,
                                       PrintWriter writer);
-
 }

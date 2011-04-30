@@ -1,11 +1,15 @@
 package cz.silesnet.service.impl;
 
 import cz.silesnet.dao.BillDAO;
+import cz.silesnet.dao.CustomerDAO;
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.model.invoice.Amount;
+import cz.silesnet.model.invoice.BillBuilder;
+import cz.silesnet.model.invoice.BillingContext;
+import cz.silesnet.model.invoice.BillingContextFactory;
 import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
@@ -49,6 +53,8 @@ public class BillingManagerImpl implements BillingManager {
 
   private CustomerManager cMgr;
 
+  private CustomerDAO customerDao;
+
   private HistoryManager hmgr;
 
   private SettingManager setMgr;
@@ -67,6 +73,12 @@ public class BillingManagerImpl implements BillingManager {
 
   private static int sPurgeDateDays = 14;
 
+  private BillingContextFactory billingContextFactory;
+
+  public void setBillingContextFactory(final BillingContextFactory billingContextFactory) {
+    this.billingContextFactory = billingContextFactory;
+  }
+
   public void setCustomerManager(CustomerManager mgr) {
     cMgr = mgr;
   }
@@ -81,6 +93,10 @@ public class BillingManagerImpl implements BillingManager {
 
   public void setHistoryManager(HistoryManager historyManager) {
     hmgr = historyManager;
+  }
+
+  public void setCustomerDao(final CustomerDAO customerDao) {
+    this.customerDao = customerDao;
   }
 
   public void setSettingManager(SettingManager settingManager) {
@@ -938,6 +954,28 @@ public class BillingManagerImpl implements BillingManager {
     return StringUtils.replace(name, "\"", "\"\"");
   }
 
+  // should be transactional
+  public void billCustomersIn(final Invoicing invoicing) {
+    BillingContext context = billingContextFactory.billingContextFor(invoicing);
+    Iterable<Long> customers = customerDao.findActiveCustomerIdsByCountry(invoicing.getCountry());
+    for(Long id: customers) {
+      Customer customer = customerDao.get(id);
+      BillBuilder builder = billBuilderFor(customer, invoicing.getInvoicingDate());
+      if (builder.wouldBuild()) {
+        Bill bill = builder.build(invoicing, context);
+        customer.updateBillingAndServicesAfterBilledWith(builder);
+        dao.save(bill);
+        customerDao.save(customer);
+      } else {
+        auditBillBuildingErrors(invoicing, customer, builder.errors());
+      }
+    }
+  }
+
+  protected BillBuilder billBuilderFor(final Customer customer, final Date due) {
+    return new BillBuilder(customer, due);
+  }
+
   protected void auditBillBuildingErrors(final Invoicing invoicing, final Customer customer, final List<String> errors) {
     for (String error : errors) {
       String key = MESSAGE_KEYS_MAPPING.get(error);
@@ -958,4 +996,6 @@ public class BillingManagerImpl implements BillingManager {
     keys.put("billing.negativeAmountBill", "mainBilling.msg.negativeInvoice");
     return Collections.unmodifiableMap(keys);
   }
+
+
 }

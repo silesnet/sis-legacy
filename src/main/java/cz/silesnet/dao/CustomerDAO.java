@@ -34,6 +34,6 @@ public interface CustomerDAO extends DAO {
 
   public int getTotalCustomers(Country c);
 
-  public Iterator<Long> findActiveCustomerIdsByCountry(Country country);
+  public Iterable<Long> findActiveCustomerIdsByCountry(Country country);
 
 }

@@ -138,11 +138,11 @@ public class CustomerDAOHibernate extends HibernateDaoSupport implements Custome
   }
 
   @SuppressWarnings("unchecked")
-  public Iterator<Long> findActiveCustomerIdsByCountry(final Country country) {
+  public Iterable<Long> findActiveCustomerIdsByCountry(final Country country) {
     getHibernateTemplate().enableFilter("activeFilter").setParameter("isActive", true);
     List ids = getHibernateTemplate().find(
-        "select c.id from Customer c where c.contact.address.country=?", country);
-    return (Iterator<Long>) ids.iterator();
+        "select c.id from Customer c where c.contact.address.country=? order by c.name", country);
+    return (Iterable<Long>) ids;
   }
 
 }

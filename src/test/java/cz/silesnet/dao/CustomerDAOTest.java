@@ -9,8 +9,6 @@ import org.testng.annotations.Test;
 import org.unitils.dbunit.annotation.DataSet;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.*;
@@ -24,13 +22,16 @@ public abstract class CustomerDAOTest extends DaoTestSupport<CustomerDAO> {
     List<Long> activeCzCustomerIds = idsToList(dao.findActiveCustomerIdsByCountry(Country.CZ));
     List<Long> activePlCustomerIds = idsToList(dao.findActiveCustomerIdsByCountry(Country.PL));
     assertThat(activeCzCustomerIds.size(), is(2));
+    assertThat(activeCzCustomerIds.get(0), is(10L));
+    assertThat(activeCzCustomerIds.get(1), is(11L));
     assertThat(activePlCustomerIds.size(), is(1));
+    assertThat(activePlCustomerIds.get(0), is(13L));
   }
 
-  private List<Long> idsToList(Iterator<Long> ids) {
+  private List<Long> idsToList(Iterable<Long> ids) {
     List<Long> list = new ArrayList<Long>();
-    while(ids.hasNext())
-      list.add(ids.next());
+    for (Long id : ids)
+      list.add(id);
     return list;
   }
 
