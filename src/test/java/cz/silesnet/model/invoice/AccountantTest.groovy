@@ -26,7 +26,7 @@ class AccountantTest extends Specification {
     def result = accountant.bill(customer)
   then:
     1 * builder.wouldBuild() >> true
-    1 * builder.build(invoicing, context) >> bill
+    1 * builder.build(accountant) >> bill
     1 * customer.updateBillingAndServicesAfterBilledWith(builder)
     1 * builder.warnings() >> ['warning']
     result.isSuccess()
@@ -77,10 +77,10 @@ class AccountantTest extends Specification {
  def "provides invoice numbers based on invoicing's numbering base" () {
    def accountant = new Accountant(invoicingWithNumberingBase2011000(), Mock(BillingContext))
    expect:
-    accountant.nextInvoiceNumber() == '2011001'
-    accountant.nextInvoiceNumber() == '2011002'
-    accountant.nextInvoiceNumber() == '2011003'
-    accountant.nextInvoiceNumber() == '2011004'
+    accountant.nextBillNumber() == '2011001'
+    accountant.nextBillNumber() == '2011002'
+    accountant.nextBillNumber() == '2011003'
+    accountant.nextBillNumber() == '2011004'
  }
 
   def 'counters are set to zero right after instantiation'() {
@@ -152,7 +152,7 @@ class AccountantTest extends Specification {
     }
     builder.wouldBuild() >>> [true, false, true, true, true]
     //                        bill  skip   bill  throw bill
-    builder.build(invoicing, context) >>> [bill, bill, { throw new RuntimeException() }, bill]
+    builder.build(accountant) >>> [bill, bill, { throw new RuntimeException() }, bill]
   when:
     5.times {
       accountant.bill(customer)

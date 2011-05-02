@@ -125,16 +125,16 @@ public class BillBuilder {
     return errors.size() == 0;
   }
 
-  public Bill build(final Invoicing invoicing, final BillingContext context) {
+  public Bill build(final Accountant accountant) {
     if (built)
       throw new IllegalStateException("can not build the bill twice");
     if (!wouldBuild())
       throw new IllegalStateException("builder is not buildable");
     Bill bill = new Bill();
-    assignNewNumberAndInvoicingReferenceTo(bill, invoicing);
+    assignNewNumberAndInvoicingReferenceTo(bill, accountant);
     assignCustomerReferencesTo(bill);
     addItemsTo(bill);
-    assignDatesAndVatRateTo(bill, context);
+    assignDatesAndVatRateTo(bill, accountant.billingContext());
     bill.setHashCode(currentHashCode());
     bill.setIsConfirmed(true);
     built = true;
@@ -170,9 +170,9 @@ public class BillBuilder {
       adjustedBillPeriod = billPeriod.duplicate();
   }
 
-  private void assignNewNumberAndInvoicingReferenceTo(final Bill bill, final Invoicing invoicing) {
-    bill.setNumber("" + invoicing.nextBillNumber());
-    bill.setInvoicingId(invoicing.getId());
+  private void assignNewNumberAndInvoicingReferenceTo(final Bill bill, final Accountant accountant) {
+    bill.setNumber(accountant.nextBillNumber());
+    bill.setInvoicingId(accountant.invoicing().getId());
   }
 
   private void assignDatesAndVatRateTo(final Bill bill, final BillingContext context) {

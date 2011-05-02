@@ -6,10 +6,13 @@ import cz.silesnet.model.Bill
 import cz.silesnet.model.Customer
 import cz.silesnet.model.Invoicing
 import cz.silesnet.model.enums.Country
+import cz.silesnet.model.invoice.Accountant
 import cz.silesnet.model.invoice.BillBuilder
+import cz.silesnet.model.invoice.BillingContext
 import cz.silesnet.model.invoice.BillingContextFactory
 import cz.silesnet.service.HistoryManager
 import spock.lang.Specification
+import cz.silesnet.model.invoice.BillingResult
 
 /**
  * User: der3k
@@ -23,12 +26,13 @@ class BillingManagerInvoicingTest extends Specification {
     def billDao = Mock(BillDAO)
     def contextFactory = Mock(BillingContextFactory)
 
-    def builder = Mock(BillBuilder)
+    def accountant = Mock(Accountant)
     def bMgr = new BillingManagerImpl() {
-      @Override protected BillBuilder billBuilderFor(Customer aCustomer, Date due) {
-        return builder
+      @Override protected Accountant newAccountantFor(Invoicing invoicing, BillingContext context) {
+        return accountant
       }
     }
+
     bMgr.setCustomerDao(customerDao)
     bMgr.setBillDAO(billDao)
     bMgr.setBillingContextFactory(contextFactory)
@@ -36,15 +40,13 @@ class BillingManagerInvoicingTest extends Specification {
     def customer = Mock(Customer)
     def bill = Mock(Bill)
     def invoicing = Mock(Invoicing)
-
+    def result = BillingResult.success(bill, customer, [])
   when:
     bMgr.billCustomersIn(invoicing)
   then:
     1 * customerDao.findActiveCustomerIdsByCountry(_) >> [1L]
     1 * customerDao.get(1L) >> customer
-    1 * builder.wouldBuild() >> true
-    1 * builder.build(invoicing, _) >> bill
-    1 * customer.updateBillingAndServicesAfterBilledWith(builder)
+    1 * accountant.bill(customer) >> result
     1 * billDao.save(bill)
     1 * customerDao.save(customer)
   }
@@ -54,10 +56,10 @@ class BillingManagerInvoicingTest extends Specification {
     def customerDao = Mock(CustomerDAO)
     def contextFactory = Mock(BillingContextFactory)
 
-    def builder = Mock(BillBuilder)
+    def accountant = Mock(Accountant)
     def bMgr = new BillingManagerImpl() {
-      @Override protected BillBuilder billBuilderFor(Customer aCustomer, Date due) {
-        return builder
+      @Override protected Accountant newAccountantFor(Invoicing invoicing, BillingContext context) {
+        return accountant
       }
 
       @Override protected void auditBillBuildingErrors(Invoicing invoicing, Customer customer, List<String> errors) {
@@ -70,14 +72,13 @@ class BillingManagerInvoicingTest extends Specification {
 
     def customer = Mock(Customer)
     def invoicing = Mock(Invoicing)
-
+    def result = BillingResult.failure(['error'])
   when:
     bMgr.billCustomersIn(invoicing)
   then:
     1 * customerDao.findActiveCustomerIdsByCountry(_) >> [1L]
     1 * customerDao.get(1L) >> customer
-    1 * builder.wouldBuild() >> false
-    1 * builder.errors() >> ['error']
+    1 * accountant.bill(customer) >> result
     errorsAudited == true
   }
 
@@ -86,7 +87,7 @@ class BillingManagerInvoicingTest extends Specification {
     def customerDao = Mock(CustomerDAO)
     bMgr.setCustomerDao(customerDao)
     bMgr.setBillingContextFactory(Mock(BillingContextFactory))
-    def invoicing = new Invoicing()
+    def invoicing = invoicingWithNumberingBase2011000()
     invoicing.setCountry(Country.PL)
   when:
     bMgr.billCustomersIn(invoicing)
@@ -100,7 +101,7 @@ class BillingManagerInvoicingTest extends Specification {
     def contextFactory = Mock(BillingContextFactory)
     bMgr.setBillingContextFactory(contextFactory)
     bMgr.setCustomerDao(Mock(CustomerDAO))
-    def invoicing = new Invoicing()
+    def invoicing = invoicingWithNumberingBase2011000()
   when:
     bMgr.billCustomersIn(invoicing)
   then:
@@ -144,11 +145,17 @@ class BillingManagerInvoicingTest extends Specification {
   }
 
   def 'groovy stubbing'() {
-    def builder = Mock(BillBuilder)
+    def accountant = Mock(Accountant)
     def bmgr = new BillingManagerImpl()
-    BillingManagerImpl.metaClass.billBuilderFor = {customer, due -> builder }
-    expect:
-      bmgr.billBuilderFor(null, null) == builder
+    BillingManagerImpl.metaClass.newAccountantFor = {customer, due -> accountant }
+  expect:
+    bmgr.newAccountantFor(null, null) == accountant
+  }
+
+  static def Invoicing invoicingWithNumberingBase2011000() {
+    def invoicing = new Invoicing()
+    invoicing.setNumberingBase('2011000')
+    invoicing
   }
 
 }

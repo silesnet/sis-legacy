@@ -27,7 +27,7 @@ class BillBuilderTest extends Specification {
   def "builder updates customer's lastly billed date after build to adjusted bill period end"() {
     def builder = buildableBillBuilderDueOn20110105()
     def customer = builder.customer
-    builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    builder.build(accountantWithNumberingBase2011000AndVatRate20())
   when:
     builder.updateBillingAndServicesOf(customer)
   then:
@@ -39,7 +39,7 @@ class BillBuilderTest extends Specification {
     customer.setServices([monthlyServiceRunningFromJan2010WithPrice10(),
         oneTimeServiceForJan2011WithPrice10()])
     def builder = new BillBuilder(customer, date('2011-01-05'))
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   when:
     builder.updateBillingAndServicesOf(customer)
   then:
@@ -50,7 +50,7 @@ class BillBuilderTest extends Specification {
 
   def "builder fails to update customer's billing and services when other customer given"() {
     def builder = buildableBillBuilderDueOn20110105()
-    builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    builder.build(accountantWithNumberingBase2011000AndVatRate20())
   when:
     builder.updateBillingAndServicesOf(new Customer())
   then:
@@ -71,7 +71,7 @@ class BillBuilderTest extends Specification {
     def context = contextWithVatRate20MockitoMock()
     Mockito.when(context.purgeDateFor(date('2011-01-05'))).thenReturn(date('2011-01-19'))
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), context)
+    def bill = builder.build(new Accountant(invoicingWithNumberingBase2011000(), context))
   then:
     bill.getPurgeDate() == date('2011-01-19')
   }
@@ -79,7 +79,7 @@ class BillBuilderTest extends Specification {
   def 'build sets vat rate from billing context'() {
     def builder = buildableBillBuilderDueOn20110105()
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getVat() == 20
   }
@@ -87,7 +87,7 @@ class BillBuilderTest extends Specification {
   def 'build sets confirmed flag to true'() {
     def builder = buildableBillBuilderDueOn20110105()
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getIsConfirmed()
   }
@@ -97,7 +97,7 @@ class BillBuilderTest extends Specification {
     def invoicing = invoicingWithNumberingBase2011000()
     invoicing.setId(1000L)
   when:
-    def bill = builder.build(invoicing, contextWithVatRate20MockitoMock())
+    def bill = builder.build(new Accountant(invoicing, contextWithVatRate20MockitoMock()))
   then:
     bill.getInvoicingId() == 1000L
   }
@@ -106,18 +106,17 @@ class BillBuilderTest extends Specification {
     def builder = buildableBillBuilderDueOn20110105()
     builder.errors << 'error'
   when:
-    builder.build(null, null)
+    builder.build(null)
   then:
     thrown IllegalStateException
   }
 
   def 'build fails when trying to build twice'() {
     def builder = buildableBillBuilderDueOn20110105()
-    def invoicing = invoicingWithNumberingBase2011000()
-    def context = contextWithVatRate20MockitoMock()
-    builder.build(invoicing, context)
+    def accountant = new Accountant(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    builder.build(accountant)
   when:
-    builder.build(invoicing, context)
+    builder.build(accountant)
   then:
     thrown IllegalStateException
   }
@@ -125,7 +124,7 @@ class BillBuilderTest extends Specification {
   def 'build populates due date'() {
     def builder = buildableBillBuilderDueOn20110105()
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getBillingDate() == date('2011-01-05')
   }
@@ -134,7 +133,7 @@ class BillBuilderTest extends Specification {
     def builder = buildableBillBuilderDueOn20110105()
     builder.adjustedBillPeriod = period('2010-01-01', '2010-01-01')
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getPeriod() == period('2010-01-01', '2010-01-01')
   }
@@ -143,7 +142,7 @@ class BillBuilderTest extends Specification {
     def builder = buildableBillBuilderDueOn20110105()
     builder.customer.getBilling().setDeliverByMail(true)
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getDeliverByMail()
   }
@@ -151,7 +150,7 @@ class BillBuilderTest extends Specification {
   def 'build populates each item with bill reference'() {
     def builder = buildableBillBuilderDueOn20110105()
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getItems()[0].getBill() == bill
   }
@@ -161,7 +160,7 @@ class BillBuilderTest extends Specification {
     builder.customer.setId(1L)
     builder.customer.setName('Customer Name')
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getInvoicedCustomer() == builder.customer
     bill.getCustomerId() == 1L
@@ -172,7 +171,7 @@ class BillBuilderTest extends Specification {
     def builder = buildableBillBuilderDueOn20110105()
     builder.customer.setId(1L)
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getHashCode()[0..-4] == (Long.toHexString(1000001) + Long.toHexString(new Date().getTime()))[0..-4]
   }
@@ -180,7 +179,7 @@ class BillBuilderTest extends Specification {
   def 'build sets bill number from invoicing'() {
     def builder = buildableBillBuilderDueOn20110105()
   when:
-    def bill = builder.build(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
+    def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
     bill.getNumber() == '2011001'
   }
@@ -444,6 +443,11 @@ class BillBuilderTest extends Specification {
   expect:
     builder.billPeriod == billPeriod // double check
     builder.billablePeriodFor(service) == billPeriod
+  }
+
+
+  static def Accountant accountantWithNumberingBase2011000AndVatRate20() {
+    new Accountant(invoicingWithNumberingBase2011000(), contextWithVatRate20MockitoMock())
   }
 
   static def BillBuilder buildableBillBuilderDueOn20110105() {

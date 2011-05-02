@@ -6,10 +6,7 @@ import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
-import cz.silesnet.model.invoice.Amount;
-import cz.silesnet.model.invoice.BillBuilder;
-import cz.silesnet.model.invoice.BillingContext;
-import cz.silesnet.model.invoice.BillingContextFactory;
+import cz.silesnet.model.invoice.*;
 import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
@@ -957,23 +954,25 @@ public class BillingManagerImpl implements BillingManager {
   // should be transactional
   public void billCustomersIn(final Invoicing invoicing) {
     BillingContext context = billingContextFactory.billingContextFor(invoicing);
+    Accountant accountant = newAccountantFor(invoicing, context);
     Iterable<Long> customers = customerDao.findActiveCustomerIdsByCountry(invoicing.getCountry());
-    for(Long id: customers) {
+    for (Long id : customers) {
       Customer customer = customerDao.get(id);
-      BillBuilder builder = billBuilderFor(customer, invoicing.getInvoicingDate());
-      if (builder.wouldBuild()) {
-        Bill bill = builder.build(invoicing, context);
-        customer.updateBillingAndServicesAfterBilledWith(builder);
-        dao.save(bill);
-        customerDao.save(customer);
-      } else {
-        auditBillBuildingErrors(invoicing, customer, builder.errors());
-      }
+      BillingResult result = accountant.bill(customer);
+      if (result.isSuccess())
+        persistBillingResult(result);
+      else
+        auditBillBuildingErrors(invoicing, customer, result.errors());
     }
   }
 
-  protected BillBuilder billBuilderFor(final Customer customer, final Date due) {
-    return new BillBuilder(customer, due);
+  protected Accountant newAccountantFor(final Invoicing invoicing, final BillingContext context) {
+    return new Accountant(invoicing, context);
+  }
+
+  private void persistBillingResult(final BillingResult result) {
+    dao.save(result.bill());
+    customerDao.save(result.customer());
   }
 
   protected void auditBillBuildingErrors(final Invoicing invoicing, final Customer customer, final List<String> errors) {

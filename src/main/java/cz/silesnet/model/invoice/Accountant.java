@@ -47,7 +47,7 @@ public class Accountant {
   private BillingResult doBill(final Customer customer) {
     BillBuilder builder = newBillBuilder(customer, invoicing.getInvoicingDate());
     if (builder.wouldBuild()) {
-      Bill bill = builder.build(invoicing, context);
+      Bill bill = builder.build(this);
       customer.updateBillingAndServicesAfterBilledWith(builder);
       return BillingResult.success(bill, customer, builder.warnings());
     }
@@ -64,7 +64,7 @@ public class Accountant {
     return errors;
   }
 
-  public String nextInvoiceNumber() {
+  public String nextBillNumber() {
     lastBillNumber++;
     return "" + lastBillNumber;
   }
