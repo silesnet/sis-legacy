@@ -994,6 +994,7 @@ public class BillingManagerImpl implements BillingManager {
     keys.put("billing.noBillItems", "mainBilling.msg.no-active-services");
     keys.put("billing.zeroBillWithoutOneTimeItem", "mainBilling.msg.zeroInvoice");
     keys.put("billing.negativeAmountBill", "mainBilling.msg.negativeInvoice");
+    keys.put("billing.error", "mainBilling.msg.illegalArgument");
     return Collections.unmodifiableMap(keys);
   }
 

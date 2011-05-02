@@ -140,7 +140,7 @@ class BillingManagerInvoicingTest extends Specification {
     "billing.noBillItems" | "mainBilling.msg.no-active-services"
     "billing.zeroBillWithoutOneTimeItem" | "mainBilling.msg.zeroInvoice"
     "billing.negativeAmountBill" | "mainBilling.msg.negativeInvoice"
-
+    "billing.error" | "mainBilling.msg.illegalArgument"
   }
 
   def 'groovy stubbing'() {
