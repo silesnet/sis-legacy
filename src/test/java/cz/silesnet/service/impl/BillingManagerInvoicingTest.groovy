@@ -7,12 +7,11 @@ import cz.silesnet.model.Customer
 import cz.silesnet.model.Invoicing
 import cz.silesnet.model.enums.Country
 import cz.silesnet.model.invoice.Accountant
-import cz.silesnet.model.invoice.BillBuilder
 import cz.silesnet.model.invoice.BillingContext
 import cz.silesnet.model.invoice.BillingContextFactory
+import cz.silesnet.model.invoice.BillingResult
 import cz.silesnet.service.HistoryManager
 import spock.lang.Specification
-import cz.silesnet.model.invoice.BillingResult
 
 /**
  * User: der3k
@@ -144,6 +143,68 @@ class BillingManagerInvoicingTest extends Specification {
     "billing.error" | "mainBilling.msg.illegalArgument"
   }
 
+  def 'invoicing billing start audit contains invoicing date and numbering base'() {
+    def audit = Mock(HistoryManager)
+    def manager = new BillingManagerImpl()
+    manager.setHistoryManager(audit)
+
+    def invoicing = invoicingWithNumberingBase2011000()
+    invoicing.setInvoicingDate(date('2011-01-05'))
+    def accountant = new Accountant(invoicing, null)
+  when:
+    manager.auditBillingStart(accountant)
+  then:
+    1 * audit.insertSystemBillingAudit(invoicing, null, 'mainBilling.msg.billingStarted', '05.01.2011, 2011000 ***')
+  }
+
+  def 'invoicing billing finished audit contains status'() {
+    def audit = Mock(HistoryManager)
+    def manager = new BillingManagerImpl()
+    manager.setHistoryManager(audit)
+
+    def accountant = Mock(Accountant)
+    def invoicing = Mock(Invoicing)
+  when:
+    manager.auditBillingFinished(accountant)
+  then:
+    1 * accountant.billedCount() >> 10
+    1 * accountant.skippedCount() >> 3
+    1 * accountant.errorsCount() >> 0
+    1 * accountant.processedCount() >> 13
+    1 * accountant.invoicing() >> invoicing
+    1 * audit.insertSystemBillingAudit(invoicing, null, 'mainBilling.msg.billingFinished', '10/3/0/13 ***')
+  }
+
+  def 'audits invoicing billing start and finish'() {
+    def theAccountant
+    def startAudited = false
+    def finishAudited = false
+    def manager = new BillingManagerImpl() {
+      @Override protected void auditBillingStart(Accountant accountant) {
+        theAccountant = accountant
+        if (!finishAudited)
+          startAudited = true
+      }
+
+      @Override protected void auditBillingFinished(Accountant accountant) {
+        if (accountant == theAccountant && startAudited)
+          finishAudited = true
+      }
+    }
+    def contextFactory = Mock(BillingContextFactory)
+    def customerDao = Mock(CustomerDAO)
+    manager.setBillingContextFactory(contextFactory)
+    manager.setCustomerDao(customerDao)
+
+    customerDao.findActiveCustomerIdsByCountry(_) >> []
+    def invoicing = invoicingWithNumberingBase2011000()
+  when:
+    manager.billCustomersIn(invoicing)
+  then:
+    startAudited
+    finishAudited
+  }
+
   def 'groovy stubbing'() {
     def accountant = Mock(Accountant)
     def bmgr = new BillingManagerImpl()
@@ -156,6 +217,10 @@ class BillingManagerInvoicingTest extends Specification {
     def invoicing = new Invoicing()
     invoicing.setNumberingBase('2011000')
     invoicing
+  }
+
+  static def Date date(String date) {
+    Date.parse('yyyy-MM-dd', date)
   }
 
 }

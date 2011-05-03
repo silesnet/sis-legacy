@@ -6,7 +6,10 @@ import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
-import cz.silesnet.model.invoice.*;
+import cz.silesnet.model.invoice.Accountant;
+import cz.silesnet.model.invoice.BillingContext;
+import cz.silesnet.model.invoice.BillingContextFactory;
+import cz.silesnet.model.invoice.BillingResult;
 import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
@@ -43,6 +46,7 @@ import java.util.*;
 public class BillingManagerImpl implements BillingManager {
   private static final int VAT_PL = 23;
   private static final Map<String, String> MESSAGE_KEYS_MAPPING = errorsAndWarningsKeysMap();
+  private static final SimpleDateFormat AUDIT_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
   protected final Log log = LogFactory.getLog(getClass());
 
@@ -177,7 +181,7 @@ public class BillingManagerImpl implements BillingManager {
     Iterator<Customer> cIter = customers.iterator();
     // log this big event
     String invoicingLog = all + ", "
-        + (new SimpleDateFormat("dd.MM.yyyy")).format(due) + ", "
+        + AUDIT_DATE_FORMAT.format(due) + ", "
         + lastInvoiceNo;
     log.info("Invoicing customers (" + invoicingLog + ") STARTED...");
     hmgr.insertSystemBillingAudit(invoicing, null,
@@ -955,22 +959,24 @@ public class BillingManagerImpl implements BillingManager {
   public void billCustomersIn(final Invoicing invoicing) {
     BillingContext context = billingContextFactory.billingContextFor(invoicing);
     Accountant accountant = newAccountantFor(invoicing, context);
+    auditBillingStart(accountant);
     Iterable<Long> customers = customerDao.findActiveCustomerIdsByCountry(invoicing.getCountry());
     for (Long id : customers) {
       Customer customer = customerDao.get(id);
       BillingResult result = accountant.bill(customer);
       if (result.isSuccess())
-        persistBillingResult(result);
+        persistNewBIllAndUpdatedCustomerFrom(result);
       else
         auditBillBuildingErrors(invoicing, customer, result.errors());
     }
+    auditBillingFinished(accountant);
   }
 
   protected Accountant newAccountantFor(final Invoicing invoicing, final BillingContext context) {
     return new Accountant(invoicing, context);
   }
 
-  private void persistBillingResult(final BillingResult result) {
+  private void persistNewBIllAndUpdatedCustomerFrom(final BillingResult result) {
     dao.save(result.bill());
     customerDao.save(result.customer());
   }
@@ -997,5 +1003,20 @@ public class BillingManagerImpl implements BillingManager {
     return Collections.unmodifiableMap(keys);
   }
 
+  protected void auditBillingStart(final Accountant accountant) {
+    String date = AUDIT_DATE_FORMAT.format(accountant.invoicing().getInvoicingDate());
+    StringBuilder status = new StringBuilder(date);
+    status.append(", ").append(accountant.invoicing().getNumberingBase()).append(" ***");
+    hmgr.insertSystemBillingAudit(accountant.invoicing(), null,
+        "mainBilling.msg.billingStarted", status.toString());
+  }
 
+  protected void auditBillingFinished(final Accountant accountant) {
+    StringBuilder status = new StringBuilder();
+    status.append(accountant.billedCount()).append("/").append(accountant.skippedCount()).append("/")
+        .append(accountant.errorsCount()).append("/").append(accountant.processedCount()).append(" ***");
+    hmgr.insertSystemBillingAudit(accountant.invoicing(), null,
+        "mainBilling.msg.billingFinished", status.toString());
+  }
+  
 }
