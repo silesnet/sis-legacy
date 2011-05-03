@@ -30,6 +30,9 @@ class BillingManagerInvoicingTest extends Specification {
       @Override protected Accountant newAccountantFor(Invoicing invoicing, BillingContext context) {
         return accountant
       }
+
+      @Override protected void auditBillingStart(Accountant anAccountant) {}
+      @Override protected void auditBillingFinished(Accountant anAccountant) {}
     }
 
     bMgr.setCustomerDao(customerDao)
@@ -65,9 +68,12 @@ class BillingManagerInvoicingTest extends Specification {
         if (errors[0] == 'error')
           errorsAudited = true
       }
+      @Override protected void auditBillingStart(Accountant anAccountant) {}
+      @Override protected void auditBillingFinished(Accountant anAccountant) {}
     }
     bMgr.setCustomerDao(customerDao)
     bMgr.setBillingContextFactory(contextFactory)
+    bMgr.setHistoryManager(Mock(HistoryManager))
 
     def customer = Mock(Customer)
     def invoicing = Mock(Invoicing)
@@ -82,10 +88,14 @@ class BillingManagerInvoicingTest extends Specification {
   }
 
   def "bills customers of invoicing's country"() {
-    def bMgr = new BillingManagerImpl()
+    def bMgr = new BillingManagerImpl() {
+      @Override protected void auditBillingStart(Accountant anAccountant) {}
+      @Override protected void auditBillingFinished(Accountant anAccountant) {}
+    }
     def customerDao = Mock(CustomerDAO)
     bMgr.setCustomerDao(customerDao)
     bMgr.setBillingContextFactory(Mock(BillingContextFactory))
+    bMgr.setHistoryManager(Mock(HistoryManager))
     def invoicing = invoicingWithNumberingBase2011000()
     invoicing.setCountry(Country.PL)
   when:
