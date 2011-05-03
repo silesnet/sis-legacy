@@ -125,6 +125,12 @@
         <property name="messagePreparatorFactory">
           <ref bean="emailPreparatorFactory" />
         </property>
+        <property name="billingContextFactory">
+          <ref bean="billingContextFactory" />
+        </property>
+        <property name="customerDao">
+          <ref bean="customerDAO" />
+        </property>
         <property name="emailFromAddressCs" value="${email.from.cs}" />
         <property name="emailSendingDelay" value="${email.delay}" />
       </bean>

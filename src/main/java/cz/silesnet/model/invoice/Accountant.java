@@ -3,6 +3,8 @@ package cz.silesnet.model.invoice;
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.Invoicing;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.List;
  * Time: 12:40
  */
 public class Accountant {
+  protected final static Log log = LogFactory.getLog(Accountant.class);
   private final static BillingResult BILLING_ERRORS_RESULT = BillingResult.failure(billingErrors());
   private final Invoicing invoicing;
   private final BillingContext context;
@@ -40,6 +43,7 @@ public class Accountant {
     } catch (RuntimeException e) {
       result = BILLING_ERRORS_RESULT;
       errorsCount++;
+      log.warn("Billing error for [" + customer.getName() + "] ", e);
     }
     return result;
   }

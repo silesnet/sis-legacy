@@ -13,7 +13,7 @@ import org.unitils.spring.annotation.SpringApplicationContext;
  *
  * @author Richard Sikora
  */
-@SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml", "context/sis-template.xml"})
+@SpringApplicationContext({"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml", "context/sis-dao.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml", "context/sis-template.xml", "context/sis-billing.xml"})
 @Transactional(TransactionMode.ROLLBACK)
 @Test(groups = "integration")
 public abstract class BaseServiceTestCase extends UnitilsTestNG {

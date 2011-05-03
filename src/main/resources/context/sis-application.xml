@@ -16,5 +16,6 @@
   <import resource="sis-messages.xml" />
   <import resource="sis-template.xml" />
   <import resource="sis-email.xml" />
+  <import resource="sis-billing.xml" />
 
 </beans>
