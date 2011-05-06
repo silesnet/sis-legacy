@@ -11,13 +11,21 @@
 
   <util:map id="billingContextMap">
     <entry key="CZ" value-ref="billingContextCz" />
+    <entry key="PL" value-ref="billingContextPl" />
   </util:map>
 
   <bean id="billingContextCz" class="cz.silesnet.model.invoice.BillingContextBean">
-    <property name="vatPercent" value="20" />
-    <property name="vatRounding" value="SCALE_OF_2_HALF_UP_ROUNDING" />
-    <property name="totalRounding" value="SCALE_OF_0_HALF_UP_ROUNDING" />
-    <property name="purgeDays" value="14" />
+    <property name="vatPercent" value="${billing.cz.vatPercent}" />
+    <property name="vatRounding" value="${billing.cz.vatRounding}" />
+    <property name="totalRounding" value="${billing.cz.totalRounding}" />
+    <property name="purgeDays" value="${billing.cz.purgeDays}" />
   </bean>
-  
+
+  <bean id="billingContextPl" class="cz.silesnet.model.invoice.BillingContextBean">
+    <property name="vatPercent" value="${billing.pl.vatPercent}" />
+    <property name="vatRounding" value="${billing.pl.vatRounding}" />
+    <property name="totalRounding" value="${billing.pl.totalRounding}" />
+    <property name="purgeDays" value="${billing.pl.purgeDays}" />
+  </bean>
+
 </beans>
