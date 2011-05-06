@@ -42,11 +42,6 @@ public class BillingManagerIntegrationTest extends BaseServiceTestCase {
     assertThat(manager.getInvoices(invoicing).size(), is(2));
   }
 
-  public void czechContext() {
-    BillingContext czContext = contextFactory.billingContextFor();
-
-  }
-
   private static Date date(String date) {
     Date parsed;
     try {

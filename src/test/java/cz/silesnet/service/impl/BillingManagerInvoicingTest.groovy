@@ -114,7 +114,7 @@ class BillingManagerInvoicingTest extends Specification {
   when:
     bMgr.billCustomersIn(invoicing)
   then:
-    1 * contextFactory.billingContextFor(invoicing)
+    1 * contextFactory.billingContextFor(invoicing.getCountry())
     thrown(NullPointerException)
   }
 
