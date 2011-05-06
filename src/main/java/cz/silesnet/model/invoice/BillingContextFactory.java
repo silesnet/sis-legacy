@@ -22,7 +22,7 @@ public class BillingContextFactory {
     this.contexts.putAll(contexts);
   }
 
-  public BillingContext billingContextFor(Invoicing invoicing) {
-    return contexts.get(invoicing.getCountry());
+  public BillingContext billingContextFor(final Country country) {
+    return contexts.get(country);
   }
 }

@@ -957,7 +957,7 @@ public class BillingManagerImpl implements BillingManager {
 
   // should be transactional
   public void billCustomersIn(final Invoicing invoicing) {
-    BillingContext context = billingContextFactory.billingContextFor(invoicing);
+    BillingContext context = billingContextFactory.billingContextFor(invoicing.getCountry());
     Accountant accountant = newAccountantFor(invoicing, context);
     auditBillingStart(accountant);
     Iterable<Long> customers = customerDao.findActiveCustomerIdsByCountry(invoicing.getCountry());

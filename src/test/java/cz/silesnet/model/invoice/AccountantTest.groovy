@@ -65,7 +65,7 @@ class AccountantTest extends Specification {
       }
     }
   when:
-    def result = accountant.bill(null)
+    def result = accountant.bill(Mock(Customer))
   then:
     !result.isSuccess()
     result.bill() == null
