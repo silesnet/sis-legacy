@@ -37,7 +37,7 @@ class BillingContextFactoryTest extends Specification {
     czech.calculateVatFor(Amount.of('0.03')) == Amount.of('0.01') // 0.03 * 0.19 = 0.0057 ~ 0.01
     czech.roundTotalOf(Amount.of('0.49')) == Amount.ZERO
     czech.roundTotalOf(Amount.of('0.50')) == Amount.ONE
-    czech.purgeDateFor(date('2011-01-05')) == date('2011-01-19') // 14 days
+    czech.purgeDateFor(date('2011-01-05')) == date('2011-01-19')  // 14 days
   }
 
   def 'polish billing context from Spring XML configuration has correct values'() {
@@ -47,10 +47,10 @@ class BillingContextFactoryTest extends Specification {
   expect:
     czech.calculateVatFor(Amount.HUNDRED) == Amount.of(23)
     czech.calculateVatFor(Amount.of('0.02')) == Amount.ZERO       // 0.02 * 0.23 = 0.0046 ~ 0.00
-    czech.calculateVatFor(Amount.of('0.03')) == Amount.of('0.01') // 0.022 * 0.23 = 0.0069 ~ 0.01
+    czech.calculateVatFor(Amount.of('0.03')) == Amount.of('0.01') // 0.03 * 0.23 = 0.0069 ~ 0.01
     czech.roundTotalOf(Amount.of('0.49')) == Amount.of('0.49')
     czech.roundTotalOf(Amount.of('0.50')) == Amount.of('0.50')
-    czech.purgeDateFor(date('2011-01-05')) == date('2011-01-19') // 14 days
+    czech.purgeDateFor(date('2011-01-05')) == date('2011-01-19')  // 14 days
   }
 
   static def Date date(String date) {
