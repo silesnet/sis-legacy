@@ -21,7 +21,7 @@ class BillingContextFactoryTest extends Specification {
       factory.billingContextFor(Country.CZ) == context
   }
 
-  def 'instantiates fro Spring XML configuration'() {
+  def 'instantiates from Spring XML configuration'() {
     def spring = new ClassPathXmlApplicationContext('context/billing-context.xml')
     def factory = spring.getBean('billingContextFactory', BillingContextFactory)
   expect:
