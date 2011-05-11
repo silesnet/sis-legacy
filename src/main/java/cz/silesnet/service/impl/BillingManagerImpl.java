@@ -955,7 +955,6 @@ public class BillingManagerImpl implements BillingManager {
     return StringUtils.replace(name, "\"", "\"\"");
   }
 
-  // should be transactional
   public void billCustomersIn(final Invoicing invoicing) {
     BillingContext context = billingContextFactory.billingContextFor(invoicing.getCountry());
     Accountant accountant = newAccountantFor(invoicing, context);
@@ -979,6 +978,7 @@ public class BillingManagerImpl implements BillingManager {
   private void persistNewBIllAndUpdatedCustomerFrom(final BillingResult result) {
     dao.save(result.bill());
     customerDao.save(result.customer());
+    log.info("Customer " + result.customer().getName() + " successfully billed, bill #" + result.bill().getNumber());
   }
 
   protected void auditBillBuildingErrors(final Invoicing invoicing, final Customer customer, final List<String> errors) {
@@ -1007,17 +1007,21 @@ public class BillingManagerImpl implements BillingManager {
   protected void auditBillingStart(final Accountant accountant) {
     String date = AUDIT_DATE_FORMAT.format(accountant.invoicing().getInvoicingDate());
     StringBuilder status = new StringBuilder(date);
-    status.append(", ").append(accountant.invoicing().getNumberingBase()).append(" ***");
+    status.append(", ").append(accountant.invoicing().getNumberingBase());
+    String logStatus = status.toString();
     hmgr.insertSystemBillingAudit(accountant.invoicing(), null,
-        "mainBilling.msg.billingStarted", status.toString());
+        "mainBilling.msg.billingStarted", status.append(" ***").toString());
+    log.info("Billing [" + logStatus + "] STARTED...") ;
   }
 
   protected void auditBillingFinished(final Accountant accountant) {
     StringBuilder status = new StringBuilder();
     status.append(accountant.billedCount()).append("/").append(accountant.skippedCount()).append("/")
-        .append(accountant.errorsCount()).append("/").append(accountant.processedCount()).append(" ***");
+        .append(accountant.errorsCount()).append("/").append(accountant.processedCount());
+    String logStatus = status.toString();
     hmgr.insertSystemBillingAudit(accountant.invoicing(), null,
-        "mainBilling.msg.billingFinished", status.toString());
+        "mainBilling.msg.billingFinished", status.append(" ***").toString());
+    log.info("Billing [" + logStatus + "] FINISHED.") ;
   }
   
 }
