@@ -146,6 +146,7 @@
         <prop key="export*">PROPAGATION_REQUIRED</prop>
         <prop key="emailAll">PROPAGATION_REQUIRED</prop>
         <prop key="setSendingEnabled">PROPAGATION_REQUIRED</prop>
+        <prop key="billCustomersIn">PROPAGATION_REQUIRED</prop>
         <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
       </props>
     </property>
