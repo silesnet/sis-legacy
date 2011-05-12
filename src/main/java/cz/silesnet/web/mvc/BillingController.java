@@ -225,8 +225,8 @@ public class BillingController extends MultiActionController {
     invoicing.setName(invoicing.getProposedName());
     invoicing.setNumberingBase(numbering);
     bMgr.insertInvoicing(invoicing);
-    bMgr.invoice(invoicing);
-//    bMgr.billCustomersIn(invoicing);
+//    bMgr.invoice(invoicing);
+    bMgr.billCustomersIn(invoicing);
     log.debug("Prepare bills FINISHED.");
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     MessagesUtils.setCodedSuccessMessage(request, "mainBilling.prepareBills.success", new Object[]{dateFormat.format(due)});
