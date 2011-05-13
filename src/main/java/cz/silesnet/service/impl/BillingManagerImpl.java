@@ -988,6 +988,8 @@ public class BillingManagerImpl implements BillingManager {
         key = error;
       hmgr.insertSystemBillingAudit(invoicing, customer, key, "mainBilling.status.skipped");
       log.info("Skipping customer [" + customer.getName() + "] " + error);
+      // audit just firs error
+      break;
     }
   }
 
