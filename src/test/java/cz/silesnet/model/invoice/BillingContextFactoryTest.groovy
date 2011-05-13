@@ -32,9 +32,9 @@ class BillingContextFactoryTest extends Specification {
     def factory = spring.getBean('billingContextFactory', BillingContextFactory)
     def czech = factory.billingContextFor(Country.CZ)
   expect:
-    czech.calculateVatFor(Amount.HUNDRED) == Amount.of(19)
-    czech.calculateVatFor(Amount.of('0.02')) == Amount.ZERO       // 0.02 * 0.19 = 0.0038 ~ 0.00
-    czech.calculateVatFor(Amount.of('0.03')) == Amount.of('0.01') // 0.03 * 0.19 = 0.0057 ~ 0.01
+    czech.calculateVatFor(Amount.HUNDRED) == Amount.of(20)
+    czech.calculateVatFor(Amount.of('0.02')) == Amount.ZERO       // 0.02 * 0.20 = 0.004 ~ 0.00
+    czech.calculateVatFor(Amount.of('0.03')) == Amount.of('0.01') // 0.03 * 0.20 = 0.006 ~ 0.01
     czech.roundTotalOf(Amount.of('0.49')) == Amount.ZERO
     czech.roundTotalOf(Amount.of('0.50')) == Amount.ONE
     czech.purgeDateFor(date('2011-01-05')) == date('2011-01-19')  // 14 days
