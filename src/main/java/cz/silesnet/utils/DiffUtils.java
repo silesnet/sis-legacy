@@ -114,8 +114,6 @@ public class DiffUtils {
 
   private static String getFieldAuditName(Object obj, Field field) {
     String objClass = obj.getClass().getSimpleName();
-    if ("Wireless".equals(objClass))
-      objClass = "wireless";
     return objClass + "." + field.getName();
   }
 

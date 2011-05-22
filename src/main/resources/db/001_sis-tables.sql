@@ -104,28 +104,6 @@ CREATE TABLE labels (
     number smallint
 );
 
-CREATE TABLE nodes (
-    id bigint NOT NULL,
-    class_type character varying(30) NOT NULL,
-    parent_id bigint,
-    name character varying(50) NOT NULL,
-    info character varying(200),
-    active boolean,
-    history_id bigint NOT NULL,
-    type integer,
-    frequency integer,
-    mac character varying(30),
-    custom_vendor character varying(50),
-    domain_lid bigint,
-    route character varying(50),
-    ip character varying(50),
-    wep character varying(255),
-    ssid character varying(50),
-    mac_authorization boolean,
-    channel integer,
-    polarization integer
-);
-
 CREATE TABLE services (
     id bigint NOT NULL,
     customer_id bigint,

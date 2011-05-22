@@ -2,8 +2,7 @@ package cz.silesnet.model.enums;
 
 public enum AuditEnum implements EnumPersistenceMapping<AuditEnum> {
   SYSTEM(10, "enum.audit.billing"), BILLING(20, "enum.audit.system"), ENTITY(
-      100, "enum.audit.entity"), ENTITY_NODE(110,
-      "enum.audit.entity.node"), ENTITY_CUSTOMER(120,
+      100, "enum.audit.entity"), ENTITY_CUSTOMER(120,
       "enum.audit.entity.customer");
 
   private int id;

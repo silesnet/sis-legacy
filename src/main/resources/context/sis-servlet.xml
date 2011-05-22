@@ -20,73 +20,6 @@
     </property>
   </bean>
 
-  <!-- NodeWireless view controller -->
-  <bean id="nodeWirelessViewController" class="cz.silesnet.web.mvc.NodeWirelessViewController">
-    <property name="methodNameResolver">
-      <ref local="appViewMethodResolver" />
-    </property>
-    <property name="nodeManager">
-      <ref bean="nodeManager" />
-    </property>
-    <property name="labelManager">
-      <ref bean="labelManager" />
-    </property>
-    <property name="historyManager">
-      <ref bean="historyManager" />
-    </property>
-  </bean>
-
-  <!-- NodeWireless edit form controller -->
-  <bean id="nodeWirelessEditController" class="cz.silesnet.web.mvc.NodeWirelessEditController">
-    <property name="nodeManager">
-      <ref bean="nodeManager" />
-    </property>
-    <property name="labelManager">
-      <ref bean="labelManager" />
-    </property>
-    <property name="historyManager">
-      <ref bean="historyManager" />
-    </property>
-    <property name="commandName">
-      <value>node</value>
-    </property>
-    <property name="validator">
-      <ref bean="nodeWirelessEditValidator" />
-    </property>
-    <property name="formView">
-      <value>wireless/editWireless</value>
-    </property>
-    <property name="successView">
-      <value>redirect:/net/wireless/view.html?view=viewMasterList</value>
-    </property>
-  </bean>
-
-  <!-- Wireless controller -->
-  <bean id="wirelessController" class="cz.silesnet.web.mvc.WirelessController">
-    <property name="methodNameResolver">
-      <ref bean="actionMethodResolver" />
-    </property>
-    <property name="persistenceManager">
-      <ref bean="nodeManager" />
-    </property>
-    <property name="historyManager">
-      <ref bean="historyManager" />
-    </property>
-    <property name="labelManager">
-      <ref bean="labelManager" />
-    </property>
-    <property name="commandName" value="wireless" />
-  </bean>
-
-  <bean id="nodeWirelessEditValidator" class="cz.silesnet.web.mvc.NodeWirelessEditValidator">
-    <property name="nodeManager">
-      <ref bean="nodeManager" />
-    </property>
-    <property name="labelManager">
-      <ref bean="labelManager" />
-    </property>
-  </bean>
-
   <!-- Simple controller to serve jsp pages without need to generate model -->
   <bean id="urlFilenameViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
 
@@ -169,7 +102,6 @@
     <property name="commandName" value="label" />
   </bean>
 
-
   <bean id="billDeliveryController" class="cz.silesnet.web.mvc.BillDeliveryController">
     <property name="billingController">
       <ref local="billingController" />
@@ -197,9 +129,6 @@
         </entry>
         <entry key="/billing/confirmDelivery.html">
           <ref local="billDeliveryController" />
-        </entry>
-        <entry key="/net/wireless/*">
-          <ref local="wirelessController" />
         </entry>
         <entry key="/label/*">
           <ref local="labelController" />

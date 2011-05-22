@@ -13,9 +13,6 @@ ALTER TABLE invoicings
 ALTER TABLE invoicings
     ADD CONSTRAINT invoicings_pkey PRIMARY KEY (id);
 
-ALTER TABLE nodes
-    ADD CONSTRAINT nodes_pkey PRIMARY KEY (id);
-
 ALTER TABLE services
     ADD CONSTRAINT services_pkey PRIMARY KEY (id);
 
@@ -57,6 +54,3 @@ ALTER TABLE customers
 
 ALTER TABLE customers
     ADD CONSTRAINT fk600e7c558a6d2c95 FOREIGN KEY (responsible_id) REFERENCES labels(id);
-
-ALTER TABLE nodes
-    ADD CONSTRAINT fk64212b14dcb921d FOREIGN KEY (domain_lid) REFERENCES labels(id);

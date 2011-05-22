@@ -44,7 +44,6 @@ public class ViewFilterFilter implements Filter {
       sisFilterMap = new HashMap<String, String>();
       // preset filtering customers only for active ones
       sisFilterMap.put("customer.billing.isActive", "true");
-      sisFilterMap.put("wireless.active", "true");
       request.getSession().setAttribute("sisFilterMap", sisFilterMap);
     }
 

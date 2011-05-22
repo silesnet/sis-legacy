@@ -22,8 +22,6 @@ public class MessagesUtilsTest {
 
   @Test
   public void testMessages() {
-    log.debug(MessagesUtils.getMessage(
-        "listWireless.label.filter.anyDomain", Locale.ENGLISH));
     log.debug(MessagesUtils.getMessage(Country.CZ.getName(), null));
     log.debug(MessagesUtils.getMessage(Country.CZ.getName()));
     log.debug(MessagesUtils.getMessage(Country.CZ.getName(), new Locale(

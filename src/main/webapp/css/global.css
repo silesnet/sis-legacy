@@ -43,13 +43,6 @@ div.formButtons input {
 	margin: 3px 0px;
 }
 
-div.masterNodeInfo {
-	margin : 5px 0 15px 0;
-	padding :10px;
-	color : #555555;
-	background-color: #ffa;
-}
-
 div.successMsg {
 	margin : 15px 0 5px 0;
 	padding :10px;

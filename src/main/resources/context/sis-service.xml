@@ -36,19 +36,6 @@
     </property>
   </bean>
 
-  <bean id="nodeManager" parent="txProxyTemplate">
-    <property name="target">
-      <bean class="cz.silesnet.service.impl.NodeManagerImpl">
-        <property name="nodeDAO">
-          <ref bean="nodeDAO" />
-        </property>
-        <property name="historyManager">
-          <ref local="historyManager" />
-        </property>
-      </bean>
-    </property>
-  </bean>
-
   <bean id="historyManager" parent="txProxyTemplate">
     <property name="target">
       <bean class="cz.silesnet.service.impl.HistoryManagerImpl">

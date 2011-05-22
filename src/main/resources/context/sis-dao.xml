@@ -16,12 +16,6 @@
     </property>
   </bean>
 
-  <bean id="nodeDAO" class="cz.silesnet.dao.hibernate.NodeDAOHibernate">
-    <property name="sessionFactory">
-      <ref bean="sessionFactory" />
-    </property>
-  </bean>
-
   <bean id="historyItemDAO" class="cz.silesnet.dao.hibernate.HistoryItemDAOHibernate">
     <property name="sessionFactory">
       <ref bean="sessionFactory" />
