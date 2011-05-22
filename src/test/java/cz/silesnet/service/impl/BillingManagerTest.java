@@ -58,7 +58,6 @@ public class BillingManagerTest extends BaseServiceTestCase {
 
     log.debug("Tidy up.");
     // tidy up
-    bmgr.delete(b);
     cmgr.delete(customer);
 
     b = null;

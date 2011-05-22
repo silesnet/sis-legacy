@@ -110,9 +110,6 @@
         <property name="billDAO">
           <ref bean="billDAO" />
         </property>
-        <property name="customerManager">
-          <ref bean="customerManager" />
-        </property>
         <property name="historyManager">
           <ref bean="historyManager" />
         </property>
