@@ -57,58 +57,6 @@ public class BillingManagerImpl implements BillingManager {
 
   private BillingContextFactory billingContextFactory;
 
-  public Bill confirmDelivery(String uuid) {
-    Bill bill = null;
-    try {
-      bill = dao.get(uuid);
-    } catch (ObjectRetrievalFailureException e) { /* IGNORED */ }
-    if (bill != null) {
-      bill.setIsSent(true);
-      bill.setIsDelivered(true);
-    }
-    return bill;
-  }
-
-  public void sendNextInvoice() {
-    Setting s = setMgr.get("billing.processSendingQueue.cz");
-    if ((new Boolean(s.getValue()))) {
-      Bill bill = dao.getToSend(Country.CZ);
-      if (bill != null) {
-        log.info("Sending next unsent CZ invoice to " + bill.getCustomerName() + " (" + bill.getNumber() + ")");
-        send(bill, null);
-        update(bill);
-      } else { // when nothing to sent for specified country disable sending
-        s.setValue(new Boolean("false").toString());
-        setMgr.update(s);
-        log.info("Nothing to sent among CZ invoices, disabling automatic invoices sending for CZ");
-      }
-    }
-    s = setMgr.get("billing.processSendingQueue.pl");
-    if ((new Boolean(s.getValue()))) {
-      Bill bill = dao.getToSend(Country.PL);
-      if (bill != null) {
-        log.info("Sending next unsent PL invoice to " + bill.getCustomerName() + " (" + bill.getNumber() + ")");
-        send(bill, null);
-        update(bill);
-      } else { // when nothing to sent for specified country disable sending
-        s.setValue(new Boolean("false").toString());
-        setMgr.update(s);
-        log.info("Nothing to sent among PL invoices, disabling automatic invoices sending for PL");
-      }
-    }
-  }
-
-  public boolean getSendingEnabled(Country country) {
-    Setting s = setMgr.get("billing.processSendingQueue." + country.getShortName());
-    return (new Boolean(s.getValue())).booleanValue();
-  }
-
-  public void setSendingEnabled(boolean status, Country country) {
-    Setting s = setMgr.get("billing.processSendingQueue." + country.getShortName());
-    s.setValue((new Boolean(status).toString()));
-    setMgr.update(s);
-  }
-
   public void billCustomersIn(final Invoicing invoicing) {
     BillingContext context = billingContextFactory.billingContextFor(invoicing.getCountry());
     Accountant accountant = newAccountantFor(invoicing, context);
@@ -178,6 +126,58 @@ public class BillingManagerImpl implements BillingManager {
     hmgr.insertSystemBillingAudit(accountant.invoicing(), null,
         "mainBilling.msg.billingFinished", status.append(" ***").toString());
     log.info("Billing [" + logStatus + "] FINISHED.");
+  }
+
+  public Bill confirmDelivery(String uuid) {
+    Bill bill = null;
+    try {
+      bill = dao.get(uuid);
+    } catch (ObjectRetrievalFailureException e) { /* IGNORED */ }
+    if (bill != null) {
+      bill.setIsSent(true);
+      bill.setIsDelivered(true);
+    }
+    return bill;
+  }
+
+  public void sendNextInvoice() {
+    Setting s = setMgr.get("billing.processSendingQueue.cz");
+    if ((Boolean.valueOf(s.getValue()))) {
+      Bill bill = dao.getToSend(Country.CZ);
+      if (bill != null) {
+        log.info("Sending next unsent CZ invoice to " + bill.getCustomerName() + " (" + bill.getNumber() + ")");
+        send(bill, null);
+        update(bill);
+      } else { // when nothing to sent for specified country disable sending
+        s.setValue(Boolean.FALSE.toString());
+        setMgr.update(s);
+        log.info("Nothing to sent among CZ invoices, disabling automatic invoices sending for CZ");
+      }
+    }
+    s = setMgr.get("billing.processSendingQueue.pl");
+    if ((Boolean.valueOf(s.getValue()))) {
+      Bill bill = dao.getToSend(Country.PL);
+      if (bill != null) {
+        log.info("Sending next unsent PL invoice to " + bill.getCustomerName() + " (" + bill.getNumber() + ")");
+        send(bill, null);
+        update(bill);
+      } else { // when nothing to sent for specified country disable sending
+        s.setValue(Boolean.FALSE.toString());
+        setMgr.update(s);
+        log.info("Nothing to sent among PL invoices, disabling automatic invoices sending for PL");
+      }
+    }
+  }
+
+  public boolean getSendingEnabled(Country country) {
+    Setting s = setMgr.get("billing.processSendingQueue." + country.getShortName());
+    return (new Boolean(s.getValue())).booleanValue();
+  }
+
+  public void setSendingEnabled(boolean status, Country country) {
+    Setting s = setMgr.get("billing.processSendingQueue." + country.getShortName());
+    s.setValue((new Boolean(status).toString()));
+    setMgr.update(s);
   }
 
   public void exportAllToInsert(Invoicing invoicing, List<Bill> bills, PrintWriter writer) {
@@ -268,43 +268,6 @@ public class BillingManagerImpl implements BillingManager {
   private String escapeQuotes(String name) {
     return StringUtils.replace(name, "\"", "\"\"");
   }
-
-  public void setBillingContextFactory(final BillingContextFactory billingContextFactory) {
-    this.billingContextFactory = billingContextFactory;
-  }
-
-  public void setEmailSendingDelay(int emailSendingDelay) {
-    this.emailSendingDelay = emailSendingDelay;
-  }
-
-  public void setBillDAO(BillDAO billDAO) {
-    dao = billDAO;
-  }
-
-  public void setHistoryManager(HistoryManager historyManager) {
-    hmgr = historyManager;
-  }
-
-  public void setCustomerDao(final CustomerDAO customerDao) {
-    this.customerDao = customerDao;
-  }
-
-  public void setSettingManager(SettingManager settingManager) {
-    setMgr = settingManager;
-  }
-
-  public void setMessagePreparatorFactory(final MimeMessagePreparatorFactory messagePreparatorFactory) {
-    this.messagePreparatorFactory = messagePreparatorFactory;
-  }
-
-  public void setMailSender(JavaMailSender mailSender) {
-    this.mailSender = mailSender;
-  }
-
-  public void setEmailFromAddressCs(String email) {
-    this.emailFromAddressCs = email;
-  }
-
 
   public Bill send(Bill bill, MutableInt emailedCounter) {
     Customer c = dao.fetchCustomer(bill);
@@ -447,6 +410,8 @@ public class BillingManagerImpl implements BillingManager {
     log.info("Email SENT for " + c.getName() + " (" + bill.getNumber() + ")");
   }
 
+  // bill repository methods
+
   public Bill get(Long billId) {
     return dao.get(billId);
   }
@@ -485,6 +450,8 @@ public class BillingManagerImpl implements BillingManager {
     return dao.fetchCustomer(bill);
   }
 
+  // invoicing repository methods
+
   public Invoicing getInvoicing(Long id) {
     return dao.getInvoicing(id);
   }
@@ -506,6 +473,44 @@ public class BillingManagerImpl implements BillingManager {
 
   public int getInvoicingSum(Invoicing invoicing) {
     return dao.getInvoicingSum(invoicing);
+  }
+
+  // Setters
+
+  public void setBillingContextFactory(final BillingContextFactory billingContextFactory) {
+    this.billingContextFactory = billingContextFactory;
+  }
+
+  public void setEmailSendingDelay(int emailSendingDelay) {
+    this.emailSendingDelay = emailSendingDelay;
+  }
+
+  public void setBillDAO(BillDAO billDAO) {
+    dao = billDAO;
+  }
+
+  public void setHistoryManager(HistoryManager historyManager) {
+    hmgr = historyManager;
+  }
+
+  public void setCustomerDao(final CustomerDAO customerDao) {
+    this.customerDao = customerDao;
+  }
+
+  public void setSettingManager(SettingManager settingManager) {
+    setMgr = settingManager;
+  }
+
+  public void setMessagePreparatorFactory(final MimeMessagePreparatorFactory messagePreparatorFactory) {
+    this.messagePreparatorFactory = messagePreparatorFactory;
+  }
+
+  public void setMailSender(JavaMailSender mailSender) {
+    this.mailSender = mailSender;
+  }
+
+  public void setEmailFromAddressCs(String email) {
+    this.emailFromAddressCs = email;
   }
 
 }
