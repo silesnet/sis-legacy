@@ -15,7 +15,6 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.validator.GenericValidator;
 import org.springframework.util.Assert;
 
 import java.io.PrintWriter;
@@ -23,16 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Concrete implementation of CustomerManager usig CustomerDAO for CRUD
- * operations.
- *
- * @author Richard Sikora
- */
 public class CustomerManagerImpl implements CustomerManager {
-
-  // ~ Instance fields
-  // --------------------------------------------------------
 
   protected final Log log = LogFactory.getLog(getClass());
 
@@ -46,54 +36,12 @@ public class CustomerManagerImpl implements CustomerManager {
 
   private SettingManager settingMgr;
 
-  // ~ Methods
-  // ----------------------------------------------------------------
-
-  public void setBillDAO(BillDAO dao) {
-    bDao = dao;
-  }
-
-  public List<Customer> getAll() {
-    return dao.getAll();
-  }
-
-  public List<Customer> getByExample(Customer customer) {
-    return dao.getByExample(customer);
-  }
-
-  public void setCustomerDAO(CustomerDAO customerDAO) {
-    dao = customerDAO;
-  }
-
-  public void setServiceDAO(ServiceDAO serviceDAO) {
-    this.sDao = serviceDAO;
-  }
-
-  public void setHistoryManager(HistoryManager historyManager) {
-    hmgr = historyManager;
-  }
-
-  public void setSettingManager(SettingManager settingManager) {
-    settingMgr = settingManager;
-  }
-
-  public void delete(Customer customer) {
-    // delete customers bills
-    List<Bill> bills = fetchBills(customer);
-    bDao.removeAll(bills);
-    // delete customers history
-    hmgr.deleteHistory(customer);
-    // delete customer
-    dao.remove(customer);
-  }
-
   public Customer get(Long customerId) {
     return dao.get(customerId);
   }
 
   public void insert(Customer customer) {
-    // make sure we will have insert
-    customer.setId(null);
+    customer.setId(null);     // make sure we will have insert
     updateSymbol(customer);
     // assign new historyId
     customer.setHistoryId(hmgr.getNewHistoryId());
@@ -106,18 +54,11 @@ public class CustomerManagerImpl implements CustomerManager {
   public void update(Customer customer) {
     // get former customer to checkperson orphans and generate history diff
     Customer formerCustomer = dao.get(customer.getId());
-    // Customer formerCustomer = dao.load(customer.getId());
     // detatch former customer from hibernate session
     dao.evict(formerCustomer);
-
     // do some validity checks
-    Assert.notNull(formerCustomer.getHistoryId(),
-        "Persisted customer without historyId.");
-    Assert
-        .isTrue(formerCustomer.getHistoryId().equals(
-            customer.getHistoryId()),
-            "Outside (illegal) historyId change.");
-
+    Assert.notNull(formerCustomer.getHistoryId(), "Persisted customer without historyId.");
+    Assert.isTrue(formerCustomer.getHistoryId().equals(customer.getHistoryId()), "Outside (illegal) historyId change.");
     // update symbol if needed
     updateSymbol(customer);
     // ok, now persist history record
@@ -129,15 +70,31 @@ public class CustomerManagerImpl implements CustomerManager {
     dao.save(customer);
   }
 
+  public List<Customer> getAll() {
+    return dao.getAll();
+  }
+
+  public List<Customer> getByExample(Customer customer) {
+    return dao.getByExample(customer);
+  }
+
+  public void delete(Customer customer) {
+    // delete customers bills
+    List<Bill> bills = fetchBills(customer);
+    bDao.removeAll(bills);
+    // delete customers history
+    hmgr.deleteHistory(customer);
+    // delete customer
+    dao.remove(customer);
+  }
+
   private boolean isSpsUpdated(Customer formerCustomer, Customer customer) {
     // general
-    if (changedString(formerCustomer.getContractNo(), customer
-        .getContractNo()))
+    if (changedString(formerCustomer.getContractNo(), customer.getContractNo()))
       return true;
     if (changedString(formerCustomer.getName(), customer.getName()))
       return true;
-    if (changedString(formerCustomer.getSupplementaryName(), customer
-        .getSupplementaryName()))
+    if (changedString(formerCustomer.getSupplementaryName(), customer.getSupplementaryName()))
       return true;
     if (changedString(formerCustomer.getPublicId(), customer.getPublicId()))
       return true;
@@ -145,11 +102,9 @@ public class CustomerManagerImpl implements CustomerManager {
       return true;
     if (changedString(formerCustomer.getSymbol(), customer.getSymbol()))
       return true;
-    if (changedString(formerCustomer.getBilling().getAccountNumber(),
-        customer.getBilling().getAccountNumber()))
+    if (changedString(formerCustomer.getBilling().getAccountNumber(), customer.getBilling().getAccountNumber()))
       return true;
-    if (changedString(formerCustomer.getBilling().getBankCode(), customer
-        .getBilling().getBankCode()))
+    if (changedString(formerCustomer.getBilling().getBankCode(), customer.getBilling().getBankCode()))
       return true;
     // address
     Address formerAddres = formerCustomer.getContact().getAddress();
@@ -169,8 +124,7 @@ public class CustomerManagerImpl implements CustomerManager {
       return true;
     if (changedString(formerContact.getName(), contact.getName()))
       return true;
-    if (!formerCustomer.getBilling().getIsActive()
-        && customer.getBilling().getIsActive())
+    if (!formerCustomer.getBilling().getIsActive() && customer.getBilling().getIsActive())
       return true;
     return false;
   }
@@ -186,8 +140,7 @@ public class CustomerManagerImpl implements CustomerManager {
   public Map<String, Long> getSummaryFor(Country c) {
     Map<String, Long> sumForCountry = sDao.calculateSummaryFor(c);
     if (Country.PL.equals(c)) {
-      double ratePLN_CZK = settingMgr.getDouble("exchangeRate.PLN_CZK",
-          Double.valueOf(7.5));
+      double ratePLN_CZK = settingMgr.getDouble("exchangeRate.PLN_CZK", Double.valueOf(7.5));
       long price_PLN = sumForCountry.get("overviewCustomers.totalPrice.CZK");
       long price_CZK = (long) (price_PLN * ratePLN_CZK);
       sumForCountry.put("overviewCustomers.totalPrice.CZK", price_CZK);
@@ -195,63 +148,6 @@ public class CustomerManagerImpl implements CustomerManager {
       sumForCountry.put("exchangeRate.PLN_CZK", (long) (ratePLN_CZK * 100.0));
     }
     return sumForCountry;
-  }
-
-  public void updateAll(List<Customer> customers) {
-    // it does not go throught history audit man, so do it by hand
-    // dao.updateAll(customers);
-    for (Customer c : customers)
-      update(c);
-  }
-
-  public void exportCusotmersToWinDuo(List<Customer> customers,
-                                      PrintWriter writer) {
-    if (customers == null)
-      return;
-    if (writer == null)
-      throw new IllegalArgumentException("Writer not initialized.");
-    for (Customer c : customers) {
-      // append customer to output writer
-      // skip silently non czechs
-      if (!c.getContact().getAddress().getCountry().equals(Country.CZ))
-        continue;
-      // header
-      writer.printf("H:128\t");
-      // ICO, DIC, Name, SupplementaryName
-      writer.printf("%s\t%s\t%s\t%s\t", sanate(c.getExportPublicId()),
-          sanate(c.getDIC()), c.getName(), sanate(c
-              .getSupplementaryName()));
-      // Street, City, PSC, Country
-      writer.printf("%s\t%s\t%s\t%s\t", c.getContact().getAddress()
-          .getStreet(), c.getContact().getAddress().getCity(),
-          sanate(c.getContact().getAddress().getPostalCode()),
-          MessagesUtils.getMessage(c.getContact().getAddress()
-              .getCountry().getName(), new Locale("cs")));
-      // Account, Bank, Person
-      writer.printf("\t\t%s\t", sanate(c.getContact().getName()));
-      // Predcisli, Phone1, Phone2, Fax
-      writer.printf("\t%s\t%s\t\t", c.getContact().getPhone1(), c
-          .getContact().getPhone2());
-      // leave rest empty, 8 Codes
-      writer.printf("0\t0\t0\t0\t0\t0\t0\t0\t");
-      // 8 Flags
-      writer.printf("N\tN\tN\tN\tN\tN\tN\tN\t");
-      // 2 Fields
-      writer.printf("0\t0\t");
-      // Note
-      if (GenericValidator.isBlankOrNull(c.getBilling()
-          .getDeliverCopyEmail()))
-        writer.printf("%s", sanate(c.getContact().getEmail()));
-      else
-        writer.printf("%s,%s", sanate(c.getContact().getEmail()), c
-            .getBilling().getDeliverCopyEmail());
-      // has to have \n
-      writer.println();
-    }
-  }
-
-  private String sanate(String s) {
-    return s == null ? "" : s;
   }
 
   public Service getService(Long serviceId) {
@@ -262,14 +158,13 @@ public class CustomerManagerImpl implements CustomerManager {
     if (service.getCustomerId() != null) {
       // insert service in customers context
       Customer c = get(service.getCustomerId());
-      // need to evic koz customer is transient all chages are auto
-      // persisted without audit
+      // need to evict koz customer is transient all changes are auto persisted without audit
       dao.evict(c);
       // add service and persist it
       c.getServices().add(service);
       update(c);
     } else
-      // no customer context found, insert separatelly
+      // no customer context found, insert separately
       sDao.save(service);
   }
 
@@ -278,8 +173,7 @@ public class CustomerManagerImpl implements CustomerManager {
     if (service.getCustomerId() != null) {
       // update service in customers context
       Customer c = get(service.getCustomerId());
-      // need to evic koz customer is transient all chages are auto
-      // persisted without audit
+      // need to evict koz customer is transient all changes are auto persisted without audit
       dao.evict(c);
       // locate service by id
       ListIterator<Service> sIt = c.getServices().listIterator();
@@ -298,7 +192,7 @@ public class CustomerManagerImpl implements CustomerManager {
       }
     }
     if (!found)
-      // no customer context change save separatelly
+      // no customer context change save separately
       sDao.save(service);
   }
 
@@ -307,8 +201,7 @@ public class CustomerManagerImpl implements CustomerManager {
     if (service.getCustomerId() != null) {
       // update service in customers context
       Customer c = get(service.getCustomerId());
-      // need to evic koz customer is transient all chages are auto
-      // persisted without audit
+      // need to evict koz customer is transient all changes are auto persisted without audit
       dao.evict(c);
       // locate service by id
       ListIterator<Service> sIt = c.getServices().listIterator();
@@ -349,8 +242,7 @@ public class CustomerManagerImpl implements CustomerManager {
     } else {
       // by service and by customer
       log.debug("Filtering Customers by Customer AND by Service.");
-      customers = ListUtils.intersection(customers,
-          getCustomers(services));
+      customers = ListUtils.intersection(customers, getCustomers(services));
     }
     return customers;
   }
@@ -394,8 +286,7 @@ public class CustomerManagerImpl implements CustomerManager {
   public void updateSymbol(Customer customer) {
     if (customer.getSymbol() == null || "".equals(customer.getSymbol())) {
       // symbol is not set, define it according to country
-      if (Country.PL.equals(customer.getContact().getAddress()
-          .getCountry())) {
+      if (Country.PL.equals(customer.getContact().getAddress().getCountry())) {
         // PL symbol definition
         if (customer.getId() == null) {
           // not persisted customer, persist him first to have id
@@ -403,22 +294,17 @@ public class CustomerManagerImpl implements CustomerManager {
           dao.evict(customer);
         }
         // compose Symbol from crippled name and id
-        String shortName = StringUtils.replaceChars(
-            (customer.getName() + "XXX").substring(0, 3),
+        String shortName = StringUtils.replaceChars((customer.getName() + "XXX").substring(0, 3),
             SearchUtils.getFromChars(), SearchUtils.getToChars());
-        customer.setSymbol(shortName.toUpperCase() + "-"
-            + customer.getId().toString());
+        customer.setSymbol(shortName.toUpperCase() + "-" + customer.getId().toString());
         log.debug("New Symbol composed :" + customer.getSymbol());
       } else {
         // CZ & SK symbol leave it empty
-        // customer.setSymbol(customer.getPublicId());
-        // log.debug("New Symbol composed :" + customer.getSymbol());
       }
     }
   }
 
-  public void exportCusotmersToInsert(List<Customer> customers,
-                                      PrintWriter writer) {
+  public void exportCustomersToInsert(List<Customer> customers, PrintWriter writer) {
     if (customers == null)
       return;
     if (writer == null)
@@ -428,16 +314,12 @@ public class CustomerManagerImpl implements CustomerManager {
     // write header
     String timeStamp = dFmt.format(new Date());
     String exportBy = MessagesUtils.getMessage("billExport.by", locale);
-    String infoLine = MessagesUtils.getMessage(
-        "billExport.invoice.infoLine", new Object[]{timeStamp,
-            exportBy}, locale);
+    String infoLine = MessagesUtils.getMessage("billExport.invoice.infoLine",
+        new Object[]{timeStamp, exportBy}, locale);
     // headers
-    writer
-        .printf(
-            "[INFO]\r\n%s\r\n\r\n[NAGLOWEK]\n\"KONTRAHENCI\"\n\n[ZAWARTOSC]\n",
-            infoLine);
-    String customerName = null;
-    String customerLongName = null;
+    writer.printf("[INFO]\r\n%s\r\n\r\n[NAGLOWEK]\n\"KONTRAHENCI\"\n\n[ZAWARTOSC]\n", infoLine);
+    String customerName;
+    String customerLongName;
     for (Customer customer : customers) {
       // append customer to output writer
       // skip silently non polish
@@ -450,34 +332,49 @@ public class CustomerManagerImpl implements CustomerManager {
       } else {
         customerName = customer.getName();
       }
-      if (customer.getSupplementaryName() != null
-          && !"".equals(customer.getSupplementaryName())) {
-        customerLongName = customer.getName() + " - "
-            + customer.getSupplementaryName();
+      if (customer.getSupplementaryName() != null && !"".equals(customer.getSupplementaryName())) {
+        customerLongName = customer.getName() + " - " + customer.getSupplementaryName();
       } else {
         customerLongName = customer.getName();
       }
       // symbol, names
-      writer.printf("2,\"%s\",\"%s\",\"%s\",", escapeQuotes(customer
-          .getSymbol()), escapeQuotes(customerName),
+      writer.printf("2,\"%s\",\"%s\",\"%s\",", escapeQuotes(customer.getSymbol()), escapeQuotes(customerName),
           escapeQuotes(customerLongName));
       // address, dic, ico
       Address a = customer.getContact().getAddress();
-      writer
-          .printf(
-              "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",,,\"%s\",,,,,,,,,,,,,,,",
-              a.getCity(), a.getPostalCode(), a.getStreet(),
-              customer.getDIC(), customer.getPublicId(), customer
-                  .getContact().getPhone(), customer
-                  .getContact().getEmail());
+      writer.printf("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",,,\"%s\",,,,,,,,,,,,,,,", a.getCity(),
+          a.getPostalCode(), a.getStreet(), customer.getDIC(), customer.getPublicId(),
+          customer.getContact().getPhone(), customer.getContact().getEmail());
       // trailer
       writer.printf("\"Polska\",\"PL\",0");
       writer.println();
     }
   }
 
+  // setters
+
   private String escapeQuotes(String name) {
     return StringUtils.replace(name, "\"", "\"\"");
+  }
+
+  public void setBillDAO(BillDAO dao) {
+    bDao = dao;
+  }
+
+  public void setCustomerDAO(CustomerDAO customerDAO) {
+    dao = customerDAO;
+  }
+
+  public void setServiceDAO(ServiceDAO serviceDAO) {
+    this.sDao = serviceDAO;
+  }
+
+  public void setHistoryManager(HistoryManager historyManager) {
+    hmgr = historyManager;
+  }
+
+  public void setSettingManager(SettingManager settingManager) {
+    settingMgr = settingManager;
   }
 
 }

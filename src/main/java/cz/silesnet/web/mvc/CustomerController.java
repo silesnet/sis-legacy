@@ -35,9 +35,6 @@ import java.util.*;
  */
 public class CustomerController extends AbstractCRUDController {
 
-  // ~ Instance fields
-  // --------------------------------------------------------
-
   private static final int DIVISION_LENGTH = 32;
 
   private static final int ACCOUNT_NUMBER_LENGTH = 26;
@@ -53,9 +50,6 @@ public class CustomerController extends AbstractCRUDController {
   private SettingManager settingMgr;
 
   private BillingManager bMgr;
-
-  // ~ Methods
-  // ----------------------------------------------------------------
 
   public void setCustomerManager(CustomerManager customerManager) {
     cMgr = customerManager;
@@ -78,16 +72,14 @@ public class CustomerController extends AbstractCRUDController {
   }
 
   @Override
-  public ModelAndView cancel(HttpServletRequest request,
-                             HttpServletResponse response) {
+  public ModelAndView cancel(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Canceling Customer form.");
     return goBack(request, response);
   }
 
   @Override
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView delete(HttpServletRequest request,
-                             HttpServletResponse response) throws Exception {
+  public ModelAndView delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.debug("Deleting Customer.");
     // get persisted Customer
     Customer c = (Customer) formBackingObject(request);
@@ -96,9 +88,8 @@ public class CustomerController extends AbstractCRUDController {
     // delete customer
     cMgr.delete(c);
     // set success message
-    MessagesUtils.setCodedSuccessMessage(request,
-        "editCustomer.deleteSuccess", new Object[]{c.getId(),
-            c.getName()});
+    MessagesUtils.setCodedSuccessMessage(request, "editCustomer.deleteSuccess",
+        new Object[]{c.getId(), c.getName()});
     // pop top url of deleted object
     NavigationUtils.getReturnUrl(request, "");
     return showList(request, response);
@@ -106,8 +97,7 @@ public class CustomerController extends AbstractCRUDController {
 
   @Override
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView insert(HttpServletRequest request,
-                             HttpServletResponse response) throws Exception {
+  public ModelAndView insert(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.debug("Inserting new Customer.");
     // get validated form Customer
     Customer c = (Customer) bindAndValidate(request);
@@ -118,24 +108,20 @@ public class CustomerController extends AbstractCRUDController {
     // persist changes
     cMgr.insert(c);
     // set success message
-    MessagesUtils.setCodedSuccessMessage(request,
-        "editCustomer.insertSuccess", new Object[]{c.getId(),
-            c.getName()});
+    MessagesUtils.setCodedSuccessMessage(request, "editCustomer.insertSuccess",
+        new Object[]{c.getId(), c.getName()});
     return new ModelAndView(new RedirectView(request.getContextPath()
-        + "/customer/view.html?action=showDetail&customerId="
-        + c.getId()));
+        + "/customer/view.html?action=showDetail&customerId=" + c.getId()));
   }
 
   @Override
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView showForm(HttpServletRequest request,
-                               HttpServletResponse response) throws Exception {
+  public ModelAndView showForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
     return super.showForm(request, response);
   }
 
   @SuppressWarnings("unchecked")
-  public ModelAndView showDetail(HttpServletRequest request,
-                                 HttpServletResponse response) throws Exception {
+  public ModelAndView showDetail(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.debug("Showing customer detail.");
     Customer c = (Customer) formBackingObject(request);
     // put binder into request, it contains command object
@@ -154,26 +140,22 @@ public class CustomerController extends AbstractCRUDController {
   }
 
   @Override
-  public ModelAndView showList(HttpServletRequest request,
-                               HttpServletResponse response) {
+  public ModelAndView showList(HttpServletRequest request, HttpServletResponse response) {
     // list all customers at once
     log.debug("Listing filtered customers");
     HashMap<String, Object> model = new HashMap<String, Object>();
     // get Customer and Service filter params from session
-    Map<String, String> customerFilter = FilterUtils.getFilterMap(request,
-        "customer.");
-    Map<String, String> serviceFilter = FilterUtils.getFilterMap(request,
-        "service.");
+    Map<String, String> customerFilter = FilterUtils.getFilterMap(request, "customer.");
+    Map<String, String> serviceFilter = FilterUtils.getFilterMap(request, "service.");
     if (!AbstractCRUDController.isTablePagination(request)) {
       // support view with customers
       Customer c = null;
       Service s = null;
       // get Customers example
-      if (!((customerFilter.size() == 0) || (customerFilter.size() == 1 && "true"
-          .equals(customerFilter.get("billing.isActive"))))) {
+      if (!((customerFilter.size() == 0) || (customerFilter.size() == 1
+          && "true".equals(customerFilter.get("billing.isActive"))))) {
         c = prepareExampleCustomer();
-        ServletRequestDataBinder binder = new ServletRequestDataBinder(
-            c);
+        ServletRequestDataBinder binder = new ServletRequestDataBinder(c);
         // register custom editors
         initBinder(binder);
         binder.bind(new MutablePropertyValues(customerFilter));
@@ -183,15 +165,10 @@ public class CustomerController extends AbstractCRUDController {
       // get Service example
       if (serviceFilter.size() != 0) {
         s = new Service();
-        ServletRequestDataBinder serviceBinder = new ServletRequestDataBinder(
-            s);
-        serviceBinder.registerCustomEditor(Integer.class,
-            new CustomNumberEditor(Integer.class, true));
-        serviceBinder.registerCustomEditor(Date.class,
-            new CustomDateEditor(
-                new SimpleDateFormat("dd.MM.yyyy"), true));
-        serviceBinder.registerCustomEditor(Frequency.class,
-            new CustomEnumEditor<Frequency>(Frequency.MONTHLY));
+        ServletRequestDataBinder serviceBinder = new ServletRequestDataBinder(s);
+        serviceBinder.registerCustomEditor(Integer.class, new CustomNumberEditor(Integer.class, true));
+        serviceBinder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd.MM.yyyy"), true));
+        serviceBinder.registerCustomEditor(Frequency.class, new CustomEnumEditor<Frequency>(Frequency.MONTHLY));
         serviceBinder.bind(new MutablePropertyValues(serviceFilter));
         if (log.isDebugEnabled())
           log.debug("Service findByExample object : " + s);
@@ -200,13 +177,11 @@ public class CustomerController extends AbstractCRUDController {
         log.debug("Considered empty filter.");
         model.put("emptyFilter", true);
       } else {
-        request.getSession().setAttribute("customersList",
-            cMgr.getByExample(c, s));
+        request.getSession().setAttribute("customersList", cMgr.getByExample(c, s));
       }
     }
     // Frequency enum for filtering
-    model.put("billingFrequency", EnumSet.of(Frequency.MONTHLY,
-        Frequency.Q, Frequency.QQ, Frequency.ANNUAL));
+    model.put("billingFrequency", EnumSet.of(Frequency.MONTHLY, Frequency.Q, Frequency.QQ, Frequency.ANNUAL));
     // Country enum for filtering
     model.put("addressCountry", EnumSet.allOf(Country.class));
     // BillingStatus enum
@@ -242,8 +217,7 @@ public class CustomerController extends AbstractCRUDController {
     return new ModelAndView("customer/overviewCustomers", model);
   }
 
-  private void addSummaryKeys(String key, Map<String, Long> result, Map<String, Long> a,
-                              Map<String, Long> b) {
+  private void addSummaryKeys(String key, Map<String, Long> result, Map<String, Long> a, Map<String, Long> b) {
     result.put(key, a.get(key) + b.get(key));
   }
 
@@ -273,8 +247,7 @@ public class CustomerController extends AbstractCRUDController {
 
   @Override
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView update(HttpServletRequest request,
-                             HttpServletResponse response) throws Exception {
+  public ModelAndView update(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.debug("Updating Customer.");
     // get updated and validated Customer
     Customer c = (Customer) bindAndValidate(request);
@@ -283,58 +256,49 @@ public class CustomerController extends AbstractCRUDController {
     // persist changes
     cMgr.update(c);
     // set success message
-    MessagesUtils.setCodedSuccessMessage(request,
-        "editCustomer.updateSuccess", new Object[]{c.getId(),
-            c.getName()});
+    MessagesUtils.setCodedSuccessMessage(request, "editCustomer.updateSuccess",
+        new Object[]{c.getId(), c.getName()});
     return goBack(request, response);
   }
 
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView activate(HttpServletRequest request,
-                               HttpServletResponse response) throws Exception {
+  public ModelAndView activate(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.debug("Activating Customer.");
     // get customer
     Customer c = (Customer) formBackingObject(request);
     // activate and persist change
     c.getBilling().setIsActive(true);
     // set new status from parameter in the request
-    c.getBilling().setStatus(
-        BillingStatus.INVOICE.valueOf(ServletRequestUtils
-            .getRequiredIntParameter(request, "newStatusId")));
+    c.getBilling().setStatus(BillingStatus.INVOICE.valueOf(
+        ServletRequestUtils.getRequiredIntParameter(request, "newStatusId")));
     cMgr.update(c);
     // set success message
-    MessagesUtils.setCodedSuccessMessage(request,
-        "editCustomer.activateSuccess", new Object[]{c.getId(),
-            c.getName()});
+    MessagesUtils.setCodedSuccessMessage(request, "editCustomer.activateSuccess",
+        new Object[]{c.getId(), c.getName()});
     return goBack(request, response);
   }
 
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView deactivate(HttpServletRequest request,
-                                 HttpServletResponse response) throws Exception {
+  public ModelAndView deactivate(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.debug("Deactivating Customer.");
     // get customer
     Customer c = (Customer) formBackingObject(request);
     // deactivate and persist change
     c.getBilling().setIsActive(false);
     // set new status from parameter in the request
-    c.getBilling().setStatus(
-        BillingStatus.INVOICE.valueOf(ServletRequestUtils
-            .getRequiredIntParameter(request, "newStatusId")));
+    c.getBilling().setStatus(BillingStatus.INVOICE.valueOf(
+        ServletRequestUtils.getRequiredIntParameter(request, "newStatusId")));
     cMgr.update(c);
     // set success message
-    MessagesUtils.setCodedSuccessMessage(request,
-        "editCustomer.deactivateSuccess", new Object[]{c.getId(),
-            c.getName()});
+    MessagesUtils.setCodedSuccessMessage(request, "editCustomer.deactivateSuccess",
+        new Object[]{c.getId(), c.getName()});
     return goBack(request, response);
   }
 
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView updateExchangeRate(HttpServletRequest request,
-                                         HttpServletResponse response) throws Exception {
+  public ModelAndView updateExchangeRate(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.debug("Updating Exchange rate system setting");
-    Double rate = ServletRequestUtils.getDoubleParameter(request,
-        "exchangeRate", 0);
+    Double rate = ServletRequestUtils.getDoubleParameter(request, "exchangeRate", 0);
     if (rate != 0) {
       // persist change
       Setting s = settingMgr.get("exchangeRate.PLN_CZK");
@@ -346,38 +310,16 @@ public class CustomerController extends AbstractCRUDController {
         settingMgr.update(s);
       }
       // set success message
-      MessagesUtils.setCodedSuccessMessage(request,
-          "overviewCustomers.updateSuccess", rate);
+      MessagesUtils.setCodedSuccessMessage(request, "overviewCustomers.updateSuccess", rate);
     } else {
-      MessagesUtils.setCodedFailureMessage(request,
-          "overviewCustomers.updateFailure");
+      MessagesUtils.setCodedFailureMessage(request, "overviewCustomers.updateFailure");
     }
     // go back to customers overview
     return showOverview(request, response);
   }
 
   @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView exportToWinduo(HttpServletRequest request,
-                                     HttpServletResponse response) throws IOException {
-    log.debug("Exporting customers in Winduo import format.");
-    // set response encoding properly
-    response.setCharacterEncoding("Cp1250");
-    // use text/plain to display in browser
-    response.setContentType("text/csv;charset=windows-1250");
-    // dump customers to response writer
-    // get selected customers
-    List<Customer> cList = new ArrayList<Customer>();
-    for (String cIdStr : getSelectedCustomersIdSet(request)) {
-      log.debug(cIdStr);
-      cList.add(cMgr.get(Long.valueOf(cIdStr)));
-    }
-    cMgr.exportCusotmersToWinDuo(cList, response.getWriter());
-    return null;
-  }
-
-  @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView exportToInsert(HttpServletRequest request,
-                                     HttpServletResponse response) throws IOException {
+  public ModelAndView exportToInsert(HttpServletRequest request, HttpServletResponse response) throws IOException {
     log.debug("Exporting customers to Insert in XML.");
     // set response encoding properly
     response.setCharacterEncoding("Cp1250");
@@ -390,82 +332,55 @@ public class CustomerController extends AbstractCRUDController {
       log.debug(cIdStr);
       cList.add(cMgr.get(Long.valueOf(cIdStr)));
     }
-    cMgr.exportCusotmersToInsert(cList, response.getWriter());
-    return null;
-  }
-
-  @Secured({"ROLE_ACCOUNTING"})
-  public ModelAndView exportAllToWinduo(HttpServletRequest request,
-                                        HttpServletResponse response) throws IOException {
-    log.debug("Exporting all customers in Winduo import format.");
-    // set response encoding properly
-    response.setCharacterEncoding("Cp1250");
-    // use text/plain to display in browser
-    response.setContentType("text/csv;charset=windows-1250");
-    // dump all customers to response writer
-    cMgr.exportCusotmersToWinDuo(cMgr.getAll(), response.getWriter());
+    cMgr.exportCustomersToInsert(cList, response.getWriter());
     return null;
   }
 
   @Override
   protected Boolean isFormBackingObjectNew(HttpServletRequest request) {
-    return (ServletRequestUtils.getLongParameter(request, "customerId", 0) == 0) ? true
-        : false;
+    return (ServletRequestUtils.getLongParameter(request, "customerId", 0) == 0);
   }
 
-  public ModelAndView goBack(HttpServletRequest request,
-                             HttpServletResponse response) {
-    String returnUrl = NavigationUtils.getReturnUrl(request,
-        "/customer/view.html?action=showList");
+  public ModelAndView goBack(HttpServletRequest request, HttpServletResponse response) {
+    String returnUrl = NavigationUtils.getReturnUrl(request, "/customer/view.html?action=showList");
     // need redirect so we will go throught controller mechanism
     return new ModelAndView(new RedirectView(returnUrl));
   }
 
   @Override
-  protected Object formBackingObject(HttpServletRequest request)
-      throws Exception {
+  protected Object formBackingObject(HttpServletRequest request) throws Exception {
     Customer c = null;
     if (isFormBackingObjectNew(request)) {
       c = new Customer();
       // set country according to country filter, default cz
       // get filter map
-      Map<String, String> filterMap = FilterUtils.getFilterMap(request,
-          "customer.");
+      Map<String, String> filterMap = FilterUtils.getFilterMap(request, "customer.");
       // if country filter set to pl change customers country
       log.debug(filterMap.get("contact.address.country"));
       if (filterMap.get("contact.address.country") != null
-          && filterMap.get("contact.address.country").equals(
-          Integer.valueOf(Country.PL.getId()).toString()))
+          && filterMap.get("contact.address.country").equals(Integer.valueOf(Country.PL.getId()).toString()))
         c.getContact().getAddress().setCountry(Country.PL);
     } else
-      c = cMgr.get(ServletRequestUtils.getRequiredLongParameter(request,
-          "customerId"));
+      c = cMgr.get(ServletRequestUtils.getRequiredLongParameter(request, "customerId"));
     return c;
   }
 
   @Override
   protected void initBinder(ServletRequestDataBinder binder) {
     // Integers
-    binder.registerCustomEditor(Integer.class, new CustomNumberEditor(
-        Integer.class, true));
+    binder.registerCustomEditor(Integer.class, new CustomNumberEditor(Integer.class, true));
     // Long numbers
-    binder.registerCustomEditor(Long.class, new CustomNumberEditor(
-        Long.class, true));
+    binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class, true));
     // Dates
-    binder.registerCustomEditor(Date.class, new CustomDateEditor(
-        new SimpleDateFormat("dd.MM.yyyy"), true));
+    binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd.MM.yyyy"), true));
     // Frequencies
-    binder.registerCustomEditor(Frequency.class,
-        new CustomEnumEditor<Frequency>(Frequency.MONTHLY));
+    binder.registerCustomEditor(Frequency.class, new CustomEnumEditor<Frequency>(Frequency.MONTHLY));
     // Countries
-    binder.registerCustomEditor(Country.class,
-        new CustomEnumEditor<Country>(Country.CZ));
+    binder.registerCustomEditor(Country.class, new CustomEnumEditor<Country>(Country.CZ));
     // Status
-    binder.registerCustomEditor(BillingStatus.class,
-        new CustomEnumEditor<BillingStatus>(BillingStatus.INVOICE));
+    binder.registerCustomEditor(BillingStatus.class, new CustomEnumEditor<BillingStatus>(BillingStatus.INVOICE));
     // InvoiceFormat
-    binder.registerCustomEditor(InvoiceFormat.class,
-        new CustomEnumEditor<InvoiceFormat>(InvoiceFormat.LINK));
+    binder.registerCustomEditor(InvoiceFormat.class, new CustomEnumEditor<InvoiceFormat>(InvoiceFormat.LINK));
     // Labels
     binder.registerCustomEditor(Label.class, new CustomLabelEditor(lmgr));
   }
@@ -474,10 +389,8 @@ public class CustomerController extends AbstractCRUDController {
   @Override
   protected Map referenceData(HttpServletRequest request) {
     HashMap<String, Object> model = new HashMap<String, Object>();
-
     // Frequency enum
-    model.put("billingFrequency", EnumSet.of(Frequency.MONTHLY,
-        Frequency.Q, Frequency.QQ, Frequency.ANNUAL));
+    model.put("billingFrequency", EnumSet.of(Frequency.MONTHLY, Frequency.Q, Frequency.QQ, Frequency.ANNUAL));
     // Country enum
     model.put("addressCountry", EnumSet.allOf(Country.class));
     // BillingStatus enum
@@ -487,8 +400,7 @@ public class CustomerController extends AbstractCRUDController {
     // Shire labels
     model.put("shires", lmgr.getSubLabels(lmgr.get(Label.SHIRES)));
     // Responsible labels
-    model.put("responsibles", lmgr.getSubLabels(lmgr
-        .get(Label.RESPONSIBLES)));
+    model.put("responsibles", lmgr.getSubLabels(lmgr.get(Label.RESPONSIBLES)));
     // InvoiceFormat enum
     model.put("invoiceFormats", EnumSet.allOf(InvoiceFormat.class));
     // include Javascripts for safe submitting and calendar
@@ -521,56 +433,39 @@ public class CustomerController extends AbstractCRUDController {
   @Override
   protected void validate(Object command, BindingResult bindingResult) {
     Customer customer = (Customer) command;
-    ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "name",
-        "editForm.error.blank-or-null", "Value required.");
-    ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,
-        "billing.lastlyBilled", "editForm.error.blank-or-null",
-        "Value required.");
-    ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "publicId",
-        "editForm.error.blank-or-null", "Value required.");
+    ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "name", "editForm.error.blank-or-null", "Value required.");
+    ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "billing.lastlyBilled", "editForm.error.blank-or-null", "Value required.");
+    ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "publicId", "editForm.error.blank-or-null", "Value required.");
     // check account number
     String accNo = customer.getBilling().getAccountNumber();
     if (StringUtils.isNotBlank(accNo)) {
       if (accNo.length() > ACCOUNT_NUMBER_LENGTH) {
-        bindingResult.rejectValue("billing.accountNumber",
-            "editCustomer.too-long",
-            new Object[]{ACCOUNT_NUMBER_LENGTH},
-            "Field is too long (max  " + ACCOUNT_NUMBER_LENGTH
-                + " characters).");
+        bindingResult.rejectValue("billing.accountNumber", "editCustomer.too-long",
+            new Object[]{ACCOUNT_NUMBER_LENGTH}, "Field is too long (max  " + ACCOUNT_NUMBER_LENGTH + " characters).");
       }
       if (!StringUtils.isNumeric(accNo.replace("-", ""))) {
-        bindingResult.rejectValue("billing.accountNumber",
-            "editCustomer.numeric", "Numeric value expected.");
+        bindingResult.rejectValue("billing.accountNumber", "editCustomer.numeric", "Numeric value expected.");
       }
     }
     // check bank code
     String bankCo = customer.getBilling().getBankCode();
     if (StringUtils.isNotBlank(bankCo)) {
       if (bankCo.length() > BANK_CODE_LENGTH) {
-        bindingResult.rejectValue("billing.bankCode",
-            "editCustomer.too-long",
-            new Object[]{BANK_CODE_LENGTH},
-            "Field is too long (max " + BANK_CODE_LENGTH
-                + " characters).");
+        bindingResult.rejectValue("billing.bankCode", "editCustomer.too-long",
+            new Object[]{BANK_CODE_LENGTH}, "Field is too long (max " + BANK_CODE_LENGTH + " characters).");
       }
       if (!StringUtils.isNumeric(bankCo.replace("-", ""))) {
-        bindingResult.rejectValue("billing.bankCode",
-            "editCustomer.numeric", "Numeric value expected.");
+        bindingResult.rejectValue("billing.bankCode", "editCustomer.numeric", "Numeric value expected.");
       }
     }
     // validate supplementaryName for 32 characters
     String division = customer.getSupplementaryName();
-    if (StringUtils.isNotBlank(division)
-        && division.length() > DIVISION_LENGTH) {
-      bindingResult.rejectValue("supplementaryName",
-          "editCustomer.too-long", new Object[]{DIVISION_LENGTH},
-          "Field is too long (max  " + DIVISION_LENGTH
-              + " characters).");
+    if (StringUtils.isNotBlank(division) && division.length() > DIVISION_LENGTH) {
+      bindingResult.rejectValue("supplementaryName", "editCustomer.too-long",
+          new Object[]{DIVISION_LENGTH}, "Field is too long (max  " + DIVISION_LENGTH + " characters).");
     }
     // validate publicId uniqueness, use exportPublicId
-    log
-        .debug("Checking uniqueness for publicId: "
-            + customer.getPublicId());
+    log.debug("Checking uniqueness for publicId: " + customer.getPublicId());
     Customer exampleCustomer = prepareExampleCustomer();
     exampleCustomer.setPublicId(customer.getPublicId());
     List<Customer> customers = cMgr.getByExample(exampleCustomer);
@@ -588,21 +483,17 @@ public class CustomerController extends AbstractCRUDController {
     }
     // validate Symbol uniqueness if not empty
     if (!(customer.getSymbol() == null || "".equals(customer.getSymbol()))) {
-      log
-          .debug("Checking uniqueness for Symbol: "
-              + customer.getSymbol());
+      log.debug("Checking uniqueness for Symbol: " + customer.getSymbol());
       exampleCustomer = prepareExampleCustomer();
       exampleCustomer.setSymbol(customer.getSymbol());
-      exampleCustomer.getContact().getAddress().setCountry(
-          customer.getContact().getAddress().getCountry());
+      exampleCustomer.getContact().getAddress().setCountry(customer.getContact().getAddress().getCountry());
       customers = cMgr.getByExample(exampleCustomer);
       for (Customer c : customers) {
         if (!c.getId().equals(customer.getId())) {
           // there is existing customer with given Symbol, so reject
           // it
-          bindingResult.rejectValue("symbol",
-              "editCustomer.not-unique.symbol", new Object[]{c
-                  .getName()}, "Unique value required.");
+          bindingResult.rejectValue("symbol", "editCustomer.not-unique.symbol",
+              new Object[]{c.getName()}, "Unique value required.");
           break;
         }
       }
@@ -612,23 +503,20 @@ public class CustomerController extends AbstractCRUDController {
     String[] contractNumbers = customer.getContractNo().split(",");
     exampleCustomer = prepareExampleCustomer();
     // check each contract number
-    contractNumbersLabel:
+  contractNumbersLabel:
     for (String contractNo : contractNumbers) {
       exampleCustomer.setContractNo(contractNo.trim());
       // get possible customers with such contractNo
       customers = cMgr.getByExample(exampleCustomer);
-      // iterate over selected customers, exept edited one
+      // iterate over selected customers, except edited one
       for (Customer c : customers) {
         if (!c.getId().equals(customer.getId())) {
           // get all existing cotrac numbers and compare each
-          String[] contracNumbersExisting = c.getContractNo().split(
-              ",");
+          String[] contracNumbersExisting = c.getContractNo().split(",");
           for (String contractNoExisting : contracNumbersExisting) {
             // if match found reject the value
             if (contractNo.equals(contractNoExisting)) {
-              bindingResult.rejectValue("contractNo",
-                  "editForm.error.not-unique",
-                  "Unique value required.");
+              bindingResult.rejectValue("contractNo", "editForm.error.not-unique", "Unique value required.");
               break contractNumbersLabel;
             }
           }
@@ -653,14 +541,10 @@ public class CustomerController extends AbstractCRUDController {
       // reference statuses
       if (c.getBilling().getIsActive()) {
         fields.put("billingStatus", BillingStatus.getActiveStatuses());
-        fields.put("billingStatusComplementary", BillingStatus
-            .getInactiveStatuses());
+        fields.put("billingStatusComplementary", BillingStatus.getInactiveStatuses());
       } else {
-        fields
-            .put("billingStatus", BillingStatus
-                .getInactiveStatuses());
-        fields.put("billingStatusComplementary", BillingStatus
-            .getActiveStatuses());
+        fields.put("billingStatus", BillingStatus.getInactiveStatuses());
+        fields.put("billingStatusComplementary", BillingStatus.getActiveStatuses());
       }
     }
     return fields;
@@ -669,8 +553,7 @@ public class CustomerController extends AbstractCRUDController {
   @SuppressWarnings("unchecked")
   private Iterable<String> getSelectedCustomersIdSet(
       HttpServletRequest request) {
-    Map<String, Object> selectedCustomersMap = WebUtils
-        .getParametersStartingWith(request, "selectedCustomers_");
+    Map<String, Object> selectedCustomersMap = WebUtils.getParametersStartingWith(request, "selectedCustomers_");
     return selectedCustomersMap.keySet();
   }
 }

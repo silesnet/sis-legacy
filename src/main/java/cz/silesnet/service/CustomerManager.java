@@ -6,7 +6,6 @@ import cz.silesnet.model.Service;
 import cz.silesnet.model.enums.Country;
 
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,12 +33,7 @@ public interface CustomerManager {
 
   public void update(Customer customer);
 
-  public void updateAll(List<Customer> customers);
-
   public Map<String, Long> getSummaryFor(Country c);
-
-  public void exportCusotmersToWinDuo(List<Customer> customers,
-                                      PrintWriter writer);
 
   public Service getService(Long serviceId);
 
@@ -55,6 +49,5 @@ public interface CustomerManager {
 
   public void updateSymbol(Customer customer);
 
-  public void exportCusotmersToInsert(List<Customer> customers,
-                                      PrintWriter writer);
+  public void exportCustomersToInsert(List<Customer> customers, PrintWriter writer);
 }
