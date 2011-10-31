@@ -2,12 +2,15 @@ apply plugin: 'war'
 apply plugin: 'idea'
 
 group = 'cz.silesnet'
+archiveBasename = 'sis'
 version = '1.1-M1'
 
 configurations.compile.transitive = true
 
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
+
+jar.enabled = true
 
 repositories {
   mavenCentral()
@@ -19,31 +22,35 @@ uploadArchives {
   }
 }
 
+def springVersion = '3.0.4.RELEASE'
+def unitilsVersion = '3.1'
+
 dependencies {
-  compile "org.springframework:spring-context:2.5.6.SEC02"
-  compile "org.springframework:spring-aop:2.5.6.SEC02"
+  compile "org.springframework:spring-context:${springVersion}"
+  compile "org.springframework:spring-orm:${springVersion}"
+  compile "org.springframework:spring-webmvc:${springVersion}"
+  compile("org.acegisecurity:acegi-security:1.0.0-RC2") {
+    exclude(groupId: 'org.springframework', artifactId: 'spring-remoting')
+    exclude(groupId: 'org.springframework', artifactId: 'spring-support')
+  }
+  compile "org.acegisecurity:acegi-security-tiger:1.0.0-RC2"
   compile "org.springframework:spring-hibernate3:2.0.8"
   compile("org.hibernate:hibernate:3.2.3.ga") {
     exclude(module: 'ehcache')
   }
-  compile "org.hibernate:hibernate-annotations:3.2.1.ga"
-  compile "net.sf.ehcache:ehcache:1.6.0"
-  compile "commons-lang:commons-lang:2.4"
-  compile "org.acegisecurity:acegi-security:1.0.0-RC2"
-  compile "org.acegisecurity:acegi-security-tiger:1.0.0-RC2"
   compile "org.bouncycastle:bcprov-jdk15:1.38"
   compile "org.bouncycastle:bcmail-jdk15:1.38"
-  compile "org.springframework.integration:spring-integration-mail:1.0.4.RELEASE"
   compile "javax.mail:mail:1.4.1"
+  compile "commons-lang:commons-lang:2.4"
   compile "commons-beanutils:commons-beanutils:1.8.0"
   compile "commons-validator:commons-validator:1.1.4"
   compile "commons-collections:commons-collections:3.1"
-  compile "aspectj:aspectjrt:1.5.0"
   compile "joda-time:joda-time:1.6"
   compile "org.hamcrest:hamcrest-all:1.1"
+  compile "org.freemarker:freemarker:2.3.16"
 
-  providedCompile "javax.servlet:servlet-api:2.4"
-
+  runtime "org.hibernate:hibernate-annotations:3.2.1.ga"
+  runtime "net.sf.ehcache:ehcache:1.6.0"
   runtime "javax.transaction:jta:1.1"
   runtime "opensymphony:quartz:1.6.1"
   runtime "postgresql:postgresql:8.2-507.jdbc3"
@@ -54,19 +61,22 @@ dependencies {
   runtime("velocity:velocity:1.4") {
     exclude(module: 'velocity-dep')
   }
+  runtime "xalan:xalan:2.7.1"
+
+  providedCompile "javax.servlet:servlet-api:2.4"
 
   testCompile "org.testng:testng:5.10:jdk15@jar"
-  testCompile "org.unitils:unitils-core:3.1"
-  testCompile "org.unitils:unitils-testng:3.1"
-  testCompile "org.unitils:unitils-spring:3.1"
-  testCompile "org.unitils:unitils-database:3.1"
-  testCompile "org.unitils:unitils-dbunit:3.1"
-  testCompile "org.unitils:unitils-dbmaintainer:3.1"
-  testCompile "org.unitils:unitils-orm:3.1"
+  testCompile "org.unitils:unitils-core:${unitilsVersion}"
+  testCompile "org.unitils:unitils-testng:${unitilsVersion}"
+  testCompile "org.unitils:unitils-spring:${unitilsVersion}"
+  testCompile "org.unitils:unitils-database:${unitilsVersion}"
+  testCompile "org.unitils:unitils-dbunit:${unitilsVersion}"
+  testCompile "org.unitils:unitils-dbmaintainer:${unitilsVersion}"
+  testCompile "org.unitils:unitils-orm:${unitilsVersion}"
   testCompile "org.slf4j:slf4j-nop:1.5.6"
   testCompile "hsqldb:hsqldb:1.8.0.7"
-  testCompile "junit:junit:3.8.1"
   testCompile "org.mockito:mockito-all:1.8.0"
+  testCompile "org.spockframework:spock-core:0.5-groovy-1.7"
 }
 
 test {
