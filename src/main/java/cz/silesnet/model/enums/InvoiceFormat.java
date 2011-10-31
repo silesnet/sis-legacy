@@ -1,7 +1,4 @@
-package cz.silesnet.service.invoice;
-
-import cz.silesnet.model.enums.EnumPersistenceMapping;
-import cz.silesnet.model.enums.ReverseEnumMap;
+package cz.silesnet.model.enums;
 
 /**
  * Enum for different InvoiceWriter formats.

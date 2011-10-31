@@ -2,7 +2,7 @@ package cz.silesnet.model;
 
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Frequency;
-import cz.silesnet.service.invoice.InvoiceFormat;
+import cz.silesnet.model.enums.InvoiceFormat;
 import cz.silesnet.utils.Dates;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -15,7 +15,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Component class for customer billing.

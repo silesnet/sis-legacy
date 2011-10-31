@@ -1,6 +1,6 @@
 package cz.silesnet.dao.hibernate.support;
 
-import cz.silesnet.service.invoice.InvoiceFormat;
+import cz.silesnet.model.enums.InvoiceFormat;
 
 /**
  * Class for InvoiceFormat enum Hibernate mapping.

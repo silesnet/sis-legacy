@@ -2,8 +2,8 @@ package cz.silesnet.service.invoice.impl;
 
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;
+import cz.silesnet.model.enums.InvoiceFormat;
 import cz.silesnet.service.invoice.Invoice;
-import cz.silesnet.service.invoice.InvoiceFormat;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

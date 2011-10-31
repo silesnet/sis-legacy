@@ -3,7 +3,6 @@ package cz.silesnet.service.invoice;
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.enums.Country;
-import cz.silesnet.utils.StringUtils;
 
 /**
  * User: der3k
