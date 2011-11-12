@@ -11,6 +11,9 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public interface BillingManager {
+  public void setReminderSenderFlag(boolean flag);
+
+ public boolean getReminderSenderFlag();
 
   public void billCustomersIn(Invoicing invoicing);
 

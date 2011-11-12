@@ -6,6 +6,7 @@ import cz.silesnet.model.Invoicing;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.HistoryManager;
+import cz.silesnet.service.impl.BillingManagerImpl;
 import cz.silesnet.utils.FilterUtils;
 import cz.silesnet.utils.MessagesUtils;
 import cz.silesnet.utils.NavigationUtils;
@@ -78,7 +79,9 @@ public class BillingController extends MultiActionController {
     model.put("countAll", bMgr.getCountByStatus(invoicing, true, null, null, null, null));
     model.put("sumAll", bMgr.getInvoicingSum(invoicing));
     model.put("invoiceSendingEnabled", bMgr.getSendingEnabled(country));
-
+    model.put("reminderSendingEnabled", bMgr.getReminderSenderFlag());
+    if (Country.CZ.equals(country))
+      model.put("pohodaRemindersEnabled", bMgr.getReminderSenderFlag());
     model.put("scripts", new String[]{"calendar.js"});
     if (!AbstractCRUDController.isTablePagination(request) && invoicing != null)
       request.getSession().setAttribute("billingAudit", hmgr.getHistory(invoicing));
@@ -300,6 +303,13 @@ public class BillingController extends MultiActionController {
     // requires _navPushUrl=1 in request
     return goBack(request, response);
   }
+
+    public ModelAndView toggleRemindersSending(HttpServletRequest request, HttpServletResponse response) {
+        boolean flag = ServletRequestUtils.getBooleanParameter(request, BillingManagerImpl.POHODA_REMINDERS_ENABLED, false);
+        log.info("Changing sending Pohoda reminders flag to: " + flag);
+        bMgr.setReminderSenderFlag(flag);
+        return goBack(request, response);
+    }
 
   public ModelAndView showPreparedUnconfirmed(HttpServletRequest request, HttpServletResponse response) {
     log.debug("Showing prepared and not confirmed bills.");

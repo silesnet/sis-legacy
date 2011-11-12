@@ -159,6 +159,25 @@
 	</c:choose>
 </div>
 <hr />
+
+<c:if test="${country == 'cz'}">
+<div class="mainBilling_sendingStatus">
+	<c:choose>
+		<c:when test="${reminderSendingEnabled}">
+			<p><fmt:message key="mainBilling.status.reminderSendingEnabled" /><br />
+			<a href="${ctx}/billing/edit.html?action=toggleRemindersSending&pohoda-reminders-enabled=false&_navPushUrl=1">
+				<fmt:message key="mainBilling.action.disableSending" /></a></p>
+		</c:when>
+		<c:otherwise>
+			<p><fmt:message key="mainBilling.status.reminderSendingDisabled" /><br />
+			<a href="${ctx}/billing/edit.html?action=toggleRemindersSending&pohoda-reminders-enabled=true&_navPushUrl=1">
+				<fmt:message key="mainBilling.action.enableSending" /></a></p>
+		</c:otherwise>
+	</c:choose>
+</div>
+<hr />
+</c:if>
+
 <c:if test="${!empty invoicing }">
 <c:if test="${country == 'pl'}">
 <span class="actionLink"><a href="${ctx}/billing/bills_pl_${billingMonth}.epp?action=exportSentToInsert&invoicingId=${invoicing.id}">

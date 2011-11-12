@@ -36,8 +36,9 @@ import java.util.*;
 public class BillingManagerImpl implements BillingManager {
   private static final Map<String, String> MESSAGE_KEYS_MAPPING = errorsAndWarningsKeysMap();
   private static final SimpleDateFormat AUDIT_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    public static final String POHODA_REMINDERS_ENABLED = "pohoda-reminders-enabled";
 
-  protected final Log log = LogFactory.getLog(getClass());
+    protected final Log log = LogFactory.getLog(getClass());
 
   private BillDAO dao;
 
@@ -57,7 +58,17 @@ public class BillingManagerImpl implements BillingManager {
 
   private BillingContextFactory billingContextFactory;
 
-  public void billCustomersIn(final Invoicing invoicing) {
+    public void setReminderSenderFlag(final boolean flag) {
+        Setting s = setMgr.get(POHODA_REMINDERS_ENABLED);
+        s.setValue((new Boolean(flag).toString()));
+        setMgr.update(s);
+    }
+
+    public boolean getReminderSenderFlag() {
+        return Boolean.valueOf(setMgr.get(POHODA_REMINDERS_ENABLED).getValue());
+    }
+
+    public void billCustomersIn(final Invoicing invoicing) {
     BillingContext context = billingContextFactory.billingContextFor(invoicing.getCountry());
     Accountant accountant = newAccountantFor(invoicing, context);
     auditBillingStart(accountant);
