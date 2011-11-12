@@ -27,7 +27,7 @@ public class FreeMarkerInvoiceWriterFactoryTest extends UnitilsTestNG {
   private static final String INVOICE_NUMBER = "12345";
   private static final String NUMBER = "Invoice number: " + INVOICE_NUMBER;
   private static final String SIGNATURE = "Sent by: accountant.cs@silesnet.cz";
-  private static final String UTF8 = "UTF-8: ���������؎�ٹ꿯";
+  private static final String UTF8 = "UTF-8: ěščřžýáíéůŘŽČŮąężŻ";
   private static final String COUNTRY = "Country: pl";
 
   @SpringBean("invoiceWriterFactory")
