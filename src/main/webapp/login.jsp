@@ -24,7 +24,7 @@
 <!-- Main -->
 <div id="MainWrapper"><div id="Main">
 <h1><s:message code="login.title"/></h1>
-<form autocomplete="off" name="loginForm" action="<c:url value='j_acegi_security_check'/>" method="post">
+<form autocomplete="off" name="loginForm" action="<c:url value='j_spring_security_check'/>" method="post">
 <table>
 	<tr><td><s:message code="login.field.loginName"/><td> <input type="text" name="j_username"/>
 	<tr><td><s:message code="login.field.password"/><td><input type="password" name="j_password"/>

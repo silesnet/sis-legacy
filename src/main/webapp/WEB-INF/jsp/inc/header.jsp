@@ -20,7 +20,7 @@
 <!-- Header -->
 <div id="HeaderWrapper"><div id="Header">
 	<!-- Login info -->
-	<h3><s:message code="app.loggedAs"/>&nbsp;<b><authz:authentication operation="username" /></b>
+	<h3><s:message code="app.loggedAs"/>&nbsp;<b><authz:authentication property="principal.username" /></b>
 	  (<a href="${ctx}/logout.jsp"><s:message code="app.logout"/></a>|<!--
       --><a href="${ctx}/app/view.html?view=viewLastLogin"><s:message code="lastLogin.link"/></a>)</h3>
 	<!-- Menu -->

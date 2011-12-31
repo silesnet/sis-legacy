@@ -3,13 +3,13 @@ package cz.silesnet.dao.hibernate;
 import cz.silesnet.dao.UserDAO;
 import cz.silesnet.model.User;
 import cz.silesnet.utils.DiffUtils;
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class UserDAOHibernate extends HibernateDaoSupport implements UserDAO {
 
     User user = result.get(0);
 
-    if (user.getAuthorities().length == 0)
+    if (user.getAuthorities().size() == 0)
       new UsernameNotFoundException(userName);
 
     return (UserDetails) user;

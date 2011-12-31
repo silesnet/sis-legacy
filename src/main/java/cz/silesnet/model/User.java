@@ -1,12 +1,15 @@
 package cz.silesnet.model;
 
 import cz.silesnet.utils.DiffUtils;
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.GrantedAuthorityImpl;
-import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * User bean.
@@ -33,7 +36,7 @@ public class User extends Entity implements UserDetails {
 
   private String fRoles;
 
-  private GrantedAuthority[] fAuthorities;
+  private Collection<GrantedAuthority> fAuthorities;
 
   // ~ Methods
   // ----------------------------------------------------------------
@@ -46,11 +49,11 @@ public class User extends Entity implements UserDetails {
     return true;
   }
 
-  public void setAuthorities(GrantedAuthority[] authorities) {
+  public void setAuthorities(Collection<GrantedAuthority> authorities) {
     fAuthorities = authorities;
   }
 
-  public GrantedAuthority[] getAuthorities() {
+  public Collection<GrantedAuthority> getAuthorities() {
     // if Authorities not polupated yet do it
     if (fAuthorities == null) {
       log.debug("Initializing authorities...");
@@ -58,12 +61,12 @@ public class User extends Entity implements UserDetails {
       String[] roles = StringUtils
           .commaDelimitedListToStringArray(getRoles());
 
-      fAuthorities = new GrantedAuthority[roles.length];
+      fAuthorities = new ArrayList<GrantedAuthority>(roles.length);
 
       for (int i = 0; i < roles.length; i++)
-        fAuthorities[i] = new GrantedAuthorityImpl(StringUtils
+        fAuthorities.add(new GrantedAuthorityImpl(StringUtils
             .trimTrailingWhitespace(StringUtils
-            .trimLeadingWhitespace(roles[i])));
+            .trimLeadingWhitespace(roles[i]))));
     }
 
     return fAuthorities;

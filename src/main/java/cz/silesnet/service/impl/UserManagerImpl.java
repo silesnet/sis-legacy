@@ -4,12 +4,12 @@ import cz.silesnet.dao.UserDAO;
 import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.UserManager;
 import cz.silesnet.utils.SecurityUtils;
-import org.acegisecurity.event.authentication.InteractiveAuthenticationSuccessEvent;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.ui.WebAuthenticationDetails;
-import org.acegisecurity.ui.session.HttpSessionDestroyedEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 
 import java.util.List;
 

@@ -23,7 +23,7 @@
 <div id="MainWrapper"><div id="Main">
 <h1><s:message code="logout.title"/></h1>
 
-<h2><s:message code="logout.user"/><font color="red"> <authz:authentication operation="username"/></font>
+<h2><s:message code="logout.user"/><font color="red"> <authz:authentication property="principal.username"/></font>
  <s:message code="logout.loggedOut"/></h2>
 <% session.invalidate(); %>
 <p><a href="${ctx}/login.jsp"><s:message code="login.title"/></a></p>

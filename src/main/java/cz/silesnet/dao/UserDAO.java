@@ -1,7 +1,7 @@
 package cz.silesnet.dao;
 
 import cz.silesnet.model.User;
-import org.acegisecurity.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 

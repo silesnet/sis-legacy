@@ -1,12 +1,9 @@
 package cz.silesnet.web.servlet;
 
-import org.acegisecurity.AccessDeniedException;
-import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.InsufficientAuthenticationException;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.ui.ExceptionTranslationFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.FilterChain;
@@ -17,81 +14,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CustomExceptionTransaltionFilter extends
-    ExceptionTranslationFilter {
+public class CustomExceptionTransaltionFilter extends ExceptionTranslationFilter {
 
-  protected final Log logger = LogFactory.getLog(getClass());
+    protected final Log logger = LogFactory.getLog(getClass());
 
-  public void doFilter(ServletRequest request, ServletResponse response,
-                       FilterChain chain) throws IOException, ServletException {
-    if (!(request instanceof HttpServletRequest)) {
-      throw new ServletException("HttpServletRequest required");
-    }
-
-    if (!(response instanceof HttpServletResponse)) {
-      throw new ServletException("HttpServletResponse required");
-    }
-
-    try {
-      chain.doFilter(request, response);
-
-      if (logger.isDebugEnabled()) {
-        logger.debug("Chain processed normally");
-      }
-    }
-    catch (AuthenticationException authentication) {
-      if (logger.isDebugEnabled()) {
-        logger
-            .debug(
-                "Authentication exception occurred; redirecting to authentication entry point",
-                authentication);
-      }
-      sendStartAuthentication(request, response, chain, authentication);
-    }
-    catch (AccessDeniedException accessDenied) {
-      if (getAuthenticationTrustResolver().isAnonymous(
-          SecurityContextHolder.getContext().getAuthentication())) {
-        if (logger.isDebugEnabled()) {
-          logger
-              .debug(
-                  "Access is denied (user is anonymous); redirecting to authentication entry point",
-                  accessDenied);
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        if (!(req instanceof HttpServletRequest)) {
+            throw new ServletException("HttpServletRequest required");
         }
 
-        sendStartAuthentication(
-            request,
-            response,
-            chain,
-            new InsufficientAuthenticationException(
-                "Full authentication is required to access this resource"));
-      } else {
-        if (logger.isDebugEnabled()) {
-          logger
-              .debug(
-                  "Access is denied (user is not anonymous); sending back forbidden response",
-                  accessDenied);
+        if (!(res instanceof HttpServletResponse)) {
+            throw new ServletException("HttpServletResponse required");
         }
 
-        sendAccessDeniedError(request, response, chain, accessDenied);
-      }
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+
+        try {
+            chain.doFilter(request, response);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Chain processed normally");
+            }
+        } catch (AuthenticationException authentication) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Authentication exception occurred; redirecting to authentication entry point", authentication);
+            }
+            sendStartAuthentication(request, response, chain, authentication);
+        } catch (NestedServletException nestedException) {
+            throw nestedException;
+        } catch (ServletException e) {
+            throw e;
+        } catch (IOException e) {
+            throw e;
+        } catch (Throwable otherException) {
+            throw new ServletException(otherException);
+        }
     }
-    catch (NestedServletException nestedException) {
-      if (nestedException.getCause() instanceof AccessDeniedException) {
-        logger.debug("Access is denied");
-        sendAccessDeniedError(request, response, chain,
-            (AccessDeniedException) nestedException.getCause());
-      } else {
-        throw nestedException;
-      }
-    }
-    catch (ServletException e) {
-      throw e;
-    }
-    catch (IOException e) {
-      throw e;
-    }
-    catch (Throwable otherException) {
-      throw new ServletException(otherException);
-    }
-  }
 }

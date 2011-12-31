@@ -1,263 +1,75 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd"
-    >
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
-  <!-- Defining filter order -->
-  <bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
-    <property name="filterInvocationDefinitionSource">
-      <value>
-        CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-        PATTERN_TYPE_APACHE_ANT
-        /billing/confirmdelivery.html*=httpSessionContextIntegrationFilter,authenticationProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterSecurityInterceptor
-        /img/logo_silesnet.gif=httpSessionContextIntegrationFilter,authenticationProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterSecurityInterceptor
-        /img/bill_signature.gif=httpSessionContextIntegrationFilter,authenticationProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterSecurityInterceptor
-        /img/bill_signature_pl.gif=httpSessionContextIntegrationFilter,authenticationProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterSecurityInterceptor
-        /css/bill.css=httpSessionContextIntegrationFilter,authenticationProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterSecurityInterceptor
-        /**=channelProcessingFilter,httpSessionContextIntegrationFilter,authenticationProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterSecurityInterceptor
-      </value>
-    </property>
-  </bean>
+  <http auto-config="true">
+    <intercept-url pattern="/css/**" filters="none" />
+    <intercept-url pattern="/img/**" filters="none" />
+    <intercept-url pattern="/js/**" filters="none" />
+    <intercept-url pattern="/css/**" filters="none" />
+    <intercept-url pattern="/favicon.ico" filters="none" />
+    <intercept-url pattern="/login.jsp*" filters="none" />
+    <intercept-url pattern="/logout.jsp" filters="none" />
+    <intercept-url pattern="/index.jsp" filters="none" />
+    <intercept-url pattern="/billing/confirmdelivery.html*" filters="none" />
+    <intercept-url pattern="/customer/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" requires-channel="https"/>
+    <intercept-url pattern="/customer/edit.html*" access="ROLE_ACCOUNTING" requires-channel="https"/>
+    <intercept-url pattern="/service/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" requires-channel="https"/>
+    <intercept-url pattern="/service/edit.html*" access="ROLE_ACCOUNTING" requires-channel="https"/>
+    <intercept-url pattern="/billing/*" access="ROLE_ACCOUNTING" requires-channel="https"/>
+    <intercept-url pattern="/**" access="ROLE_USER" requires-channel="https" />
+    <form-login login-page="/login.jsp" />
+  </http>
 
-  <!-- Defining filters -->
+  <authentication-manager>
+    <authentication-provider ref="daoAuthenticationProviderDB" />
+  </authentication-manager>
 
-  <!-- ChannelProcessingFilter -->
-  <bean id="channelProcessingFilter" class="org.acegisecurity.securechannel.ChannelProcessingFilter">
-    <property name="channelDecisionManager">
-      <ref local="channelDecisionManager" />
-    </property>
-    <property name="filterInvocationDefinitionSource">
-      <value>
-        CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-        PATTERN_TYPE_APACHE_ANT
-        /**=REQUIRES_SECURE_CHANNEL
-      </value>
-    </property>
-  </bean>
-
-  <bean id="channelDecisionManager" class="org.acegisecurity.securechannel.ChannelDecisionManagerImpl">
-    <property name="channelProcessors">
-      <list>
-        <ref local="secureChannelProcessor" />
-        <ref local="insecureChannelProcessor" />
-      </list>
-    </property>
-  </bean>
-
-  <bean id="secureChannelProcessor" class="org.acegisecurity.securechannel.SecureChannelProcessor" />
-  <bean id="insecureChannelProcessor" class="org.acegisecurity.securechannel.InsecureChannelProcessor" />
-
-
-  <!-- HttpSessionContextIntegrationFilter -->
-  <bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter">
-    <property name="context">
-      <value>org.acegisecurity.context.SecurityContextImpl</value>
-    </property>
-  </bean>
-
-  <!-- AuthenticationPorcessingFilter -->
-  <bean id="authenticationProcessingFilter" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
-    <property name="authenticationManager">
-      <ref local="authenticationManager" />
-    </property>
-    <property name="authenticationFailureUrl">
-      <value>/login.jsp?error=1</value>
-    </property>
-    <property name="defaultTargetUrl">
-      <value>/</value>
-    </property>
-    <property name="filterProcessesUrl">
-      <value>/j_acegi_security_check</value>
-    </property>
-  </bean>
-
-  <bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager">
-    <property name="providers">
-      <list>
-        <ref local="daoAuthenticationProviderDB" />
-        <ref local="anonymousAuthenticationProvider" />
-      </list>
-    </property>
-  </bean>
-
-  <bean id="daoAuthenticationProviderDB" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
-    <property name="userDetailsService">
-      <ref bean="userDAO" />
-    </property>
-    <property name="userCache">
-      <ref local="userCache" />
-    </property>
-    <property name="passwordEncoder">
-      <ref local="passwordEncoder" />
-    </property>
-  </bean>
+  <beans:bean id="daoAuthenticationProviderDB" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <beans:property name="userDetailsService">
+      <beans:ref bean="userDAO" />
+    </beans:property>
+    <beans:property name="userCache">
+      <beans:ref local="userCache" />
+    </beans:property>
+    <beans:property name="passwordEncoder">
+      <beans:ref local="passwordEncoder" />
+    </beans:property>
+  </beans:bean>
 
   <!-- userCache -->
-  <bean id="userCache" class="org.acegisecurity.providers.dao.cache.EhCacheBasedUserCache">
-    <property name="cache">
-      <ref local="userCacheBackend" />
-    </property>
-  </bean>
+  <beans:bean id="userCache" class="org.springframework.security.core.userdetails.cache.EhCacheBasedUserCache">
+    <beans:property name="cache">
+      <beans:ref local="userCacheBackend" />
+    </beans:property>
+  </beans:bean>
 
-  <bean id="userCacheBackend" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-    <property name="cacheManager">
-      <ref local="cacheManager" />
-    </property>
-    <property name="cacheName">
-      <value>userCache</value>
-    </property>
-  </bean>
+  <beans:bean id="userCacheBackend" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <beans:property name="cacheManager">
+      <beans:ref local="cacheManager" />
+    </beans:property>
+    <beans:property name="cacheName">
+      <beans:value>userCache</beans:value>
+    </beans:property>
+  </beans:bean>
 
-  <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-    <property name="configLocation">
-      <value>classpath:ehcache-failsafe.xml</value>
-    </property>
-  </bean>
-
+  <beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    <beans:property name="configLocation">
+      <beans:value>classpath:ehcache-failsafe.xml</beans:value>
+    </beans:property>
+  </beans:bean>
 
   <!-- can use PlaintextPasswordEncoder instead of ShaPasswordEncoder -->
-  <bean id="passwordEncoder" class="org.acegisecurity.providers.encoding.ShaPasswordEncoder" />
+  <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 
-  <bean id="anonymousAuthenticationProvider"
-        class="org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider">
-    <property name="key">
-      <value>anonymousKey</value>
-    </property>
-  </bean>
+  <beans:bean id="loginListener" class="cz.silesnet.web.LoginListener">
+    <beans:property name="userManager">
+      <beans:ref bean="userManager" />
+    </beans:property>
+  </beans:bean>
 
-  <!-- AnonymousProcessingFilter -->
-  <bean id="anonymousProcessingFilter" class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
-    <property name="key">
-      <value>anonymousKey</value>
-    </property>
-    <property name="userAttribute">
-      <value>anonymousUser,ROLE_ANONYMOUS</value>
-    </property>
-  </bean>
-
-  <!-- SecurityEnforcementFilter -->
-  <bean id="exceptionTranslationFilter" class="cz.silesnet.web.servlet.CustomExceptionTransaltionFilter">
-    <property name="authenticationEntryPoint">
-      <ref local="authenticationEntryPoint" />
-    </property>
-  </bean>
-
-  <bean id="authenticationEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
-    <property name="loginFormUrl">
-      <value>/login.jsp</value>
-    </property>
-  </bean>
-
-  <!-- this '*' is important so page can receive parameters
-		 withou need to be authorised -->
-  <bean id="filterSecurityInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
-    <property name="authenticationManager">
-      <ref local="authenticationManager" />
-    </property>
-    <property name="accessDecisionManager">
-      <ref local="accessDecisionManager" />
-    </property>
-    <property name="objectDefinitionSource">
-      <value>
-        CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-        PATTERN_TYPE_APACHE_ANT
-        /index.jsp=ROLE_ANONYMOUS
-        /login.jsp*=ROLE_ANONYMOUS
-        /logout.jsp=ROLE_ANONYMOUS
-        /css/**.css=ROLE_ANONYMOUS
-        /favicon.ico=ROLE_ANONYMOUS
-        /img/**=ROLE_ANONYMOUS
-        /js/**.js=ROLE_ANONYMOUS
-        /index.html=ROLE_DEALER,ROLE_DEALER2,ROLE_USER
-        /net/wireless/view.html*=ROLE_DEALER,ROLE_DEALER2,ROLE_USER
-        /php/diar/*=ROLE_DEALER,ROLE_DEALER2,ROLE_USER
-        /php/technologie/*=ROLE_TECH_ADMIN
-        /php/registered.php*=ROLE_TECH_ADMIN
-        /php/problemy/*=ROLE_DEALER2,ROLE_USER
-        /php/voip/*=ROLE_USER,ROLE_DEALER
-        /php/doc/*=ROLE_DEALER2,ROLE_DEALER,ROLE_USER
-        /php/timer.php=ROLE_USER,ROLE_DEALER
-        /php/atmel/*=ROLE_USER,ROLE_DEALER
-        /app/view.html*=ROLE_USER,ROLE_DEALER
-        /doc/*=ROLE_DEALER2,ROLE_USER
-        /php/routery/*=ROLE_DEALER,ROLE_USER
-        /service/view.html*=ROLE_CUST_VIEW,ROLE_ACCOUNTING
-        /service/edit.html*=ROLE_ACCOUNTING
-        /customer/view.html*=ROLE_CUST_VIEW,ROLE_ACCOUNTING
-        /customer/edit.html*=ROLE_ACCOUNTING
-        /billing/confirmdelivery.html*=ROLE_ANONYMOUS
-        /billing/*=ROLE_ACCOUNTING
-        /**=ROLE_USER
-      </value>
-    </property>
-  </bean>
-
-  <!-- important for roles matching UnanimousBased meas all roles are 2 be set-->
-  <bean id="accessDecisionManager" class="org.acegisecurity.vote.AffirmativeBased">
-    <property name="allowIfAllAbstainDecisions">
-      <value>false</value>
-    </property>
-    <property name="decisionVoters">
-      <list>
-        <ref local="roleVoter" />
-      </list>
-    </property>
-  </bean>
-
-  <bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter" />
-
-  <!-- Method security using annotations -->
-  <!--
-    <bean id="methodSecurityInterceptor" class="cz.silesnet.utils.BeforeAspectJSecurityInterceptor"> <bean
-    id="methodSecurityInterceptor" class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">
-  <bean id="methodSecurityInterceptor" class="org.acegisecurity.intercept.method.aspectj.AspectJSecurityInterceptor">
-    <property name="validateConfigAttributes" value="false" />
-    <property name="authenticationManager">
-      <ref local="authenticationManager" />
-    </property>
-    <property name="accessDecisionManager">
-      <ref local="accessDecisionManager" />
-    </property>
-    <property name="objectDefinitionSource">
-      <ref local="objectAnnotationDefinitionSource" />
-    </property>
-  </bean>
-
-  <bean id="objectAnnotationDefinitionSource" class="org.acegisecurity.intercept.method.MethodDefinitionAttributes">
-    <property name="attributes">
-      <bean class="org.acegisecurity.annotation.SecurityAnnotationAttributes" />
-    </property>
-  </bean>
-  -->
-
-  <bean id="loginListener" class="cz.silesnet.web.LoginListener">
-    <property name="userManager">
-      <ref bean="userManager" />
-    </property>
-  </bean>
-
-  <!--
-    <aop:config> <aop:aspect id="methodSecurityAspect" ref="methodSecurityInterceptor"> <aop:advice kind="before"
-    method="before" pointcut="execution(public org.springframework.web.servlet.ModelAndView
-    cz.silesnet.web.mvc.CustomerController.*(..))" /> </aop:aspect> </aop:config>
-  -->
-
-  <!--
-    Turn it on for production
-    <bean id="methodSecurityAspect" class="cz.silesnet.utils.MethodSecurityAspect"
-    factory-method="aspectOf"> <property name="securityInterceptor" ref="methodSecurityInterceptor" /> </bean>
-  -->
-
-  <!--
-    Turn it on for AOP proxy implementation <bean id="attributeSecuritySourceAdvisor"
-    class="org.acegisecurity.intercept.method.aopalliance.MethodDefinitionSourceAdvisor"> <constructor-arg><ref
-    local="methodSecurityInterceptor" /></constructor-arg> </bean> <bean id="autoProxyCreator"
-    class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"> <property
-    name="proxyTargetClass" value="true" /> </bean>
-  -->
-
-</beans>
+</beans:beans>

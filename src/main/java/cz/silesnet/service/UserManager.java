@@ -1,8 +1,8 @@
 package cz.silesnet.service;
 
 import cz.silesnet.model.User;
-import org.acegisecurity.event.authentication.InteractiveAuthenticationSuccessEvent;
-import org.acegisecurity.ui.session.HttpSessionDestroyedEvent;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
+import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 
 import java.util.List;
 

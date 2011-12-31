@@ -1,13 +1,13 @@
 package cz.silesnet.web;
 
 import cz.silesnet.service.UserManager;
-import org.acegisecurity.event.authentication.InteractiveAuthenticationSuccessEvent;
-import org.acegisecurity.ui.session.HttpSessionCreatedEvent;
-import org.acegisecurity.ui.session.HttpSessionDestroyedEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
+import org.springframework.security.web.session.HttpSessionCreatedEvent;
+import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 
 /**
  * Used to keep record of succesfull logins in application history.

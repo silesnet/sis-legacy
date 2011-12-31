@@ -1,10 +1,12 @@
 package cz.silesnet.dao;
 
 import cz.silesnet.model.User;
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.userdetails.UserDetails;
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.testng.annotations.Test;
+
+import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -87,7 +89,7 @@ public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
     log.debug("Retrieved user: " + user);
     log.debug("Granted authorities: ");
 
-    GrantedAuthority[] authorities = user.getAuthorities();
+    Collection<GrantedAuthority> authorities = user.getAuthorities();
 
     for (GrantedAuthority authority : authorities)
       log.debug("Authority: " + authority);

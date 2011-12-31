@@ -59,7 +59,7 @@
   </listener>
 
   <listener>
-    <listener-class>org.acegisecurity.ui.session.HttpSessionEventPublisher</listener-class>
+    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
   </listener>
 
   <!-- This filter needs to be first!!! before request.getReader() is invoked -->
@@ -78,12 +78,8 @@
 
   <!-- Acegi Filter Chain Proxy introducing security filters -->
   <filter>
-    <filter-name>Acegi Filter Chain Proxy</filter-name>
-    <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
-    <init-param>
-      <param-name>targetClass</param-name>
-      <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
-    </init-param>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
   </filter>
 
   <filter>
@@ -122,7 +118,7 @@
   </filter-mapping>
 
   <filter-mapping>
-    <filter-name>Acegi Filter Chain Proxy</filter-name>
+    <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 

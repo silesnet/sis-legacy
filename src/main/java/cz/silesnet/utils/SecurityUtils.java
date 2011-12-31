@@ -1,7 +1,7 @@
 package cz.silesnet.utils;
 
 import cz.silesnet.model.User;
-import org.acegisecurity.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Utility class using mainly Acegi Security for Spring.
