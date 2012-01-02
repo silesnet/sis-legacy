@@ -1,4 +1,4 @@
-<a href="https://tech.silesnet.cz:2828/"><s:message code="app.menu.home"/></a><!--
+<a href="https://sis.silesnet.net"><s:message code="app.menu.home"/></a><!--
 
 --><authz:authorize ifAllGranted="ROLE_USER">|<!--
 --><authz:authorize ifAnyGranted="ROLE_ACCOUNTING,ROLE_CUST_VIEW"><a href="${ctx}/customer/view.html?action=showList"><s:message code="app.menu.customers"/></a>|</authz:authorize><!--

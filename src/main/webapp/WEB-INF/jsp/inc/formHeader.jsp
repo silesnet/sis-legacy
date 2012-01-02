@@ -22,17 +22,8 @@
 
 <!-- Header -->
 <div id="HeaderWrapper"><div id="Header">
-	<!-- Login info -->
-	<h3><s:message code="app.loggedAs"/>&nbsp;<b><authz:authentication operation="username" /></b>
-	  (<a href="${ctx}/logout.jsp"><s:message code="app.logout"/></a>|<!--
-      --><a href="${ctx}/app/view.html?view=viewLastLogin"><s:message code="lastLogin.link"/></a>)</h3>
-
-	<!-- Title -->
-	<h1><s:message code="app.title"/> v<s:message code="app.version"/></h1>
-	
 	<!-- Menu -->
-	<h2><%@ include file="/WEB-INF/jsp/inc/mainMenu.jsp" %></h2>
-
+	<h2><a href="https://sis.silesnet.net">Zpět</a></h2>
 </div></div>
 
 
