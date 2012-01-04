@@ -13,8 +13,8 @@
             <sec:filter-chain pattern="/img/**" filters="none" />
             <sec:filter-chain pattern="/js/**" filters="none" />
             <sec:filter-chain pattern="/favicon.ico" filters="none" />
-            <sec:filter-chain pattern="/login.jsp*" filters="none" />
-            <sec:filter-chain pattern="/logout.jsp*" filters="none" />
+            <sec:filter-chain pattern="/login.jsp*" filters="channelProcessingFilter" />
+            <sec:filter-chain pattern="/logout.jsp*" filters="channelProcessingFilter" />
             <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="none" />
             <sec:filter-chain pattern="/**" filters="
                 channelProcessingFilter,
@@ -37,7 +37,7 @@
         </property>
         <property name="securityMetadataSource">
             <sec:filter-invocation-definition-source>
-                <sec:intercept-url pattern="/**" />
+                <sec:intercept-url pattern="/**" access="REQUIRES_SECURE_CHANNEL" />
             </sec:filter-invocation-definition-source>
         </property>
     </bean>
