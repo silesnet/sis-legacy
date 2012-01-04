@@ -1,75 +1,112 @@
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-  xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/security
-           http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.0.3.xsd"
+ >
 
-  <http auto-config="true">
-    <intercept-url pattern="/css/**" filters="none" />
-    <intercept-url pattern="/img/**" filters="none" />
-    <intercept-url pattern="/js/**" filters="none" />
-    <intercept-url pattern="/css/**" filters="none" />
-    <intercept-url pattern="/favicon.ico" filters="none" />
-    <intercept-url pattern="/login.jsp*" filters="none" />
-    <intercept-url pattern="/logout.jsp" filters="none" />
-    <intercept-url pattern="/index.jsp" filters="none" />
-    <intercept-url pattern="/billing/confirmdelivery.html*" filters="none" />
-    <intercept-url pattern="/customer/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" requires-channel="https"/>
-    <intercept-url pattern="/customer/edit.html*" access="ROLE_ACCOUNTING" requires-channel="https"/>
-    <intercept-url pattern="/service/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" requires-channel="https"/>
-    <intercept-url pattern="/service/edit.html*" access="ROLE_ACCOUNTING" requires-channel="https"/>
-    <intercept-url pattern="/billing/*" access="ROLE_ACCOUNTING" requires-channel="https"/>
-    <intercept-url pattern="/**" access="ROLE_USER" requires-channel="https" />
-    <form-login login-page="/login.jsp" />
-  </http>
+    <bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+        <sec:filter-chain-map path-type="ant">
+            <sec:filter-chain pattern="/css/**" filters="none" />
+            <sec:filter-chain pattern="/img/**" filters="none" />
+            <sec:filter-chain pattern="/js/**" filters="none" />
+            <sec:filter-chain pattern="/favicon.ico" filters="none" />
+            <sec:filter-chain pattern="/login.jsp*" filters="none" />
+            <sec:filter-chain pattern="/logout.jsp*" filters="none" />
+            <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="none" />
+            <sec:filter-chain pattern="/**" filters="
+                channelProcessingFilter,
+                securityContextPersistenceFilter,
+                usernamePasswordAuthenticationFilter,
+                exceptionTranslationFilter,
+                filterSecurityInterceptor" />
+        </sec:filter-chain-map>
+    </bean>
 
-  <authentication-manager>
-    <authentication-provider ref="daoAuthenticationProviderDB" />
-  </authentication-manager>
+    <bean id="channelProcessingFilter" class="org.springframework.security.web.access.channel.ChannelProcessingFilter">
+        <property name="channelDecisionManager">
+            <bean class="org.springframework.security.web.access.channel.ChannelDecisionManagerImpl">
+                <property name="channelProcessors">
+                    <list>
+                        <bean class="org.springframework.security.web.access.channel.SecureChannelProcessor" />
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="securityMetadataSource">
+            <sec:filter-invocation-definition-source>
+                <sec:intercept-url pattern="/**" />
+            </sec:filter-invocation-definition-source>
+        </property>
+    </bean>
 
-  <beans:bean id="daoAuthenticationProviderDB" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-    <beans:property name="userDetailsService">
-      <beans:ref bean="userDAO" />
-    </beans:property>
-    <beans:property name="userCache">
-      <beans:ref local="userCache" />
-    </beans:property>
-    <beans:property name="passwordEncoder">
-      <beans:ref local="passwordEncoder" />
-    </beans:property>
-  </beans:bean>
+    <bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
 
-  <!-- userCache -->
-  <beans:bean id="userCache" class="org.springframework.security.core.userdetails.cache.EhCacheBasedUserCache">
-    <beans:property name="cache">
-      <beans:ref local="userCacheBackend" />
-    </beans:property>
-  </beans:bean>
+    <bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="filterProcessesUrl" value="/j_spring_security_check" />
+        <property name="authenticationSuccessHandler">
+            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
+                <property name="defaultTargetUrl" value="/" />
+            </bean>
+        </property>
+        <property name="authenticationFailureHandler">
+            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+                <property name="defaultFailureUrl" value="/login.jsp?error=1" />
+            </bean>
+        </property>
+        <property name="postOnly" value="false" />
+    </bean>
 
-  <beans:bean id="userCacheBackend" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-    <beans:property name="cacheManager">
-      <beans:ref local="cacheManager" />
-    </beans:property>
-    <beans:property name="cacheName">
-      <beans:value>userCache</beans:value>
-    </beans:property>
-  </beans:bean>
+    <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <property name="providers">
+            <list>
+                <bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+                    <property name="userDetailsService" ref="userDAO" />
+                    <property name="passwordEncoder">
+                        <bean class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
-  <beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-    <beans:property name="configLocation">
-      <beans:value>classpath:ehcache-failsafe.xml</beans:value>
-    </beans:property>
-  </beans:bean>
+    <bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+        <property name="authenticationEntryPoint">
+            <bean class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+                <property name="loginFormUrl" value="/login.jsp" />
+            </bean>
+        </property>
+    </bean>
 
-  <!-- can use PlaintextPasswordEncoder instead of ShaPasswordEncoder -->
-  <beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+    <bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="accessDecisionManager">
+            <bean class="org.springframework.security.access.vote.AffirmativeBased">
+                <property name="allowIfAllAbstainDecisions" value="false" />
+                <property name="decisionVoters">
+                    <list>
+                        <bean class="org.springframework.security.access.vote.RoleVoter" />
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="securityMetadataSource">
+            <sec:filter-security-metadata-source>
+                <sec:intercept-url pattern="/customer/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" />
+                <sec:intercept-url pattern="/customer/edit.html*" access="ROLE_ACCOUNTING" />
+                <sec:intercept-url pattern="/service/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" />
+                <sec:intercept-url pattern="/service/edit.html*" access="ROLE_ACCOUNTING" />
+                <sec:intercept-url pattern="/billing/*" access="ROLE_ACCOUNTING" />
+                <sec:intercept-url pattern="/**" access="ROLE_USER" />
+            </sec:filter-security-metadata-source>
+        </property>
+    </bean>
 
-  <beans:bean id="loginListener" class="cz.silesnet.web.LoginListener">
-    <beans:property name="userManager">
-      <beans:ref bean="userManager" />
-    </beans:property>
-  </beans:bean>
+    <bean id="loginListener" class="cz.silesnet.web.LoginListener">
+        <property name="userManager" ref="userManager" />
+    </bean>
 
-</beans:beans>
+</beans>

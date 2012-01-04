@@ -16,36 +16,37 @@ import org.springframework.security.web.session.HttpSessionDestroyedEvent;
  */
 public class LoginListener implements ApplicationListener {
 
-  // ~ Instance fields
-  // --------------------------------------------------------
+    // ~ Instance fields
+    // --------------------------------------------------------
 
-  protected final Log log = LogFactory.getLog(getClass());
+    protected final Log log = LogFactory.getLog(getClass());
 
-  private UserManager umgr;
+    private UserManager umgr;
 
-  // ~ Methods
-  // ----------------------------------------------------------------
+    // ~ Methods
+    // ----------------------------------------------------------------
 
-  // wired by Spring
+    // wired by Spring
 
-  public void setUserManager(UserManager userManager) {
-    umgr = userManager;
-  }
-
-  public void onApplicationEvent(ApplicationEvent event) {
-    if (event instanceof InteractiveAuthenticationSuccessEvent) {
-      log.info("Interactive authentication success.");
-      umgr
-          .dispatchSuccessfulLoginEvent((InteractiveAuthenticationSuccessEvent) event);
+    public void setUserManager(UserManager userManager) {
+        umgr = userManager;
     }
 
-    if (event instanceof HttpSessionCreatedEvent)
-      log.info("Http session created.");
+    public void onApplicationEvent(ApplicationEvent event) {
+        if (event instanceof InteractiveAuthenticationSuccessEvent) {
+            log.info("Interactive authentication success.");
+            umgr.dispatchSuccessfulLoginEvent((InteractiveAuthenticationSuccessEvent) event);
+        }
 
-    if (event instanceof HttpSessionDestroyedEvent) {
-      log.info("Http session destroyed.");
-      umgr
-          .dispatchSessionDestroyedEvent((HttpSessionDestroyedEvent) event);
+        if (event instanceof HttpSessionCreatedEvent) {
+            HttpSessionCreatedEvent sessionCreatedEvent = (HttpSessionCreatedEvent) event;
+            log.info("Http session created (" + sessionCreatedEvent.getSession().getId() + ").");
+        }
+
+        if (event instanceof HttpSessionDestroyedEvent) {
+            HttpSessionDestroyedEvent sessionDestroyedEvent = (HttpSessionDestroyedEvent) event;
+            log.info("Http session destroyed (" + sessionDestroyedEvent.getId() + ").");
+            umgr.dispatchSessionDestroyedEvent((HttpSessionDestroyedEvent) event);
+        }
     }
-  }
 }

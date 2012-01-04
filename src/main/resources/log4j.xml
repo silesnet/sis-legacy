@@ -6,7 +6,7 @@
   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern"
-             value="[%d{yyyy-MM-dd HH:mm:ss}] %p - %C{1}.%M(%L) | %m%n" />
+             value="[%d{yyyy-MM-dd HH:mm:ss}] %p - %m%n" />
     </layout>
   </appender>
 
@@ -27,10 +27,6 @@
           <level value="SQL=DEBUG, SQL_APPENDER"/>
       </logger>
   -->
-
-  <logger name="org.acegisecurity">
-    <level value="WARN" />
-  </logger>
 
   <logger name="cz.silesnet">
     <level value="INFO" />
