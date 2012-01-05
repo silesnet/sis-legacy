@@ -13,9 +13,9 @@
             <sec:filter-chain pattern="/img/**" filters="none" />
             <sec:filter-chain pattern="/js/**" filters="none" />
             <sec:filter-chain pattern="/favicon.ico" filters="none" />
-            <sec:filter-chain pattern="/login.jsp*" filters="channelProcessingFilter" />
-            <sec:filter-chain pattern="/logout.jsp*" filters="channelProcessingFilter" />
-            <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="none" />
+            <sec:filter-chain pattern="/login.jsp*" filters="channelProcessingFilter,securityContextPersistenceFilter" />
+            <sec:filter-chain pattern="/logout.jsp*" filters="channelProcessingFilter,securityContextPersistenceFilter" />
+            <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="securityContextPersistenceFilter" />
             <sec:filter-chain pattern="/**" filters="
                 channelProcessingFilter,
                 securityContextPersistenceFilter,
