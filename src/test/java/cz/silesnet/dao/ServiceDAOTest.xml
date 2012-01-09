@@ -29,4 +29,6 @@
   <!--Orphan-->
   <SERVICES ID="15" CUSTOMER_ID="0" NAME="Service 6" PRICE="1" DOWNLOAD="1" UPLOAD="1" BPS="M"
             PERIOD_FROM="2010-01-01" />
+
+  <NEWSERVICES ID="10020110" CUSTOMER_ID="0" POZNAMKA="bez" />
 </dataset>

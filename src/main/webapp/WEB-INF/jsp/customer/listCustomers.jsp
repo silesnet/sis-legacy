@@ -13,8 +13,11 @@
 <display:table name="${customersList}" id="row" class="customerList" pagesize="100" requestURI="${ctx}/customer/view.html?action=showList" export="true" excludedParams="*">
 	<display:column titleKey="app.fNo">
 		${row_rowNum}</display:column>
+
+<%--
 	<display:column media="html" titleKey="Customer.fContractNo" property="contractNo" sortable="true" headerClass="sortable" maxLength="11" />
 	<display:column media="csv xml excel pdf" titleKey="Customer.fContractNo" property="contractNo" />
+--%>
 
 	<display:column media="html" titleKey="Customer.fName" property="name" sortable="true" headerClass="sortable" maxLength="23"
 		url="/customer/view.html?action=showDetail&_navPushUrl=1" paramId="customerId" paramProperty="id" />
@@ -42,7 +45,9 @@
 <script type="text/javascript">
 	function clearForm(formName) {
 		document.forms[formName].elements["_filter.customer.name"].value="";
+<!--
 		document.forms[formName].elements["_filter.customer.contractNo"].value="";
+-->
 		document.forms[formName].elements["_filter.customer.contact.email"].value="";
 		document.forms[formName].elements["_filter.customer.contact.address.street"].value="";
 		document.forms[formName].elements["_filter.customer.contact.address.city"].value="";
@@ -63,10 +68,10 @@
 
 	<tr class="filterCaption"><td><fmt:message key="Customer.fName" /></td></tr>
 	<tr><td><input type="text" name="_filter.customer.name" value="${sisFilterMap['customer.name']}"/></td></tr>
-
+<!--
 	<tr class="filterCaption"><td><fmt:message key="Customer.fContractNo" /></td></tr>
 	<tr><td><input type="text" name="_filter.customer.contractNo" value="${sisFilterMap['customer.contractNo']}"/></td></tr>
-
+-->
 	<tr class="filterCaption"><td><fmt:message key="Customer.fContact.fEmail" /></td></tr>
 	<tr><td><input type="text" name="_filter.customer.contact.email" value="${sisFilterMap['customer.contact.email']}"/></td></tr>
 

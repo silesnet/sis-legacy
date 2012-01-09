@@ -2,6 +2,7 @@ package cz.silesnet.dao.hibernate;
 
 import cz.silesnet.dao.ServiceDAO;
 import cz.silesnet.model.Service;
+import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Country;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
@@ -81,7 +82,15 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
     getHibernateTemplate().evict(service);
   }
 
-  public List<Service> getByExample(Service s) {
+    public ServiceBlueprint findBlueprint(Integer blueprintId) {
+        return getHibernateTemplate().get(ServiceBlueprint.class, blueprintId);
+    }
+
+    public void saveBlueprint(ServiceBlueprint blueprint) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public List<Service> getByExample(Service s) {
     if (s == null)
       return null;
     if (s.getPeriod() != null && s.getPeriod().getTo() != null) {

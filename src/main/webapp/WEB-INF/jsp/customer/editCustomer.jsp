@@ -21,7 +21,7 @@
 <%-- Contract --%>
 <h3><fmt:message key="editCustomer.header.Contract" /></h3>
 <table class="editForm">
-	<app:formInputLine path="contractNo" label="Customer.fContractNo" required="true" size="12" />
+<!--	<app:formInputLine path="contractNo" label="Customer.fContractNo" required="true" size="12" /> -->
 	<app:formInputLine path="name" label="Customer.fName" required="true" size="25" />
 	<app:formInputLine path="supplementaryName" label="Customer.fSupplementaryName" size="25" />
 	<app:formInputLine path="publicId" label="${publicId_label}" required="true" size="12"/>
@@ -149,8 +149,11 @@
 	</c:otherwise>
 </c:choose>
 
+<!--
 <span class="actionLink"><a href="${ctx}/service/edit.html?action=showForm&customerId=${customer.id}&_navPushUrl=1" class="action">
 	<fmt:message key="listServices.action.addService" /></a></span>
+-->
+
 <span class="actionLink"><a href="${ctx}/service/edit.html?action=showForm&customerId=${customer.id}&formType=oneTime&_navPushUrl=1">
 	<fmt:message key="viewCustomer.action.addOneTimeService" /></a></span>
 <br />

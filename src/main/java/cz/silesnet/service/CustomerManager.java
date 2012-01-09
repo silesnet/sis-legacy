@@ -3,9 +3,11 @@ package cz.silesnet.service;
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.Service;
+import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Country;
 
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,38 +18,40 @@ import java.util.Map;
  */
 public interface CustomerManager {
 
-  // ~ Methods
-  // ----------------------------------------------------------------
+    // ~ Methods
+    // ----------------------------------------------------------------
 
-  public List<Customer> getAll();
+    public List<Customer> getAll();
 
-  public List<Customer> getByExample(Customer customer);
+    public List<Customer> getByExample(Customer customer);
 
-  public List<Customer> getByExample(Customer customer, Service service);
+    public List<Customer> getByExample(Customer customer, Service service);
 
-  public void delete(Customer customer);
+    public void delete(Customer customer);
 
-  public Customer get(Long customerId);
+    public Customer get(Long customerId);
 
-  public void insert(Customer customer);
+    public void insert(Customer customer);
 
-  public void update(Customer customer);
+    public void update(Customer customer);
 
-  public Map<String, Long> getSummaryFor(Country c);
+    public Map<String, Long> getSummaryFor(Country c);
 
-  public Service getService(Long serviceId);
+    public Service getService(Long serviceId);
 
-  public void insertService(Service service);
+    public void insertService(Service service);
 
-  public void updateService(Service service);
+    public void addService(ServiceBlueprint blueprint, int price);
 
-  public void deleteService(Service service);
+    public void updateService(Service service);
 
-  public void deactivateCandidates();
+    public void deleteService(Service service);
 
-  public List<Bill> fetchBills(Customer customer);
+    public void deactivateCandidates();
 
-  public void updateSymbol(Customer customer);
+    public List<Bill> fetchBills(Customer customer);
 
-  public void exportCustomersToInsert(List<Customer> customers, PrintWriter writer);
+    public void updateSymbol(Customer customer);
+
+    public void exportCustomersToInsert(List<Customer> customers, PrintWriter writer);
 }

@@ -5,17 +5,18 @@
 		<xsd:complexType>
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
 				<xsd:element name="CUSTOMERS" type="dflt:CUSTOMERS__type" />
-				<xsd:element name="BILLS" type="dflt:BILLS__type" />
 				<xsd:element name="VENDORS" type="dflt:VENDORS__type" />
-				<xsd:element name="USERS" type="dflt:USERS__type" />
-				<xsd:element name="BILL_ITEMS" type="dflt:BILL_ITEMS__type" />
-				<xsd:element name="SERVICES" type="dflt:SERVICES__type" />
 				<xsd:element name="SETTINGS" type="dflt:SETTINGS__type" />
 				<xsd:element name="DUAL_AUDIT_ITEM_ID_SEQ" type="dflt:DUAL_AUDIT_ITEM_ID_SEQ__type" />
-				<xsd:element name="AUDIT_ITEMS" type="dflt:AUDIT_ITEMS__type" />
 				<xsd:element name="INVOICINGS" type="dflt:INVOICINGS__type" />
-				<xsd:element name="LABELS" type="dflt:LABELS__type" />
 				<xsd:element name="DBMAINTAIN_SCRIPTS" type="dflt:DBMAINTAIN_SCRIPTS__type" />
+				<xsd:element name="BILLS" type="dflt:BILLS__type" />
+				<xsd:element name="USERS" type="dflt:USERS__type" />
+				<xsd:element name="BILL_ITEMS" type="dflt:BILL_ITEMS__type" />
+				<xsd:element name="NEWSERVICES" type="dflt:NEWSERVICES__type" />
+				<xsd:element name="SERVICES" type="dflt:SERVICES__type" />
+				<xsd:element name="AUDIT_ITEMS" type="dflt:AUDIT_ITEMS__type" />
+				<xsd:element name="LABELS" type="dflt:LABELS__type" />
 				<xsd:any namespace="PUBLIC" />
 			</xsd:choice>
 		</xsd:complexType>

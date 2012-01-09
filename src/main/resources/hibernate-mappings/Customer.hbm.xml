@@ -45,6 +45,7 @@
       <property name="status" type="cz.silesnet.dao.hibernate.support.BillingStatusHibernateUserType" />
       <property name="accountNumber" column="account_no" length="17" />
       <property name="bankCode" column="bank_no" length="4" />
+      <property name="variableSymbol" column="variable" />
     </component>
     <property name="connectionSpot" column="connection_spot" length="100" />
     <property name="info" length="150" />

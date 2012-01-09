@@ -121,6 +121,19 @@ CREATE TABLE services (
     bps character(1)
 );
 
+CREATE TABLE newservices
+(
+  customer_id integer DEFAULT 0,
+  poznamka character varying(90) DEFAULT 'bez',
+  technik character varying(10),
+  id integer,
+  name character varying(20),
+  download smallint,
+  upload smallint,
+  billing_on timestamp,
+  period_from timestamp
+);
+
 CREATE TABLE settings (
     id bigint NOT NULL,
     name character varying(50) NOT NULL,

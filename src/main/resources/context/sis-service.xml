@@ -1,150 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
-    "http://www.springframework.org/dtd/spring-beans.dtd">
+        "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
 
-  <bean id="userManager" parent="txProxyTemplate">
-    <property name="target">
-      <bean class="cz.silesnet.service.impl.UserManagerImpl">
-        <property name="userDAO">
-          <ref bean="userDAO" />
+    <bean id="userManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.UserManagerImpl">
+                <property name="userDAO">
+                    <ref bean="userDAO" />
+                </property>
+                <property name="historyManager">
+                    <ref local="historyManager" />
+                </property>
+            </bean>
         </property>
-        <property name="historyManager">
-          <ref local="historyManager" />
+        <property name="transactionAttributes">
+            <props>
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="dispatch*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
         </property>
-      </bean>
-    </property>
-    <property name="transactionAttributes">
-      <props>
-        <prop key="insert*">PROPAGATION_REQUIRED</prop>
-        <prop key="update*">PROPAGATION_REQUIRED</prop>
-        <prop key="delete*">PROPAGATION_REQUIRED</prop>
-        <prop key="dispatch*">PROPAGATION_REQUIRED</prop>
-        <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
-      </props>
-    </property>
-  </bean>
+    </bean>
 
-  <bean id="labelManager" parent="txProxyTemplate">
-    <property name="target">
-      <bean class="cz.silesnet.service.impl.LabelManagerImpl">
-        <property name="labelDAO">
-          <ref bean="labelDAO" />
+    <bean id="labelManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.LabelManagerImpl">
+                <property name="labelDAO">
+                    <ref bean="labelDAO" />
+                </property>
+            </bean>
         </property>
-      </bean>
-    </property>
-  </bean>
+    </bean>
 
-  <bean id="historyManager" parent="txProxyTemplate">
-    <property name="target">
-      <bean class="cz.silesnet.service.impl.HistoryManagerImpl">
-        <property name="historyItemDAO">
-          <ref bean="historyItemDAO" />
+    <bean id="historyManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.HistoryManagerImpl">
+                <property name="historyItemDAO">
+                    <ref bean="historyItemDAO" />
+                </property>
+                <property name="labelManager">
+                    <ref local="labelManager" />
+                </property>
+            </bean>
         </property>
-        <property name="labelManager">
-          <ref local="labelManager" />
+        <property name="transactionAttributes">
+            <props>
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="clear*">PROPAGATION_REQUIRED</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
         </property>
-      </bean>
-    </property>
-    <property name="transactionAttributes">
-      <props>
-        <prop key="insert*">PROPAGATION_REQUIRED</prop>
-        <prop key="update*">PROPAGATION_REQUIRED</prop>
-        <prop key="delete*">PROPAGATION_REQUIRED</prop>
-        <prop key="clear*">PROPAGATION_REQUIRED</prop>
-        <prop key="remove*">PROPAGATION_REQUIRED</prop>
-        <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
-      </props>
-    </property>
-  </bean>
+    </bean>
 
-  <bean id="customerManager" parent="txProxyTemplate">
-    <property name="target">
-      <bean class="cz.silesnet.service.impl.CustomerManagerImpl">
-        <property name="customerDAO">
-          <ref bean="customerDAO" />
+    <bean id="customerManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.CustomerManagerImpl">
+                <property name="customerDAO">
+                    <ref bean="customerDAO" />
+                </property>
+                <property name="billDAO">
+                    <ref bean="billDAO" />
+                </property>
+                <property name="serviceDAO">
+                    <ref bean="serviceDAO" />
+                </property>
+                <property name="historyManager">
+                    <ref local="historyManager" />
+                </property>
+                <property name="settingManager">
+                    <ref local="settingManager" />
+                </property>
+            </bean>
         </property>
-        <property name="billDAO">
-          <ref bean="billDAO" />
+        <property name="transactionAttributes">
+            <props>
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="deactivateCandidates">PROPAGATION_REQUIRED</prop>
+                <prop key="addService">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
         </property>
-        <property name="serviceDAO">
-          <ref bean="serviceDAO" />
-        </property>
-        <property name="historyManager">
-          <ref local="historyManager" />
-        </property>
-        <property name="settingManager">
-          <ref local="settingManager" />
-        </property>
-      </bean>
-    </property>
-    <property name="transactionAttributes">
-      <props>
-        <prop key="insert*">PROPAGATION_REQUIRED</prop>
-        <prop key="update*">PROPAGATION_REQUIRED</prop>
-        <prop key="delete*">PROPAGATION_REQUIRED</prop>
-        <prop key="deactivateCandidates">PROPAGATION_REQUIRED</prop>
-        <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
-      </props>
-    </property>
 
-  </bean>
+    </bean>
 
-  <bean id="billingManager" parent="txProxyTemplate">
-    <property name="target">
-      <bean class="cz.silesnet.service.impl.BillingManagerImpl">
-        <property name="billDAO">
-          <ref bean="billDAO" />
+    <bean id="billingManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.BillingManagerImpl">
+                <property name="billDAO">
+                    <ref bean="billDAO" />
+                </property>
+                <property name="historyManager">
+                    <ref bean="historyManager" />
+                </property>
+                <property name="settingManager">
+                    <ref bean="settingManager" />
+                </property>
+                <property name="mailSender">
+                    <ref bean="mailSenderProduction" />
+                </property>
+                <property name="messagePreparatorFactory">
+                    <ref bean="emailPreparatorFactory" />
+                </property>
+                <property name="billingContextFactory">
+                    <ref bean="billingContextFactory" />
+                </property>
+                <property name="customerDao">
+                    <ref bean="customerDAO" />
+                </property>
+                <property name="emailFromAddressCs" value="${email.from.cs}" />
+                <property name="emailSendingDelay" value="${email.delay}" />
+            </bean>
         </property>
-        <property name="historyManager">
-          <ref bean="historyManager" />
+        <property name="transactionAttributes">
+            <props>
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="invoice*">PROPAGATION_REQUIRED</prop>
+                <prop key="send*">PROPAGATION_REQUIRED</prop>
+                <prop key="reSendAll">PROPAGATION_REQUIRED</prop>
+                <prop key="export*">PROPAGATION_REQUIRED</prop>
+                <prop key="emailAll">PROPAGATION_REQUIRED</prop>
+                <prop key="setSendingEnabled">PROPAGATION_REQUIRED</prop>
+                <prop key="setReminderSenderFlag">PROPAGATION_REQUIRED</prop>
+                <prop key="billCustomersIn">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
         </property>
-        <property name="settingManager">
-          <ref bean="settingManager" />
-        </property>
-        <property name="mailSender">
-          <ref bean="mailSenderProduction" />
-        </property>
-        <property name="messagePreparatorFactory">
-          <ref bean="emailPreparatorFactory" />
-        </property>
-        <property name="billingContextFactory">
-          <ref bean="billingContextFactory" />
-        </property>
-        <property name="customerDao">
-          <ref bean="customerDAO" />
-        </property>
-        <property name="emailFromAddressCs" value="${email.from.cs}" />
-        <property name="emailSendingDelay" value="${email.delay}" />
-      </bean>
-    </property>
-    <property name="transactionAttributes">
-      <props>
-        <prop key="insert*">PROPAGATION_REQUIRED</prop>
-        <prop key="update*">PROPAGATION_REQUIRED</prop>
-        <prop key="delete*">PROPAGATION_REQUIRED</prop>
-        <prop key="invoice*">PROPAGATION_REQUIRED</prop>
-        <prop key="send*">PROPAGATION_REQUIRED</prop>
-        <prop key="reSendAll">PROPAGATION_REQUIRED</prop>
-        <prop key="export*">PROPAGATION_REQUIRED</prop>
-        <prop key="emailAll">PROPAGATION_REQUIRED</prop>
-        <prop key="setSendingEnabled">PROPAGATION_REQUIRED</prop>
-        <prop key="setReminderSenderFlag">PROPAGATION_REQUIRED</prop>
-        <prop key="billCustomersIn">PROPAGATION_REQUIRED</prop>
-        <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
-      </props>
-    </property>
-  </bean>
+    </bean>
 
-  <bean id="settingManager" parent="txProxyTemplate">
-    <property name="target">
-      <bean class="cz.silesnet.service.impl.SettingManagerImpl">
-        <property name="settingDAO">
-          <ref bean="settingDAO" />
+    <bean id="settingManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.SettingManagerImpl">
+                <property name="settingDAO">
+                    <ref bean="settingDAO" />
+                </property>
+            </bean>
         </property>
-      </bean>
-    </property>
-  </bean>
+    </bean>
 
 </beans>

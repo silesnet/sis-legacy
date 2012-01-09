@@ -54,6 +54,8 @@ public class Billing implements HistoricToString, Serializable {
 
   private String fBankCode;
 
+  private Integer fVariableSymbol;
+
   public void setFrequency(Frequency frequency) {
     fFrequency = frequency;
   }
@@ -236,4 +238,12 @@ public class Billing implements HistoricToString, Serializable {
     }
     return invoiceTo;
   }
+
+    public Integer getVariableSymbol() {
+        return fVariableSymbol;
+    }
+
+    public void setVariableSymbol(Integer fVariableSymbol) {
+        this.fVariableSymbol = fVariableSymbol;
+    }
 }
