@@ -7,6 +7,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.util.Date;
 
+import static cz.silesnet.model.ServiceId.serviceId;
+
 /**
  * User: admin
  * Date: 8.1.12
@@ -24,10 +26,30 @@ public class ServiceBlueprint {
     private Date billingOn;
 
     public Service buildService(final int price) {
+        if (!isNewContract() && isNewCustomer())
+            throw new IllegalStateException("existing contract '" + serviceId(id).contractNo() + "', but customer id not set");
         final Service service = new Service();
         service.setId(id.longValue());
         service.setCustomerId(customerId.longValue());
+        service.setPrice(price);
+        service.setPeriod(new Period(periodFrom, null));
+        service.setName(name);
+        service.setAdditionalName(null);
+        service.getConnectivity().setDownload(download);
+        service.getConnectivity().setUpload(upload);
+        service.getConnectivity().setBps("M");
+        service.getConnectivity().setIsAggregated(false);
+        service.getConnectivity().setAggregationId(null);
+        service.setInfo(info);
         return service;
+    }
+
+    public boolean isNewContract() {
+        return serviceId(id).orderNo() == 0;
+    }
+
+    public boolean isNewCustomer() {
+        return customerId == null;
     }
 
     public Integer getId() {
