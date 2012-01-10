@@ -40,10 +40,10 @@ public class CustomerManagerImpl implements CustomerManager {
         return dao.get(customerId);
     }
 
-    public void addService(final ServiceBlueprint blueprint, final int price) {
+    public void addService(final ServiceBlueprint blueprint) {
         Customer customer;
         if (blueprint.getCustomerId() == null) {
-            customer = new Customer();
+            customer = null;
         } else {
             customer = get(blueprint.getCustomerId().longValue());
         }

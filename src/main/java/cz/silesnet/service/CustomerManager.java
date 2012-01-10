@@ -41,7 +41,7 @@ public interface CustomerManager {
 
     public void insertService(Service service);
 
-    public void addService(ServiceBlueprint blueprint, int price);
+    public void addService(ServiceBlueprint blueprint);
 
     public void updateService(Service service);
 

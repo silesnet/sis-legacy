@@ -124,14 +124,15 @@ CREATE TABLE services (
 CREATE TABLE newservices
 (
   customer_id integer DEFAULT 0,
-  poznamka character varying(90) DEFAULT 'bez',
+  poznamka character varying(90),
   technik character varying(10),
   id integer,
   name character varying(20),
   download smallint,
   upload smallint,
-  billing_on timestamp,
-  period_from timestamp
+  price smallint,
+  billing_on date,
+  period_from date
 );
 
 CREATE TABLE settings (
