@@ -57,6 +57,7 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
     public void testFindBlueprint() throws Exception {
         final ServiceBlueprint blueprint = dao.findBlueprint(10020110);
         assertThat(blueprint.getId(), is(10020110));
+//        System.out.println(blueprint);
     }
 
     @Test
@@ -66,7 +67,8 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
         blueprint.setBillingOn(new Date());
         dao.saveBlueprint(blueprint);
         final ServiceBlueprint updatedBlueprint = dao.findBlueprint(10020110);
-        assertThat(updatedBlueprint, is(notNullValue()));
+        assertThat(updatedBlueprint.getBillingOn(), is(notNullValue()));
+//        System.out.println(updatedBlueprint);
     }
 
 }

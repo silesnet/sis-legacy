@@ -7,7 +7,6 @@ import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Country;
 
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,6 @@ import java.util.Map;
  * @author Richard Sikora
  */
 public interface CustomerManager {
-
-    // ~ Methods
-    // ----------------------------------------------------------------
 
     public List<Customer> getAll();
 
@@ -41,7 +37,7 @@ public interface CustomerManager {
 
     public void insertService(Service service);
 
-    public void addService(ServiceBlueprint blueprint);
+    public Long addService(Integer blueprintId);
 
     public void updateService(Service service);
 

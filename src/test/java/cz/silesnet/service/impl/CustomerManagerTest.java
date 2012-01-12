@@ -1,10 +1,8 @@
 package cz.silesnet.service.impl;
 
-import cz.silesnet.dao.CustomerDAO;
 import cz.silesnet.dao.ServiceDAO;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.PrepareMixture;
-import cz.silesnet.model.Service;
 import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.service.CustomerManager;
@@ -32,30 +30,24 @@ public class CustomerManagerTest extends BaseServiceTestCase {
     @Test
     public void testAddService() throws Exception {
         final ServiceBlueprint blueprint = new ServiceBlueprint();
-        final Customer customer = PrepareMixture.getCustomer();
-        cmgr.insert(customer);
-        blueprint.setId(1020110);
-        blueprint.setCustomerId(customer.getId().intValue());
-        blueprint.setName("Wireless");
-        blueprint.setDownload(4);
-        blueprint.setUpload(2);
+        blueprint.setId(800020120);
+        blueprint.setName("Service from blueprint");
+        blueprint.setPrice(200);
         blueprint.setPeriodFrom(new Date());
-        blueprint.setResponsible("Karel");
-        blueprint.setInfo("Info for Wireless");
-        blueprint.setBillingOn(null);
-        cmgr.addService(blueprint, 10);
-        final Customer updatedCustomer = cmgr.get(customer.getId());
-        final Service service = updatedCustomer.getServices().get(0);
-        assertEquals(service.getId().intValue(), 1020110L);
-        assertEquals(service.getPrice().intValue(), 10);
-        assertEquals(service.getName(), "Wireless");
-        assertEquals(service.getConnectivity().getDownload().intValue(), 4);
-        assertEquals(service.getConnectivity().getUpload().intValue(), 2);
-        assertNotNull(service.getPeriod().getFrom());
-        assertEquals(customer.getBilling().getResponsible().getName(), "Karel");
-        assertEquals(service.getInfo(), "Info for Wireless");
-        final ServiceBlueprint updatedBlueprint = serviceDAO.findBlueprint(1020110);
-        assertNotNull(updatedBlueprint.getBillingOn());
+        blueprint.setResponsible("Technik");
+        blueprint.setInfo("Blueprint info");
+
+        serviceDAO.saveBlueprint(blueprint);
+        assertNotNull(blueprint.getId());
+
+        final Long customerId = cmgr.addService(blueprint.getId());
+
+        final Customer customer = cmgr.get(customerId);
+        assertEquals(customer.getServices().get(0).getId().intValue(), 800020210);
+
+        final ServiceBlueprint updatedBlueprint = serviceDAO.findBlueprint(800020210);
+        assertEquals(updatedBlueprint.getCustomerId(), customerId);
+        assertTrue(updatedBlueprint.getBillingOn().getTime() <= System.currentTimeMillis());
     }
 
     @Test

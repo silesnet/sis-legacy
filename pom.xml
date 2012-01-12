@@ -5,7 +5,7 @@
   <artifactId>sis</artifactId>
   <packaging>war</packaging>
   <name>SIS</name>
-  <version>1.3</version>
+  <version>1.4</version>
   <description>SilesNet IS</description>
   <properties>
     <spring.version>3.0.4.RELEASE</spring.version>

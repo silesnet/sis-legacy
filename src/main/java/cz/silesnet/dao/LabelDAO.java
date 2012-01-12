@@ -11,17 +11,19 @@ import java.util.List;
  */
 public interface LabelDAO extends DAO {
 
-  public static Long LOGIN_HISTORY_TYPE_LABEL_ID = 17L;
+    public static Long LOGIN_HISTORY_TYPE_LABEL_ID = 17L;
 
-  public Label getLabelById(Long labelId);
+    public Label getLabelById(Long labelId);
 
-  public List<Label> findAll();
+    public List<Label> findAll();
 
-  public List<Label> getByExmaple(Label example);
+    public List<Label> getByExmaple(Label example);
 
-  public List<Label> getSubLabels(Long labelId);
+    public List<Label> getSubLabels(Long labelId);
 
-  public void removeLabel(Label label);
+    public void removeLabel(Label label);
 
-  public void saveLabel(Label label);
+    public void saveLabel(Label label);
+
+    public Label findByName(String name, long parent);
 }

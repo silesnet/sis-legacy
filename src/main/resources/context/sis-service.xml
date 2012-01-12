@@ -77,6 +77,9 @@
                 <property name="settingManager">
                     <ref local="settingManager" />
                 </property>
+                <property name="labelDAO">
+                    <ref bean="labelDAO" />
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">

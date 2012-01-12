@@ -2,6 +2,7 @@ package cz.silesnet.service.impl;
 
 import cz.silesnet.dao.BillDAO;
 import cz.silesnet.dao.CustomerDAO;
+import cz.silesnet.dao.LabelDAO;
 import cz.silesnet.dao.ServiceDAO;
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
@@ -22,6 +23,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static cz.silesnet.model.ServiceId.serviceId;
+
 public class CustomerManagerImpl implements CustomerManager {
 
     protected final Log log = LogFactory.getLog(getClass());
@@ -36,17 +39,40 @@ public class CustomerManagerImpl implements CustomerManager {
 
     private SettingManager settingMgr;
 
+    private LabelDAO labelDAO;
+
     public Customer get(Long customerId) {
         return dao.get(customerId);
     }
 
-    public void addService(final ServiceBlueprint blueprint) {
+    public Long addService(final Integer blueprintId) {
+        final ServiceBlueprint blueprint = sDao.findBlueprint(blueprintId);
         Customer customer;
-        if (blueprint.getCustomerId() == null) {
-            customer = null;
+        if (blueprint.isNewCustomer()) {
+            Label shire = labelDAO.findByName(blueprint.getResponsible(), Label.SHIRES);
+            if (shire == null)
+                shire = labelDAO.findByName("Archiv", Label.SHIRES);
+            Label responsible = labelDAO.findByName(blueprint.getResponsible(), Label.RESPONSIBLES);
+            if (responsible == null)
+                responsible = labelDAO.findByName("Archiv", Label.RESPONSIBLES);
+            customer = blueprint.initializeNewCustomer(shire, responsible);
+            insert(customer);
         } else {
-            customer = get(blueprint.getCustomerId().longValue());
+            customer = dao.get(blueprint.getCustomerId().longValue());
         }
+
+        final Service service = blueprint.buildService(customer);
+        sDao.save(service);
+
+        customer.getServices().add(service);
+        blueprint.imprintNewServiceOn(customer);
+        update(customer);
+
+        blueprint.setCustomerId(customer.getId().intValue());
+        blueprint.setBillingOn(new Date());
+        sDao.saveBlueprint(blueprint);
+        
+        return customer.getId();
     }
 
     public void insert(Customer customer) {
@@ -303,9 +329,9 @@ public class CustomerManagerImpl implements CustomerManager {
                     dao.evict(customer);
                 }
                 // compose Symbol from crippled name and id
-                String shortName = StringUtils.replaceChars((customer.getName() + "XXX").substring(0, 3),
-                        SearchUtils.getFromChars(), SearchUtils.getToChars());
-                customer.setSymbol(shortName.toUpperCase() + "-" + customer.getId().toString());
+//                String shortName = StringUtils.replaceChars((customer.getName() + "XXX").substring(0, 3),
+//                        SearchUtils.getFromChars(), SearchUtils.getToChars());
+                customer.setSymbol(customer.getBilling().getVariableSymbol() + "-" + customer.getId().toString());
                 log.debug("New Symbol composed :" + customer.getSymbol());
             } else {
                 // CZ & SK symbol leave it empty
@@ -360,8 +386,6 @@ public class CustomerManagerImpl implements CustomerManager {
         }
     }
 
-
-
     // setters
 
     private String escapeQuotes(String name) {
@@ -388,4 +412,7 @@ public class CustomerManagerImpl implements CustomerManager {
         settingMgr = settingManager;
     }
 
+    public void setLabelDAO(LabelDAO labelDAO) {
+        this.labelDAO = labelDAO;
+    }
 }

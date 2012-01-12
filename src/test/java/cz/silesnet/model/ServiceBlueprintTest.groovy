@@ -2,6 +2,7 @@ package cz.silesnet.model;
 
 
 import cz.silesnet.model.enums.BillingStatus
+import cz.silesnet.model.enums.Country
 import cz.silesnet.model.enums.Frequency
 import cz.silesnet.model.enums.InvoiceFormat
 import spock.lang.Specification
@@ -29,23 +30,27 @@ public class ServiceBlueprintTest extends Specification {
     private static final String BPS = 'M'
     private static final String RESPONSIBLE = 'TECH'
     private static final Label RESPONSIBLE_LABEL = new Label();
+    private static final Label SHIRE_LABEL = new Label();
     private static final String FAKE_CONTRACT_NO = 'X'
+    private static final int SERVICE_ID_PL = 1001020110
 
     def 'initializes new customer from blueprint'() {
         def blueprint = new ServiceBlueprint()
         blueprint.id = SERVICE_ID
         blueprint.periodFrom = new Date(FROM)
         blueprint.info = INFO
-        def customer = blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
+        def customer = blueprint.initializeNewCustomer(SHIRE_LABEL, RESPONSIBLE_LABEL)
         def address = customer.contact.address
         def billing = customer.billing
     expect:
+        customer.id == null
         customer.name == UNIQUE_FOO
         customer.contractNo == CONTRACT_STR
         customer.publicId == CONTRACT_STR
         address.street == UNIQUE_FOO
         address.city == UNIQUE_FOO
         address.postalCode == UNIQUE_FOO
+        address.country == Country.CZ
         billing.lastlyBilled.time == BILLED_TO
         billing.frequency == Frequency.MONTHLY
         !billing.isBilledAfter
@@ -53,7 +58,7 @@ public class ServiceBlueprintTest extends Specification {
         billing.deliverByEmail
         billing.format == InvoiceFormat.LINK
         !billing.deliverSigned
-        billing.shire == RESPONSIBLE_LABEL
+        billing.shire == SHIRE_LABEL
         billing.responsible == RESPONSIBLE_LABEL
         billing.isActive
         billing.status == BillingStatus.INVOICE
@@ -61,11 +66,22 @@ public class ServiceBlueprintTest extends Specification {
         customer.info == INFO
     }
 
+    def 'initializes new customer country from blueprint'() {
+        def blueprint = new ServiceBlueprint()
+        blueprint.id = SERVICE_ID_PL
+        blueprint.periodFrom = new Date(FROM)
+        blueprint.info = INFO
+        def customer = blueprint.initializeNewCustomer(SHIRE_LABEL, RESPONSIBLE_LABEL)
+        def address = customer.contact.address
+    expect:
+        address.country == Country.PL
+    }
+
     def 'cannot initialize new customer service order is not zero'() {
         def blueprint = new ServiceBlueprint()
         blueprint.id = SERVICE_ID2
     when:
-        blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
+        blueprint.initializeNewCustomer(SHIRE_LABEL, RESPONSIBLE_LABEL)
     then:
         thrown IllegalStateException
     }
@@ -91,6 +107,19 @@ public class ServiceBlueprintTest extends Specification {
         service.period.to == null
         service.info == INFO
         service.frequency == Frequency.MONTHLY;
+    }
+
+    def 'cannot build service when country mismatch'() {
+        def blueprint = blueprintFixture()
+        blueprint.id = SERVICE_ID_PL
+        def customer = new Customer()
+        customer.id = CUSTOMER_ID;
+        customer.contact.address.country = Country.CZ
+    when:
+        blueprint.buildService(customer)
+    then:
+        thrown IllegalStateException
+
     }
 
     def 'builds service for existing customer'() {
@@ -186,6 +215,17 @@ public class ServiceBlueprintTest extends Specification {
     expect:
         !blueprint.isNewContract()
         !blueprint.isNewCustomer()
+    }
+
+    def 'should set connectivity kbps for magic value 512'() {
+        def blueprint = blueprintFixture()
+        blueprint.download = 512
+        blueprint.upload = 512
+        def customer = new Customer()
+        customer.id = CUSTOMER_ID;
+        def service = blueprint.buildService(customer)
+    expect:
+        service.connectivity.bps == 'k'
     }
 
     def static blueprintFixture() {

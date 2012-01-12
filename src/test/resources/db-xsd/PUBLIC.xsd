@@ -113,6 +113,7 @@
 		<xsd:attribute name="AMOUNT" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="NEWSERVICES__type">
+		<xsd:attribute name="PRICE" use="optional" />
 		<xsd:attribute name="BILLING_ON" use="optional" />
 		<xsd:attribute name="NAME" use="optional" />
 		<xsd:attribute name="POZNAMKA" use="optional" />

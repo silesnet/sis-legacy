@@ -32,7 +32,7 @@ public class ServiceBlueprint {
     private Date periodFrom;
     private Date billingOn;
 
-    public Customer initializeNewCustomer(final Label responsible) {
+    public Customer initializeNewCustomer(final Label shire, final Label responsible) {
         final Customer customer = new Customer();
         final ServiceId serviceId = serviceId(id);
         if (serviceId.orderNo() != 0)
@@ -45,6 +45,7 @@ public class ServiceBlueprint {
         customer.getContact().getAddress().setStreet(uniqueFoo);
         customer.getContact().getAddress().setCity(uniqueFoo);
         customer.getContact().getAddress().setPostalCode(uniqueFoo);
+        customer.getContact().getAddress().setCountry(serviceId.country());
         final Billing billing = customer.getBilling();
         billing.setLastlyBilled(calculateLastlyBilled(periodFrom));
         billing.setFrequency(Frequency.MONTHLY);
@@ -53,7 +54,7 @@ public class ServiceBlueprint {
         billing.setDeliverByEmail(true);
         billing.setFormat(InvoiceFormat.LINK);
         billing.setDeliverSigned(false);
-        billing.setShire(responsible);
+        billing.setShire(shire);
         billing.setResponsible(responsible);
         billing.setIsActive(true);
         billing.setStatus(BillingStatus.INVOICE);
@@ -74,7 +75,11 @@ public class ServiceBlueprint {
         service.setAdditionalName(null);
         service.getConnectivity().setDownload(download);
         service.getConnectivity().setUpload(upload);
-        service.getConnectivity().setBps("M");
+        if ((download != null && download == 512) || (upload != null && upload == 512))
+            // EXCEPTION for specific PL service
+            service.getConnectivity().setBps("k");
+        else
+            service.getConnectivity().setBps("M");
         service.getConnectivity().setIsAggregated(false);
         service.getConnectivity().setAggregationId(null);
         service.setInfo(info);
@@ -103,6 +108,7 @@ public class ServiceBlueprint {
     }
 
     private void checkIfCanBuild(final Customer customer) {
+        final ServiceId serviceId = serviceId(id);
         if (customer == null)
             throw new IllegalStateException("customer cannot be null");
         if (customer.getId() == null || customer.getId() == 0)
@@ -118,7 +124,10 @@ public class ServiceBlueprint {
         if (name == null)
             throw new IllegalStateException("service name cannot be null");
         if (!isNewContract() && isNewCustomer())
-            throw new IllegalStateException("existing contract '" + serviceId(id).contractNo() + "', but customer id not set");
+            throw new IllegalStateException("existing contract '" + serviceId.contractNo() + "', but customer id not set");
+        if (!customer.getContact().getAddress().getCountry().equals(serviceId.country()))
+            throw new IllegalStateException("cannot add service '" + serviceId.country() + "' to the customer '" +
+                    customer.getContact().getAddress().getCountry() + "' from different country");
     }
 
     public boolean isNewContract() {
