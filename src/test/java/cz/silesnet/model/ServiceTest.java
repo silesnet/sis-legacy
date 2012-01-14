@@ -22,12 +22,32 @@ public class ServiceTest {
     }
 
     @Test
+    public void testCsContracNoSmall() {
+        Service s = new Service();
+        s.setId(120061L);
+        assertEquals(s.getContractNo(), "12006");
+    }
+
+    @Test
+    public void testCsContracNoOnetime() {
+        Service s = new Service();
+        s.setId(5000023200600L);
+        assertEquals(s.getContractNo(), "232006");
+    }
+
+    @Test
+    public void testPlContracNoOnetime() {
+        Service s = new Service();
+        s.setId(5100023200621L);
+        assertEquals(s.getContractNo(), "232006");
+    }
+    
+    @Test
     public void testPlContracNo() {
         Service s = new Service();
         s.setId(1002320062L);
         assertEquals(s.getContractNo(), "232006");
     }
-
 
     @Test
     public void testEnums() {

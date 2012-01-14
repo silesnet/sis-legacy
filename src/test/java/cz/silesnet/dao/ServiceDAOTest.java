@@ -68,7 +68,15 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
         dao.saveBlueprint(blueprint);
         final ServiceBlueprint updatedBlueprint = dao.findBlueprint(10020110);
         assertThat(updatedBlueprint.getBillingOn(), is(notNullValue()));
+        // By the way this is wrong test as it never hits database it only exists in cache!!!
+        // try to do nothing in the saveBlueprint() method, yes test would pass!
 //        System.out.println(updatedBlueprint);
+    }
+
+    @Test
+    public void testFindMaxIdInRange() throws Exception {
+        assertThat(dao.findMaxIdInRange(10, 20).intValue(), is(15));
+        assertThat(dao.findMaxIdInRange(100, 200), is(nullValue()));
     }
 
 }

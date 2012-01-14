@@ -14,24 +14,26 @@ import java.util.Map;
  */
 public interface ServiceDAO extends DAO {
 
-  // ~ Methods
-  // ----------------------------------------------------------------
+    // ~ Methods
+    // ----------------------------------------------------------------
 
-  public List<Service> getAllOrphans();
+    public List<Service> getAllOrphans();
 
-  public List<Service> getByExample(Service service);
+    public List<Service> getByExample(Service service);
 
-  public Service get(Long serviceId);
+    public Service get(Long serviceId);
 
-  public void remove(Service service);
+    public void remove(Service service);
 
-  public void save(Service service);
+    public void save(Service service);
 
-  public Map<String, Long> calculateSummaryFor(Country c);
+    public Map<String, Long> calculateSummaryFor(Country c);
 
-  public void evict(Service service);
+    public void evict(Service service);
 
-  public ServiceBlueprint findBlueprint(Integer blueprintId);
+    public ServiceBlueprint findBlueprint(Integer blueprintId);
 
-  public void saveBlueprint(ServiceBlueprint blueprint);
+    public void saveBlueprint(ServiceBlueprint blueprint);
+
+    public Long findMaxIdInRange(long min, long max);
 }

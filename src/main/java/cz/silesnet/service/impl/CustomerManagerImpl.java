@@ -384,6 +384,21 @@ public class CustomerManagerImpl implements CustomerManager {
         }
     }
 
+    public long nextOneTimeServiceId(Long customerId) {
+        final Customer customer = dao.get(customerId);
+        dao.evict(customer);
+        final Integer variableSymbol = customer.getBilling().getVariableSymbol();
+        if (variableSymbol == null)
+            throw new IllegalStateException("customer without variable symbol encountered '" + customer.getId() + "'");
+        long base = Country.CZ.equals(customer.getContact().getAddress().getCountry()) ? Service.ONETIME_SERVICE_BASE_CZ : Service.ONETIME_SERVICE_BASE_PL;
+        long min = base + (variableSymbol * 100L);
+        long max = min + 99;
+        Long lastId = sDao.findMaxIdInRange(min, max);
+        long nextId =  lastId == null ? min : lastId + 1;
+        log.debug("next onetime service id for variable symbol '" + variableSymbol + "' is '" + nextId + "'");
+        return nextId;
+    }
+
     // setters
 
     private String escapeQuotes(String name) {
