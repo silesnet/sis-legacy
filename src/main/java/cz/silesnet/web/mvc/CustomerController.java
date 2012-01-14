@@ -81,9 +81,15 @@ public class CustomerController extends AbstractCRUDController {
     public ModelAndView addService(HttpServletRequest request, HttpServletResponse response) throws Exception {
         final int blueprintId = ServletRequestUtils.getRequiredIntParameter(request, "serviceId");
         log.debug("inserting new service from blueprint '" + blueprintId + "'");
-        final long customerId = cMgr.addService(blueprintId);
-        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.addServiceSuccess");
-        return new ModelAndView(new RedirectView(request.getContextPath()+ "/customer/edit.html?action=showForm&customerId=" + customerId));
+        final ServiceBlueprint blueprint = cMgr.addService(blueprintId);
+        log.debug("new service added from blueprint: " + blueprint);
+        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.addServiceSuccess", blueprint.getName());
+        ModelAndView modelAndView;
+        if (blueprint.isNewCustomerCreated())
+            modelAndView = new ModelAndView(new RedirectView(request.getContextPath() + "/customer/edit.html?action=showForm&customerId=" + blueprint.getCustomerId()));
+        else
+            modelAndView = new ModelAndView(new RedirectView(request.getContextPath() + "/customer/view.html?action=showDetail&customerId=" + blueprint.getCustomerId()));
+        return modelAndView;
     }
 
     @Override

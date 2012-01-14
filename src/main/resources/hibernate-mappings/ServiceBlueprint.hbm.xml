@@ -9,6 +9,7 @@
         <property name="name" length="20" />
         <property name="download" />
         <property name="upload" />
+        <property name="price" />
         <property name="responsible" column="technik" length="10"/>
         <property name="info" column="poznamka" length="90" />
         <property name="periodFrom" column="period_from" type="timestamp" />

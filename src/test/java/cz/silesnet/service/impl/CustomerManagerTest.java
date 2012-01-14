@@ -28,29 +28,6 @@ public class CustomerManagerTest extends BaseServiceTestCase {
     private ServiceDAO serviceDAO;
 
     @Test
-    public void testAddService() throws Exception {
-        final ServiceBlueprint blueprint = new ServiceBlueprint();
-        blueprint.setId(800020120);
-        blueprint.setName("Service from blueprint");
-        blueprint.setPrice(200);
-        blueprint.setPeriodFrom(new Date());
-        blueprint.setResponsible("Technik");
-        blueprint.setInfo("Blueprint info");
-
-        serviceDAO.saveBlueprint(blueprint);
-        assertNotNull(blueprint.getId());
-
-        final Long customerId = cmgr.addService(blueprint.getId());
-
-        final Customer customer = cmgr.get(customerId);
-        assertEquals(customer.getServices().get(0).getId().intValue(), 800020210);
-
-        final ServiceBlueprint updatedBlueprint = serviceDAO.findBlueprint(800020210);
-        assertEquals(updatedBlueprint.getCustomerId(), customerId);
-        assertTrue(updatedBlueprint.getBillingOn().getTime() <= System.currentTimeMillis());
-    }
-
-    @Test
     public void testCRUD() {
 
         Customer c = PrepareMixture.getCustomer();

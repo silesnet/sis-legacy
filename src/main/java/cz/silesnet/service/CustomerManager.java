@@ -37,7 +37,7 @@ public interface CustomerManager {
 
     public void insertService(Service service);
 
-    public Long addService(Integer blueprintId);
+    public ServiceBlueprint addService(Integer blueprintId);
 
     public void updateService(Service service);
 

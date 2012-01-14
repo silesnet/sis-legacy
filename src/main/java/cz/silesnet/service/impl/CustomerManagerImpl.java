@@ -45,7 +45,7 @@ public class CustomerManagerImpl implements CustomerManager {
         return dao.get(customerId);
     }
 
-    public Long addService(final Integer blueprintId) {
+    public ServiceBlueprint addService(final Integer blueprintId) {
         final ServiceBlueprint blueprint = sDao.findBlueprint(blueprintId);
         Customer customer;
         if (blueprint.isNewCustomer()) {
@@ -56,14 +56,12 @@ public class CustomerManagerImpl implements CustomerManager {
             if (responsible == null)
                 responsible = labelDAO.findByName("Archiv", Label.RESPONSIBLES);
             customer = blueprint.initializeNewCustomer(shire, responsible);
+            log.debug(customer);
             insert(customer);
         } else {
             customer = dao.get(blueprint.getCustomerId().longValue());
         }
-
         final Service service = blueprint.buildService(customer);
-        sDao.save(service);
-
         customer.getServices().add(service);
         blueprint.imprintNewServiceOn(customer);
         update(customer);
@@ -72,7 +70,7 @@ public class CustomerManagerImpl implements CustomerManager {
         blueprint.setBillingOn(new Date());
         sDao.saveBlueprint(blueprint);
         
-        return customer.getId();
+        return blueprint;
     }
 
     public void insert(Customer customer) {

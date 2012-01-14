@@ -61,12 +61,6 @@ public class CustomerManagerImplTest extends Specification {
             customer.services.size() == 0
         })
 
-        1 * serviceDao.save( { service ->
-            service.id == ID
-            println "NEW SERVICE:\n$service"
-            service.customerId == CUSTOMER_ID
-        })
-
         1 * customerDao.save( { customer ->
             customer.id = CUSTOMER_ID
             println "UPDATED CUSTOMER:\n$customer"

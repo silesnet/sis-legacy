@@ -15,7 +15,7 @@ import spock.lang.Specification
 public class ServiceBlueprintTest extends Specification {
 
     private static final String INFO = 'INFO'
-    private static final long FROM = new GregorianCalendar(2012, Calendar.JANUARY, 15).timeInMillis
+    private static final long FROM = new GregorianCalendar(2012, Calendar.JANUARY, 12).timeInMillis
     private static final long BILLED_TO = new GregorianCalendar(2011, Calendar.DECEMBER, 31).timeInMillis
     private static final int UPLOAD = 2
     private static final int DOWNLOAD = 4
@@ -39,6 +39,7 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.id = SERVICE_ID
         blueprint.periodFrom = new Date(FROM)
         blueprint.info = INFO
+        blueprint.customerId = 0
         def customer = blueprint.initializeNewCustomer(SHIRE_LABEL, RESPONSIBLE_LABEL)
         def address = customer.contact.address
         def billing = customer.billing
@@ -64,6 +65,8 @@ public class ServiceBlueprintTest extends Specification {
         billing.status == BillingStatus.INVOICE
         billing.variableSymbol == CONTRACT_NO
         customer.info == INFO
+        customer.insertedOn.time > FROM
+        blueprint.isNewCustomerCreated()
     }
 
     def 'initializes new customer country from blueprint'() {
@@ -88,7 +91,7 @@ public class ServiceBlueprintTest extends Specification {
 
     def "builds service for new customer"() {
         def blueprint = blueprintFixture()
-        blueprint.customerId = null
+        blueprint.customerId = 0
         def customer = new Customer()
         customer.id = CUSTOMER_ID;
         def service = blueprint.buildService(customer)

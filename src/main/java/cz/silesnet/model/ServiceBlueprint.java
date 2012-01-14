@@ -31,6 +31,7 @@ public class ServiceBlueprint {
     private String info;
     private Date periodFrom;
     private Date billingOn;
+    private boolean newCustomerCreated = false;
 
     public Customer initializeNewCustomer(final Label shire, final Label responsible) {
         final Customer customer = new Customer();
@@ -60,6 +61,8 @@ public class ServiceBlueprint {
         billing.setStatus(BillingStatus.INVOICE);
         billing.setVariableSymbol(contractNo.value());
         customer.setInfo(info);
+        customer.setInsertedOn(new Date());
+        newCustomerCreated = true;
         return customer;
     }
 
@@ -115,7 +118,7 @@ public class ServiceBlueprint {
             throw new IllegalStateException("customer id cannot be zero or null");
         if (id == null)
             throw new IllegalStateException("service id cannot be null");
-        if (customerId != null && customer.getId() != customerId.longValue())
+        if (!isNewCustomer() && customer.getId() != customerId.longValue())
             throw new IllegalArgumentException("customer id must match service blueprint customer id");
         if (price == null)
             throw new IllegalStateException("service price cannot be null");
@@ -216,6 +219,10 @@ public class ServiceBlueprint {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public boolean isNewCustomerCreated() {
+        return newCustomerCreated;
     }
 
     public boolean equals(Object o) {
