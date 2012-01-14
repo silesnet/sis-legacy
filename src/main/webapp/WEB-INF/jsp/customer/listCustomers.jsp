@@ -14,10 +14,8 @@
 	<display:column titleKey="app.fNo">
 		${row_rowNum}</display:column>
 
-<%--
-	<display:column media="html" titleKey="Customer.fContractNo" property="contractNo" sortable="true" headerClass="sortable" maxLength="11" />
-	<display:column media="csv xml excel pdf" titleKey="Customer.fContractNo" property="contractNo" />
---%>
+	<display:column media="html" titleKey="Customer.fBilling.fVariableSymbol" property="billing.variableSymbol" sortable="true" headerClass="sortable" maxLength="11" />
+	<display:column media="csv xml excel pdf" titleKey="Customer.fBilling.fVariableSymbol" property="billing.variableSymbol" />
 
 	<display:column media="html" titleKey="Customer.fName" property="name" sortable="true" headerClass="sortable" maxLength="23"
 		url="/customer/view.html?action=showDetail&_navPushUrl=1" paramId="customerId" paramProperty="id" />

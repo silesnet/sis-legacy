@@ -513,31 +513,6 @@ public class CustomerController extends AbstractCRUDController {
                 }
             }
         }
-        // validate contract number uniqueness for each contrac no entered
-        // contractNo is multivalue field separated by ","
-        String[] contractNumbers = customer.getContractNo().split(",");
-        exampleCustomer = prepareExampleCustomer();
-        // check each contract number
-    contractNumbersLabel:
-        for (String contractNo : contractNumbers) {
-            exampleCustomer.setContractNo(contractNo.trim());
-            // get possible customers with such contractNo
-            customers = cMgr.getByExample(exampleCustomer);
-            // iterate over selected customers, except edited one
-            for (Customer c : customers) {
-                if (!c.getId().equals(customer.getId())) {
-                    // get all existing cotrac numbers and compare each
-                    String[] contracNumbersExisting = c.getContractNo().split(",");
-                    for (String contractNoExisting : contracNumbersExisting) {
-                        // if match found reject the value
-                        if (contractNo.equals(contractNoExisting)) {
-                            bindingResult.rejectValue("contractNo", "editForm.error.not-unique", "Unique value required.");
-                            break contractNumbersLabel;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @SuppressWarnings("unchecked")

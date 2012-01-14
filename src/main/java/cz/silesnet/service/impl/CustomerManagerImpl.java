@@ -123,8 +123,6 @@ public class CustomerManagerImpl implements CustomerManager {
 
     private boolean isSpsUpdated(Customer formerCustomer, Customer customer) {
         // general
-        if (changedString(formerCustomer.getContractNo(), customer.getContractNo()))
-            return true;
         if (changedString(formerCustomer.getName(), customer.getName()))
             return true;
         if (changedString(formerCustomer.getSupplementaryName(), customer.getSupplementaryName()))
