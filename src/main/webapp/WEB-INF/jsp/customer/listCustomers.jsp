@@ -43,9 +43,7 @@
 <script type="text/javascript">
 	function clearForm(formName) {
 		document.forms[formName].elements["_filter.customer.name"].value="";
-<!--
 		document.forms[formName].elements["_filter.customer.contractNo"].value="";
--->
 		document.forms[formName].elements["_filter.customer.contact.email"].value="";
 		document.forms[formName].elements["_filter.customer.contact.address.street"].value="";
 		document.forms[formName].elements["_filter.customer.contact.address.city"].value="";
@@ -66,10 +64,10 @@
 
 	<tr class="filterCaption"><td><fmt:message key="Customer.fName" /></td></tr>
 	<tr><td><input type="text" name="_filter.customer.name" value="${sisFilterMap['customer.name']}"/></td></tr>
-<!--
+
 	<tr class="filterCaption"><td><fmt:message key="Customer.fContractNo" /></td></tr>
 	<tr><td><input type="text" name="_filter.customer.contractNo" value="${sisFilterMap['customer.contractNo']}"/></td></tr>
--->
+
 	<tr class="filterCaption"><td><fmt:message key="Customer.fContact.fEmail" /></td></tr>
 	<tr><td><input type="text" name="_filter.customer.contact.email" value="${sisFilterMap['customer.contact.email']}"/></td></tr>
 
