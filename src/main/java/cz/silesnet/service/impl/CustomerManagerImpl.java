@@ -318,16 +318,7 @@ public class CustomerManagerImpl implements CustomerManager {
         if (customer.getSymbol() == null || "".equals(customer.getSymbol())) {
             // symbol is not set, define it according to country
             if (Country.PL.equals(customer.getContact().getAddress().getCountry())) {
-                // PL symbol definition
-                if (customer.getId() == null) {
-                    // not persisted customer, persist him first to have id
-                    dao.save(customer);
-                    dao.evict(customer);
-                }
-                // compose Symbol from crippled name and id
-//                String shortName = StringUtils.replaceChars((customer.getName() + "XXX").substring(0, 3),
-//                        SearchUtils.getFromChars(), SearchUtils.getToChars());
-                customer.setSymbol(customer.getBilling().getVariableSymbol() + "-" + customer.getId().toString());
+                customer.setSymbol("PL-" + customer.getBilling().getVariableSymbol());
                 log.debug("New Symbol composed :" + customer.getSymbol());
             } else {
                 // CZ & SK symbol leave it empty
