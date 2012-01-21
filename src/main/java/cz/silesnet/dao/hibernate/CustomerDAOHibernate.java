@@ -50,7 +50,8 @@ public class CustomerDAOHibernate extends HibernateDaoSupport implements Custome
         // first 8 digits (excluding '/') are export public_id, use this export
         // public id instead of raw public id
         SearchUtils.addIlikeRestriction(crit, "substring(replace(public_id, '/', ''), 1, 8)", cExample.getExportPublicId());
-        SearchUtils.addIlikeInRestriction(crit, "replace(contract_no, '/', '')", cExample.getStoredContractNo().replaceAll("/", ""));
+        if (cExample.getStoredContractNo() != null)
+            SearchUtils.addIlikeInRestriction(crit, "replace(contract_no, '/', '')", cExample.getStoredContractNo().replaceAll("/", ""));
         SearchUtils.addEqRestriction(crit, "symbol", cExample.getSymbol());
         // contact restrictions
         if (cExample.getContact() != null) {
