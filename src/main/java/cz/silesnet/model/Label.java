@@ -7,8 +7,6 @@ package cz.silesnet.model;
  */
 public class Label extends Entity implements HistoricToString {
 
-  public static final long SHIRES = 250;
-
   public static final long RESPONSIBLES = 300;
 
   // ~ Static fields/initializers

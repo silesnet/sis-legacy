@@ -412,8 +412,6 @@ public class CustomerController extends AbstractCRUDController {
         // model.put("billingStatus", EnumSet.allOf(BillingStatus.class));
         // logic moved to referenceI18nFields because we have the customer there
         // available
-        // Shire labels
-        model.put("shires", lmgr.getSubLabels(lmgr.get(Label.SHIRES)));
         // Responsible labels
         model.put("responsibles", lmgr.getSubLabels(lmgr.get(Label.RESPONSIBLES)));
         // InvoiceFormat enum
