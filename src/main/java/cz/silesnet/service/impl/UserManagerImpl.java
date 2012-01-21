@@ -3,7 +3,7 @@ package cz.silesnet.service.impl;
 import cz.silesnet.dao.UserDAO;
 import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.UserManager;
-import cz.silesnet.utils.SecurityUtils;
+import cz.silesnet.util.SecurityUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

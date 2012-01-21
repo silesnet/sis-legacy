@@ -1,4 +1,4 @@
-package cz.silesnet.utils;
+package cz.silesnet.util;
 
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;

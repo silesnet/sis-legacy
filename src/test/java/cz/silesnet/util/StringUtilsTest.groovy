@@ -1,8 +1,8 @@
-package cz.silesnet.utils;
+package cz.silesnet.util;
 
 
 import spock.lang.Specification
-import static cz.silesnet.utils.StringUtils.join
+import static cz.silesnet.util.StringUtils.join
 
 /**
  * User: admin

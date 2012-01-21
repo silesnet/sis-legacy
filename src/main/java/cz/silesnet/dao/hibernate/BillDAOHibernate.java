@@ -5,7 +5,7 @@ import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.Invoicing;
 import cz.silesnet.model.enums.Country;
-import cz.silesnet.utils.SearchUtils;
+import cz.silesnet.util.SearchUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;

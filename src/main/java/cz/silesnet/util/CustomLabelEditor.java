@@ -1,4 +1,4 @@
-package cz.silesnet.utils;
+package cz.silesnet.util;
 
 import cz.silesnet.service.LabelManager;
 import org.apache.commons.logging.Log;

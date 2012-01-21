@@ -1,7 +1,6 @@
-package cz.silesnet.utils;
+package cz.silesnet.util;
 
 import cz.silesnet.model.Customer;
-import cz.silesnet.model.Label;
 import cz.silesnet.model.PrepareMixture;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

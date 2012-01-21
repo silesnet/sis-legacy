@@ -6,7 +6,7 @@ import cz.silesnet.model.Address;
 import cz.silesnet.model.Billing;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.enums.Country;
-import cz.silesnet.utils.SearchUtils;
+import cz.silesnet.util.SearchUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;

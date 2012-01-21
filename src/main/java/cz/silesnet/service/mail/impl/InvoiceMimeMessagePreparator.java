@@ -2,7 +2,7 @@ package cz.silesnet.service.mail.impl;
 
 import cz.silesnet.service.invoice.Invoice;
 import cz.silesnet.service.invoice.InvoiceWriter;
-import cz.silesnet.utils.MessagesUtils;
+import cz.silesnet.util.MessagesUtils;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 

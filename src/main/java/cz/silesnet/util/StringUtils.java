@@ -1,4 +1,4 @@
-package cz.silesnet.utils;
+package cz.silesnet.util;
 
 /**
  * Various utility methods for strings. Implemented to be library independet for

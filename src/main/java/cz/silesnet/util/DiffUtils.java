@@ -1,4 +1,4 @@
-package cz.silesnet.utils;
+package cz.silesnet.util;
 
 import cz.silesnet.model.Entity;
 import cz.silesnet.model.HistoricToString;

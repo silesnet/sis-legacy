@@ -1,6 +1,6 @@
 package cz.silesnet.web.servlet;
 
-import cz.silesnet.utils.NavigationUtils;
+import cz.silesnet.util.NavigationUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.GenericValidator;

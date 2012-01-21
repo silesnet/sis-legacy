@@ -1,4 +1,4 @@
-package cz.silesnet.utils;
+package cz.silesnet.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

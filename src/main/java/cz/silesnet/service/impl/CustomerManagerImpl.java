@@ -10,8 +10,7 @@ import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.SettingManager;
-import cz.silesnet.utils.MessagesUtils;
-import cz.silesnet.utils.SearchUtils;
+import cz.silesnet.util.MessagesUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -22,8 +21,6 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static cz.silesnet.model.ServiceId.serviceId;
 
 public class CustomerManagerImpl implements CustomerManager {
 

@@ -1,7 +1,7 @@
 package cz.silesnet.web.mvc;
 
 import cz.silesnet.service.HistoryManager;
-import cz.silesnet.utils.SecurityUtils;
+import cz.silesnet.util.SecurityUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;

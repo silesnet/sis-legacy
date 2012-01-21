@@ -2,7 +2,7 @@ package cz.silesnet.dao.hibernate;
 
 import cz.silesnet.dao.UserDAO;
 import cz.silesnet.model.User;
-import cz.silesnet.utils.DiffUtils;
+import cz.silesnet.util.DiffUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;

@@ -3,8 +3,8 @@ package cz.silesnet.model;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.model.invoice.BillBuilder;
-import cz.silesnet.utils.SearchUtils;
-import cz.silesnet.utils.StringUtils;
+import cz.silesnet.util.SearchUtils;
+import cz.silesnet.util.StringUtils;
 
 import java.util.*;
 

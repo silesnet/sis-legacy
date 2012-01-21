@@ -6,7 +6,7 @@ import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.model.enums.InvoiceFormat;
 import cz.silesnet.service.*;
-import cz.silesnet.utils.*;
+import cz.silesnet.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.propertyeditors.CustomDateEditor;

@@ -1,6 +1,6 @@
 package cz.silesnet.model;
 
-import cz.silesnet.utils.MessagesUtils;
+import cz.silesnet.util.MessagesUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.util.Date;

@@ -13,7 +13,7 @@ import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.SettingManager;
 import cz.silesnet.service.invoice.Invoice;
 import cz.silesnet.service.mail.MimeMessagePreparatorFactory;
-import cz.silesnet.utils.MessagesUtils;
+import cz.silesnet.util.MessagesUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.commons.logging.Log;

@@ -2,7 +2,7 @@ package cz.silesnet.dao;
 
 import cz.silesnet.model.HistoryItem;
 import cz.silesnet.model.Label;
-import cz.silesnet.utils.SecurityUtils;
+import cz.silesnet.util.SecurityUtils;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 import org.unitils.dbunit.annotation.DataSet;

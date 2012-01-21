@@ -23,6 +23,6 @@
     </property>
   </bean>
 
-  <bean id="messagesUtils" class="cz.silesnet.utils.MessagesUtils" />
+  <bean id="messagesUtils" class="cz.silesnet.util.MessagesUtils" />
 
 </beans>

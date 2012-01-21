@@ -3,7 +3,7 @@ package cz.silesnet.model;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.model.enums.InvoiceFormat;
-import cz.silesnet.utils.Dates;
+import cz.silesnet.util.Dates;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

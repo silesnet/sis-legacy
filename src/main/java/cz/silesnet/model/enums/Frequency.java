@@ -2,7 +2,7 @@ package cz.silesnet.model.enums;
 
 import cz.silesnet.model.Period;
 import cz.silesnet.model.invoice.Percent;
-import cz.silesnet.utils.Dates;
+import cz.silesnet.util.Dates;
 import org.joda.time.DurationFieldType;
 import org.joda.time.PeriodType;
 
@@ -11,7 +11,6 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Frequency enumerator for setting servicess/billing periods.
