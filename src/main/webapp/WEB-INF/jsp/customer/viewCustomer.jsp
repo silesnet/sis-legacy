@@ -11,24 +11,24 @@
 <h3><fmt:message key="editCustomer.header.Contract" /><c:if test="${!synchronized}">*</c:if></h3>
 <table class="customerDetail" width="100%">
 <s:nestedPath path="customer">
-<!--	<app:viewTextLine path="contractNo" label="Customer.fContractNo" styleClass="odd" /> -->
-	<app:viewTextLine path="name" label="Customer.fName" emphasis="true" styleClass="odd" />
-	<app:viewTextLine path="supplementaryName" label="Customer.fSupplementaryName" styleClass="even" />
-	<app:viewTextLine path="publicId" label="${publicId_label}" styleClass="odd" />
-	<app:viewTextLine path="DIC" label="${dic_label}" styleClass="even" />
-	<app:viewTextLine path="symbol" label="Customer.fSymbol" styleClass="odd" />
+	<app:viewTextLine path="contractNo" label="Customer.fContractNo" styleClass="odd" />
+	<app:viewTextLine path="name" label="Customer.fName" emphasis="true" styleClass="even" />
+	<app:viewTextLine path="supplementaryName" label="Customer.fSupplementaryName" styleClass="odd" />
+	<app:viewTextLine path="publicId" label="${publicId_label}" styleClass="even" />
+	<app:viewTextLine path="DIC" label="${dic_label}" styleClass="odd" />
+	<app:viewTextLine path="symbol" label="Customer.fSymbol" styleClass="even" />
 	<c:set var="mapLink" value="" />
 	<c:if test="${customer.contact.address.country.name == 'enum.country.cz'}">
 		<c:set var="mapLink" value="http://maps.google.cz/maps?hl=cs&amp;q=${customer.contact.address.street}, ${customer.contact.address.city}" />
 	</c:if>
-	<app:viewTextLine path="contact.address.street" label="Customer.fContact.fAddress.fStreet" link="${mapLink}" target="_blank" styleClass="even" />
-	<app:viewTextLine path="contact.address.city" label="Customer.fContact.fAddress.fCity" styleClass="odd" />
-	<app:viewTextLine path="contact.address.postalCode" label="Customer.fContact.fAddress.fPostalCode" styleClass="even" />
-	<app:viewTextLine path="contact.address.country.name" label="Customer.fContact.fAddress.fCountry" i18n="true" styleClass="odd" />
-	<app:viewTextLine path="contact.email" label="Customer.fContact.fEmail" link="mailto:${customer.contact.email}" styleClass="even" />
-	<app:viewTextLine path="contact.phone" label="Customer.fContact.fPhone" styleClass="odd" />
-	<app:viewTextLine path="contact.name" label="Customer.fContact.fName" styleClass="even" />
-	<app:viewTextLine path="connectionSpot" label="Customer.fConnectionSpot" styleClass="odd" />
+	<app:viewTextLine path="contact.address.street" label="Customer.fContact.fAddress.fStreet" link="${mapLink}" target="_blank" styleClass="odd" />
+	<app:viewTextLine path="contact.address.city" label="Customer.fContact.fAddress.fCity" styleClass="even" />
+	<app:viewTextLine path="contact.address.postalCode" label="Customer.fContact.fAddress.fPostalCode" styleClass="odd" />
+	<app:viewTextLine path="contact.address.country.name" label="Customer.fContact.fAddress.fCountry" i18n="true" styleClass="even" />
+	<app:viewTextLine path="contact.email" label="Customer.fContact.fEmail" link="mailto:${customer.contact.email}" styleClass="odd" />
+	<app:viewTextLine path="contact.phone" label="Customer.fContact.fPhone" styleClass="even" />
+	<app:viewTextLine path="contact.name" label="Customer.fContact.fName" styleClass="odd" />
+	<app:viewTextLine path="connectionSpot" label="Customer.fConnectionSpot" styleClass="even" />
 </s:nestedPath>
 </table>
 
