@@ -54,7 +54,7 @@
 	<app:formInputLine path="billing.deliverCopyEmail" label="Customer.fBilling.fDeliverCopyEmail" size="30"/>
 	<app:formEnumLine path="billing.format" label="Customer.fBilling.format" enums="${invoiceFormats}" required="true" />
 	<app:formCheckboxLine path="billing.deliverSigned" label="Customer.fBilling.deliverSigned" required="true" />
-	<app:formLabelLine path="billing.shire" label="Customer.fBilling.shire" labels="${shires}" naOption="true" />
+<%--	<app:formLabelLine path="billing.shire" label="Customer.fBilling.shire" labels="${shires}" naOption="true" /> --%>
 	<app:formLabelLine path="billing.responsible" label="Customer.fBilling.responsible" labels="${responsibles}" naOption="true"/>
 	<app:formLine path="billing.isActive" label="Customer.fBilling.fIsActive" required="true">
 		${customer.billing.isActive ? yes : no }

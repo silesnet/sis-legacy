@@ -33,7 +33,7 @@ public class ServiceBlueprint {
     private Date billingOn;
     private boolean newCustomerCreated = false;
 
-    public Customer initializeNewCustomer(final Label shire, final Label responsible) {
+    public Customer initializeNewCustomer(final Label responsible) {
         final Customer customer = new Customer();
         final ServiceId serviceId = serviceId(id);
         if (serviceId.orderNo() != 0)
@@ -55,7 +55,6 @@ public class ServiceBlueprint {
         billing.setDeliverByEmail(true);
         billing.setFormat(InvoiceFormat.LINK);
         billing.setDeliverSigned(false);
-        billing.setShire(shire);
         billing.setResponsible(responsible);
         billing.setIsActive(true);
         billing.setStatus(BillingStatus.INVOICE);
@@ -93,7 +92,7 @@ public class ServiceBlueprint {
         customer.getBilling().setIsActive(true);
         final ServiceId serviceId = serviceId(id);
         if (!isNewCustomer() && isNewContract()) {
-            customer.setContractNo(appendContractNo(customer.getContractNo(), serviceId.contractNo()));
+            customer.setContractNo(appendContractNo(customer.getStoredContractNo(), serviceId.contractNo()));
         }
         return customer;
     }

@@ -49,13 +49,10 @@ public class CustomerManagerImpl implements CustomerManager {
         final ServiceBlueprint blueprint = sDao.findBlueprint(blueprintId);
         Customer customer;
         if (blueprint.isNewCustomer()) {
-            Label shire = labelDAO.findByName(blueprint.getResponsible(), Label.SHIRES);
-            if (shire == null)
-                shire = labelDAO.findByName("Archiv", Label.SHIRES);
             Label responsible = labelDAO.findByName(blueprint.getResponsible(), Label.RESPONSIBLES);
             if (responsible == null)
                 responsible = labelDAO.findByName("Archiv", Label.RESPONSIBLES);
-            customer = blueprint.initializeNewCustomer(shire, responsible);
+            customer = blueprint.initializeNewCustomer(responsible);
             log.debug(customer);
             insert(customer);
         } else {

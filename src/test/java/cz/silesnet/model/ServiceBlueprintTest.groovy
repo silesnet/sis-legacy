@@ -30,7 +30,6 @@ public class ServiceBlueprintTest extends Specification {
     private static final String BPS = 'M'
     private static final String RESPONSIBLE = 'TECH'
     private static final Label RESPONSIBLE_LABEL = new Label();
-    private static final Label SHIRE_LABEL = new Label();
     private static final String FAKE_CONTRACT_NO = 'X'
     private static final int SERVICE_ID_PL = 1001020110
 
@@ -40,13 +39,13 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.periodFrom = new Date(FROM)
         blueprint.info = INFO
         blueprint.customerId = 0
-        def customer = blueprint.initializeNewCustomer(SHIRE_LABEL, RESPONSIBLE_LABEL)
+        def customer = blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
         def address = customer.contact.address
         def billing = customer.billing
     expect:
         customer.id == null
         customer.name == UNIQUE_FOO
-        customer.contractNo == CONTRACT_STR
+        customer.storedContractNo == CONTRACT_STR
         customer.publicId == CONTRACT_STR
         address.street == UNIQUE_FOO
         address.city == UNIQUE_FOO
@@ -59,7 +58,6 @@ public class ServiceBlueprintTest extends Specification {
         billing.deliverByEmail
         billing.format == InvoiceFormat.LINK
         !billing.deliverSigned
-        billing.shire == SHIRE_LABEL
         billing.responsible == RESPONSIBLE_LABEL
         billing.isActive
         billing.status == BillingStatus.INVOICE
@@ -74,7 +72,7 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.id = SERVICE_ID_PL
         blueprint.periodFrom = new Date(FROM)
         blueprint.info = INFO
-        def customer = blueprint.initializeNewCustomer(SHIRE_LABEL, RESPONSIBLE_LABEL)
+        def customer = blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
         def address = customer.contact.address
     expect:
         address.country == Country.PL
@@ -84,7 +82,7 @@ public class ServiceBlueprintTest extends Specification {
         def blueprint = new ServiceBlueprint()
         blueprint.id = SERVICE_ID2
     when:
-        blueprint.initializeNewCustomer(SHIRE_LABEL, RESPONSIBLE_LABEL)
+        blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
     then:
         thrown IllegalStateException
     }
@@ -141,9 +139,9 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.buildService(customer)
         customer.contractNo = null
         blueprint.imprintNewServiceOn(customer)
-        def first = customer.contractNo
+        def first = customer.storedContractNo
         blueprint.imprintNewServiceOn(customer)
-        def second = customer.contractNo
+        def second = customer.storedContractNo
     expect:
         first == CONTRACT_STR
         second == "$CONTRACT_STR, $CONTRACT_STR"
@@ -157,9 +155,9 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.buildService(customer)
         customer.contractNo = FAKE_CONTRACT_NO
         blueprint.imprintNewServiceOn(customer)
-        def first = customer.contractNo
+        def first = customer.storedContractNo
         blueprint.imprintNewServiceOn(customer)
-        def second = customer.contractNo
+        def second = customer.storedContractNo
     expect:
         first == FAKE_CONTRACT_NO
         second == FAKE_CONTRACT_NO
@@ -173,9 +171,9 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.buildService(customer)
         customer.contractNo = FAKE_CONTRACT_NO
         blueprint.imprintNewServiceOn(customer)
-        def first = customer.contractNo
+        def first = customer.storedContractNo
         blueprint.imprintNewServiceOn(customer)
-        def second = customer.contractNo
+        def second = customer.storedContractNo
     expect:
         first == FAKE_CONTRACT_NO
         second == FAKE_CONTRACT_NO

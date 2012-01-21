@@ -200,9 +200,6 @@ public class Customer extends Entity implements Historic {
 
     public String getServicesInfo() {
         String comm = "";
-        if (getBilling().getShire() != null)
-            comm = "[" + getBilling().getShire().getName().substring(0, 3)
-                    + "]";
         if (getServices().size() == 0)
             return comm;
         return getServices().size() > 1 ? getServices().get(0).getShortInfo()
