@@ -220,6 +220,10 @@ public class Customer extends Entity implements Historic {
         return StringUtils.join(contracts, ", ");
     }
 
+    public String getStoredContractNo() {
+        return fContractNo;
+    }
+
     public void setContractNo(String contractNo) {
         fContractNo = contractNo;
     }
