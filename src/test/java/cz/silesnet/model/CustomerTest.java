@@ -4,41 +4,79 @@ import org.testng.annotations.Test;
 
 import java.util.Date;
 
-import static org.testng.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class CustomerTest {
 
-  @Test
-  public void testIsSpsSynchronizedTrue() {
-    Customer customer = new Customer();
-    long now = System.currentTimeMillis();
-    customer.setUpdated(new Date(now));
-    customer.setSynchronized(new Date(now + 1));
-    assertTrue(customer.isSpsSynchronized());
-  }
+    private static final long SERVICE1_ID_NEW_CONTRACT_101 = 1010120120L;
+    private static final long SERVICE2_ID_NEW_CONTRACT_102 = 1010220120L;
+    private static final long SERVICE3_ID_SAME_CONTRACT_102 = 1010220121L;
+    private static final long SERVICE4_ID_ONETIME_SAME_CONTRACT_101 = Service.ONETIME_SERVICE_BASE_PL + 101201200;
+    private static final long SERVICE5_ID_ONETIME_NEW_CONTRACT_103 = Service.ONETIME_SERVICE_BASE_PL + 103201200;
 
-  @Test
-  public void testIsSpsSynchronizedGreater() {
-    Customer customer = new Customer();
-    long now = System.currentTimeMillis();
-    customer.setUpdated(new Date(now));
-    customer.setSynchronized(new Date(now - 1));
-    assertFalse(customer.isSpsSynchronized());
-  }
+    @Test
+    public void testShouldReturnEmptyContractNoWhenNoOrNullServices() throws Exception {
+        final Customer customer = new Customer();
+        assertThat(customer.getContractNo(), is(""));
+        customer.setServices(null);
+        assertThat(customer.getContractNo(), is(""));
+    }
 
-  @Test
-  public void testIsSpsSynchronizedEqual() {
-    Customer customer = new Customer();
-    Date now = new Date();
-    customer.setUpdated(now);
-    customer.setSynchronized(now);
-    assertFalse(customer.isSpsSynchronized());
-  }
+    @Test
+    public void testShouldReturnContractNumbersFromServices() throws Exception {
+        final Service service1 = new Service();
+        service1.setId(SERVICE1_ID_NEW_CONTRACT_101);
+        final Service service2 = new Service();
+        service2.setId(SERVICE2_ID_NEW_CONTRACT_102);
+        final Service service3 = new Service();
+        service3.setId(SERVICE3_ID_SAME_CONTRACT_102);
+        final Service service4 = new Service();
+        service4.setId(SERVICE4_ID_ONETIME_SAME_CONTRACT_101);
+        final Service service5 = new Service();
+        service5.setId(SERVICE5_ID_ONETIME_NEW_CONTRACT_103);
+        final Customer customer = new Customer();
+        customer.getServices().add(service1);
+        customer.getServices().add(service2);
+        customer.getServices().add(service3);
+        customer.getServices().add(service4);
+        customer.getServices().add(service5);
+        assertThat(customer.getContractNo(), is("1012012, 1022012, 1032012"));
+    }
 
-  @Test
-  public void testIsSpsSynchronizedNull() {
-    Customer customer = new Customer();
-    assertFalse(customer.isSpsSynchronized());
-  }
+    @Test
+    public void testIsSpsSynchronizedTrue() {
+        Customer customer = new Customer();
+        long now = System.currentTimeMillis();
+        customer.setUpdated(new Date(now));
+        customer.setSynchronized(new Date(now + 1));
+        assertTrue(customer.isSpsSynchronized());
+    }
+
+    @Test
+    public void testIsSpsSynchronizedGreater() {
+        Customer customer = new Customer();
+        long now = System.currentTimeMillis();
+        customer.setUpdated(new Date(now));
+        customer.setSynchronized(new Date(now - 1));
+        assertFalse(customer.isSpsSynchronized());
+    }
+
+    @Test
+    public void testIsSpsSynchronizedEqual() {
+        Customer customer = new Customer();
+        Date now = new Date();
+        customer.setUpdated(now);
+        customer.setSynchronized(now);
+        assertFalse(customer.isSpsSynchronized());
+    }
+
+    @Test
+    public void testIsSpsSynchronizedNull() {
+        Customer customer = new Customer();
+        assertFalse(customer.isSpsSynchronized());
+    }
 
 }
