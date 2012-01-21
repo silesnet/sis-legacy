@@ -55,8 +55,8 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
 
     @Test
     public void testFindBlueprint() throws Exception {
-        final ServiceBlueprint blueprint = dao.findBlueprint(10020110);
-        assertThat(blueprint.getId(), is(10020110));
+        final ServiceBlueprint blueprint = dao.findBlueprint(1010020110);
+        assertThat(blueprint.getId(), is(1010020110));
 //        System.out.println(blueprint);
     }
 

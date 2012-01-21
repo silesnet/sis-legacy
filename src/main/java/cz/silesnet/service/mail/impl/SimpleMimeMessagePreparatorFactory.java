@@ -1,10 +1,10 @@
 package cz.silesnet.service.mail.impl;
 
-import cz.silesnet.service.SignedEmailGenerator;
 import cz.silesnet.service.invoice.Invoice;
 import cz.silesnet.service.invoice.InvoiceWriter;
 import cz.silesnet.service.invoice.InvoiceWriterFactory;
 import cz.silesnet.service.mail.MimeMessagePreparatorFactory;
+import cz.silesnet.service.mail.SignedEmailGenerator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.util.Assert;

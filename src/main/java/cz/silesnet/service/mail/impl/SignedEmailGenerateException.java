@@ -1,4 +1,4 @@
-package cz.silesnet.service;
+package cz.silesnet.service.mail.impl;
 
 public class SignedEmailGenerateException extends RuntimeException {
 

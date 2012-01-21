@@ -1,7 +1,6 @@
-package cz.silesnet.service.impl;
+package cz.silesnet.service.mail.impl;
 
-import cz.silesnet.service.SignedEmailGenerateException;
-import cz.silesnet.service.SignedEmailGenerator;
+import cz.silesnet.service.mail.SignedEmailGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;

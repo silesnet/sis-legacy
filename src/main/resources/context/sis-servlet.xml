@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
     "http://www.springframework.org/dtd/spring-beans.dtd">
-
 <beans>
 
   <!-- Multiaction controller for various system actions -->
@@ -92,16 +91,6 @@
     </property>
   </bean>
 
-  <bean id="labelController" class="cz.silesnet.web.mvc.LabelController">
-    <property name="methodNameResolver">
-      <ref bean="actionMethodResolver" />
-    </property>
-    <property name="persistenceManager">
-      <ref bean="labelManager" />
-    </property>
-    <property name="commandName" value="label" />
-  </bean>
-
   <bean id="billDeliveryController" class="cz.silesnet.web.mvc.BillDeliveryController">
     <property name="billingController">
       <ref local="billingController" />
@@ -129,9 +118,6 @@
         </entry>
         <entry key="/billing/confirmDelivery.html">
           <ref local="billDeliveryController" />
-        </entry>
-        <entry key="/label/*">
-          <ref local="labelController" />
         </entry>
         <entry key="/index.html">
           <ref bean="urlFilenameViewController" />

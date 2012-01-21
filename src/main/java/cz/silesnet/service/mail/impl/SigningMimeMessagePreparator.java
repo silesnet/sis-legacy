@@ -1,12 +1,10 @@
 package cz.silesnet.service.mail.impl;
 
-import cz.silesnet.service.SignedEmailGenerator;
+import cz.silesnet.service.mail.SignedEmailGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;

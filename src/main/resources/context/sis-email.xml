@@ -12,7 +12,7 @@
   </bean>
 
   <!-- configure signed email generator  -->
-  <bean id="signedEmailGenerator" class="cz.silesnet.service.impl.SignedEmailGeneratorBC" init-method="configure">
+  <bean id="signedEmailGenerator" class="cz.silesnet.service.mail.impl.SignedEmailGeneratorBC" init-method="configure">
     <property name="certificatePath" value="${crypto.cert.path}" />
     <property name="privateKeyPath" value="${crypto.pk.path}" />
     <property name="privateKeyAlias" value="${crypto.pk.alias}" />

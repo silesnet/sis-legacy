@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author Vlastn�k
  */
-public interface LabelManager extends PersistenceManager<Label> {
+public interface LabelManager {
 
   // ~ Methods
   // ----------------------------------------------------------------
@@ -20,4 +20,6 @@ public interface LabelManager extends PersistenceManager<Label> {
   public List getSubLabels(Label label);
 
   public Map getSubLabelsMap(long parentId);
+
+  public Label get(Long parentId);
 }

@@ -1,4 +1,4 @@
-package cz.silesnet.service;
+package cz.silesnet.service.mail;
 
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
