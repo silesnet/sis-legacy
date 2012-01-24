@@ -39,13 +39,9 @@ public class ServiceBlueprint {
         if (serviceId.orderNo() != 0)
             throw new IllegalStateException("cannot create customer when the service '" + serviceId + "' is not first in contract");
         final ContractNo contractNo = serviceId.contractNo();
-        final String uniqueFoo = "?" + contractNo;
-        customer.setName(uniqueFoo);
+        customer.setName(info);
         customer.setContractNo(contractNo.toString());
         customer.setPublicId(contractNo.toString());
-        customer.getContact().getAddress().setStreet(uniqueFoo);
-        customer.getContact().getAddress().setCity(uniqueFoo);
-        customer.getContact().getAddress().setPostalCode(uniqueFoo);
         customer.getContact().getAddress().setCountry(serviceId.country());
         final Billing billing = customer.getBilling();
         billing.setLastlyBilled(calculateLastlyBilled(periodFrom));
@@ -59,7 +55,6 @@ public class ServiceBlueprint {
         billing.setIsActive(true);
         billing.setStatus(BillingStatus.INVOICE);
         billing.setVariableSymbol(contractNo.value());
-        customer.setInfo(info);
         customer.setInsertedOn(new Date());
         newCustomerCreated = true;
         return customer;
@@ -84,7 +79,6 @@ public class ServiceBlueprint {
             service.getConnectivity().setBps("M");
         service.getConnectivity().setIsAggregated(false);
         service.getConnectivity().setAggregationId(null);
-        service.setInfo(info);
         return service;
     }
 

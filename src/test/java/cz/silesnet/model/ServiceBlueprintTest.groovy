@@ -44,12 +44,12 @@ public class ServiceBlueprintTest extends Specification {
         def billing = customer.billing
     expect:
         customer.id == null
-        customer.name == UNIQUE_FOO
+        customer.name == INFO
         customer.storedContractNo == CONTRACT_STR
         customer.publicId == CONTRACT_STR
-        address.street == UNIQUE_FOO
-        address.city == UNIQUE_FOO
-        address.postalCode == UNIQUE_FOO
+        address.street == null
+        address.city == null
+        address.postalCode == null
         address.country == Country.CZ
         billing.lastlyBilled.time == BILLED_TO
         billing.frequency == Frequency.MONTHLY
@@ -62,7 +62,7 @@ public class ServiceBlueprintTest extends Specification {
         billing.isActive
         billing.status == BillingStatus.INVOICE
         billing.variableSymbol == CONTRACT_NO
-        customer.info == INFO
+        customer.info == null
         customer.insertedOn.time > FROM
         blueprint.isNewCustomerCreated()
     }
@@ -106,7 +106,7 @@ public class ServiceBlueprintTest extends Specification {
         service.connectivity.aggregationId == null
         service.period.from.time == FROM
         service.period.to == null
-        service.info == INFO
+        service.info == null
         service.frequency == Frequency.MONTHLY;
     }
 

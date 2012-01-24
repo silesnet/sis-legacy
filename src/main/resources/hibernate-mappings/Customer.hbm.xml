@@ -15,9 +15,9 @@
         <component name="contact">
             <property name="name" column="contact_name" length="50" />
             <component name="address">
-                <property name="street" length="40" not-null="true" />
-                <property name="city" length="40" not-null="true" />
-                <property name="postalCode" column="postal_code" length="10" not-null="true" />
+                <property name="street" length="40" />
+                <property name="city" length="40" />
+                <property name="postalCode" column="postal_code" length="10" />
                 <property name="country" type="cz.silesnet.dao.hibernate.support.CountryHibernateUserType" />
             </component>
             <property name="email" length="50" />

@@ -124,8 +124,8 @@ CREATE TABLE services (
 CREATE TABLE newservices
 (
   customer_id integer DEFAULT 0,
-  poznamka character varying(90),
-  technik character varying(10),
+  customer character varying(90),
+  technician character varying(10),
   id integer,
   name character varying(20),
   download smallint,

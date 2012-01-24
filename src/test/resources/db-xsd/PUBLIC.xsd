@@ -113,14 +113,14 @@
 		<xsd:attribute name="AMOUNT" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="NEWSERVICES__type">
+		<xsd:attribute name="CUSTOMER" use="optional" />
 		<xsd:attribute name="PRICE" use="optional" />
 		<xsd:attribute name="BILLING_ON" use="optional" />
 		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="POZNAMKA" use="optional" />
 		<xsd:attribute name="PERIOD_FROM" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
 		<xsd:attribute name="CUSTOMER_ID" use="optional" />
-		<xsd:attribute name="TECHNIK" use="optional" />
+		<xsd:attribute name="TECHNICIAN" use="optional" />
 		<xsd:attribute name="DOWNLOAD" use="optional" />
 		<xsd:attribute name="UPLOAD" use="optional" />
 	</xsd:complexType>
