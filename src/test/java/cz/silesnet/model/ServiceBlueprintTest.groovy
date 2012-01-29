@@ -56,7 +56,6 @@ public class ServiceBlueprintTest extends Specification {
         billing.deliverByEmail
         billing.format == InvoiceFormat.LINK
         !billing.deliverSigned
-        billing.responsible == null
         billing.isActive
         billing.status == BillingStatus.INVOICE
         billing.variableSymbol == CONTRACT_NO

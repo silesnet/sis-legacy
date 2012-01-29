@@ -42,8 +42,6 @@ public class Billing implements HistoricToString, Serializable {
 
     private Boolean deliverSigned = false;
 
-    private Label responsible;
-
     private Boolean fIsActive = true;
 
     private BillingStatus fStatus = BillingStatus.INVOICE;
@@ -72,7 +70,6 @@ public class Billing implements HistoricToString, Serializable {
                 .append(getDeliverCopyEmail())
                 .append(getFormat().toString())
                 .append(getDeliverSigned())
-                .append(getResponsible() != null ? getResponsible().getHistoricToString() : "")
                 .append(getIsActive())
                 .append(getStatus())
                 .toString();
@@ -149,14 +146,6 @@ public class Billing implements HistoricToString, Serializable {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    public Label getResponsible() {
-        return responsible;
-    }
-
-    public void setResponsible(Label responsible) {
-        this.responsible = responsible;
     }
 
     public Boolean getDeliverSigned() {

@@ -31,9 +31,6 @@
 	<app:formInputLine path="contact.address.city" label="Customer.fContact.fAddress.fCity" required="true" size="15" />
 	<app:formInputLine path="contact.address.postalCode" label="Customer.fContact.fAddress.fPostalCode" required="true" size="7" />
 	<app:formDisabledLine path="contact.address.country" label="Customer.fContact.fAddress.fCountry" i18n="true" enum="true" />
-	<%--
-		<app:formEnumLine path="contact.address.country" label="Customer.fContact.fAddress.fCountry" enums="${addressCountry}" disabled="true" />
-	--%>
 	<app:formInputLine path="contact.email" label="Customer.fContact.fEmail" size="30" />
 	<app:formInputLine path="contact.phone" label="Customer.fContact.fPhone" size="30" />
 	<app:formInputLine path="contact.name" label="Customer.fContact.fName" size="30" />
@@ -54,8 +51,6 @@
 	<app:formInputLine path="billing.deliverCopyEmail" label="Customer.fBilling.fDeliverCopyEmail" size="30"/>
 	<app:formEnumLine path="billing.format" label="Customer.fBilling.format" enums="${invoiceFormats}" required="true" />
 	<app:formCheckboxLine path="billing.deliverSigned" label="Customer.fBilling.deliverSigned" required="true" />
-<%--	<app:formLabelLine path="billing.shire" label="Customer.fBilling.shire" labels="${shires}" naOption="true" /> --%>
-	<app:formLabelLine path="billing.responsible" label="Customer.fBilling.responsible" labels="${responsibles}" naOption="true"/>
 	<app:formLine path="billing.isActive" label="Customer.fBilling.fIsActive" required="true">
 		${customer.billing.isActive ? yes : no }
 	</app:formLine>

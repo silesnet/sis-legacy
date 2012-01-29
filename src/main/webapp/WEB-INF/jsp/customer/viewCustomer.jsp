@@ -47,15 +47,13 @@
 	<app:viewTextLine path="deliverCopyEmail" label="Customer.fBilling.fDeliverCopyEmail" styleClass="even" />
 	<app:viewLabelLine path="format" label="Customer.fBilling.format" i18n="true" styleClass="odd" />
 	<app:viewTextLine path="deliverSigned" label="Customer.fBilling.deliverSigned" i18n="true" styleClass="even" />
-<%--	<app:viewLabelLine path="shire" label="Customer.fBilling.shire" styleClass="odd" /> --%>
-	<app:viewLabelLine path="responsible" label="Customer.fBilling.responsible" styleClass="odd" />
-	<app:viewTextLine path="isActive" label="Customer.fBilling.fIsActive" i18n="true" styleClass="even" />
-    <app:viewLabelLine path="status" label="Customer.fBilling.fStatus" i18n="true" styleClass="odd" />
-	<app:viewTextLine path="bankAccount" label="Customer.fBilling.fAccount" styleClass="even" />
-	<app:viewTextLine path="variableSymbol" label="Customer.fBilling.fVariableSymbol" styleClass="odd" />
+	<app:viewTextLine path="isActive" label="Customer.fBilling.fIsActive" i18n="true" styleClass="odd" />
+    <app:viewLabelLine path="status" label="Customer.fBilling.fStatus" i18n="true" styleClass="even" />
+	<app:viewTextLine path="bankAccount" label="Customer.fBilling.fAccount" styleClass="odd" />
+	<app:viewTextLine path="variableSymbol" label="Customer.fBilling.fVariableSymbol" styleClass="even" />
 </s:nestedPath>
 <s:nestedPath path="customer">
-	<app:viewTextLine path="info" label="Customer.fInfo" styleClass="even" />
+	<app:viewTextLine path="info" label="Customer.fInfo" styleClass="odd" />
 </s:nestedPath>
 </table>
 
