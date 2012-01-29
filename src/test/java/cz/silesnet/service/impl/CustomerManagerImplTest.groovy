@@ -16,7 +16,7 @@ import cz.silesnet.model.Customer
  */
 public class CustomerManagerImplTest extends Specification {
 
-    private static final int ID = 1800020120
+    private static final int ID = 10800001
     private static final String NAME = 'Service from blueprint'
     private static final int PRICE = 200
     private static final String RESPONSIBLE = 'Technik'

@@ -46,7 +46,7 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
         service.setPeriod(new Period(null, cal.getTime()));
 
         List<Service> services = dao.getByExample(service);
-        Service service2 = dao.get(12L);
+        Service service2 = dao.get(10010201L);
 //    log.debug(service2);
         assertThat("error in fixture configuration! (dbunit.org)", service2.getPeriod().getTo(), is(not(nullValue())));
         assertThat(services.size(), is(1));
@@ -55,18 +55,18 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
 
     @Test
     public void testFindBlueprint() throws Exception {
-        final ServiceBlueprint blueprint = dao.findBlueprint(1010020110);
-        assertThat(blueprint.getId(), is(1010020110));
+        final ServiceBlueprint blueprint = dao.findBlueprint(10010001);
+        assertThat(blueprint.getId(), is(10010001));
 //        System.out.println(blueprint);
     }
 
     @Test
     public void testSaveBlueprint() throws Exception {
-        final ServiceBlueprint blueprint = dao.findBlueprint(10020110);
+        final ServiceBlueprint blueprint = dao.findBlueprint(10010001);
         assertThat(blueprint.getBillingOn(), is(nullValue()));
         blueprint.setBillingOn(new Date());
         dao.saveBlueprint(blueprint);
-        final ServiceBlueprint updatedBlueprint = dao.findBlueprint(10020110);
+        final ServiceBlueprint updatedBlueprint = dao.findBlueprint(10010001);
         assertThat(updatedBlueprint.getBillingOn(), is(notNullValue()));
         // By the way this is wrong test as it never hits database it only exists in cache!!!
         // try to do nothing in the saveBlueprint() method, yes test would pass!
@@ -75,7 +75,7 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
 
     @Test
     public void testFindMaxIdInRange() throws Exception {
-        assertThat(dao.findMaxIdInRange(10, 20).intValue(), is(15));
+        assertThat(dao.findMaxIdInRange(10010200, 10010202).intValue(), is(10010201));
         assertThat(dao.findMaxIdInRange(100, 200), is(nullValue()));
     }
 

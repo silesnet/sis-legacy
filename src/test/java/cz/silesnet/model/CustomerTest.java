@@ -11,11 +11,11 @@ import static org.testng.Assert.assertTrue;
 
 public class CustomerTest {
 
-    private static final long SERVICE1_ID_NEW_CONTRACT_101 = 1010120120L;
-    private static final long SERVICE2_ID_NEW_CONTRACT_102 = 1010220120L;
-    private static final long SERVICE3_ID_SAME_CONTRACT_102 = 1010220121L;
-    private static final long SERVICE4_ID_ONETIME_SAME_CONTRACT_101 = Service.ONETIME_SERVICE_BASE_PL + 101201200;
-    private static final long SERVICE5_ID_ONETIME_NEW_CONTRACT_103 = Service.ONETIME_SERVICE_BASE_PL + 103201200;
+    private static final long SERVICE1_ID_NEW_CONTRACT_101 = 10010101;
+    private static final long SERVICE2_ID_NEW_CONTRACT_102 = 10010201;
+    private static final long SERVICE3_ID_SAME_CONTRACT_102 = 10010202;
+    private static final long SERVICE4_ID_ONETIME_SAME_CONTRACT_101 = 110010101;
+    private static final long SERVICE5_ID_ONETIME_NEW_CONTRACT_103 = 110010301;
 
     @Test
     public void testShouldReturnEmptyContractNoWhenNoOrNullServices() throws Exception {
@@ -43,7 +43,7 @@ public class CustomerTest {
         customer.getServices().add(service3);
         customer.getServices().add(service4);
         customer.getServices().add(service5);
-        assertThat(customer.getContractNo(), is("1012012, 1022012, 1032012"));
+        assertThat(customer.getContractNo(), is("101, 102, 103"));
     }
 
     @Test

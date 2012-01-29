@@ -8,7 +8,7 @@ create table dual_audit_item_id_seq (zero integer);
 insert into dual_audit_item_id_seq values (0);
 
 -- just for HSQLDB testing!
-CREATE ALIAS TRANSLATE FOR "cz.silesnet.utils.HsqlSupport.translate";
+CREATE ALIAS TRANSLATE FOR "cz.silesnet.util.HsqlSupport.translate";
 
 CREATE TABLE audit_items (
     id bigint NOT NULL,
@@ -131,8 +131,8 @@ CREATE TABLE newservices
   download smallint,
   upload smallint,
   price smallint,
-  billing_on date,
-  period_from date
+  period_from date,
+  billing_on date
 );
 
 CREATE TABLE settings (

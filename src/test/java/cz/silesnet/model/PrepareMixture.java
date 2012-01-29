@@ -15,6 +15,8 @@ import java.util.GregorianCalendar;
  */
 public class PrepareMixture {
 
+    private static int contract = 1;
+
   public static Label getCommissionLabel() {
     Label l = new Label();
     l.setName("Commission Test Label");
@@ -66,6 +68,7 @@ public class PrepareMixture {
 
   public static Service getService(String name) {
     Service s = new Service();
+    s.setId(Long.valueOf(ServiceId.firstServiceId(Country.CZ, ContractNo.contractNo(contract++)).id()));
     s.setCustomerId(null);
     s.setFrequency(Frequency.MONTHLY);
     s.setName(name);
