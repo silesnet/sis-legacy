@@ -14,9 +14,6 @@ import static cz.silesnet.model.ServiceId.serviceId;
  */
 public class Service extends Entity implements HistoricToString {
 
-    public static final long ONETIME_SERVICE_BASE_CZ = 5000000000000L;
-    public static final long ONETIME_SERVICE_BASE_PL = 5100000000000L;
-
     // ~ Static fields/initializers
     // ---------------------------------------------
 
@@ -154,14 +151,6 @@ public class Service extends Entity implements HistoricToString {
     public String getContractNo() {
         if (getId() == null)
             return "";
-        long id = getId();
-        String idString = "" + id;
-        String contractNo;
-        if (id > ONETIME_SERVICE_BASE_CZ) {
-            contractNo = idString.substring(2, idString.length() - 2);
-            return "" + Integer.valueOf(contractNo);
-        } else {
-            return serviceId((int) id).contractNo().toString();
-        }
+        return serviceId(getId().intValue()).contractNo().toString();
     }
 }

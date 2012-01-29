@@ -6,20 +6,18 @@ package cz.silesnet.model;
  * Time: 21:48
  */
 public final class ContractNo {
-    private static final int YEAR_MASK = 10000;
-    private static final int MAX_SEQUENCE = 9999;
-    final private int sequence;
-    final private int year;
+    private static final int MIN_VALUE = 1;
+    private static final int MAX_VALUE = 99999;
+    final private int contractNo;
     final private String value;
 
     public ContractNo(final int contractNo) {
-        if (contractNo < YEAR_MASK)
-            throw new IllegalArgumentException("contract number value too low'" + contractNo + "'");
-        sequence = contractNo / YEAR_MASK;
-        if (sequence > MAX_SEQUENCE)
+        if (contractNo < MIN_VALUE)
+            throw new IllegalArgumentException("contract number value too low '" + contractNo + "'");
+        if (contractNo > MAX_VALUE)
             throw new IllegalArgumentException("contract number value too big '" + contractNo + "'");
-        year = contractNo % YEAR_MASK;
-        value = "" + contractNo;
+        this.contractNo = contractNo;
+        this.value = "" + contractNo;
     }
 
     public ContractNo(final String contractNo) {
@@ -34,16 +32,8 @@ public final class ContractNo {
         return new ContractNo(contractNo);
     }
 
-    public int sequence() {
-        return sequence;
-    }
-
-    public int year() {
-        return year;
-    }
-
     public int value() {
-        return Integer.valueOf(value);
+        return contractNo;
     }
     
     @Override
@@ -55,16 +45,13 @@ public final class ContractNo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ContractNo that = (ContractNo) o;
-
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-
+        if (contractNo != that.contractNo) return false;
         return true;
     }
 
     @Override
     public int hashCode() {
-        return value != null ? value.hashCode() : 0;
+        return contractNo;
     }
 }

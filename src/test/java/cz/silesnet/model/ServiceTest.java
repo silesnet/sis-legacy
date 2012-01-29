@@ -17,36 +17,36 @@ public class ServiceTest {
     @Test
     public void testCsContracNo() {
         Service s = new Service();
-        s.setId(2320061L);
-        assertEquals(s.getContractNo(), "232006");
+        s.setId(10002301L);
+        assertEquals(s.getContractNo(), "23");
     }
 
     @Test
     public void testCsContracNoSmall() {
         Service s = new Service();
-        s.setId(120061L);
-        assertEquals(s.getContractNo(), "12006");
+        s.setId(10000101L);
+        assertEquals(s.getContractNo(), "1");
     }
 
     @Test
     public void testCsContracNoOnetime() {
         Service s = new Service();
-        s.setId(5000023200600L);
-        assertEquals(s.getContractNo(), "232006");
+        s.setId(110002301L);
+        assertEquals(s.getContractNo(), "23");
     }
 
     @Test
     public void testPlContracNoOnetime() {
         Service s = new Service();
-        s.setId(5100023200621L);
-        assertEquals(s.getContractNo(), "232006");
+        s.setId(120002301L);
+        assertEquals(s.getContractNo(), "23");
     }
     
     @Test
     public void testPlContracNo() {
         Service s = new Service();
-        s.setId(1002320062L);
-        assertEquals(s.getContractNo(), "232006");
+        s.setId(20002301L);
+        assertEquals(s.getContractNo(), "23");
     }
 
     @Test

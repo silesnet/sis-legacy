@@ -22,16 +22,14 @@ public class ServiceBlueprintTest extends Specification {
     private static final String NAME = "Wireless"
     private static final int PRICE = 20
     private static final int CUSTOMER_ID = 201
-    private static final int SERVICE_ID = 1020110
-    private static final int SERVICE_ID2 = 1020111
-    private static final int CONTRACT_NO = 102011
-    private static final String CONTRACT_STR = '102011'
-    private static final String UNIQUE_FOO = '?102011'
+    private static final int SERVICE_ID = 10001001
+    private static final int SERVICE_ID2 = 10001002
+    private static final int CONTRACT_NO = 10
+    private static final String CONTRACT_STR = '10'
     private static final String BPS = 'M'
     private static final String RESPONSIBLE = 'TECH'
-    private static final Label RESPONSIBLE_LABEL = new Label();
     private static final String FAKE_CONTRACT_NO = 'X'
-    private static final int SERVICE_ID_PL = 1001020110
+    private static final int SERVICE_ID_PL = 20001001
 
     def 'initializes new customer from blueprint'() {
         def blueprint = new ServiceBlueprint()
@@ -39,7 +37,7 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.periodFrom = new Date(FROM)
         blueprint.info = INFO
         blueprint.customerId = 0
-        def customer = blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
+        def customer = blueprint.createNewCustomer()
         def address = customer.contact.address
         def billing = customer.billing
     expect:
@@ -58,7 +56,7 @@ public class ServiceBlueprintTest extends Specification {
         billing.deliverByEmail
         billing.format == InvoiceFormat.LINK
         !billing.deliverSigned
-        billing.responsible == RESPONSIBLE_LABEL
+        billing.responsible == null
         billing.isActive
         billing.status == BillingStatus.INVOICE
         billing.variableSymbol == CONTRACT_NO
@@ -72,7 +70,7 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.id = SERVICE_ID_PL
         blueprint.periodFrom = new Date(FROM)
         blueprint.info = INFO
-        def customer = blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
+        def customer = blueprint.createNewCustomer()
         def address = customer.contact.address
     expect:
         address.country == Country.PL
@@ -82,7 +80,7 @@ public class ServiceBlueprintTest extends Specification {
         def blueprint = new ServiceBlueprint()
         blueprint.id = SERVICE_ID2
     when:
-        blueprint.initializeNewCustomer(RESPONSIBLE_LABEL)
+        blueprint.createNewCustomer()
     then:
         thrown IllegalStateException
     }
@@ -197,7 +195,7 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.customerId = 0
     expect:
         blueprint.isNewContract()
-        blueprint.isNewCustomer()
+        blueprint.shouldCreateNewCustomer()
     }
 
     def 'detects new contract for existing customer'() {
@@ -206,7 +204,7 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.customerId = CUSTOMER_ID
     expect:
         blueprint.isNewContract()
-        !blueprint.isNewCustomer()
+        !blueprint.shouldCreateNewCustomer()
     }
 
     def 'detects existing contract for existing customer'() {
@@ -215,7 +213,7 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.customerId = CUSTOMER_ID
     expect:
         !blueprint.isNewContract()
-        !blueprint.isNewCustomer()
+        !blueprint.shouldCreateNewCustomer()
     }
 
     def 'should set connectivity kbps for magic value 512'() {

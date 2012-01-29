@@ -45,11 +45,8 @@ public class CustomerManagerImpl implements CustomerManager {
     public ServiceBlueprint addService(final Integer blueprintId) {
         final ServiceBlueprint blueprint = sDao.findBlueprint(blueprintId);
         Customer customer;
-        if (blueprint.isNewCustomer()) {
-            Label responsible = labelDAO.findByName(blueprint.getResponsible(), Label.RESPONSIBLES);
-            if (responsible == null)
-                responsible = labelDAO.findByName("Archiv", Label.RESPONSIBLES);
-            customer = blueprint.initializeNewCustomer(responsible);
+        if (blueprint.shouldCreateNewCustomer()) {
+            customer = blueprint.createNewCustomer();
             log.debug(customer);
             insert(customer);
         } else {
@@ -370,15 +367,31 @@ public class CustomerManagerImpl implements CustomerManager {
     public long nextOneTimeServiceId(Long customerId) {
         final Customer customer = dao.get(customerId);
         dao.evict(customer);
-        final Integer variableSymbol = customer.getBilling().getVariableSymbol();
-        if (variableSymbol == null)
-            throw new IllegalStateException("customer without variable symbol encountered '" + customer.getId() + "'");
-        long base = Country.CZ.equals(customer.getContact().getAddress().getCountry()) ? Service.ONETIME_SERVICE_BASE_CZ : Service.ONETIME_SERVICE_BASE_PL;
-        long min = base + (variableSymbol * 100L);
-        long max = min + 99;
-        Long lastId = sDao.findMaxIdInRange(min, max);
-        long nextId =  lastId == null ? min : lastId + 1;
-        log.debug("next onetime service id for variable symbol '" + variableSymbol + "' is '" + nextId + "'");
+        ContractNo contract = null;
+        if (customer.getServices().size() > 0) {
+            contract = ServiceId.serviceId(customer.getServices().get(0).getId().intValue()).contractNo();
+        } else {
+            log.debug("falling back to contract number from variable symbol");
+            final Integer variableSymbol = customer.getBilling().getVariableSymbol();
+            if (variableSymbol == null)
+                throw new IllegalStateException("customer without variable symbol encountered '" + customer.getId() + "'");
+            int variable = variableSymbol;
+            while(contract == null && variable != 0) {
+                try {
+                    contract = ContractNo.contractNo(variable);
+                } catch (IllegalArgumentException e) {
+                    variable /= 10000; // cut off last 4 digits, legacy magic
+                }
+            }
+            if (contract == null)
+                throw new IllegalStateException("cannot figure out contract no from variable symbol");
+        }
+        final Country country = customer.getContact().getAddress().getCountry();
+        final ServiceId fist = ServiceId.firstOnetimeServiceId(country, contract);
+        final ServiceId last = ServiceId.lastOnetimeServiceId(country, contract);
+        Long lastId = sDao.findMaxIdInRange(fist.id(), last.id());
+        long nextId =  lastId == null ? fist.id() : ServiceId.serviceId(lastId.intValue()).next().id();
+        log.debug("next onetime service id is '" + nextId + "'");
         return nextId;
     }
 

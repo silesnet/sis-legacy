@@ -10,34 +10,33 @@ import static cz.silesnet.model.ContractNo.contractNo
  * Time: 21:52
  */
 public class ContractNoTest extends Specification {
+    private final static int MIN_CONTRACT_NO = 1
+    private final static int MAX_CONTRACT_NO = 99999
+
     def 'instantiates from integer'() {
-        def contractNo = new ContractNo(102010)
+        def contractNo = new ContractNo(MIN_CONTRACT_NO)
     expect:
-        contractNo.sequence() == 10
-        contractNo.year() == 2010
-        contractNo.value() == 102010
+        contractNo.value() == MIN_CONTRACT_NO
     }
 
     def 'instantiates from string'() {
-        def contractNo = new ContractNo('102010')
+        def contractNo = new ContractNo('' + MAX_CONTRACT_NO)
     expect:
-        contractNo.sequence() == 10
-        contractNo.year() == 2010
-        contractNo.value() == 102010
+        contractNo.value() == MAX_CONTRACT_NO
     }
 
     def 'cannot instantiate from too small number'() {
-    when: contractNo(9999)
+    when: contractNo(0)
     then: thrown IllegalArgumentException
     }
 
     def 'cannot instantiate from too big number'() {
-    when: contractNo(100000000)
+    when: contractNo(100000)
     then: thrown IllegalArgumentException
     }
 
     def 'string representation does not have leading zeros'() {
     expect:
-        contractNo('00012012').toString() == '12012'
+        contractNo('000' + MIN_CONTRACT_NO).toString() == '' + MIN_CONTRACT_NO
     }
 }

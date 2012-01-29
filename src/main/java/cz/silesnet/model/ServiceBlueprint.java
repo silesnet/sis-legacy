@@ -22,6 +22,7 @@ import static cz.silesnet.model.ServiceId.serviceId;
  */
 public class ServiceBlueprint {
     private Integer id;
+    private ServiceId serviceId;
     private Integer customerId;
     private Integer price;
     private String name;
@@ -33,10 +34,9 @@ public class ServiceBlueprint {
     private Date billingOn;
     private boolean newCustomerCreated = false;
 
-    public Customer initializeNewCustomer(final Label responsible) {
+    public Customer createNewCustomer() {
         final Customer customer = new Customer();
-        final ServiceId serviceId = serviceId(id);
-        if (serviceId.orderNo() != 0)
+        if (!serviceId.isFirst())
             throw new IllegalStateException("cannot create customer when the service '" + serviceId + "' is not first in contract");
         final ContractNo contractNo = serviceId.contractNo();
         customer.setName(info);
@@ -51,7 +51,6 @@ public class ServiceBlueprint {
         billing.setDeliverByEmail(true);
         billing.setFormat(InvoiceFormat.LINK);
         billing.setDeliverSigned(false);
-        billing.setResponsible(responsible);
         billing.setIsActive(true);
         billing.setStatus(BillingStatus.INVOICE);
         billing.setVariableSymbol(contractNo.value());
@@ -84,8 +83,7 @@ public class ServiceBlueprint {
 
     public Customer imprintNewServiceOn(final Customer customer) {
         customer.getBilling().setIsActive(true);
-        final ServiceId serviceId = serviceId(id);
-        if (!isNewCustomer() && isNewContract()) {
+        if (!shouldCreateNewCustomer() && isNewContract()) {
             customer.setContractNo(appendContractNo(customer.getStoredContractNo(), serviceId.contractNo()));
         }
         return customer;
@@ -104,14 +102,13 @@ public class ServiceBlueprint {
     }
 
     private void checkIfCanBuild(final Customer customer) {
-        final ServiceId serviceId = serviceId(id);
         if (customer == null)
             throw new IllegalStateException("customer cannot be null");
         if (customer.getId() == null || customer.getId() == 0)
             throw new IllegalStateException("customer id cannot be zero or null");
         if (id == null)
             throw new IllegalStateException("service id cannot be null");
-        if (!isNewCustomer() && customer.getId() != customerId.longValue())
+        if (!shouldCreateNewCustomer() && customer.getId() != customerId.longValue())
             throw new IllegalArgumentException("customer id must match service blueprint customer id");
         if (price == null)
             throw new IllegalStateException("service price cannot be null");
@@ -119,7 +116,7 @@ public class ServiceBlueprint {
             throw new IllegalStateException("service starting period cannot be null");
         if (name == null)
             throw new IllegalStateException("service name cannot be null");
-        if (!isNewContract() && isNewCustomer())
+        if (!isNewContract() && shouldCreateNewCustomer())
             throw new IllegalStateException("existing contract '" + serviceId.contractNo() + "', but customer id not set");
         if (!customer.getContact().getAddress().getCountry().equals(serviceId.country()))
             throw new IllegalStateException("cannot add service '" + serviceId.country() + "' to the customer '" +
@@ -127,10 +124,10 @@ public class ServiceBlueprint {
     }
 
     public boolean isNewContract() {
-        return serviceId(id).orderNo() == 0;
+        return serviceId.isFirst();
     }
 
-    public boolean isNewCustomer() {
+    public boolean shouldCreateNewCustomer() {
         return customerId == null || customerId == 0;
     }
 
@@ -140,6 +137,7 @@ public class ServiceBlueprint {
 
     public void setId(Integer id) {
         this.id = id;
+        this.serviceId = serviceId(id);
     }
 
     public Integer getCustomerId() {
