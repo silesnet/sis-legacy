@@ -40,7 +40,6 @@
             <property name="format" column="format"
                       type="cz.silesnet.dao.hibernate.support.InvoiceFormatHibernateUserType" />
             <property name="deliverSigned" column="deliver_signed" />
-            <many-to-one name="responsible" column="responsible_id" lazy="false" />
             <property name="isActive" column="is_active" />
             <property name="status" type="cz.silesnet.dao.hibernate.support.BillingStatusHibernateUserType" />
             <property name="accountNumber" column="account_no" length="17" />
