@@ -38,8 +38,11 @@ public class Service extends Entity implements HistoricToString {
 
     private String fInfo;
 
+    private Integer fContract;
+
     // ~ Methods
     // ----------------------------------------------------------------
+
 
     public void setConnectivity(Connectivity connectivity) {
         fConnectivity = connectivity;
@@ -152,5 +155,13 @@ public class Service extends Entity implements HistoricToString {
         if (getId() == null)
             return "";
         return serviceId(getId().intValue()).contractNo().toString();
+    }
+
+    public Integer getContract() {
+        return fContract;
+    }
+
+    public void setContract(final Integer fContract) {
+        this.fContract = fContract;
     }
 }

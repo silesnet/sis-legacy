@@ -9,6 +9,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,11 +101,12 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
     public List<Service> getByExample(Service s) {
         if (s == null)
             return null;
+        if (s.getContract() != null)
+            return getHibernateTemplate().find("from Service as s where s.contract = ?", s.getContract());
         if (s.getPeriod() != null && s.getPeriod().getTo() != null) {
-            return getHibernateTemplate().find("from Service as s where s.period.to <= ?",
-                    s.getPeriod().getTo());
+            return getHibernateTemplate().find("from Service as s where s.period.to <= ?", s.getPeriod().getTo());
         }
-        return getHibernateTemplate().find("from Service");
+        return new ArrayList<Service>(0);
     }
 
 }

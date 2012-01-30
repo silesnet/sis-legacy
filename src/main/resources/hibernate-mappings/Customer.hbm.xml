@@ -9,7 +9,6 @@
             <generator class="increment" />
         </id>
         <property name="historyId" column="history_id" not-null="true" unique="true" />
-        <property name="contractNo" column="contract_no" length="50" not-null="true" />
         <property name="name" length="80" not-null="true" />
         <property name="supplementaryName" column="supplementary_name" length="50" />
         <component name="contact">

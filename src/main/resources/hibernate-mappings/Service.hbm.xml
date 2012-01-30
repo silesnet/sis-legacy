@@ -22,5 +22,6 @@
             <property name="bps" />
         </component>
         <property name="info" length="150" />
+        <property name="contract" formula="(id % 10000000) / 100" />
     </class>
 </hibernate-mapping>
