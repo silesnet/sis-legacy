@@ -43,7 +43,7 @@
 <script type="text/javascript">
 	function clearForm(formName) {
 		document.forms[formName].elements["_filter.customer.name"].value="";
-		document.forms[formName].elements["_filter.customer.contractNo"].value="";
+		document.forms[formName].elements["_filter.service.contract"].value="";
 		document.forms[formName].elements["_filter.customer.contact.email"].value="";
 		document.forms[formName].elements["_filter.customer.contact.address.street"].value="";
 		document.forms[formName].elements["_filter.customer.contact.address.city"].value="";
