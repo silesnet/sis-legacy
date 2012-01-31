@@ -48,9 +48,3 @@ ALTER TABLE audit_items
 
 ALTER TABLE services
     ADD CONSTRAINT fk5235105e31f2d3d FOREIGN KEY (customer_id) REFERENCES customers(id);
-
-ALTER TABLE customers
-    ADD CONSTRAINT fk600e7c55793cd404 FOREIGN KEY (shire_id) REFERENCES labels(id);
-
-ALTER TABLE customers
-    ADD CONSTRAINT fk600e7c558a6d2c95 FOREIGN KEY (responsible_id) REFERENCES labels(id);

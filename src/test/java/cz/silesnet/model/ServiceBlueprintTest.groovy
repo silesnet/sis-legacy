@@ -116,7 +116,6 @@ public class ServiceBlueprintTest extends Specification {
         blueprint.buildService(customer)
     then:
         thrown IllegalStateException
-
     }
 
     def 'builds service for existing customer'() {

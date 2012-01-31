@@ -21,10 +21,9 @@
 		<xsd:attribute name="LASTLY_BILLED" use="optional" />
 		<xsd:attribute name="PUBLIC_ID" use="optional" />
 		<xsd:attribute name="DELIVER_COPY_EMAIL" use="optional" />
-		<xsd:attribute name="STATUS" use="optional" />
 		<xsd:attribute name="STREET" use="optional" />
+		<xsd:attribute name="STATUS" use="optional" />
 		<xsd:attribute name="PHONE" use="optional" />
-		<xsd:attribute name="SHIRE_ID" use="optional" />
 		<xsd:attribute name="INSERTED_ON" use="optional" />
 		<xsd:attribute name="DELIVER_BY_EMAIL" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
@@ -46,10 +45,8 @@
 		<xsd:attribute name="HISTORY_ID" use="optional" />
 		<xsd:attribute name="FORMAT" use="optional" />
 		<xsd:attribute name="UPDATED" use="optional" />
-		<xsd:attribute name="RESPONSIBLE_ID" use="optional" />
 		<xsd:attribute name="POSTAL_CODE" use="optional" />
 		<xsd:attribute name="CITY" use="optional" />
-		<xsd:attribute name="CONTRACT_NO" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="VENDORS__type">
 		<xsd:attribute name="MAC_PREFIX" use="optional" />
