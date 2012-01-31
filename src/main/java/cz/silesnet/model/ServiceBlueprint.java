@@ -40,7 +40,6 @@ public class ServiceBlueprint {
             throw new IllegalStateException("cannot create customer when the service '" + serviceId + "' is not first in contract");
         final ContractNo contractNo = serviceId.contractNo();
         customer.setName(info);
-        customer.setContractNo(contractNo.toString());
         customer.setPublicId(contractNo.toString());
         customer.getContact().getAddress().setCountry(serviceId.country());
         final Billing billing = customer.getBilling();
@@ -83,9 +82,6 @@ public class ServiceBlueprint {
 
     public Customer imprintNewServiceOn(final Customer customer) {
         customer.getBilling().setIsActive(true);
-        if (!shouldCreateNewCustomer() && isNewContract()) {
-            customer.setContractNo(appendContractNo(customer.getStoredContractNo(), serviceId.contractNo()));
-        }
         return customer;
     }
 

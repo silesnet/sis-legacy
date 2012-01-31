@@ -43,7 +43,6 @@ public class ServiceBlueprintTest extends Specification {
     expect:
         customer.id == null
         customer.name == INFO
-        customer.storedContractNo == CONTRACT_STR
         customer.publicId == CONTRACT_STR
         address.street == null
         address.city == null
@@ -127,53 +126,6 @@ public class ServiceBlueprintTest extends Specification {
         def service = blueprint.buildService(customer)
     expect:
         service.customerId == CUSTOMER_ID
-    }
-
-    def 'imprinting first contract service on existing customer appends contract no'() {
-        def blueprint = blueprintFixture()
-        def customer = new Customer()
-        customer.id = CUSTOMER_ID;
-        blueprint.buildService(customer)
-        customer.contractNo = null
-        blueprint.imprintNewServiceOn(customer)
-        def first = customer.storedContractNo
-        blueprint.imprintNewServiceOn(customer)
-        def second = customer.storedContractNo
-    expect:
-        first == CONTRACT_STR
-        second == "$CONTRACT_STR, $CONTRACT_STR"
-    }
-
-    def 'imprinting first contract service on new customer does not change contract no'() {
-        def blueprint = blueprintFixture()
-        blueprint.customerId = null;
-        def customer = new Customer()
-        customer.id = CUSTOMER_ID;
-        blueprint.buildService(customer)
-        customer.contractNo = FAKE_CONTRACT_NO
-        blueprint.imprintNewServiceOn(customer)
-        def first = customer.storedContractNo
-        blueprint.imprintNewServiceOn(customer)
-        def second = customer.storedContractNo
-    expect:
-        first == FAKE_CONTRACT_NO
-        second == FAKE_CONTRACT_NO
-    }
-
-    def 'imprinting following contract service on customer does not change contract no'() {
-        def blueprint = blueprintFixture()
-        blueprint.id = SERVICE_ID2
-        def customer = new Customer()
-        customer.id = CUSTOMER_ID;
-        blueprint.buildService(customer)
-        customer.contractNo = FAKE_CONTRACT_NO
-        blueprint.imprintNewServiceOn(customer)
-        def first = customer.storedContractNo
-        blueprint.imprintNewServiceOn(customer)
-        def second = customer.storedContractNo
-    expect:
-        first == FAKE_CONTRACT_NO
-        second == FAKE_CONTRACT_NO
     }
 
     def 'imprinting new service on customer activates customer'() {

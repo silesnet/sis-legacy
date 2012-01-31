@@ -26,8 +26,6 @@ public class Customer extends Entity implements Historic {
 
     private Long fHistoryId;
 
-    private String fContractNo;
-
     private String fName;
 
     private String fSupplementaryName;
@@ -215,14 +213,6 @@ public class Customer extends Entity implements Historic {
             contracts.add(service.getContractNo());
         contracts.remove(""); // when there is new service without contract skip it
         return StringUtils.join(contracts, ", ");
-    }
-
-    public String getStoredContractNo() {
-        return fContractNo;
-    }
-
-    public void setContractNo(String contractNo) {
-        fContractNo = contractNo;
     }
 
     public String getSupplementaryName() {

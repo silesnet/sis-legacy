@@ -86,7 +86,6 @@ public class PrepareMixture {
   public static Customer getCustomerSimple(String name) {
     Customer c = new Customer();
     c.setHistoryId(Long.valueOf(0));
-    c.setContractNo("1234/2005");
     c.setName(name);
     c.setSupplementaryName("Supplementary Test Name");
     c.setContact(getContact());

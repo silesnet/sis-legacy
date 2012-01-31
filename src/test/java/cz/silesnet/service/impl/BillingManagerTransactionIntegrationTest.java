@@ -162,7 +162,6 @@ public class BillingManagerTransactionIntegrationTest {
     private Customer customerFixture(int i) {
         Customer customer = new Customer();
         customer.setName("Customer " + i);
-        customer.setContractNo("2011/00" + i);
         customer.setPublicId("1234567" + i);
         customer.setInsertedOn(new Date());
         customer.setContact(contactFixture(i));
