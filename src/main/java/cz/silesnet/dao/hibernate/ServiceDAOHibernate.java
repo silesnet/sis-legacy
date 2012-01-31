@@ -9,10 +9,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Concrete implementation of ServiceDAO using Hibernate.
@@ -101,8 +98,15 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
     public List<Service> getByExample(Service s) {
         if (s == null)
             return null;
-        if (s.getContract() != null)
-            return getHibernateTemplate().find("from Service as s where s.contract = ?", s.getContract());
+        if (s.getContract() != null) {
+            final List<Service> services = getHibernateTemplate().find("from Service as s where s.contract = ?", s.getContract());
+            final HashMap<Long, Service> unique = new HashMap<Long, Service>();
+            for (Service service : services)
+                unique.put(service.getCustomerId(), service);
+            final List<Service> result = new ArrayList<Service>();
+            result.addAll(unique.values());
+            return result;
+        }
         if (s.getPeriod() != null && s.getPeriod().getTo() != null) {
             return getHibernateTemplate().find("from Service as s where s.period.to <= ?", s.getPeriod().getTo());
         }
