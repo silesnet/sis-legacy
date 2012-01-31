@@ -61,7 +61,7 @@ CREATE TABLE customers (
     country integer,
     email character varying(50),
     dic character varying(20),
-    contract_no character varying(50) NOT NULL,
+    contract_no character varying(50),
     connection_spot character varying(100),
     inserted_on timestamp NOT NULL,
     frequency integer,
