@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+        "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+    <bean id="sisBus" class="cz.silesnet.event.impl.SimpleEventBus">
+        <property name="consumers">
+            <list>
+                <bean class="cz.silesnet.event.impl.SimpleEventBus.ConsumerWithPattern">
+                    <property name="pattern" value="sis.service*" />
+                    <property name="consumer" ref="serviceEventConsumer" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="serviceEventConsumer" class="cz.silesnet.event.consumer.ServiceEventConsumer" />
+</beans>
