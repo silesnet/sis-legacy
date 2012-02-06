@@ -6,5 +6,5 @@ package cz.silesnet.event;
  * Time: 15:44
  */
 public interface EventConsumer {
-    void consume(PublishedEvent event);
+    void consume(Event event);
 }

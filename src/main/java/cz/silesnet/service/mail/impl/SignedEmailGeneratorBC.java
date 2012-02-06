@@ -83,7 +83,7 @@ public class SignedEmailGeneratorBC implements SignedEmailGenerator {
     bis = new BufferedInputStream(new FileInputStream(certificatePath));
     X509Certificate certificate = (X509Certificate) cf
         .generateCertificate(bis);
-    // get private key from file
+    // get private of from file
     KeyStore ks = KeyStore.getInstance("PKCS12", "SunJSSE");
     bis = new BufferedInputStream(new FileInputStream(privateKeyPath));
     ks.load(bis, privateKeyPassword.toCharArray());

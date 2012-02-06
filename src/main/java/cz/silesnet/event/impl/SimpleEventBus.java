@@ -1,6 +1,7 @@
 package cz.silesnet.event.impl;
 
 import cz.silesnet.event.*;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,29 +14,45 @@ import java.util.Map;
  * Time: 17:55
  */
 public class SimpleEventBus implements EventBus {
-    private final Map<EventKeyPattern, List<EventConsumer>> consumers = new HashMap<EventKeyPattern, List<EventConsumer>>();
+    private final Map<KeyPattern, List<EventConsumer>> consumers = new HashMap<KeyPattern, List<EventConsumer>>();
 
-    public void publish(final EventKey key, final Event event) {
-        for (EventKeyPattern pattern : consumers.keySet())
+    public void publish(final Payload payload, final Key key) {
+        final DateTime now = new DateTime();
+        for (KeyPattern pattern : consumers.keySet())
             if (pattern.matches(key))
                 for (EventConsumer consumer : consumers.get(pattern))
-                    consumer.consume(new PublishedEvent() {
-                        public EventId id() {
-                            return null;
+                    consumer.consume(new Event() {
+                        public String name() {
+                            return key.name();
                         }
 
-                        public EventKey key() {
-                            return key;
+                        public String domain() {
+                            return key.domain();
+                        }
+
+                        public DateTime timestamp() {
+                            return now;
                         }
 
                         public <T> T value(final String key, final Class<T> type) {
-                            return event.value(key, type);
+                            return payload.value(key, type);
                         }
 
+                        public String toString() {
+                            final StringBuilder builder = new StringBuilder();
+                            builder.append("[key='")
+                                    .append(key.toString())
+                                    .append("', timestamp=")
+                                    .append(now)
+                                    .append(", ")
+                                    .append(payload.toString())
+                                    .append("]");
+                            return builder.toString();
+                        }
                     });
     }
 
-    public void subscribe(final EventConsumer consumer, final EventKeyPattern pattern) {
+    public void subscribe(final EventConsumer consumer, final KeyPattern pattern) {
         if (!consumers.containsKey(pattern))
             consumers.put(pattern, new ArrayList<EventConsumer>());
         consumers.get(pattern).add(consumer);
@@ -52,7 +69,7 @@ public class SimpleEventBus implements EventBus {
 
     public static class ConsumerWithPattern {
         private EventConsumer consumer;
-        private EventKeyPattern pattern;
+        private KeyPattern pattern;
 
         public ConsumerWithPattern() { }
 
@@ -60,8 +77,8 @@ public class SimpleEventBus implements EventBus {
             this.consumer = consumer;
         }
 
-        public void setPattern(final String pattern) {
-            this.pattern = new EventKeyPattern(pattern);
+        public void setPattern(final String regex) {
+            this.pattern = KeyPattern.of(regex);
         }
 
     }

@@ -1,6 +1,6 @@
 package cz.silesnet.event.support;
 
-import cz.silesnet.event.Event;
+import cz.silesnet.event.Payload;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -12,25 +12,19 @@ import java.util.Map;
  * Date: 5.2.12
  * Time: 16:07
  */
-public class JsonEvent implements Event {
+public class JsonPayload implements Payload {
     private final String text;
     private final Map<String, Object> map;
-
-    private JsonEvent(final Map<String, Object> map) {
-        this.map = map;
-        final ObjectMapper mapper = new ObjectMapper();
-        try {
-            this.text = mapper.writeValueAsString(map);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public static JsonEvent parse(final String text) {
+    public static JsonPayload of(final Map map) {
+        return new JsonPayload(map);
+    }
+
+    public static JsonPayload parse(final String text) {
         final ObjectMapper mapper = new ObjectMapper();
         final Map map;
         try {
@@ -38,7 +32,7 @@ public class JsonEvent implements Event {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new JsonEvent(map);
+        return new JsonPayload(map);
     }
 
     public <T> T value(final String key, final Class<T> type) {
@@ -49,13 +43,23 @@ public class JsonEvent implements Event {
         return text;
     }
 
+    private JsonPayload(final Map map) {
+        this.map = map;
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            this.text = mapper.writeValueAsString(map);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static class Builder {
-        private Map<String, Object> map = new HashMap<String, Object>();
+        private Map map = new HashMap();
 
         private Builder() { }
 
-        public JsonEvent build() {
-            return new JsonEvent(map);
+        public JsonPayload build() {
+            return new JsonPayload(map);
         }
 
         public Builder add(final String key, final String value) {
@@ -63,7 +67,7 @@ public class JsonEvent implements Event {
             return this;
         }
 
-        public Builder add(final Map<String, Object> map) {
+        public Builder add(final Map map) {
             this.map.putAll(map);
             return this;
         }

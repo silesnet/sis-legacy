@@ -72,7 +72,7 @@ public class H2DbSupport extends DbSupport {
      * Gets the names of all primary columns of the given table.
      *
      * @param tableName The table, not null
-     * @return The names of the primary key columns of the table with the given
+     * @return The names of the primary of columns of the table with the given
      *         name
      */
     @Override

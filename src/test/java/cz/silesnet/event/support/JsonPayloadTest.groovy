@@ -7,33 +7,33 @@ import spock.lang.Specification
  * Date: 5.2.12
  * Time: 16:11
  */
-class JsonEventTest extends Specification {
+class JsonPayloadTest extends Specification {
     def 'should build from key-value pairs'() {
-        def event = JsonEvent.builder().add("key", "value").build()
+        def event = JsonPayload.builder().add("key", "value").build()
     expect:
         event.toString() == '{"key":"value"}'
     }
 
     def 'should build from map'() {
-        def event = JsonEvent.builder().add(key: 'value').build()
+        def event = JsonPayload.builder().add(key: 'value').build()
     expect:
         event.toString() == '{"key":"value"}'
     }
 
     def 'should parse json'() {
-        def event = JsonEvent.parse('{"key":"value"}')
+        def event = JsonPayload.parse('{"key":"value"}')
     expect:
         event.toString() == '{"key":"value"}'
     }
 
     def 'should return value by key'() {
-        def event = JsonEvent.parse('{"key":"value"}')
+        def event = JsonPayload.parse('{"key":"value"}')
     expect:
         event.value('key', String) == 'value'
     }
 
     def 'should return typed value by key'() {
-        def event = JsonEvent.parse('{"key":1}')
+        def event = JsonPayload.parse('{"key":1}')
     expect:
         event.value('key', Integer) instanceof Integer
     }

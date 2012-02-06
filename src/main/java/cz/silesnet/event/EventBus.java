@@ -6,9 +6,9 @@ package cz.silesnet.event;
  * Time: 15:41
  */
 public interface EventBus {
-    void publish(EventKey key, Event event);
+    void publish(Payload payload, Key key);
 
-    void subscribe(EventConsumer consumer, EventKeyPattern pattern);
+    void subscribe(EventConsumer consumer, KeyPattern pattern);
 
     void unsubscribe(EventConsumer consumer);
 }

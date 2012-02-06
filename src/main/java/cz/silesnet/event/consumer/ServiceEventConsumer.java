@@ -1,7 +1,7 @@
 package cz.silesnet.event.consumer;
 
 import cz.silesnet.event.EventConsumer;
-import cz.silesnet.event.PublishedEvent;
+import cz.silesnet.event.Event;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,7 +14,7 @@ public class ServiceEventConsumer implements EventConsumer {
 
     protected final Log log = LogFactory.getLog(getClass());
 
-    public void consume(final PublishedEvent event) {
-        log.debug("consumed '" + event.key() + "' " + event.toString());
+    public void consume(final Event event) {
+        log.debug("consumed " + event.toString());
     }
 }
