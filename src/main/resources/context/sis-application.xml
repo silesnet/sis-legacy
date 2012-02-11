@@ -8,6 +8,7 @@
   <import resource="sis-db.xml" />
   <import resource="sis-hibernate.xml" />
   <import resource="sis-dao.xml" />
+  <import resource="sis-bus.xml" />
   <import resource="sis-transaction.xml" />
   <import resource="sis-service.xml" />
   <import resource="sis-servlet.xml" />

@@ -12,9 +12,9 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ServiceEventConsumer implements EventConsumer {
 
-    protected final Log log = LogFactory.getLog(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     public void consume(final Event event) {
-        log.debug("consumed " + event.toString());
+        log.info("consumed " + event.toString());
     }
 }

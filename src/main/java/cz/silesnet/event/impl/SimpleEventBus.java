@@ -1,7 +1,11 @@
 package cz.silesnet.event.impl;
 
 import cz.silesnet.event.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +17,9 @@ import java.util.Map;
  * Date: 5.2.12
  * Time: 17:55
  */
-public class SimpleEventBus implements EventBus {
+public class SimpleEventBus implements EventBus, BeanPostProcessor {
     private final Map<KeyPattern, List<EventConsumer>> consumers = new HashMap<KeyPattern, List<EventConsumer>>();
+    private final Log log = LogFactory.getLog(getClass());
 
     public void publish(final Payload payload, final Key key) {
         final DateTime now = new DateTime();
@@ -65,6 +70,19 @@ public class SimpleEventBus implements EventBus {
 
     public void unsubscribe(final EventConsumer consumer) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Object postProcessBeforeInitialization(final Object o, final String s) throws BeansException {
+        return o;
+    }
+
+    public Object postProcessAfterInitialization(final Object o, final String s) throws BeansException {
+        if (o instanceof ConsumerWithPattern) {
+            ConsumerWithPattern consumerWithPattern = (ConsumerWithPattern) o;
+            subscribe(consumerWithPattern.consumer, consumerWithPattern.pattern);
+            log.debug("subscribed '" + s + "' as event bus consumer");
+        }
+        return o;
     }
 
     public static class ConsumerWithPattern {

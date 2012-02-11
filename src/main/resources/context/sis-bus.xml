@@ -3,16 +3,13 @@
         "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 
-    <bean id="sisBus" class="cz.silesnet.event.impl.SimpleEventBus">
-        <property name="consumers">
-            <list>
-                <bean class="cz.silesnet.event.impl.SimpleEventBus.ConsumerWithPattern">
-                    <property name="pattern" value="sis.service*" />
-                    <property name="consumer" ref="serviceEventConsumer" />
-                </bean>
-            </list>
+    <bean id="eventBus" class="cz.silesnet.event.impl.SimpleEventBus" />
+
+    <bean id="serviceEventConsumer" class="cz.silesnet.event.impl.SimpleEventBus.ConsumerWithPattern">
+        <property name="pattern" value="sis.service*" />
+        <property name="consumer">
+            <bean class="cz.silesnet.event.consumer.ServiceEventConsumer" />
         </property>
     </bean>
 
-    <bean id="serviceEventConsumer" class="cz.silesnet.event.consumer.ServiceEventConsumer" />
 </beans>

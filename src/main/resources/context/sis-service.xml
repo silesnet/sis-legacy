@@ -80,6 +80,9 @@
                 <property name="labelDAO">
                     <ref bean="labelDAO" />
                 </property>
+                <property name="eventBus">
+                    <ref bean="eventBus" />
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">

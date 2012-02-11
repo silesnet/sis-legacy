@@ -4,6 +4,9 @@ import cz.silesnet.dao.BillDAO;
 import cz.silesnet.dao.CustomerDAO;
 import cz.silesnet.dao.LabelDAO;
 import cz.silesnet.dao.ServiceDAO;
+import cz.silesnet.event.EventBus;
+import cz.silesnet.event.Key;
+import cz.silesnet.event.support.JsonPayload;
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
@@ -37,6 +40,8 @@ public class CustomerManagerImpl implements CustomerManager {
     private SettingManager settingMgr;
 
     private LabelDAO labelDAO;
+
+    private EventBus eventBus;
 
     public Customer get(Long customerId) {
         return dao.get(customerId);
@@ -208,6 +213,7 @@ public class CustomerManagerImpl implements CustomerManager {
                     sIt.set(service);
                     // persist change
                     update(c);
+                    eventBus.publish(JsonPayload.builder().add("id", service.getId().toString()).build(), Key.of("sis.serviceUpdated"));
                     found = true;
                     break;
                 }
@@ -423,5 +429,9 @@ public class CustomerManagerImpl implements CustomerManager {
 
     public void setLabelDAO(LabelDAO labelDAO) {
         this.labelDAO = labelDAO;
+    }
+
+    public void setEventBus(final EventBus eventBus) {
+        this.eventBus = eventBus;
     }
 }
