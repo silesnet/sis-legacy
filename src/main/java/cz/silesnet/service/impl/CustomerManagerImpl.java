@@ -213,7 +213,7 @@ public class CustomerManagerImpl implements CustomerManager {
                     sIt.set(service);
                     // persist change
                     update(c);
-                    eventBus.publish(JsonPayload.builder().add("id", service.getId().toString()).build(), Key.of("sis.serviceUpdated"));
+                    eventBus.publish(JsonPayload.builder().add("id", service.getId()).build(), Key.of("sis.serviceUpdated"));
                     found = true;
                     break;
                 }

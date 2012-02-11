@@ -8,7 +8,11 @@
     <bean id="serviceEventConsumer" class="cz.silesnet.event.impl.SimpleEventBus.ConsumerWithPattern">
         <property name="pattern" value="sis.service*" />
         <property name="consumer">
-            <bean class="cz.silesnet.event.consumer.ServiceEventConsumer" />
+            <bean class="cz.silesnet.event.consumer.ServiceEventConsumer">
+                <property name="customerManager">
+                    <ref bean="customerManager" />
+                </property>
+            </bean>
         </property>
     </bean>
 

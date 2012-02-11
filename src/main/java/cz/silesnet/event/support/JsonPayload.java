@@ -62,7 +62,7 @@ public class JsonPayload implements Payload {
             return new JsonPayload(map);
         }
 
-        public Builder add(final String key, final String value) {
+        public Builder add(final String key, final Object value) {
             map.put(key, value);
             return this;
         }
