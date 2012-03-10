@@ -13,6 +13,7 @@
   <import resource="sis-service.xml" />
   <import resource="sis-servlet.xml" />
   <import resource="sis-security.xml" />
+  <import resource="sis-rest.xml" />
   <import resource="sis-schedule.xml" />
   <import resource="sis-messages.xml" />
   <import resource="sis-template.xml" />
