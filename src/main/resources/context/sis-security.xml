@@ -16,6 +16,7 @@
             <sec:filter-chain pattern="/login.jsp*" filters="channelProcessingFilter,securityContextPersistenceFilter" />
             <sec:filter-chain pattern="/logout.jsp*" filters="channelProcessingFilter,securityContextPersistenceFilter" />
             <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="securityContextPersistenceFilter" />
+            <sec:filter-chain pattern="/rest/**" filters="channelProcessingFilter" />
             <sec:filter-chain pattern="/**" filters="
                 channelProcessingFilter,
                 securityContextPersistenceFilter,
