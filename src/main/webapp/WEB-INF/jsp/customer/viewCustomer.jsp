@@ -71,7 +71,7 @@
 		<display:column titleKey="app.fNo">
 			${row_rowNum}</display:column>
 		<display:column titleKey="Service.fName" property="shortInfo" />
-		<display:column titleKey="Service.fContractNo" property="contractNo" />
+		<display:column titleKey="Service.fId" property="id" />
 		<display:column titleKey="Service.fPeriod.fFrom">
 			<fmt:formatDate value="${row.period.from}" /></display:column>
 		<display:column titleKey="Service.fPeriod.fTo">
