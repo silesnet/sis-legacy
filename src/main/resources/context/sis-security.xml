@@ -5,7 +5,7 @@
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.0.3.xsd"
- >
+        >
 
     <bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
         <sec:filter-chain-map path-type="ant">
@@ -13,16 +13,25 @@
             <sec:filter-chain pattern="/img/**" filters="none" />
             <sec:filter-chain pattern="/js/**" filters="none" />
             <sec:filter-chain pattern="/favicon.ico" filters="none" />
-            <sec:filter-chain pattern="/login.jsp*" filters="channelProcessingFilter,securityContextPersistenceFilter" />
-            <sec:filter-chain pattern="/logout.jsp*" filters="channelProcessingFilter,securityContextPersistenceFilter" />
-            <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="securityContextPersistenceFilter" />
-            <sec:filter-chain pattern="/rest/**" filters="channelProcessingFilter" />
+            <sec:filter-chain pattern="/login.jsp*" filters="
+                                                channelProcessingFilter,
+                                                securityContextPersistenceFilter" />
+            <sec:filter-chain pattern="/logout.jsp*" filters="
+                                                channelProcessingFilter,
+                                                securityContextPersistenceFilter" />
+            <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="
+                                                    securityContextPersistenceFilter" />
+            <sec:filter-chain pattern="/rest/**" filters="
+                                                channelProcessingFilter,
+                                                keyAuthenticationFilter,
+                                                exceptionTranslationFilter,
+                                                filterSecurityInterceptor" />
             <sec:filter-chain pattern="/**" filters="
-                channelProcessingFilter,
-                securityContextPersistenceFilter,
-                usernamePasswordAuthenticationFilter,
-                exceptionTranslationFilter,
-                filterSecurityInterceptor" />
+                                                channelProcessingFilter,
+                                                securityContextPersistenceFilter,
+                                                usernamePasswordAuthenticationFilter,
+                                                exceptionTranslationFilter,
+                                                filterSecurityInterceptor" />
         </sec:filter-chain-map>
     </bean>
 
@@ -43,9 +52,11 @@
         </property>
     </bean>
 
-    <bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+    <bean id="securityContextPersistenceFilter"
+          class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
 
-    <bean id="usernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+    <bean id="usernamePasswordAuthenticationFilter"
+          class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
         <property name="authenticationManager" ref="authenticationManager" />
         <property name="filterProcessesUrl" value="/j_spring_security_check" />
         <property name="authenticationSuccessHandler">
@@ -80,9 +91,13 @@
                 <property name="loginFormUrl" value="/login.jsp" />
             </bean>
         </property>
+        <property name="accessDeniedHandler">
+            <bean class="org.springframework.security.web.access.AccessDeniedHandlerImpl" />
+        </property>
     </bean>
 
-    <bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+    <bean id="filterSecurityInterceptor"
+          class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
         <property name="authenticationManager" ref="authenticationManager" />
         <property name="accessDecisionManager">
             <bean class="org.springframework.security.access.vote.AffirmativeBased">
@@ -101,6 +116,7 @@
                 <sec:intercept-url pattern="/service/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" />
                 <sec:intercept-url pattern="/service/edit.html*" access="ROLE_ACCOUNTING" />
                 <sec:intercept-url pattern="/billing/*" access="ROLE_ACCOUNTING" />
+                <sec:intercept-url pattern="/rest/bus/status**" access="ROLE_ANONYMOUS" />
                 <sec:intercept-url pattern="/**" access="ROLE_USER" />
             </sec:filter-security-metadata-source>
         </property>
@@ -109,5 +125,6 @@
     <bean id="loginListener" class="cz.silesnet.web.LoginListener">
         <property name="userManager" ref="userManager" />
     </bean>
-
+    <bean id="keyAuthenticationFilter" class="cz.silesnet.web.rest.KeyAuthenticationProcessingFilter">
+    </bean>
 </beans>
