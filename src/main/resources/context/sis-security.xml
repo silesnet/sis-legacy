@@ -126,5 +126,8 @@
         <property name="userManager" ref="userManager" />
     </bean>
     <bean id="keyAuthenticationFilter" class="cz.silesnet.web.rest.KeyAuthenticationProcessingFilter">
+        <property name="userDao">
+            <ref bean="userDAO" />
+        </property>
     </bean>
 </beans>

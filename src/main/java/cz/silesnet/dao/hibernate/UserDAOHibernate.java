@@ -21,64 +21,71 @@ import java.util.List;
  */
 public class UserDAOHibernate extends HibernateDaoSupport implements UserDAO {
 
-  // ~ Static fields/initializers
-  // ---------------------------------------------
+    // ~ Static fields/initializers
+    // ---------------------------------------------
 
-  protected static final Log log = LogFactory.getLog(DiffUtils.class);
+    protected static final Log log = LogFactory.getLog(DiffUtils.class);
 
-  // ~ Methods
-  // ----------------------------------------------------------------
+    // ~ Methods
+    // ----------------------------------------------------------------
 
-  public User getUserById(Long userId) {
-    User user = (User) getHibernateTemplate().get(User.class, userId);
+    public User getUserById(Long userId) {
+        User user = (User) getHibernateTemplate().get(User.class, userId);
 
-    if (user == null)
-      throw new ObjectRetrievalFailureException(User.class, userId);
+        if (user == null)
+            throw new ObjectRetrievalFailureException(User.class, userId);
 
-    return user;
-  }
+        return user;
+    }
 
-  public User getUserByLoginName(String loginName) {
-    ArrayList result = (ArrayList) getHibernateTemplate().find(
-        "from cz.silesnet.model.User as user where user.loginName=?",
-        loginName);
+    public User getUserByLoginName(String loginName) {
+        ArrayList result = (ArrayList) getHibernateTemplate().find(
+                "from cz.silesnet.model.User as user where user.loginName=?",
+                loginName);
 
-    // login name is unique man
-    if ((result.size() == 0) || (result.size() > 1))
-      throw new ObjectRetrievalFailureException(User.class, loginName);
+        // login name is unique man
+        if ((result.size() == 0) || (result.size() > 1))
+            throw new ObjectRetrievalFailureException(User.class, loginName);
 
-    return (User) result.get(0);
-  }
+        return (User) result.get(0);
+    }
 
-  public List getUsers() {
-    return getHibernateTemplate().find("from cz.silesnet.model.User");
-  }
+    public User getUserByPassword(final String password) {
+        final List result = getHibernateTemplate().find("from cz.silesnet.model.User as user where user.password=?", password);
+        if (result.size() == 0)
+            throw new ObjectRetrievalFailureException(User.class, password);
+        return (User) result.get(0);
+    }
 
-  public UserDetails loadUserByUsername(String userName)
-      throws UsernameNotFoundException, DataAccessException {
-    log.debug("Loading user by userName (AuthenticationDao).");
+    public List getUsers() {
+        return getHibernateTemplate().find("from cz.silesnet.model.User");
+    }
 
-    ArrayList<User> result = (ArrayList<User>) getHibernateTemplate().find(
-        "from cz.silesnet.model.User as user where user.loginName=?",
-        userName);
+    public UserDetails loadUserByUsername(String userName)
+            throws UsernameNotFoundException, DataAccessException {
+        log.debug("Loading user by userName (AuthenticationDao).");
 
-    // login name is unique man
-    if ((result.size() == 0) || (result.size() > 1))
-      throw new UsernameNotFoundException(userName);
+        ArrayList<User> result = (ArrayList<User>) getHibernateTemplate().find(
+                "from cz.silesnet.model.User as user where user.loginName=?",
+                userName);
 
-    User user = result.get(0);
+        // login name is unique man
+        if ((result.size() == 0) || (result.size() > 1))
+            throw new UsernameNotFoundException(userName);
 
-    if (user.getAuthorities().size() == 0)
-      new UsernameNotFoundException(userName);
+        User user = result.get(0);
 
-    return (UserDetails) user;
-  }
+        if (user.getAuthorities().size() == 0)
+            new UsernameNotFoundException(userName);
 
-  public void removeUser(Long userId) {
-    getHibernateTemplate().delete(getUserById(userId));
-  }
+        return (UserDetails) user;
+    }
 
-  public void saveUser(User user) {
-    getHibernateTemplate().saveOrUpdate(user);
-  }
+    public void removeUser(Long userId) {
+        getHibernateTemplate().delete(getUserById(userId));
+    }
+
+    public void saveUser(User user) {
+        getHibernateTemplate().saveOrUpdate(user);
+    }
 }

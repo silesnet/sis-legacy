@@ -13,99 +13,138 @@ import static org.hamcrest.MatcherAssert.*;
 
 public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
 
-  @Test
-  public void testGetUserByLoginName() {
-    // have new user
-    User u = new User();
-    u.setLoginName("user1");
-    u.setPassword("pass1");
-    u.setName("UserName");
+    @Test
+    public void testGetUserByLoginName() {
+        // have new user
+        User u = new User();
+        u.setLoginName("user1");
+        u.setPassword("pass1");
+        u.setName("UserName");
 
-    // save user
-    log.debug("Saving user: " + u);
+        // save user
+        log.debug("Saving user: " + u);
 
-    dao.saveUser(u);
+        dao.saveUser(u);
 
-    // get user by login name
-    log.debug("Getting previously saved user by login name");
+        // get user by login name
+        log.debug("Getting previously saved user by login name");
 
-    User u2 = dao.getUserByLoginName(u.getLoginName());
+        User u2 = dao.getUserByLoginName(u.getLoginName());
 
-    assertThat(u2, is(not(nullValue())));
-    assertThat(u.getId(), is(u2.getId()));
+        assertThat(u2, is(not(nullValue())));
+        assertThat(u.getId(), is(u2.getId()));
 
-    User u3 = null;
+        User u3 = null;
 
-    try {
-      u3 = dao.getUserByLoginName("fido");
-      assertThat("this user does not exist.", true, is(false));
+        try {
+            u3 = dao.getUserByLoginName("fido");
+            assertThat("this user does not exist.", true, is(false));
+        } catch (ObjectRetrievalFailureException e) {
+            log.debug("caught expected exception: " + e);
+        }
+
+        assertThat(u3, is(nullValue()));
+
+        // remove saved user
+        log.debug("Removing user: " + u.getId());
+
+        dao.removeUser(Long.valueOf(u.getId()));
     }
-    catch (ObjectRetrievalFailureException e) {
-      log.debug("caught expected exception: " + e);
+    
+    @Test
+    public void testSaveRemoveUser() {
+        // have new user
+        User u = new User();
+        u.setLoginName("user1");
+        u.setPassword("pass1");
+        u.setName("UserName");
+
+        // save user
+        log.debug("saving user: " + u);
+
+        dao.saveUser(u);
+
+        // remove saved user
+        log.debug("removing user: " + u.getId());
+
+        dao.removeUser(Long.valueOf(u.getId()));
     }
 
-    assertThat(u3, is(nullValue()));
+    @Test
+    public void testUserDetails() {
 
-    // remove saved user
-    log.debug("Removing user: " + u.getId());
+        User user = new User();
+        user.setLoginName("fido");
+        user.setPassword("dido");
+        user.setRoles("    ROLE_USER  , ROLE_STORE  ");
+        user.setName("Fido Dido");
 
-    dao.removeUser(Long.valueOf(u.getId()));
-  }
+        log.debug("Saving user: " + user);
+        dao.saveUser(user);
 
-  @Test
-  public void testSaveRemoveUser() {
-    // have new user
-    User u = new User();
-    u.setLoginName("user1");
-    u.setPassword("pass1");
-    u.setName("UserName");
+        user = null;
 
-    // save user
-    log.debug("saving user: " + u);
+        user = dao.getUserByLoginName("fido");
+        log.debug("Retrieved user: " + user);
+        log.debug("Granted authorities: ");
 
-    dao.saveUser(u);
+        Collection<GrantedAuthority> authorities = user.getAuthorities();
 
-    // remove saved user
-    log.debug("removing user: " + u.getId());
+        for (GrantedAuthority authority : authorities)
+            log.debug("Authority: " + authority);
 
-    dao.removeUser(Long.valueOf(u.getId()));
-  }
+        // once more should be without initialization
+        log.debug("Once more without initialization....");
+        log.debug("Granted authorities: ");
+        authorities = user.getAuthorities();
 
-  @Test
-  public void testUserDetails() {
+        for (GrantedAuthority authority : authorities)
+            log.debug("Authority: " + authority);
 
-    User user = new User();
-    user.setLoginName("fido");
-    user.setPassword("dido");
-    user.setRoles("    ROLE_USER  , ROLE_STORE  ");
-    user.setName("Fido Dido");
+        // test DaoAuthentication
+        UserDetails ud = dao.loadUserByUsername("fido");
+        log.debug("Retrieved user by auhenticationDao..." + ud);
 
-    log.debug("Saving user: " + user);
-    dao.saveUser(user);
+        dao.removeUser(user.getId());
+    }
 
-    user = null;
+    @Test
+    public void testGetUserByPassword() {
+        // have new user
+        User u = new User();
+        u.setLoginName("user1");
+        u.setPassword("pass1");
+        u.setName("UserName");
 
-    user = dao.getUserByLoginName("fido");
-    log.debug("Retrieved user: " + user);
-    log.debug("Granted authorities: ");
+        // save user
+        log.debug("Saving user: " + u);
 
-    Collection<GrantedAuthority> authorities = user.getAuthorities();
+        dao.saveUser(u);
 
-    for (GrantedAuthority authority : authorities)
-      log.debug("Authority: " + authority);
+        // get user by login name
+        log.debug("Getting previously saved user by password name");
 
-    // once more should be without initialization
-    log.debug("Once more without initialization....");
-    log.debug("Granted authorities: ");
-    authorities = user.getAuthorities();
+        User u2 = dao.getUserByPassword(u.getPassword());
 
-    for (GrantedAuthority authority : authorities)
-      log.debug("Authority: " + authority);
+        assertThat(u2, is(not(nullValue())));
+        assertThat(u.getId(), is(u2.getId()));
 
-    // test DaoAuthentication
-    UserDetails ud = dao.loadUserByUsername("fido");
-    log.debug("Retrieved user by auhenticationDao..." + ud);
+        User u3 = null;
 
-    dao.removeUser(user.getId());
-  }
+        try {
+            u3 = dao.getUserByPassword("fido");
+            assertThat("this user does not exist.", true, is(false));
+        } catch (ObjectRetrievalFailureException e) {
+            log.debug("caught expected exception: " + e);
+        }
+
+        assertThat(u3, is(nullValue()));
+
+        // remove saved user
+        log.debug("Removing user: " + u.getId());
+
+        dao.removeUser(Long.valueOf(u.getId()));
+    }
+
+
 }

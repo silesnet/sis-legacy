@@ -1,7 +1,10 @@
 package cz.silesnet.web.rest;
 
+import cz.silesnet.dao.UserDAO;
+import cz.silesnet.model.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
@@ -25,17 +28,32 @@ import java.util.LinkedList;
 public class KeyAuthenticationProcessingFilter extends GenericFilterBean {
 
     private final static GrantedAuthority ROLE_ANONYMOUS = new GrantedAuthorityImpl("ROLE_ANONYMOUS");
-    private final static GrantedAuthority ROLE_USER = new GrantedAuthorityImpl("ROLE_USER");
 
     private final Log log = LogFactory.getLog(getClass());
 
+    private UserDAO userDao;
+
+    public void setUserDao(final UserDAO userDao) {
+        this.userDao = userDao;
+    }
+
     public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain filterChain) throws IOException, ServletException {
         final Collection<GrantedAuthority> authorities = new LinkedList<GrantedAuthority>();
+        String name = "anonymous";
         authorities.add(ROLE_ANONYMOUS);
         final String key = ServletRequestUtils.getStringParameter(servletRequest, "key");
-        if (key != null)
-            authorities.add(ROLE_USER);
-
+        log.info("authenticating user by key: '" + key + "'");
+        if (key != null) {
+            try {
+                final User user = userDao.getUserByPassword(key);
+                name = user.getName();
+                authorities.addAll(user.getAuthorities());
+                log.info("authenticated user " + user);
+            } catch (ObjectRetrievalFailureException e) {
+                log.info("authentication failed, assuming default anonymous authentification");
+            }
+        }
+        final String finalName = name;
         final Authentication authentication = new Authentication() {
             public Collection<GrantedAuthority> getAuthorities() {
                 return authorities;
@@ -50,7 +68,7 @@ public class KeyAuthenticationProcessingFilter extends GenericFilterBean {
             }
 
             public Object getPrincipal() {
-                return "anonymous";
+                return finalName;
             }
 
             public boolean isAuthenticated() {
@@ -62,7 +80,7 @@ public class KeyAuthenticationProcessingFilter extends GenericFilterBean {
             }
 
             public String getName() {
-                return "anonymous";
+                return finalName;
             }
         };
         SecurityContextHolder.getContext().setAuthentication(authentication);
