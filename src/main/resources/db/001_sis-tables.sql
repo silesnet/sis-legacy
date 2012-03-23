@@ -143,7 +143,8 @@ CREATE TABLE users (
     login character varying(255) NOT NULL,
     passwd character varying(255),
     name character varying(255) NOT NULL,
-    roles character varying(255)
+    roles character varying(255),
+    key character varying(255)
 );
 
 CREATE TABLE vendors (

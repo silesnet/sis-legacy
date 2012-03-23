@@ -50,10 +50,10 @@ public class UserDAOHibernate extends HibernateDaoSupport implements UserDAO {
         return (User) result.get(0);
     }
 
-    public User getUserByPassword(final String password) {
-        final List result = getHibernateTemplate().find("from cz.silesnet.model.User as user where user.password=?", password);
-        if (result.size() == 0)
-            throw new ObjectRetrievalFailureException(User.class, password);
+    public User getUserByKey(final String key) {
+        final List result = getHibernateTemplate().find("from cz.silesnet.model.User as user where user.key=?", key);
+        if ((result.size() == 0) || (result.size() > 1))
+            throw new ObjectRetrievalFailureException(User.class, key);
         return (User) result.get(0);
     }
 

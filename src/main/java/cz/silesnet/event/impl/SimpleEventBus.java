@@ -6,6 +6,8 @@ import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,11 @@ public class SimpleEventBus implements EventBus, BeanPostProcessor {
 
     public void publish(final Payload payload, final Key key) {
         final DateTime now = new DateTime();
+        String principal = "anonymous";
+        final SecurityContext securityContext = SecurityContextHolder.getContext();
+        if (securityContext.getAuthentication() != null)
+            principal = securityContext.getAuthentication().getPrincipal().toString();
+        final String user = principal;
         for (KeyPattern pattern : consumers.keySet())
             if (pattern.matches(key))
                 for (EventConsumer consumer : consumers.get(pattern))
@@ -33,6 +40,10 @@ public class SimpleEventBus implements EventBus, BeanPostProcessor {
 
                         public String domain() {
                             return key.domain();
+                        }
+
+                        public String user() {
+                            return user;
                         }
 
                         public DateTime timestamp() {
@@ -47,6 +58,8 @@ public class SimpleEventBus implements EventBus, BeanPostProcessor {
                             final StringBuilder builder = new StringBuilder();
                             builder.append("[key='")
                                     .append(key.toString())
+                                    .append("', user='")
+                                    .append(user)
                                     .append("', timestamp=")
                                     .append(now)
                                     .append(", ")

@@ -124,7 +124,7 @@ public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
         // get user by login name
         log.debug("Getting previously saved user by password name");
 
-        User u2 = dao.getUserByPassword(u.getPassword());
+        User u2 = dao.getUserByKey(u.getPassword());
 
         assertThat(u2, is(not(nullValue())));
         assertThat(u.getId(), is(u2.getId()));
@@ -132,7 +132,7 @@ public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
         User u3 = null;
 
         try {
-            u3 = dao.getUserByPassword("fido");
+            u3 = dao.getUserByKey("fido");
             assertThat("this user does not exist.", true, is(false));
         } catch (ObjectRetrievalFailureException e) {
             log.debug("caught expected exception: " + e);

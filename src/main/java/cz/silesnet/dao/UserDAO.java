@@ -19,7 +19,7 @@ public interface UserDAO extends DAO, UserDetailsService {
 
     public User getUserByLoginName(String loginName);
 
-    public User getUserByPassword(String password);
+    public User getUserByKey(String key);
     
     public List getUsers();
 

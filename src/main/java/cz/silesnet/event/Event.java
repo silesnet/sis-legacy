@@ -12,5 +12,7 @@ public interface Event extends Payload {
 
     String domain();
 
+    String user();
+
     DateTime timestamp();
 }

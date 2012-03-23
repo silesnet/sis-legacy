@@ -28,6 +28,8 @@ import java.util.LinkedList;
 public class KeyAuthenticationProcessingFilter extends GenericFilterBean {
 
     private final static GrantedAuthority ROLE_ANONYMOUS = new GrantedAuthorityImpl("ROLE_ANONYMOUS");
+    private static final String ANONYMOUS_NAME = "anonymous";
+    private static final String AUTHENTICATION_KEY = "key";
 
     private final Log log = LogFactory.getLog(getClass());
 
@@ -39,18 +41,18 @@ public class KeyAuthenticationProcessingFilter extends GenericFilterBean {
 
     public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain filterChain) throws IOException, ServletException {
         final Collection<GrantedAuthority> authorities = new LinkedList<GrantedAuthority>();
-        String name = "anonymous";
+        String name = ANONYMOUS_NAME;
         authorities.add(ROLE_ANONYMOUS);
-        final String key = ServletRequestUtils.getStringParameter(servletRequest, "key");
-        log.info("authenticating user by key: '" + key + "'");
+        final String key = ServletRequestUtils.getStringParameter(servletRequest, AUTHENTICATION_KEY);
+        log.debug("authenticating user by key: '" + key + "'");
         if (key != null) {
             try {
-                final User user = userDao.getUserByPassword(key);
+                final User user = userDao.getUserByKey(key);
                 name = user.getName();
                 authorities.addAll(user.getAuthorities());
-                log.info("authenticated user " + user);
+                log.debug("authenticated user " + user);
             } catch (ObjectRetrievalFailureException e) {
-                log.info("authentication failed, assuming default anonymous authentification");
+                log.debug("authentication failed, assuming default anonymous authentication");
             }
         }
         final String finalName = name;

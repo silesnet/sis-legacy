@@ -27,6 +27,7 @@ class SimpleEventBusTest extends Specification {
         event.name() == 'b'
         event.domain() == 'a'
         event.value('key', String) == 'value'
+        event.user() == 'anonymous'
         println event
     }
 
@@ -40,12 +41,5 @@ class SimpleEventBusTest extends Specification {
         bus.consumers = [consumerWithPattern]
     expect:
         bus.consumers.size() == 1
-    }
-
-    def 'should instantiate from spring context file'() {
-        def context = new ClassPathXmlApplicationContext('context/sis-bus.xml')
-        def bus = context.getBean("sisBus", EventBus)
-    expect:
-        bus != null
     }
 }

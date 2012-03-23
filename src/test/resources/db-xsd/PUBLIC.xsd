@@ -101,6 +101,7 @@
 		<xsd:attribute name="LOGIN" use="optional" />
 		<xsd:attribute name="PASSWD" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="KEY" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="BILL_ITEMS__type">
 		<xsd:attribute name="IS_DISPLAY_UNIT" use="optional" />
