@@ -1,6 +1,7 @@
 package cz.silesnet.event.impl;
 
 import cz.silesnet.event.*;
+import cz.silesnet.util.SecurityUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -25,11 +26,7 @@ public class SimpleEventBus implements EventBus, BeanPostProcessor {
 
     public void publish(final Payload payload, final Key key) {
         final DateTime now = new DateTime();
-        String principal = "anonymous";
-        final SecurityContext securityContext = SecurityContextHolder.getContext();
-        if (securityContext.getAuthentication() != null)
-            principal = securityContext.getAuthentication().getPrincipal().toString();
-        final String user = principal;
+        final String user = SecurityUtils.currentUser();
         for (KeyPattern pattern : consumers.keySet())
             if (pattern.matches(key))
                 for (EventConsumer consumer : consumers.get(pattern))

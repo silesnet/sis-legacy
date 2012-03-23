@@ -1,6 +1,8 @@
 package cz.silesnet.web.rest;
 
 import cz.silesnet.event.EventBus;
+import cz.silesnet.event.Key;
+import cz.silesnet.event.support.JsonPayload;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -34,14 +36,12 @@ public class BusController {
     }
 
     @POST
-    @Path("/publish")
+    @Path("/publish/{key}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Object publish(Map data) {
-        log.info("published: " + data);
-        final HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("status", "OK");
-        return map;
+    public void publish(final Map data, @PathParam("key") final String key) {
+        final JsonPayload payload = JsonPayload.of(data);
+        eventBus.publish(payload, Key.of(key));
     }
 
 

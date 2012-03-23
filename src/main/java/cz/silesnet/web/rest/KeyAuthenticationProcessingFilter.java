@@ -48,7 +48,7 @@ public class KeyAuthenticationProcessingFilter extends GenericFilterBean {
         if (key != null) {
             try {
                 final User user = userDao.getUserByKey(key);
-                name = user.getName();
+                name = user.getLoginName();
                 authorities.addAll(user.getAuthorities());
                 log.debug("authenticated user " + user);
             } catch (ObjectRetrievalFailureException e) {

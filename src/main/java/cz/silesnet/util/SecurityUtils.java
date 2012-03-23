@@ -10,37 +10,45 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class SecurityUtils {
 
-  // ~ Methods
-  // ----------------------------------------------------------------
+    // ~ Methods
+    // ----------------------------------------------------------------
 
-  public static User getUser() {
-    Object principal = null;
+    public static User getUser() {
+        Object principal = null;
 
-    try {
-      principal = SecurityContextHolder.getContext().getAuthentication()
-          .getPrincipal();
+        try {
+            principal = SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+        } catch (IllegalStateException e) {
+        } catch (NullPointerException e) {
+        }
+
+        User user = null;
+
+        if (principal != null) {
+            if (principal instanceof User)
+                user = (User) principal;
+            else {
+                user = new User();
+                user.setId(Long.valueOf(1));
+                user.setLoginName(principal.toString());
+            }
+        } else {
+            user = new User();
+            user.setId(Long.valueOf(1));
+            user.setLoginName("anonymousUser");
+        }
+
+        return user;
     }
-    catch (IllegalStateException e) {
-    }
-    catch (NullPointerException e) {
-    }
 
-    User user = null;
-
-    if (principal != null) {
-      if (principal instanceof User)
-        user = (User) principal;
-      else {
-        user = new User();
-        user.setId(Long.valueOf(1));
-        user.setLoginName(principal.toString());
-      }
-    } else {
-      user = new User();
-      user.setId(Long.valueOf(1));
-      user.setLoginName("anonymousUser");
+    public static String currentUser() {
+        String user = "anonymous";
+        try {
+            user = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        } catch (Exception e) {
+            // ignore
+        }
+        return user;
     }
-
-    return user;
-  }
 }
