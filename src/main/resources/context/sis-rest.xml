@@ -6,4 +6,8 @@
         <property name="eventBus"><ref bean="eventBus" /></property>
     </bean>
 
+    <bean id="customersRestController" class="cz.silesnet.web.rest.CustomerController">
+        <property name="customerManager"><ref bean="customerManager" /></property>
+    </bean>
+
 </beans>
