@@ -91,10 +91,7 @@ public class ServiceBlueprint {
 
     private Date calculateLastlyBilled(final Date from) {
         final Period period = Frequency.MONTHLY.periodFor(from);
-        final Calendar first = Dates.calendarWithZeroTimeFrom(period.getFrom());
-        final Calendar last = (Calendar) first.clone();
-        last.add(Calendar.DATE, -1);
-        return last.getTime();
+        return period.getTo();
     }
 
     private void checkIfCanBuild(final Customer customer) {

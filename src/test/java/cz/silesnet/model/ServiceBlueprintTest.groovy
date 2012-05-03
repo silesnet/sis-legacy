@@ -16,7 +16,7 @@ public class ServiceBlueprintTest extends Specification {
 
     private static final String INFO = 'INFO'
     private static final long FROM = new GregorianCalendar(2012, Calendar.JANUARY, 12).timeInMillis
-    private static final long BILLED_TO = new GregorianCalendar(2011, Calendar.DECEMBER, 31).timeInMillis
+    private static final long BILLED_TO = new GregorianCalendar(2012, Calendar.JANUARY, 31).timeInMillis
     private static final int UPLOAD = 2
     private static final int DOWNLOAD = 4
     private static final String NAME = "Wireless"
