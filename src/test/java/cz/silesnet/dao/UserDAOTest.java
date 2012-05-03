@@ -113,7 +113,7 @@ public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
         // have new user
         User u = new User();
         u.setLoginName("user1");
-        u.setPassword("pass1");
+        u.setKey("pass1");
         u.setName("UserName");
 
         // save user
@@ -124,7 +124,7 @@ public abstract class UserDAOTest extends DaoTestSupport<UserDAO> {
         // get user by login name
         log.debug("Getting previously saved user by password name");
 
-        User u2 = dao.getUserByKey(u.getPassword());
+        User u2 = dao.getUserByKey(u.getKey());
 
         assertThat(u2, is(not(nullValue())));
         assertThat(u.getId(), is(u2.getId()));
