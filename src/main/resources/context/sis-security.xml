@@ -21,7 +21,7 @@
                                                 securityContextPersistenceFilter" />
             <sec:filter-chain pattern="/billing/confirmDelivery.html*" filters="
                                                     securityContextPersistenceFilter" />
-            <sec:filter-chain pattern="/rest/**" filters="
+            <sec:filter-chain pattern="/api/**" filters="
                                                 channelProcessingFilter,
                                                 keyAuthenticationFilter,
                                                 exceptionTranslationFilter,
@@ -116,7 +116,7 @@
                 <sec:intercept-url pattern="/service/view.html*" access="ROLE_CUST_VIEW,ROLE_ACCOUNTING" />
                 <sec:intercept-url pattern="/service/edit.html*" access="ROLE_ACCOUNTING" />
                 <sec:intercept-url pattern="/billing/*" access="ROLE_ACCOUNTING" />
-                <sec:intercept-url pattern="/rest/bus/status**" access="ROLE_ANONYMOUS" />
+                <sec:intercept-url pattern="/api/bus/status**" access="ROLE_ANONYMOUS" />
                 <sec:intercept-url pattern="/**" access="ROLE_USER" />
             </sec:filter-security-metadata-source>
         </property>
