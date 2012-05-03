@@ -28,7 +28,7 @@ public class ServiceEventConsumer implements EventConsumer {
             for (Integer serviceId : (Iterable<Integer>) id)
                 ids.add(serviceId);
         } else {
-            ids.add((Integer) id);
+            ids.add(Integer.valueOf(id.toString()));
         }
         for (Integer serviceId : ids) {
             log.info("service:\n" + customerManager.getService(serviceId.longValue()));
