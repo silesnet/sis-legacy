@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
-    "http://www.springframework.org/dtd/spring-beans.dtd">
+        "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
     <bean id="busController" class="cz.silesnet.web.rest.BusController">
-        <property name="eventBus"><ref bean="eventBus" /></property>
+        <property name="eventBus">
+            <ref bean="eventBus"/>
+        </property>
     </bean>
 
     <bean id="customersRestController" class="cz.silesnet.web.rest.CustomerController">
-        <property name="customerManager"><ref bean="customerManager" /></property>
+        <property name="customerManager">
+            <ref bean="customerManager"/>
+        </property>
+    </bean>
+
+    <bean id="commandController" class="cz.silesnet.web.rest.CommandController">
+        <property name="commandDispatcher">
+            <ref bean="commandDispatcher" />
+        </property>
     </bean>
 
 </beans>

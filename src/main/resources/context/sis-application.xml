@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
-    "http://www.springframework.org/dtd/spring-beans.dtd">
+        "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
 
-  <import resource="sis-properties.xml" />
-  <import resource="sis-db.xml" />
-  <import resource="sis-hibernate.xml" />
-  <import resource="sis-dao.xml" />
-  <import resource="sis-bus.xml" />
-  <import resource="sis-transaction.xml" />
-  <import resource="sis-service.xml" />
-  <import resource="sis-servlet.xml" />
-  <import resource="sis-security.xml" />
-  <import resource="sis-rest.xml" />
-  <import resource="sis-schedule.xml" />
-  <import resource="sis-messages.xml" />
-  <import resource="sis-template.xml" />
-  <import resource="sis-email.xml" />
-  <import resource="sis-billing.xml" />
+    <import resource="sis-properties.xml"/>
+    <import resource="sis-db.xml"/>
+    <import resource="sis-hibernate.xml"/>
+    <import resource="sis-dao.xml"/>
+    <import resource="sis-command.xml"/>
+    <import resource="sis-bus.xml"/>
+    <import resource="sis-transaction.xml"/>
+    <import resource="sis-service.xml"/>
+    <import resource="sis-servlet.xml"/>
+    <import resource="sis-security.xml"/>
+    <import resource="sis-rest.xml"/>
+    <import resource="sis-schedule.xml"/>
+    <import resource="sis-messages.xml"/>
+    <import resource="sis-template.xml"/>
+    <import resource="sis-email.xml"/>
+    <import resource="sis-billing.xml"/>
 
 </beans>
