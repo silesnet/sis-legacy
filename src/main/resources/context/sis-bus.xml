@@ -16,4 +16,11 @@
         </property>
     </bean>
 
+    <bean id="invoiceEventConsumer" class="cz.silesnet.event.impl.SimpleEventBus.ConsumerWithPattern">
+        <property name="pattern" value="sis.invoice*" />
+        <property name="consumer">
+            <bean class="cz.silesnet.event.consumer.InvoiceEventConsumer" />
+        </property>
+
+    </bean>
 </beans>
