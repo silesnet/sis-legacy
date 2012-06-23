@@ -17,7 +17,7 @@ public class InvoiceEventConsumer implements EventConsumer {
 
     public void consume(Event event) {
         log.info("consumed: " + event.name());
-        final Iterable payments = event.value("payments", Iterable.class);
+        final Iterable payments = event.value("clearances", Iterable.class);
         for (Object payment : payments) {
             log.info(payment);
         }
