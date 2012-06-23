@@ -445,6 +445,16 @@ class BillBuilderTest extends Specification {
     builder.billablePeriodFor(service) == billPeriod
   }
 
+    def 'billable period for one-time service is set to bill period when service occurs before'() {
+        def builder = new BillBuilder(activeCustomerBilledMonthlyForwardUpToDec2010(), date('2011-01-05'))
+        def service = oneTimeServiceForJan2011WithPrice10()
+        service.setPeriod(new Period(date('2010-12-31'), null))
+        def billPeriod = period('2011-01-01', '2011-01-31')
+        expect:
+        builder.billPeriod == billPeriod // double check
+        builder.billablePeriodFor(service) == billPeriod
+    }
+
     def 'billable period for one-time service is set to NONE when service from falls outside'() {
         def builder = new BillBuilder(activeCustomerBilledMonthlyForwardUpToDec2010(), date('2011-01-05'))
         def service = oneTimeServiceForJan2011WithPrice10()

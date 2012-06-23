@@ -81,7 +81,7 @@ public class BillBuilder {
 
   protected Period billablePeriodFor(Service service) {
     if (service.getFrequency().equals(Frequency.ONE_TIME))
-      return billPeriod.contains(service.getPeriod().getFrom()) ? billPeriod : Period.NONE;
+      return service.getPeriod().getFrom().getTime() <= billPeriod.getTo().getTime() ? billPeriod : Period.NONE;
     Period intersection = service.getPeriod().intersection(billPeriod);
     return intersection != null ? intersection : Period.NONE;
   }
