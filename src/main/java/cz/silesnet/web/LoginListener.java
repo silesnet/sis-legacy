@@ -14,7 +14,8 @@ import org.springframework.security.web.session.HttpSessionDestroyedEvent;
  *
  * @author Richard Sikora
  */
-public class LoginListener implements ApplicationListener {
+public class
+        LoginListener implements ApplicationListener {
 
     // ~ Instance fields
     // --------------------------------------------------------
@@ -34,18 +35,18 @@ public class LoginListener implements ApplicationListener {
 
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof InteractiveAuthenticationSuccessEvent) {
-            log.info("Interactive authentication success.");
+            log.debug("Interactive authentication success.");
             umgr.dispatchSuccessfulLoginEvent((InteractiveAuthenticationSuccessEvent) event);
         }
 
         if (event instanceof HttpSessionCreatedEvent) {
             HttpSessionCreatedEvent sessionCreatedEvent = (HttpSessionCreatedEvent) event;
-            log.info("Http session created (" + sessionCreatedEvent.getSession().getId() + ").");
+            log.debug("Http session created (" + sessionCreatedEvent.getSession().getId() + ").");
         }
 
         if (event instanceof HttpSessionDestroyedEvent) {
             HttpSessionDestroyedEvent sessionDestroyedEvent = (HttpSessionDestroyedEvent) event;
-            log.info("Http session destroyed (" + sessionDestroyedEvent.getId() + ").");
+            log.debug("Http session destroyed (" + sessionDestroyedEvent.getId() + ").");
             umgr.dispatchSessionDestroyedEvent((HttpSessionDestroyedEvent) event);
         }
     }

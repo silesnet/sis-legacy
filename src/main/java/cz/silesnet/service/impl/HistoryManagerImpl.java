@@ -68,7 +68,7 @@ public class HistoryManagerImpl implements HistoryManager {
   }
 
   public List<HistoryItem> getLoginHistory() {
-    log.info("Getting all login HistoryItems");
+    log.debug("Getting all login HistoryItems");
 
     // using zero for system logs
     // FIXME can not be hardcoded so, do it via appliction interface consts
@@ -89,7 +89,7 @@ public class HistoryManagerImpl implements HistoryManager {
 
   public List<HistoryItem> getUserLoginHistory(User user) {
     // TODO Auto-generated method stub
-    log.info("Getting all user login HistoryItems (user: "
+    log.debug("Getting all user login HistoryItems (user: "
         + user.getLoginName() + ")");
 
     return null;
@@ -152,7 +152,7 @@ public class HistoryManagerImpl implements HistoryManager {
   }
 
   public void insertLogin(User user, String ip, String sessionId) {
-    log.info("Inserting new user login HistoryItem (user: "
+    log.debug("Inserting new user login HistoryItem (user: "
         + user.getLoginName() + ", ip: " + ip + ", sessionId: "
         + sessionId + ")");
 
@@ -192,7 +192,7 @@ public class HistoryManagerImpl implements HistoryManager {
   }
 
   public void updateLogout(HttpSession session) {
-    log.info("Updating logout time in HistoryItem (session: "
+    log.debug("Updating logout time in HistoryItem (session: "
         + session.getId() + ")");
     updateLogout(session.getId());
   }
@@ -215,6 +215,7 @@ public class HistoryManagerImpl implements HistoryManager {
             + onlineItems.get(0));
 
       // persist it
+      log.info("'" + onlineItems.get(0).getUser().getLoginName() + "' logged out");
       dao.saveHistoryItem(onlineItems.get(0));
     } else
       // no open session
@@ -282,7 +283,7 @@ public class HistoryManagerImpl implements HistoryManager {
   }
 
   public List<HistoryItem> getSystemBillingAudit() {
-    log.info("Getting system billing audit.");
+    log.debug("Getting system billing audit.");
     // using 1 for billing audit
     // FIXME can not be hardcoded so, do it via appliction interface consts
     return dao.getHistory(Long.valueOf(1));
