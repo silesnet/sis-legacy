@@ -50,7 +50,38 @@ public class BillTest {
     assertEquals(8.806F, bill.getItems().get(0).getBrt());
   }
 
-  private Bill prepareMixture() {
+    @Test
+    public void testBrtWithRounding() throws Exception {
+        Bill bill = prepareMixture();
+        bill.getItems().clear();
+        bill.getItems().add(new BillItem("Item 1", 292F, 1));
+        bill.setVat(20);
+
+        assertEquals(350, bill.getBrt());
+    }
+
+    @Test
+    public void test21VatRounding() throws Exception {
+        final Bill bill = prepareMixture();
+        bill.setVat(21);
+        bill.getItems().clear();
+        final BillItem item = new BillItem("Item", 0F, 1);
+        bill.getItems().add(item);
+
+        item.setAmount(260F);
+        assertEquals(315, bill.getBrt());
+
+        item.setAmount(310F);
+        assertEquals(375, bill.getBrt());
+
+        item.setAmount(360F);
+        assertEquals(436, bill.getBrt());
+
+        item.setAmount(410F);
+        assertEquals(496, bill.getBrt());
+    }
+
+    private Bill prepareMixture() {
     Bill bill = new Bill();
     BillItem item1 = new BillItem("Item 1", 0.74F, 10);
     BillItem item2 = new BillItem("Item 2", 1.21F, 10);

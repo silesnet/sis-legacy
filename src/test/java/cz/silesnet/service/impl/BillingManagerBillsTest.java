@@ -1,6 +1,10 @@
 package cz.silesnet.service.impl;
 
 import cz.silesnet.model.*;
+import cz.silesnet.model.enums.Country;
+import cz.silesnet.model.invoice.Amount;
+import cz.silesnet.model.invoice.BillingContext;
+import cz.silesnet.model.invoice.BillingContextFactory;
 import cz.silesnet.service.BillingManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +22,31 @@ public class BillingManagerBillsTest {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     protected final Log log = LogFactory.getLog(getClass());
+
+    @Test(groups = "integration")
+    public void testCzRounding() {
+        String[] paths = {"context/sis-properties.xml", "context/sis-billing.xml"};
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
+        assertNotNull(ctx);
+        BillingContextFactory billingContext = (BillingContextFactory) ctx.getBean("billingContextFactory");
+        final BillingContext czContext = billingContext.billingContextFor(Country.CZ);
+        final Amount total = czContext.roundTotalOf(Amount.of("350.40"));
+        System.out.println(total);
+
+//        Bill bill = PrepareMixture.getBill();
+//        bill.getInvoicedCustomer().getContact().setEmail("rsi.news@quick.cz");
+//        bill.getInvoicedCustomer().getBilling().setDeliverCopyEmail(
+//                "sikora@silesnet.cz,sikora@gympol.cz");
+//        Calendar cFrom = new GregorianCalendar(2006, Calendar.MARCH, 1);
+//        Calendar cTo = new GregorianCalendar(2006, Calendar.MARCH, 31);
+//        bill.setPeriod(new Period(cFrom.getTime(), cTo.getTime()));
+//        bill.setHashCode("2853a22d-b4b9-11da-9de4-958326744870");
+//
+//        @SuppressWarnings("unused")
+//        BillingManager bMgr = (BillingManager) ctx.getBean("billingManager");
+        // bMgr.email(billFor);
+    }
+
 
     @Test(groups = "integration")
     public void testMailSender() {
