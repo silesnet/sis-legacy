@@ -16,16 +16,6 @@
 	<tr><td><fmt:message key="mainBilling.status.countUndelivered" /></td><td>: ${countUndelivered}</td></tr>
 	<tr><td><fmt:message key="mainBilling.status.countDelivered" /></td><td>: ${countDelivered}</td></tr>
 	<tr><td><b><fmt:message key="mainBilling.status.countAll" /></b></td><td>: <b>${countAll}</b></td></tr>
-<!-- NOT IMPLEMENTED YET IN DAO, alway return 0
-	<tr><td><b><fmt:message key="mainBilling.status.sumAll" /></b></td><td>: <b><i18n:formatNumber value="${sumAll}" pattern="###,###,##0" /></b>
-		<c:if test="${invoicing.country == 'enum.country.cz'}">
-			CZK
-		</c:if>
-		<c:if test="${invoicing.country == 'enum.country.pl'}">
-			PLN
-		</c:if>
-	</td></tr>
- -->
  </table>
 </td><td style="text-align: right;">
 <script type="text/javascript">

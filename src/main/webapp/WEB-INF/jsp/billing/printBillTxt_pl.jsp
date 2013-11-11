@@ -149,7 +149,7 @@
   <TD Align="Left" width="48%" valign="top">
 	<table width="80%">
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Wystawił(a):</td></tr>
-		<tr><td align="center">Iwona Heczko<!-- <br /><img src="${ctx}/img/bill_signature_pl.gif" /> --></td></tr>
+		<tr><td align="center">Iwona Heczko</td></tr>
 	</table>
   </TD>
   <td>&nbsp;</td>
