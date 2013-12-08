@@ -21,8 +21,8 @@
 		<xsd:attribute name="LASTLY_BILLED" use="optional" />
 		<xsd:attribute name="PUBLIC_ID" use="optional" />
 		<xsd:attribute name="DELIVER_COPY_EMAIL" use="optional" />
-		<xsd:attribute name="STATUS" use="optional" />
 		<xsd:attribute name="STREET" use="optional" />
+		<xsd:attribute name="STATUS" use="optional" />
 		<xsd:attribute name="PHONE" use="optional" />
 		<xsd:attribute name="INSERTED_ON" use="optional" />
 		<xsd:attribute name="DELIVER_BY_EMAIL" use="optional" />
@@ -125,18 +125,18 @@
 	<xsd:complexType name="SERVICES__type">
 		<xsd:attribute name="FREQUENCY" use="optional" />
 		<xsd:attribute name="PRICE" use="optional" />
-		<xsd:attribute name="REPLACE_ID" use="optional" />
 		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="PERIOD_TO" use="optional" />
+		<xsd:attribute name="REPLACE_ID" use="optional" />
 		<xsd:attribute name="PERIOD_FROM" use="optional" />
-		<xsd:attribute name="ADDITIONALNAME" use="optional" />
-		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="PERIOD_TO" use="optional" />
 		<xsd:attribute name="CUSTOMER_ID" use="optional" />
 		<xsd:attribute name="BPS" use="optional" />
-		<xsd:attribute name="INFO" use="optional" />
 		<xsd:attribute name="DOWNLOAD" use="optional" />
 		<xsd:attribute name="UPLOAD" use="optional" />
 		<xsd:attribute name="IS_AGGREGATED" use="optional" />
+		<xsd:attribute name="ADDITIONALNAME" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="INFO" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="AUDIT_ITEMS__type">
 		<xsd:attribute name="TIME_STAMP" use="optional" />

@@ -28,8 +28,7 @@
                                                 filterSecurityInterceptor" />
             <sec:filter-chain pattern="/**" filters="
                                                 channelProcessingFilter,
-                                                securityContextPersistenceFilter,
-                                                usernamePasswordAuthenticationFilter,
+                                                sisAuthenticationFilter,
                                                 exceptionTranslationFilter,
                                                 filterSecurityInterceptor" />
         </sec:filter-chain-map>
@@ -70,6 +69,12 @@
             </bean>
         </property>
         <property name="postOnly" value="false" />
+    </bean>
+
+    <bean id="sisAuthenticationFilter" class="cz.silesnet.web.mvc.SisAuthenticationFilter">
+        <property name="userUrl" value="https://localhost:8443/get_user" />
+        <property name="loginUrl" value="https://localhost:8443/login.jsp" />
+        <property name="sessionId" value="JSESSIONID" />
     </bean>
 
     <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
