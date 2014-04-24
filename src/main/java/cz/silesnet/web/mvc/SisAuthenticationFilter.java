@@ -60,7 +60,15 @@ public class SisAuthenticationFilter extends GenericFilterBean {
         this.sessionId = sessionId;
     }
 
-    @Override
+		protected void setClient(Client client) {
+			this.client = client;
+		}
+
+		protected void setMapper(ObjectMapper mapper) {
+			this.mapper = mapper;
+		}
+
+	@Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
 
@@ -110,9 +118,12 @@ public class SisAuthenticationFilter extends GenericFilterBean {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        final HttpServletRequest req = (HttpServletRequest) request;
-        final HttpServletResponse res = (HttpServletResponse) response;
-        final Cookie[] cookies = req.getCookies();
+      final HttpServletRequest req = (HttpServletRequest) request;
+      final HttpServletResponse res = (HttpServletResponse) response;
+	    if (req.getSession(false) == null) {
+		    req.getSession(true);
+	    }
+	    final Cookie[] cookies = req.getCookies();
         String userData = null;
         if (cookies != null) {
             for (int i = cookies.length; 0 < i; i--) {
@@ -148,6 +159,7 @@ public class SisAuthenticationFilter extends GenericFilterBean {
                 }
             };
             SecurityContextHolder.getContext().setAuthentication(authentication);
+	          req.getSession(false).setAttribute("authentication", authentication);
             chain.doFilter(request, response);
         } else {
             res.sendRedirect(loginUrl);
