@@ -291,9 +291,9 @@ public class BillingManagerImpl implements BillingManager {
         email(bill);
         if (emailedCounter != null)
           emailedCounter.setValue(emailedCounter.intValue() + 1);
-      } catch (MailParseException e) {
+      } catch (MailException e) {
         hmgr.insertSystemBillingAudit(invoicing, c, "mainBilling.msg.emailAddressError", "mainBilling.status.byMail");
-        log.warn("Bill email parse exception: " + c.getName());
+        log.warn("Bill email exception: " + c.getName());
         log.warn(e.getCause());
         bill.setDeliverByMail(true);
       }
