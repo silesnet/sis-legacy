@@ -2,6 +2,7 @@ package cz.silesnet.web.mvc;
 
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
+import cz.silesnet.model.HistoryItem;
 import cz.silesnet.model.Invoicing;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.BillingManager;
@@ -84,9 +85,26 @@ public class BillingController extends MultiActionController {
       model.put("pohodaRemindersEnabled", bMgr.getReminderSenderFlag());
     model.put("scripts", new String[]{"calendar.js"});
     if (!AbstractCRUDController.isTablePagination(request) && invoicing != null)
-      request.getSession().setAttribute("billingAudit", hmgr.getHistory(invoicing));
+      request.getSession().setAttribute("billingAudit", invoicingAudit(invoicing));
 
     return new ModelAndView("billing/mainBilling", model);
+  }
+
+  private List<HistoryItem> invoicingAudit(final Invoicing invoicing) {
+    final List<HistoryItem> originalAudit = hmgr.getHistory(invoicing);
+    final ArrayList<HistoryItem> errors = new ArrayList<HistoryItem>();
+    final ListIterator<HistoryItem> auditItems = originalAudit.listIterator();
+    while (auditItems.hasNext()) {
+      final HistoryItem auditItem = auditItems.next();
+      if ("mainBilling.msg.illegalArgument".equals(auditItem.getOldValue())) {
+        errors.add(auditItem);
+        auditItems.remove();
+      }
+    }
+    final ArrayList<HistoryItem> audit = new ArrayList<HistoryItem>();
+    audit.addAll(errors);
+    audit.addAll(originalAudit);
+    return audit;
   }
 
   private Country resolveCountry(final HttpServletRequest request, final Invoicing invoicing) {
