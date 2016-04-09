@@ -197,6 +197,8 @@ public class CustomerManagerImpl implements CustomerManager {
 
     public void updateService(Service service) {
         boolean found = false;
+        // when saving service always reset its status
+        service.setStatus("INHERIT_FROM_CUSTOMER");
         if (service.getCustomerId() != null) {
             // update service in customers context
             Customer c = get(service.getCustomerId());

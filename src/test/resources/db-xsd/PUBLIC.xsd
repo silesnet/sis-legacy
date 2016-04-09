@@ -1,157 +1,158 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="PUBLIC" targetNamespace="PUBLIC">
-	<xsd:element name="CUSTOMERS" type="CUSTOMERS__type" />
+	<xsd:element name="SERVICES" type="SERVICES__type" />
+	<xsd:element name="BILL_ITEMS" type="BILL_ITEMS__type" />
+	<xsd:element name="DUAL_AUDIT_ITEM_ID_SEQ" type="DUAL_AUDIT_ITEM_ID_SEQ__type" />
+	<xsd:element name="BILLS" type="BILLS__type" />
+	<xsd:element name="NEWSERVICES" type="NEWSERVICES__type" />
+	<xsd:element name="INVOICINGS" type="INVOICINGS__type" />
 	<xsd:element name="VENDORS" type="VENDORS__type" />
 	<xsd:element name="SETTINGS" type="SETTINGS__type" />
-	<xsd:element name="DUAL_AUDIT_ITEM_ID_SEQ" type="DUAL_AUDIT_ITEM_ID_SEQ__type" />
-	<xsd:element name="INVOICINGS" type="INVOICINGS__type" />
 	<xsd:element name="DBMAINTAIN_SCRIPTS" type="DBMAINTAIN_SCRIPTS__type" />
-	<xsd:element name="BILLS" type="BILLS__type" />
-	<xsd:element name="USERS" type="USERS__type" />
-	<xsd:element name="BILL_ITEMS" type="BILL_ITEMS__type" />
-	<xsd:element name="NEWSERVICES" type="NEWSERVICES__type" />
-	<xsd:element name="SERVICES" type="SERVICES__type" />
+	<xsd:element name="CUSTOMERS" type="CUSTOMERS__type" />
 	<xsd:element name="AUDIT_ITEMS" type="AUDIT_ITEMS__type" />
 	<xsd:element name="LABELS" type="LABELS__type" />
-	<xsd:complexType name="CUSTOMERS__type">
-		<xsd:attribute name="FREQUENCY" use="optional" />
-		<xsd:attribute name="IS_AUTO_BILLING" use="optional" />
-		<xsd:attribute name="CONTACT_NAME" use="optional" />
-		<xsd:attribute name="SYMBOL" use="optional" />
-		<xsd:attribute name="LASTLY_BILLED" use="optional" />
-		<xsd:attribute name="PUBLIC_ID" use="optional" />
-		<xsd:attribute name="DELIVER_COPY_EMAIL" use="optional" />
-		<xsd:attribute name="STREET" use="optional" />
-		<xsd:attribute name="STATUS" use="optional" />
-		<xsd:attribute name="PHONE" use="optional" />
-		<xsd:attribute name="INSERTED_ON" use="optional" />
-		<xsd:attribute name="DELIVER_BY_EMAIL" use="optional" />
-		<xsd:attribute name="ID" use="optional" />
-		<xsd:attribute name="DIC" use="optional" />
-		<xsd:attribute name="EMAIL" use="optional" />
-		<xsd:attribute name="DELIVER_BY_MAIL" use="optional" />
+	<xsd:element name="USERS" type="USERS__type" />
+	<xsd:complexType name="SERVICES__type">
+		<xsd:attribute name="PRICE" use="optional" />
+		<xsd:attribute name="BPS" use="optional" />
+		<xsd:attribute name="PERIOD_TO" use="optional" />
+		<xsd:attribute name="CUSTOMER_ID" use="optional" />
+		<xsd:attribute name="DOWNLOAD" use="optional" />
 		<xsd:attribute name="INFO" use="optional" />
-		<xsd:attribute name="IS_BILLED_AFTER" use="optional" />
-		<xsd:attribute name="CONNECTION_SPOT" use="optional" />
-		<xsd:attribute name="ACCOUNT_NO" use="optional" />
+		<xsd:attribute name="REPLACE_ID" use="optional" />
 		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="SYNCHRONIZED" use="optional" />
-		<xsd:attribute name="DELIVER_SIGNED" use="optional" />
-		<xsd:attribute name="VARIABLE" use="optional" />
-		<xsd:attribute name="COUNTRY" use="optional" />
-		<xsd:attribute name="SUPPLEMENTARY_NAME" use="optional" />
-		<xsd:attribute name="IS_ACTIVE" use="optional" />
-		<xsd:attribute name="BANK_NO" use="optional" />
-		<xsd:attribute name="HISTORY_ID" use="optional" />
-		<xsd:attribute name="FORMAT" use="optional" />
-		<xsd:attribute name="UPDATED" use="optional" />
-		<xsd:attribute name="POSTAL_CODE" use="optional" />
-		<xsd:attribute name="CITY" use="optional" />
-	</xsd:complexType>
-	<xsd:complexType name="VENDORS__type">
-		<xsd:attribute name="MAC_PREFIX" use="optional" />
-		<xsd:attribute name="VENDOR" use="optional" />
-	</xsd:complexType>
-	<xsd:complexType name="SETTINGS__type">
-		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="VALUE" use="optional" />
+		<xsd:attribute name="ADDITIONALNAME" use="optional" />
+		<xsd:attribute name="STATUS" use="optional" />
+		<xsd:attribute name="UPLOAD" use="optional" />
+		<xsd:attribute name="IS_AGGREGATED" use="optional" />
+		<xsd:attribute name="FREQUENCY" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="PERIOD_FROM" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="BILL_ITEMS__type">
+		<xsd:attribute name="BILL_ID" use="optional" />
+		<xsd:attribute name="PRICE" use="optional" />
+		<xsd:attribute name="IS_DISPLAY_UNIT" use="optional" />
+		<xsd:attribute name="AMOUNT" use="optional" />
+		<xsd:attribute name="TEXT" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="DUAL_AUDIT_ITEM_ID_SEQ__type">
 		<xsd:attribute name="ZERO" use="optional" />
 	</xsd:complexType>
-	<xsd:complexType name="INVOICINGS__type">
-		<xsd:attribute name="HISTORY_ID" use="optional" />
-		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="NUMBERINGBASE" use="optional" />
-		<xsd:attribute name="COUNTRY" use="optional" />
-		<xsd:attribute name="ID" use="optional" />
-		<xsd:attribute name="INVOICING_DATE" use="optional" />
-	</xsd:complexType>
-	<xsd:complexType name="DBMAINTAIN_SCRIPTS__type">
-		<xsd:attribute name="FILE_NAME" use="optional" />
-		<xsd:attribute name="EXECUTED_AT" use="optional" />
-		<xsd:attribute name="VERSION" use="optional" />
-		<xsd:attribute name="SUCCEEDED" use="optional" />
-		<xsd:attribute name="CHECKSUM" use="optional" />
-		<xsd:attribute name="FILE_LAST_MODIFIED_AT" use="optional" />
-	</xsd:complexType>
 	<xsd:complexType name="BILLS__type">
-		<xsd:attribute name="CUSTOMER_NAME" use="optional" />
 		<xsd:attribute name="SYNCHRONIZED" use="optional" />
-		<xsd:attribute name="PERIOD_FROM" use="optional" />
-		<xsd:attribute name="PERIOD_TO" use="optional" />
-		<xsd:attribute name="IS_CONFIRMED" use="optional" />
-		<xsd:attribute name="IS_DELIVERED" use="optional" />
-		<xsd:attribute name="CUSTOMER_ID" use="optional" />
-		<xsd:attribute name="HASH_CODE" use="optional" />
 		<xsd:attribute name="NUMBER" use="optional" />
-		<xsd:attribute name="BILLING_DATE" use="optional" />
 		<xsd:attribute name="PURGE_DATE" use="optional" />
-		<xsd:attribute name="IS_SENT" use="optional" />
-		<xsd:attribute name="ID" use="optional" />
-		<xsd:attribute name="VAT" use="optional" />
-		<xsd:attribute name="DELIVER_BY_MAIL" use="optional" />
-		<xsd:attribute name="IS_ARCHIVED" use="optional" />
 		<xsd:attribute name="INVOICING_ID" use="optional" />
-	</xsd:complexType>
-	<xsd:complexType name="USERS__type">
-		<xsd:attribute name="ROLES" use="optional" />
-		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="LOGIN" use="optional" />
-		<xsd:attribute name="PASSWD" use="optional" />
+		<xsd:attribute name="PERIOD_TO" use="optional" />
+		<xsd:attribute name="IS_SENT" use="optional" />
+		<xsd:attribute name="CUSTOMER_ID" use="optional" />
+		<xsd:attribute name="VAT" use="optional" />
+		<xsd:attribute name="BILLING_DATE" use="optional" />
+		<xsd:attribute name="IS_CONFIRMED" use="optional" />
+		<xsd:attribute name="IS_ARCHIVED" use="optional" />
+		<xsd:attribute name="DELIVER_BY_MAIL" use="optional" />
+		<xsd:attribute name="CUSTOMER_NAME" use="optional" />
+		<xsd:attribute name="HASH_CODE" use="optional" />
+		<xsd:attribute name="IS_DELIVERED" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
-		<xsd:attribute name="KEY" use="optional" />
-	</xsd:complexType>
-	<xsd:complexType name="BILL_ITEMS__type">
-		<xsd:attribute name="IS_DISPLAY_UNIT" use="optional" />
-		<xsd:attribute name="PRICE" use="optional" />
-		<xsd:attribute name="TEXT" use="optional" />
-		<xsd:attribute name="BILL_ID" use="optional" />
-		<xsd:attribute name="AMOUNT" use="optional" />
+		<xsd:attribute name="PERIOD_FROM" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="NEWSERVICES__type">
-		<xsd:attribute name="CUSTOMER" use="optional" />
 		<xsd:attribute name="PRICE" use="optional" />
+		<xsd:attribute name="UPLOAD" use="optional" />
 		<xsd:attribute name="BILLING_ON" use="optional" />
-		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="PERIOD_FROM" use="optional" />
-		<xsd:attribute name="ID" use="optional" />
 		<xsd:attribute name="CUSTOMER_ID" use="optional" />
+		<xsd:attribute name="DOWNLOAD" use="optional" />
+		<xsd:attribute name="CUSTOMER" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
 		<xsd:attribute name="TECHNICIAN" use="optional" />
-		<xsd:attribute name="DOWNLOAD" use="optional" />
-		<xsd:attribute name="UPLOAD" use="optional" />
-	</xsd:complexType>
-	<xsd:complexType name="SERVICES__type">
-		<xsd:attribute name="FREQUENCY" use="optional" />
-		<xsd:attribute name="PRICE" use="optional" />
-		<xsd:attribute name="NAME" use="optional" />
-		<xsd:attribute name="REPLACE_ID" use="optional" />
 		<xsd:attribute name="PERIOD_FROM" use="optional" />
-		<xsd:attribute name="PERIOD_TO" use="optional" />
-		<xsd:attribute name="CUSTOMER_ID" use="optional" />
-		<xsd:attribute name="BPS" use="optional" />
-		<xsd:attribute name="DOWNLOAD" use="optional" />
-		<xsd:attribute name="UPLOAD" use="optional" />
-		<xsd:attribute name="IS_AGGREGATED" use="optional" />
-		<xsd:attribute name="ADDITIONALNAME" use="optional" />
+		<xsd:attribute name="NAME" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="INVOICINGS__type">
+		<xsd:attribute name="NUMBERINGBASE" use="optional" />
+		<xsd:attribute name="HISTORY_ID" use="optional" />
+		<xsd:attribute name="COUNTRY" use="optional" />
+		<xsd:attribute name="INVOICING_DATE" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="NAME" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="VENDORS__type">
+		<xsd:attribute name="VENDOR" use="optional" />
+		<xsd:attribute name="MAC_PREFIX" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="SETTINGS__type">
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="VALUE" use="optional" />
+		<xsd:attribute name="NAME" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="DBMAINTAIN_SCRIPTS__type">
+		<xsd:attribute name="CHECKSUM" use="optional" />
+		<xsd:attribute name="SUCCEEDED" use="optional" />
+		<xsd:attribute name="VERSION" use="optional" />
+		<xsd:attribute name="FILE_LAST_MODIFIED_AT" use="optional" />
+		<xsd:attribute name="EXECUTED_AT" use="optional" />
+		<xsd:attribute name="FILE_NAME" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="CUSTOMERS__type">
+		<xsd:attribute name="FORMAT" use="optional" />
+		<xsd:attribute name="PHONE" use="optional" />
+		<xsd:attribute name="SUPPLEMENTARY_NAME" use="optional" />
+		<xsd:attribute name="UPDATED" use="optional" />
+		<xsd:attribute name="EMAIL" use="optional" />
 		<xsd:attribute name="INFO" use="optional" />
+		<xsd:attribute name="IS_ACTIVE" use="optional" />
+		<xsd:attribute name="BANK_NO" use="optional" />
+		<xsd:attribute name="STATUS" use="optional" />
+		<xsd:attribute name="LASTLY_BILLED" use="optional" />
+		<xsd:attribute name="COUNTRY" use="optional" />
+		<xsd:attribute name="POSTAL_CODE" use="optional" />
+		<xsd:attribute name="VARIABLE" use="optional" />
+		<xsd:attribute name="FREQUENCY" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="INSERTED_ON" use="optional" />
+		<xsd:attribute name="DIC" use="optional" />
+		<xsd:attribute name="DELIVER_COPY_EMAIL" use="optional" />
+		<xsd:attribute name="CONTACT_NAME" use="optional" />
+		<xsd:attribute name="SYNCHRONIZED" use="optional" />
+		<xsd:attribute name="PUBLIC_ID" use="optional" />
+		<xsd:attribute name="IS_AUTO_BILLING" use="optional" />
+		<xsd:attribute name="STREET" use="optional" />
+		<xsd:attribute name="NAME" use="optional" />
+		<xsd:attribute name="HISTORY_ID" use="optional" />
+		<xsd:attribute name="DELIVER_SIGNED" use="optional" />
+		<xsd:attribute name="CITY" use="optional" />
+		<xsd:attribute name="DELIVER_BY_MAIL" use="optional" />
+		<xsd:attribute name="SYMBOL" use="optional" />
+		<xsd:attribute name="DELIVER_BY_EMAIL" use="optional" />
+		<xsd:attribute name="CONNECTION_SPOT" use="optional" />
+		<xsd:attribute name="ACCOUNT_NO" use="optional" />
+		<xsd:attribute name="IS_BILLED_AFTER" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="AUDIT_ITEMS__type">
-		<xsd:attribute name="TIME_STAMP" use="optional" />
 		<xsd:attribute name="HISTORY_ID" use="optional" />
-		<xsd:attribute name="FIELD_NAME" use="optional" />
-		<xsd:attribute name="USER_ID" use="optional" />
-		<xsd:attribute name="OLD_VALUE" use="optional" />
-		<xsd:attribute name="ID" use="optional" />
-		<xsd:attribute name="HISTORY_TYPE_LABEL_ID" use="optional" />
 		<xsd:attribute name="NEW_VALUE" use="optional" />
+		<xsd:attribute name="HISTORY_TYPE_LABEL_ID" use="optional" />
+		<xsd:attribute name="USER_ID" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="TIME_STAMP" use="optional" />
+		<xsd:attribute name="FIELD_NAME" use="optional" />
+		<xsd:attribute name="OLD_VALUE" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="LABELS__type">
-		<xsd:attribute name="NAME" use="optional" />
+		<xsd:attribute name="NUMBER" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
 		<xsd:attribute name="PARENT_ID" use="optional" />
-		<xsd:attribute name="NUMBER" use="optional" />
+		<xsd:attribute name="NAME" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="USERS__type">
+		<xsd:attribute name="PASSWD" use="optional" />
+		<xsd:attribute name="ROLES" use="optional" />
+		<xsd:attribute name="LOGIN" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="KEY" use="optional" />
+		<xsd:attribute name="NAME" use="optional" />
 	</xsd:complexType>
 </xsd:schema>

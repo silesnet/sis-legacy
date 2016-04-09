@@ -40,6 +40,8 @@ public class Service extends Entity implements HistoricToString {
 
     private Integer fContract;
 
+    private String fStatus = "INHERIT_FROM_CUSTOMER";
+
     // ~ Methods
     // ----------------------------------------------------------------
 
@@ -163,5 +165,13 @@ public class Service extends Entity implements HistoricToString {
 
     public void setContract(final Integer fContract) {
         this.fContract = fContract;
+    }
+
+    public String getStatus() {
+        return fStatus;
+    }
+
+    public void setStatus(String fStatus) {
+        this.fStatus = fStatus;
     }
 }

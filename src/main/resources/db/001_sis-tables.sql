@@ -115,7 +115,8 @@ CREATE TABLE services (
     info character varying(150),
     replace_id bigint,
     additionalname character varying(50),
-    bps character(1)
+    bps character(1),
+    status character varying(50)
 );
 
 CREATE TABLE newservices

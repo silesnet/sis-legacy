@@ -23,5 +23,6 @@
         </component>
         <property name="info" length="150" />
         <property name="contract" formula="(id % 10000000) / 100" />
+        <property name="status" length="50" />
     </class>
 </hibernate-mapping>
