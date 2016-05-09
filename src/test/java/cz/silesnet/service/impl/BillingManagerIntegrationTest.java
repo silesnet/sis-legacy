@@ -2,7 +2,6 @@ package cz.silesnet.service.impl;
 
 import cz.silesnet.model.Invoicing;
 import cz.silesnet.model.enums.Country;
-import cz.silesnet.model.invoice.BillingContext;
 import cz.silesnet.model.invoice.BillingContextFactory;
 import cz.silesnet.service.BillingManager;
 import org.testng.annotations.Test;

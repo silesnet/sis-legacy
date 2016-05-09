@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../src/test/resources/db-xsd/dataset.xsd">
+         xsi:noNamespaceSchemaLocation="../../../db-xsd/dataset.xsd">
     <!--Active-->
     <CUSTOMERS ID="10" HISTORY_ID="10" PUBLIC_ID="12345" INSERTED_ON="2010-05-19"
                NAME="bCustomer 1" COUNTRY="10" IS_ACTIVE="true" />
