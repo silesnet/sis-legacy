@@ -147,11 +147,14 @@ public class BillingController extends MultiActionController {
     Map<String, Object> model = new HashMap<String, Object>();
     String view = "billing/notFoundBill";
     String uuid = ServletRequestUtils.getStringParameter(request, "uuid", null);
+    boolean ignoreDelivery = ServletRequestUtils.getBooleanParameter(request, "ignoreDelivery", false);
     Bill bill = null;
     if (uuid != null)
       bill = bMgr.confirmDelivery(uuid);
     if (bill != null) {
-      bMgr.update(bill);
+      if (!ignoreDelivery) {
+        bMgr.update(bill);
+      }
       fetchInvoicedCustomer(bill);
       String localeString = getShortLocale(bill);
       view = "billing/printBillTxt_" + localeString;
