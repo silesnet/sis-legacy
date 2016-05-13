@@ -1,8 +1,10 @@
 package cz.silesnet.service.mail.impl;
 
 import cz.silesnet.model.enums.Country;
+import cz.silesnet.service.DocumentService;
 import cz.silesnet.service.invoice.Invoice;
 import cz.silesnet.service.invoice.InvoiceWriterFactory;
+import cz.silesnet.service.mail.SignedEmailGenerator;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -23,15 +25,16 @@ public class SimpleMimeMessagePreparatorFactoryTest {
   @BeforeMethod
   private void setUp() {
     preparatorFactory = new SimpleMimeMessagePreparatorFactory();
-    InvoiceWriterFactory writerFactory = mock(InvoiceWriterFactory.class);
-    preparatorFactory.setWriterFactory(writerFactory);
+    preparatorFactory.setWriterFactory(mock(InvoiceWriterFactory.class));
+    preparatorFactory.setSigner(mock(SignedEmailGenerator.class));
+    preparatorFactory.setDocumentService(mock(DocumentService.class));
   }
 
   @Test
   public void newInstance() throws Exception {
     Invoice invoice = mockInvoiceFixture(false);
     MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice);
-    assertThat(preparator, is(instanceOf(InvoiceMimeMessagePreparator.class)));
+    assertThat(preparator, is(instanceOf(DelegatingMimeMessagePreparator.class)));
   }
 
   @Test
