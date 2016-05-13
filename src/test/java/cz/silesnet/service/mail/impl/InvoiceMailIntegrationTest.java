@@ -3,8 +3,12 @@ package cz.silesnet.service.mail.impl;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.invoice.Invoice;
 import cz.silesnet.service.mail.MimeMessagePreparatorFactory;
+import cz.silesnet.util.MessagesUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.subethamail.wiser.Wiser;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.unitils.UnitilsTestNG;
 import org.unitils.spring.annotation.SpringApplicationContext;
@@ -21,13 +25,26 @@ import static org.mockito.Mockito.*;
  */
 @SpringApplicationContext({"context/sis-properties.xml", "context/sis-template.xml", "context/sis-email.xml", "context/sis-messages.xml"})
 @Test(groups = "email")
-public class InviceMailIntegrationTest extends UnitilsTestNG {
+public class InvoiceMailIntegrationTest extends UnitilsTestNG {
 
   @SpringBean("emailPreparatorFactory")
   private MimeMessagePreparatorFactory preparatorFactory;
 
   @SpringBean("mailSenderProduction")
   private JavaMailSender sender;
+
+  private Wiser wiser;
+
+  @BeforeMethod
+  public void setUp() throws Exception {
+    wiser = new Wiser();
+    wiser.start();
+  }
+
+  @AfterMethod
+  public void tearDown() throws Exception {
+    wiser.stop();
+  }
 
   @Test
   public void configuration() throws Exception {

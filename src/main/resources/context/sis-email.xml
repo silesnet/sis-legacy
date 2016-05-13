@@ -22,6 +22,11 @@
   <bean id="emailPreparatorFactory" class="cz.silesnet.service.mail.impl.SimpleMimeMessagePreparatorFactory">
     <property name="signer" ref="signedEmailGenerator" />
     <property name="writerFactory" ref="invoiceWriterFactory" />
+    <property name="documentService" ref="documentService" />
   </bean>
-  
+
+  <bean id="documentService" class="cz.silesnet.service.impl.DefaultDocumentService">
+
+  </bean>
+
 </beans>

@@ -1,5 +1,6 @@
 package cz.silesnet.service.mail.impl;
 
+import cz.silesnet.service.DocumentService;
 import cz.silesnet.service.invoice.Invoice;
 import cz.silesnet.service.invoice.InvoiceWriter;
 import cz.silesnet.service.invoice.InvoiceWriterFactory;
@@ -18,23 +19,17 @@ public class SimpleMimeMessagePreparatorFactory implements MimeMessagePreparator
 
   private InvoiceWriterFactory writerFactory;
   private SignedEmailGenerator signer;
+  private DocumentService documentService;
 
   public MimeMessagePreparator newInstance(final Invoice invoice) {
+    DelegatingMimeMessagePreparator messagePreparator = new DelegatingMimeMessagePreparator();
     InvoiceWriter writer = writerFactory.instanceOf(invoice);
-    MimeMessagePreparator invoicePreparator = new InvoiceMimeMessagePreparator(invoice, writer);
-
+    messagePreparator.addPreparator(new InvoiceMimeMessagePreparator(invoice, writer));
+    messagePreparator.addPreparator(new PdfInvoiceMimeMessagePreparator(invoice, documentService));
     if (invoice.isSignedDelivery()) {
-      return createSignedPreparatorFrom(invoicePreparator);
-    } else {
-      return invoicePreparator;
+      messagePreparator.addPreparator(new SigningMimeMessagePreparator(signer));
     }
-  }
-
-  private MimeMessagePreparator createSignedPreparatorFrom(final MimeMessagePreparator preparator) {
-    DelegatingMimeMessagePreparator delegatingPreparator = new DelegatingMimeMessagePreparator();
-    delegatingPreparator.addPreparator(preparator);
-    delegatingPreparator.addPreparator(new SigningMimeMessagePreparator(signer));
-    return delegatingPreparator;
+    return  messagePreparator;
   }
 
   public void setWriterFactory(final InvoiceWriterFactory writerFactory) {
@@ -45,8 +40,13 @@ public class SimpleMimeMessagePreparatorFactory implements MimeMessagePreparator
     this.signer = signer;
   }
 
+  public void setDocumentService(DocumentService documentService) {
+    this.documentService = documentService;
+  }
+
   public void afterPropertiesSet() throws Exception {
     Assert.notNull(writerFactory);
     Assert.notNull(signer);
+    Assert.notNull(documentService);
   }
 }
