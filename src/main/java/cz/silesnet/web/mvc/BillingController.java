@@ -6,6 +6,7 @@ import cz.silesnet.model.HistoryItem;
 import cz.silesnet.model.Invoicing;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.BillingManager;
+import cz.silesnet.service.DocumentService;
 import cz.silesnet.service.HistoryManager;
 import cz.silesnet.service.impl.BillingManagerImpl;
 import cz.silesnet.util.FilterUtils;
@@ -28,6 +29,7 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -44,12 +46,18 @@ public class BillingController extends MultiActionController {
 
   private HistoryManager hmgr;
 
+  private DocumentService documentService;
+
   public void setBillingManager(BillingManager billingManager) {
     bMgr = billingManager;
   }
 
   public void setHistoryManager(HistoryManager historyManager) {
     hmgr = historyManager;
+  }
+
+  public void setDocumentService(DocumentService documentService) {
+    this.documentService = documentService;
   }
 
   public ModelAndView mainBilling(HttpServletRequest request, HttpServletResponse response) {
@@ -200,6 +208,16 @@ public class BillingController extends MultiActionController {
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
     fetchInvoicedCustomer(bill);
+    String localeString = getShortLocale(bill);
+    model.put("bills", new Bill[]{bill});
+    return new ModelAndView("billing/printBillTxt_" + localeString, model);
+  }
+
+  public ModelAndView printBillPdf(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
+    Map<String, Object> model = new HashMap<String, Object>();
+    Bill bill = getRequestedBill(request);
+    fetchInvoicedCustomer(bill);
+    documentService.invoicePdfStream(bill.getHashCode());
     String localeString = getShortLocale(bill);
     model.put("bills", new Bill[]{bill});
     return new ModelAndView("billing/printBillTxt_" + localeString, model);

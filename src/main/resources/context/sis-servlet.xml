@@ -89,6 +89,9 @@
     <property name="historyManager">
       <ref bean="historyManager" />
     </property>
+    <property name="documentService">
+      <ref bean="documentService" />
+    </property>
   </bean>
 
   <bean id="billDeliveryController" class="cz.silesnet.web.mvc.BillDeliveryController">

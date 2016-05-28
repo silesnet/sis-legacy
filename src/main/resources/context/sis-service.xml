@@ -4,6 +4,10 @@
 
 <beans>
 
+    <bean id="documentService" class="cz.silesnet.service.impl.DefaultDocumentService">
+        <property name="billingManager" ref="billingManager" />
+    </bean>
+
     <bean id="userManager" parent="txProxyTemplate">
         <property name="target">
             <bean class="cz.silesnet.service.impl.UserManagerImpl">
