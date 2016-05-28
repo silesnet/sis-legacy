@@ -13,6 +13,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -45,8 +46,10 @@ public class DefaultDocumentService implements DocumentService, ServletContextAw
     StringBuffer buffer = writer.getBuffer();
     SwallowingHttpServletResponse swallowingResponse = new SwallowingHttpServletResponse(response, writer, "UTF-8");
     try {
-      View view = viewResolver.resolveViewName("billing/printBillTxt_cs", Locale.US);
-      view.render(new HashMap<String, Object>(), request, swallowingResponse);
+//      View view = viewResolver.resolveViewName("billing/printBillTxt_cs", Locale.US);
+//      view.render(new HashMap<String, Object>(), request, swallowingResponse);
+      RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/WEB-INF/jsp/billing/printBillTxt_cs.jsp");
+      dispatcher.include(request, swallowingResponse);
       log.info(buffer.toString());
     } catch (Exception e) {
       throw new RuntimeException(e);
