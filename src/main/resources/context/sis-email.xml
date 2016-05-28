@@ -27,4 +27,10 @@
     </property>
   </bean>
 
+  <bean id="documentService" class="cz.silesnet.service.impl.DefaultDocumentService">
+    <property name="billDAO">
+      <ref bean="billDAO" />
+    </property>
+  </bean>
+
 </beans>
