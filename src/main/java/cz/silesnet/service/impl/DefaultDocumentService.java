@@ -20,7 +20,9 @@ public class DefaultDocumentService implements DocumentService {
   }
 
   public InputStream invoicePdfStream(String uuid) {
+    log.info("streaming pdf...");
     Bill bill = billDAO.get(uuid);
+    log.info(bill);
     long billId = bill.getId();
     log.info("getting html of " + billId);
 

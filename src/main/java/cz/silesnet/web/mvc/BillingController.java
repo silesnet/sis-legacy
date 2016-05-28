@@ -217,6 +217,9 @@ public class BillingController extends MultiActionController {
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
     fetchInvoicedCustomer(bill);
+    log.info("calling document service...");
+    log.info(documentService);
+    log.info(bill);
     documentService.invoicePdfStream(bill.getHashCode());
     String localeString = getShortLocale(bill);
     model.put("bills", new Bill[]{bill});
