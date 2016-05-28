@@ -25,7 +25,7 @@ public class SimpleMimeMessagePreparatorFactory implements MimeMessagePreparator
     DelegatingMimeMessagePreparator messagePreparator = new DelegatingMimeMessagePreparator();
     InvoiceWriter writer = writerFactory.instanceOf(invoice);
     messagePreparator.addPreparator(new InvoiceMimeMessagePreparator(invoice, writer));
-//    messagePreparator.addPreparator(new PdfInvoiceMimeMessagePreparator(invoice, documentService));
+    messagePreparator.addPreparator(new PdfInvoiceMimeMessagePreparator(invoice, documentService));
     if (invoice.isSignedDelivery()) {
       messagePreparator.addPreparator(new SigningMimeMessagePreparator(signer));
     }
@@ -47,6 +47,6 @@ public class SimpleMimeMessagePreparatorFactory implements MimeMessagePreparator
   public void afterPropertiesSet() throws Exception {
     Assert.notNull(writerFactory);
     Assert.notNull(signer);
-//    Assert.notNull(documentService);
+    Assert.notNull(documentService);
   }
 }

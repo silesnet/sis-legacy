@@ -16,14 +16,11 @@ public class DefaultDocumentService implements DocumentService {
   private BillDAO billDAO;
 
   public void setBillDAO(BillDAO billDAO) {
-    log.info("DAO SET!!!!");
     this.billDAO = billDAO;
   }
 
   public InputStream invoicePdfStream(String uuid) {
-    log.info("streaming pdf...");
     Bill bill = billDAO.get(uuid);
-    log.info(bill);
     long billId = bill.getId();
     log.info("getting html of " + billId);
 
