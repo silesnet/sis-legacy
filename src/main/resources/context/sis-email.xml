@@ -23,6 +23,9 @@
     <property name="billDAO">
       <ref bean="billDAO" />
     </property>
+    <property name="viewResolver">
+      <ref bean="viewResolver" />
+    </property>
   </bean>
 
   <bean id="emailPreparatorFactory" class="cz.silesnet.service.mail.impl.SimpleMimeMessagePreparatorFactory">
