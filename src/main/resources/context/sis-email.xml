@@ -25,8 +25,4 @@
     <property name="documentService" ref="documentService" />
   </bean>
 
-  <bean id="documentService" class="cz.silesnet.service.impl.DefaultDocumentService">
-
-  </bean>
-
 </beans>

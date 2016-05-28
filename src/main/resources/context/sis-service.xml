@@ -5,7 +5,9 @@
 <beans>
 
     <bean id="documentService" class="cz.silesnet.service.impl.DefaultDocumentService">
-        <property name="billingManager" ref="billingManager" />
+        <property name="billingManager">
+            <ref local="billingManager" />
+        </property>
     </bean>
 
     <bean id="userManager" parent="txProxyTemplate">
