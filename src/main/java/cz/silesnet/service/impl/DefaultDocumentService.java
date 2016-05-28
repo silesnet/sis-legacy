@@ -16,6 +16,7 @@ public class DefaultDocumentService implements DocumentService {
   private BillDAO billDAO;
 
   public void setBillDAO(BillDAO billDAO) {
+    log.info("DAO SET!!!!");
     this.billDAO = billDAO;
   }
 
