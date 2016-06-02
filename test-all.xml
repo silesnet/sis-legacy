@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="sis-all">
+  <test name="all">
+    <packages>
+      <package name="cz.silesnet.*" />
+    </packages>
+  </test>
+</suite>
