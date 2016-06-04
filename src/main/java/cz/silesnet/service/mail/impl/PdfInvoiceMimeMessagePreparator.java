@@ -26,9 +26,9 @@ public class PdfInvoiceMimeMessagePreparator implements MimeMessagePreparator {
   }
 
   public void prepare(MimeMessage mimeMessage) throws Exception {
-//    LOG.info("adding PDF attachment to email...");
-//    final MimeMessageHelper email = new MimeMessageHelper(mimeMessage, true);
-//    email.addAttachment(pdfFilename(), pdfResource(), PDF_MIME);
+    LOG.info("adding PDF attachment to email...");
+    final MimeMessageHelper email = new MimeMessageHelper(mimeMessage, true);
+    email.addAttachment(pdfFilename(), pdfResource(), PDF_MIME);
   }
 
   private ByteArrayResource pdfResource() {
