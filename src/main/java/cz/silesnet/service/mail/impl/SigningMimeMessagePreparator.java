@@ -25,12 +25,13 @@ public class SigningMimeMessagePreparator implements MimeMessagePreparator {
   }
 
   public void prepare(final MimeMessage mimeMessage) throws IOException, MessagingException {
+    log.info("signig invoice email...");
     MimeBodyPart bodyPart = new MimeBodyPart();
     bodyPart.setText(mimeMessage.getContent().toString());
     try {
       Multipart multipart = signer.generate(bodyPart);
       mimeMessage.setContent(multipart, multipart.getContentType());
-      log.debug("Email successfuly SIGNED.");
+      log.debug("Email successfully SIGNED.");
     } catch (RuntimeException e) {
       log.info("Email SIGNING FAILED for: " + mimeMessage.getRecipients(MimeMessage.RecipientType.TO)[0].toString());
       log.info(e);

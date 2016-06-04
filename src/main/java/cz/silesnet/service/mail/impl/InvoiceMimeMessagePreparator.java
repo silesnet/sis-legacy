@@ -3,6 +3,8 @@ package cz.silesnet.service.mail.impl;
 import cz.silesnet.service.invoice.Invoice;
 import cz.silesnet.service.invoice.InvoiceWriter;
 import cz.silesnet.util.MessagesUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
@@ -18,6 +20,8 @@ import java.util.Locale;
  * Time: 15:23:10
  */
 public class InvoiceMimeMessagePreparator implements MimeMessagePreparator {
+  protected final Log LOG = LogFactory.getLog(getClass());
+
   private Invoice invoice;
   private InvoiceWriter writer;
   private Locale locale = Locale.getDefault();
@@ -28,6 +32,7 @@ public class InvoiceMimeMessagePreparator implements MimeMessagePreparator {
   }
 
   public void prepare(final MimeMessage mimeMessage) throws Exception {
+    LOG.info("creating invoice email...");
     MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
     locale = invoice.getCountry().getLocale();
 

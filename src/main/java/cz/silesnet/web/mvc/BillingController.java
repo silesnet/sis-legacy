@@ -167,7 +167,9 @@ public class BillingController extends MultiActionController {
       String localeString = getShortLocale(bill);
       view = "billing/printBillTxt_" + localeString;
       model.put("bills", new Bill[]{bill});
-      log.info("DELIVERY of bill no " + bill.getNumber() + " CONFIRMED by " + bill.getInvoicedCustomer().getName());
+      if (!ignoreDelivery) {
+        log.info("DELIVERY of bill no " + bill.getNumber() + " CONFIRMED by " + bill.getInvoicedCustomer().getName());
+      }
     } else {
       model.put("uuid", uuid);
     }
@@ -217,7 +219,6 @@ public class BillingController extends MultiActionController {
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
     fetchInvoicedCustomer(bill);
-    log.info("calling document service...");
     documentService.invoicePdfStream(bill.getHashCode());
     String localeString = getShortLocale(bill);
     model.put("bills", new Bill[]{bill});

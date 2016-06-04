@@ -149,16 +149,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.directwebremoting</groupId>-->
-            <!--<artifactId>dwr</artifactId>-->
-            <!--<version>3.0.1-RELEASE</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-test</artifactId>-->
-            <!--<version>3.2.17.RELEASE</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -248,7 +238,6 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <!--<version>5.12.1</version>-->
             <version>6.9.10</version>
             <scope>test</scope>
         </dependency>
@@ -268,12 +257,6 @@
             <groupId>org.unitils</groupId>
             <artifactId>unitils-spring</artifactId>
             <version>3.1</version>
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.springframework</groupId>-->
-                    <!--<artifactId>spring-test</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
             <scope>test</scope>
         </dependency>
         <dependency>

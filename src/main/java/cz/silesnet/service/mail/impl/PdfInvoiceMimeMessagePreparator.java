@@ -2,6 +2,8 @@ package cz.silesnet.service.mail.impl;
 
 import cz.silesnet.service.DocumentService;
 import cz.silesnet.service.invoice.Invoice;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -12,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class PdfInvoiceMimeMessagePreparator implements MimeMessagePreparator {
+  protected final Log LOG = LogFactory.getLog(getClass());
+
   public static final String PDF_MIME = "application/pdf";
   private final DocumentService documentService;
   private final Invoice invoice;
@@ -22,9 +26,9 @@ public class PdfInvoiceMimeMessagePreparator implements MimeMessagePreparator {
   }
 
   public void prepare(MimeMessage mimeMessage) throws Exception {
+    LOG.info("adding PDF attachment to email...");
     final MimeMessageHelper email = new MimeMessageHelper(mimeMessage, true);
-    // disabled
-//    email.addAttachment(pdfFilename(), pdfResource(), PDF_MIME);
+    email.addAttachment(pdfFilename(), pdfResource(), PDF_MIME);
   }
 
   private ByteArrayResource pdfResource() {

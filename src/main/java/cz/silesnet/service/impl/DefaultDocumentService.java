@@ -23,7 +23,7 @@ public class DefaultDocumentService implements DocumentService, InitializingBean
   }
 
   public InputStream invoicePdfStream(final String uuid) {
-    LOG.info("getting html of " + uuid);
+    LOG.info("getting PDF of " + uuid);
     final File pdfFile = pdfFile(uuid);
     if (!pdfFile.exists() || pdfFile.length() == 0) {
       if (!tmpFolder.exists()) {
