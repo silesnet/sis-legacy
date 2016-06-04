@@ -21,11 +21,11 @@ public class SimpleMimeMessagePreparatorFactory implements MimeMessagePreparator
   private SignedEmailGenerator signer;
   private DocumentService documentService;
 
+
   public MimeMessagePreparator newInstance(final Invoice invoice) {
     DelegatingMimeMessagePreparator messagePreparator = new DelegatingMimeMessagePreparator();
     InvoiceWriter writer = writerFactory.instanceOf(invoice);
-    messagePreparator.addPreparator(new InvoiceMimeMessagePreparator(invoice, writer));
-    messagePreparator.addPreparator(new PdfInvoiceMimeMessagePreparator(invoice, documentService));
+    messagePreparator.addPreparator(new InvoiceMimeMessagePreparator(invoice, writer, documentService));
     if (invoice.isSignedDelivery()) {
       messagePreparator.addPreparator(new SigningMimeMessagePreparator(signer));
     }
