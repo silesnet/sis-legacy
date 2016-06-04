@@ -33,7 +33,7 @@ public class InvoiceMimeMessagePreparator implements MimeMessagePreparator {
 
   public void prepare(final MimeMessage mimeMessage) throws Exception {
     LOG.info("creating invoice email...");
-    MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
+    MimeMessageHelper email = new MimeMessageHelper(mimeMessage, true);
     locale = invoice.getCountry().getLocale();
 
     email.setSentDate(new Date());
