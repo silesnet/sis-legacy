@@ -39,10 +39,11 @@ public class DefaultDocumentService implements DocumentService, InitializingBean
         if (error != 0) {
           throw new RuntimeException("error code: " + error);
         }
-        Assert.isTrue(pdfFile.exists());
-        Assert.isTrue(pdfFile.length() > 0);
+        Assert.isTrue(pdfFile.exists(), pdfFile.getAbsolutePath() + " exists");
+        Assert.isTrue(pdfFile.length() > 0, pdfFile.getAbsolutePath() + " has non zero size");
       } catch (Exception e) {
         LOG.error("PDF creation command failed for '" + uuid + "'", e);
+        throw new RuntimeException(e);
       }
     }
     final FileInputStream pdfInput;
