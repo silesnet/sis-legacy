@@ -20,6 +20,8 @@
   </bean>
 
   <bean id="documentService" class="cz.silesnet.service.impl.DefaultDocumentService">
+    <property name="tmpFolder" value="${pdf.tmp.folder}" />
+    <property name="pdfCommand" value="${pdf.command}" />
   </bean>
 
   <bean id="emailPreparatorFactory" class="cz.silesnet.service.mail.impl.SimpleMimeMessagePreparatorFactory">
