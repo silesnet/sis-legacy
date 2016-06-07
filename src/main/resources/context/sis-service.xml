@@ -83,6 +83,9 @@
                 <property name="eventBus">
                     <ref bean="eventBus" />
                 </property>
+                <property name="networkService">
+                    <ref bean="networkService" />
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">

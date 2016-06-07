@@ -12,6 +12,7 @@ import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
+import cz.silesnet.service.NetworkService;
 import cz.silesnet.service.SettingManager;
 import cz.silesnet.util.MessagesUtils;
 import org.apache.commons.collections.ListUtils;
@@ -42,6 +43,8 @@ public class CustomerManagerImpl implements CustomerManager {
     private LabelDAO labelDAO;
 
     private EventBus eventBus;
+
+    private NetworkService networkService;
 
     public Customer get(Long customerId) {
         return dao.get(customerId);
@@ -224,6 +227,7 @@ public class CustomerManagerImpl implements CustomerManager {
         if (!found)
             // no customer context change save separately
             sDao.save(service);
+      networkService.kickUser(service.getId());
     }
 
     public void deleteService(Service service) {
@@ -436,4 +440,8 @@ public class CustomerManagerImpl implements CustomerManager {
     public void setEventBus(final EventBus eventBus) {
         this.eventBus = eventBus;
     }
+
+  public void setNetworkService(NetworkService networkService) {
+    this.networkService = networkService;
+  }
 }

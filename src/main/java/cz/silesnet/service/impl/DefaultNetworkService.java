@@ -4,6 +4,7 @@ import cz.silesnet.service.NetworkService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
@@ -11,11 +12,11 @@ import javax.sql.DataSource;
 public class DefaultNetworkService implements NetworkService, InitializingBean {
   private static final Log log = LogFactory.getLog(DefaultNetworkService.class);
 
-  private DataSource dataSource;
   private String kickPppoeUserCommand;
+  private JdbcTemplate jdbcTemplate;
 
   public void setDataSource(DataSource dataSource) {
-    this.dataSource = dataSource;
+    this.jdbcTemplate = new JdbcTemplate(dataSource);
   }
 
   public void setKickPppoeUserCommand(String kickPppoeUserCommand) {
@@ -24,7 +25,7 @@ public class DefaultNetworkService implements NetworkService, InitializingBean {
 
   @Override
   public void afterPropertiesSet() throws Exception {
-    Assert.notNull(dataSource);
+    Assert.notNull(jdbcTemplate);
     Assert.notNull(kickPppoeUserCommand);
   }
 
@@ -55,10 +56,10 @@ public class DefaultNetworkService implements NetworkService, InitializingBean {
   }
 
   private String serviceMaster(final long serviceId) {
-    return "";
+    return "test";
   }
 
   private String serviceLogin(final long serviceId) {
-    return "";
+    return "test";
   }
 }
