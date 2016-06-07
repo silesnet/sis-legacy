@@ -26,9 +26,9 @@ public class SimpleMimeMessagePreparatorFactory implements MimeMessagePreparator
     DelegatingMimeMessagePreparator messagePreparator = new DelegatingMimeMessagePreparator();
     InvoiceWriter writer = writerFactory.instanceOf(invoice);
     messagePreparator.addPreparator(new InvoiceMimeMessagePreparator(invoice, writer, documentService));
-    if (invoice.isSignedDelivery()) {
-      messagePreparator.addPreparator(new SigningMimeMessagePreparator(signer));
-    }
+//    if (invoice.isSignedDelivery()) {
+//      messagePreparator.addPreparator(new SigningMimeMessagePreparator(signer));
+//    }
     return  messagePreparator;
   }
 
