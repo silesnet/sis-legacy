@@ -155,4 +155,9 @@
         </property>
     </bean>
 
+    <bean id="networkService" class="cz.silesnet.service.impl.DefaultNetworkService">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="kickPppoeUserCommand" value="/var/sis/kick-pppoe-user"/>
+    </bean>
+
 </beans>
