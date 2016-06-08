@@ -160,7 +160,7 @@
 
     <bean id="networkService" class="cz.silesnet.service.impl.DefaultNetworkService">
         <property name="dataSource" ref="dataSource"/>
-        <property name="kickPppoeUserCommand" value="/var/sis/kick-pppoe-user"/>
+        <property name="kickPppoeUserCommand" value="${kick-pppoe.command}"/>
     </bean>
 
 </beans>

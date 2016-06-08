@@ -8,18 +8,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
+import java.io.File;
 
 public class DefaultNetworkService implements NetworkService, InitializingBean {
   private static final Log log = LogFactory.getLog(DefaultNetworkService.class);
 
-  private String kickPppoeUserCommand;
+  private File kickPppoeUserCommand;
   private JdbcTemplate jdbcTemplate;
 
   public void setDataSource(DataSource dataSource) {
     this.jdbcTemplate = new JdbcTemplate(dataSource);
   }
 
-  public void setKickPppoeUserCommand(String kickPppoeUserCommand) {
+  public void setKickPppoeUserCommand(File kickPppoeUserCommand) {
     this.kickPppoeUserCommand = kickPppoeUserCommand;
   }
 
@@ -37,7 +38,7 @@ public class DefaultNetworkService implements NetworkService, InitializingBean {
       @Override
       public void run() {
         try {
-          Process process = new ProcessBuilder(kickPppoeUserCommand, master, login)
+          Process process = new ProcessBuilder(kickPppoeUserCommand.getPath(), master, login)
               .redirectErrorStream(true)
               .redirectOutput(ProcessBuilder.Redirect.INHERIT)
               .start();
