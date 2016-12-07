@@ -44,7 +44,7 @@ public class DefaultNetworkService implements NetworkService, InitializingBean {
         @Override
         public void run() {
           try {
-            Process process = new ProcessBuilder(kickPppoeUserCommand.getPath(), master, login)
+            Process process = new ProcessBuilder(kickPppoeUserCommand.getPath(), "-d", master, "-u", login)
                 .redirectErrorStream(true)
                 .redirectOutput(ProcessBuilder.Redirect.INHERIT)
                 .start();
