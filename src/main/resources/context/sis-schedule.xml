@@ -31,7 +31,7 @@
 
   <bean id="processSendingQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="processSendingQueueJobDetail" />
-    <property name="cronExpression" value="0/20 * * * * ?" />
+    <property name="cronExpression" value="0/5 * * * * ?" />
   </bean>
 
   <bean id="processSendingQueueJobDetail"
