@@ -5,8 +5,8 @@
 
 <hibernate-mapping>
     <class name="cz.silesnet.model.Event" table="events">
-        <id name="id" unsaved-value="null">
-            <generator class="increment" />
+        <id name="id" column="id" unsaved-value="null">
+            <generator class="identity" />
         </id>
         <property name="event" length="50" not-null="true" />
         <property name="entity" length="30" />

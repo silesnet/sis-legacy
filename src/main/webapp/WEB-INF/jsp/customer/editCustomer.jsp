@@ -144,6 +144,17 @@
 	</c:otherwise>
 </c:choose>
 
+<c:choose>
+	<c:when test="${isDisconnected}">
+	    DISCONNECTED
+		<form name="reconnectCustomer" method="POST" action="${ctx}/customer/edit.html?action=reconnect&customerId=${customer.id}&_navPushUrl=1">
+            <span class="actionLink">
+                <a href="javascript:document.reconnectCustomer.submit()" class="action">
+                RECONNECT</a></span>
+        </form>
+	</c:when>
+</c:choose>
+
 <!--
 <span class="actionLink"><a href="${ctx}/service/edit.html?action=showForm&customerId=${customer.id}&_navPushUrl=1" class="action">
 	<fmt:message key="listServices.action.addService" /></a></span>

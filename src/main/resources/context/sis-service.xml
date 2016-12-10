@@ -163,4 +163,35 @@
         <property name="kickPppoeUserCommand" value="${kick-pppoe.command}"/>
     </bean>
 
+    <bean id="commandManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.CommandManagerImpl">
+                <property name="commandDAO">
+                    <ref bean="commandDAO" />
+                </property>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="submit">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="eventManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="cz.silesnet.service.impl.EventManagerImpl">
+                <property name="eventDAO">
+                    <ref bean="eventDAO" />
+                </property>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
+        </property>
+    </bean>
+
 </beans>

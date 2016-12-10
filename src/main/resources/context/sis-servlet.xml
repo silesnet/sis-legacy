@@ -70,6 +70,12 @@
     <property name="billingManager">
       <ref bean="billingManager" />
     </property>
+    <property name="commandManager">
+      <ref bean="commandManager" />
+    </property>
+    <property name="eventManager">
+      <ref bean="eventManager" />
+    </property>
     <property name="commandName">
       <value>customer</value>
     </property>

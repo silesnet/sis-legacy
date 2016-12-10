@@ -51,6 +51,10 @@ public class CustomerController extends AbstractCRUDController {
 
     private BillingManager bMgr;
 
+    private EventManager eventManager;
+
+    private CommandManager commandManager;
+
     public void setCustomerManager(CustomerManager customerManager) {
         cMgr = customerManager;
     }
@@ -69,6 +73,14 @@ public class CustomerController extends AbstractCRUDController {
 
     public void setBillingManager(BillingManager billingManager) {
         bMgr = billingManager;
+    }
+
+    public void setEventManager(EventManager eventManager) {
+        this.eventManager = eventManager;
+    }
+
+    public void setCommandManager(CommandManager commandManager) {
+        this.commandManager = commandManager;
     }
 
     @Override
@@ -277,19 +289,21 @@ public class CustomerController extends AbstractCRUDController {
     }
 
     @Secured({"ROLE_ACCOUNTING"})
-    public ModelAndView enableConnectivity(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        log.debug("Enabling customers connectivity");
-        // TODO: set customer billing status to invoice,
-        // TODO: for every customers service set its status to INHERIT and
-        // TODO: kick, enable port or send email (call crm-service...)
-//        // get customer
-//        Customer c = (Customer) formBackingObject(request);
-//        // deactivate and persist change
-//        c.getBilling().setIsActive(false);
-//        // set new status from parameter in the request
-//        c.getBilling().setStatus(BillingStatus.INVOICE.valueOf(
-//            ServletRequestUtils.getRequiredIntParameter(request, "newStatusId")));
-//        cMgr.update(c);
+    public ModelAndView reconnect(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Customer c = (Customer) formBackingObject(request);
+        log.debug("Enabling customers connectivity for " + c.getName());
+        final Command reconnect = new Command();
+        reconnect.setCommand("reconnect");
+        reconnect.setEntity("customers");
+        reconnect.setEntityId(c.getId());
+        reconnect.setData("{ }");
+        reconnect.setStatus("issued");
+        reconnect.setInsertedOn(new Date());
+
+        final long reconnectCommandId = commandManager.submit(reconnect);
+        final String reconnectStatus = commandManager.status(reconnectCommandId);
+        log.debug(reconnectStatus);
+        // TODO: wait for proper reconnectStatus
 //        // set success message
 //        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.deactivateSuccess",
 //                                             new Object[]{c.getId(), c.getName()});
@@ -435,7 +449,6 @@ public class CustomerController extends AbstractCRUDController {
         // InvoiceFormat enum
         model.put("invoiceFormats", EnumSet.allOf(InvoiceFormat.class));
         // include Javascripts for safe submitting and calendar
-        // TODO: add canEnableConnectivity bool
         // when customer is active, and is disconnected (replay, customer events)
         model.put("scripts", new String[]{"safeSubmit.js", "calendar.js"});
         return model;
@@ -554,8 +567,23 @@ public class CustomerController extends AbstractCRUDController {
                 fields.put("billingStatus", BillingStatus.getInactiveStatuses());
                 fields.put("billingStatusComplementary", BillingStatus.getActiveStatuses());
             }
+            fields.put("isDisconnected", isDisconnected(c.getId()));
         }
         return fields;
+    }
+
+    private boolean isDisconnected(long customerId) {
+        final Set<String> connectionEvents = new HashSet<>();
+        connectionEvents.add("disconnected");
+        connectionEvents.add("reconnected");
+        connectionEvents.add("connected");
+        String lastEvent = null;
+        for (Event event : eventManager.events("customers", customerId)) {
+            if (connectionEvents.contains(event.getEvent())) {
+                lastEvent = event.getEvent();
+            }
+        }
+        return "disconnected".equals(lastEvent);
     }
 
     @SuppressWarnings("unchecked")

@@ -46,4 +46,16 @@
     </property>
   </bean>
 
+  <bean id="commandDAO" class="cz.silesnet.dao.hibernate.CommandDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
+  <bean id="eventDAO" class="cz.silesnet.dao.hibernate.EventDAOHibernate">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory" />
+    </property>
+  </bean>
+
 </beans>
