@@ -8,7 +8,7 @@
 <tr><td width="45%" >
 
 <%-- Contract --%>
-<h3><fmt:message key="editCustomer.header.Contract" /><c:if test="${!synchronized}">*</c:if></h3>
+<h3><fmt:message key="editCustomer.header.Contract" /><c:if test="${!isSynchronized}">*</c:if></h3>
 <table class="customerDetail" width="100%">
 <s:nestedPath path="customer">
 	<app:viewTextLine path="contractNo" label="Customer.fContractNo" styleClass="odd" />

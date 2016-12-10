@@ -6,11 +6,11 @@
 <%@ attribute name="valueType" %>
 <%@ attribute name="styleClass" %>
 <%@ attribute name="i18n" %>
-<%@ attribute name="enum" %>
+<%@ attribute name="isEnum" %>
 
 <app:formLine label="${label}" path="${path}" required="${required}" valueType="${valueType}" styleClass="${styleClass}">
 		<c:choose>
-			<c:when test="${!empty enum}">
+			<c:when test="${!empty isEnum}">
 				<html:input path="${path}.id" type="hidden" />
 			</c:when>
 			<c:otherwise>

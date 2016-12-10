@@ -30,7 +30,7 @@
 	<app:formInputLine path="contact.address.street" label="Customer.fContact.fAddress.fStreet" required="true" size="25" />
 	<app:formInputLine path="contact.address.city" label="Customer.fContact.fAddress.fCity" required="true" size="15" />
 	<app:formInputLine path="contact.address.postalCode" label="Customer.fContact.fAddress.fPostalCode" required="true" size="7" />
-	<app:formDisabledLine path="contact.address.country" label="Customer.fContact.fAddress.fCountry" i18n="true" enum="true" />
+	<app:formDisabledLine path="contact.address.country" label="Customer.fContact.fAddress.fCountry" i18n="true" isEnum="true" />
 	<app:formInputLine path="contact.email" label="Customer.fContact.fEmail" size="30" />
 	<app:formInputLine path="contact.phone" label="Customer.fContact.fPhone" size="30" />
 	<app:formInputLine path="contact.name" label="Customer.fContact.fName" size="30" />
