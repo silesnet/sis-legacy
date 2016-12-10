@@ -277,6 +277,26 @@ public class CustomerController extends AbstractCRUDController {
     }
 
     @Secured({"ROLE_ACCOUNTING"})
+    public ModelAndView enableConnectivity(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        log.debug("Enabling customers connectivity");
+        // TODO: set customer billing status to invoice,
+        // TODO: for every customers service set its status to INHERIT and
+        // TODO: kick, enable port or send email (call crm-service...)
+//        // get customer
+//        Customer c = (Customer) formBackingObject(request);
+//        // deactivate and persist change
+//        c.getBilling().setIsActive(false);
+//        // set new status from parameter in the request
+//        c.getBilling().setStatus(BillingStatus.INVOICE.valueOf(
+//            ServletRequestUtils.getRequiredIntParameter(request, "newStatusId")));
+//        cMgr.update(c);
+//        // set success message
+//        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.deactivateSuccess",
+//                                             new Object[]{c.getId(), c.getName()});
+        return goBack(request, response);
+    }
+
+    @Secured({"ROLE_ACCOUNTING"})
     public ModelAndView activate(HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.debug("Activating Customer.");
         // get customer
@@ -415,6 +435,8 @@ public class CustomerController extends AbstractCRUDController {
         // InvoiceFormat enum
         model.put("invoiceFormats", EnumSet.allOf(InvoiceFormat.class));
         // include Javascripts for safe submitting and calendar
+        // TODO: add canEnableConnectivity bool
+        // when customer is active, and is disconnected (replay, customer events)
         model.put("scripts", new String[]{"safeSubmit.js", "calendar.js"});
         return model;
     }

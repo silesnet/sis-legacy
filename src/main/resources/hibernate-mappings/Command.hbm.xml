@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="cz.silesnet.model.Command" table="commands">
+        <id name="id" unsaved-value="null">
+            <generator class="increment" />
+        </id>
+        <property name="command" length="50" not-null="true" />
+        <property name="entity" length="30" />
+        <property name="entityId" column="entity_id" length="30" />
+        <property name="data" />
+        <property name="status" length="20" not-null="true" />
+        <property name="insertedOn" column="happened_on" type="timestamp" not-null="true"/>
+        <property name="startedOn" column="started_on" type="timestamp" />
+        <property name="finishedOn" column="finished_on" type="timestamp" />
+    </class>
+</hibernate-mapping>

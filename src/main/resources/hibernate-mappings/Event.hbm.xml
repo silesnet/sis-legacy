@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="cz.silesnet.model.Event" table="events">
+        <id name="id" unsaved-value="null">
+            <generator class="increment" />
+        </id>
+        <property name="event" length="50" not-null="true" />
+        <property name="entity" length="30" />
+        <property name="entityId" column="entity_id" length="30" />
+        <property name="data" />
+        <property name="commandId" column="command_id" />
+        <property name="happenedOn" column="happened_on" type="timestamp" not-null="true"/>
+    </class>
+</hibernate-mapping>
