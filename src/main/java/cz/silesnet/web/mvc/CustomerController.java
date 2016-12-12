@@ -28,6 +28,9 @@ import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static cz.silesnet.util.MessagesUtils.setCodedFailureMessage;
+import static cz.silesnet.util.MessagesUtils.setCodedSuccessMessage;
+
 /**
  * Controller for Customer handling.
  *
@@ -95,7 +98,7 @@ public class CustomerController extends AbstractCRUDController {
         log.debug("inserting new service from blueprint '" + blueprintId + "'");
         final ServiceBlueprint blueprint = cMgr.addService(blueprintId);
         log.debug("new service added from blueprint: " + blueprint);
-        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.addServiceSuccess", blueprint.getName());
+        setCodedSuccessMessage(request, "editCustomer.addServiceSuccess", blueprint.getName());
         ModelAndView modelAndView;
         if (blueprint.isNewCustomerCreated())
             modelAndView = new ModelAndView(new RedirectView(request.getContextPath() + "/customer/edit.html?action=showForm&customerId=" + blueprint.getCustomerId()));
@@ -115,7 +118,7 @@ public class CustomerController extends AbstractCRUDController {
         // delete customer
         cMgr.delete(c);
         // set success message
-        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.deleteSuccess",
+        setCodedSuccessMessage(request, "editCustomer.deleteSuccess",
                 new Object[]{c.getId(), c.getName()});
         // pop top url of deleted object
         NavigationUtils.getReturnUrl(request, "");
@@ -135,7 +138,7 @@ public class CustomerController extends AbstractCRUDController {
         // persist changes
         cMgr.insert(c);
         // set success message
-        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.insertSuccess",
+        setCodedSuccessMessage(request, "editCustomer.insertSuccess",
                 new Object[]{c.getId(), c.getName()});
         return new ModelAndView(new RedirectView(request.getContextPath()
                 + "/customer/view.html?action=showDetail&customerId=" + c.getId()));
@@ -283,7 +286,7 @@ public class CustomerController extends AbstractCRUDController {
         // persist changes
         cMgr.update(c);
         // set success message
-        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.updateSuccess",
+        setCodedSuccessMessage(request, "editCustomer.updateSuccess",
                 new Object[]{c.getId(), c.getName()});
         return goBack(request, response);
     }
@@ -296,17 +299,16 @@ public class CustomerController extends AbstractCRUDController {
         reconnect.setCommand("reconnect");
         reconnect.setEntity("customers");
         reconnect.setEntityId(c.getId());
-        reconnect.setData("{ }");
-        reconnect.setStatus("issued");
-        reconnect.setInsertedOn(new Date());
 
         final long reconnectCommandId = commandManager.submit(reconnect);
-        final String reconnectStatus = commandManager.status(reconnectCommandId);
-        log.debug(reconnectStatus);
-        // TODO: wait for proper reconnectStatus
-//        // set success message
-//        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.deactivateSuccess",
-//                                             new Object[]{c.getId(), c.getName()});
+
+        final CommandExecution execution = new CommandExecution(commandManager, reconnectCommandId);
+        execution.waitUntilFinished(2000);
+        if (execution.hasCompleted()) {
+            setCodedSuccessMessage(request, "editCustomer.reconnectSuccess", new Object[]{c.getId(), c.getName()});
+        } else {
+            setCodedFailureMessage(request, "editCustomer.reconnectFail", new Object[]{c.getId(), c.getName()});
+        }
         return goBack(request, response);
     }
 
@@ -322,7 +324,7 @@ public class CustomerController extends AbstractCRUDController {
                 ServletRequestUtils.getRequiredIntParameter(request, "newStatusId")));
         cMgr.update(c);
         // set success message
-        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.activateSuccess",
+        setCodedSuccessMessage(request, "editCustomer.activateSuccess",
                 new Object[]{c.getId(), c.getName()});
         return goBack(request, response);
     }
@@ -339,7 +341,7 @@ public class CustomerController extends AbstractCRUDController {
                 ServletRequestUtils.getRequiredIntParameter(request, "newStatusId")));
         cMgr.update(c);
         // set success message
-        MessagesUtils.setCodedSuccessMessage(request, "editCustomer.deactivateSuccess",
+        setCodedSuccessMessage(request, "editCustomer.deactivateSuccess",
                 new Object[]{c.getId(), c.getName()});
         return goBack(request, response);
     }
@@ -359,7 +361,7 @@ public class CustomerController extends AbstractCRUDController {
                 settingMgr.update(s);
             }
             // set success message
-            MessagesUtils.setCodedSuccessMessage(request, "overviewCustomers.updateSuccess", rate);
+            setCodedSuccessMessage(request, "overviewCustomers.updateSuccess", rate);
         } else {
             MessagesUtils.setCodedFailureMessage(request, "overviewCustomers.updateFailure");
         }

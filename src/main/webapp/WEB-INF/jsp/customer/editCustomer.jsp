@@ -120,6 +120,15 @@
 <div class="actionLinks">
 
 <c:choose>
+	<c:when test="${isDisconnected}">
+	    <fmt:message key="viewCustomer.status.disconnected" />
+        <span class="actionLink"><a href="${ctx}/customer/edit.html?action=reconnect&customerId=${customer.id}&_navPushUrl=1">
+            <fmt:message key="editCustomer.action.reconnect" /></a></span>
+    <br />
+	</c:when>
+</c:choose>
+
+<c:choose>
 	<c:when test="${customer.billing.isActive}">
 		<form name="customerNewStatus" method="POST" action="${ctx}/customer/edit.html?action=deactivate&customerId=${customer.id}&_navPushUrl=1">
 		<span class="actionLink">
@@ -143,17 +152,7 @@
 		</form>
 	</c:otherwise>
 </c:choose>
-
-<c:choose>
-	<c:when test="${isDisconnected}">
-	    DISCONNECTED
-		<form name="reconnectCustomer" method="POST" action="${ctx}/customer/edit.html?action=reconnect&customerId=${customer.id}&_navPushUrl=1">
-            <span class="actionLink">
-                <a href="javascript:document.reconnectCustomer.submit()" class="action">
-                RECONNECT</a></span>
-        </form>
-	</c:when>
-</c:choose>
+<br />
 
 <!--
 <span class="actionLink"><a href="${ctx}/service/edit.html?action=showForm&customerId=${customer.id}&_navPushUrl=1" class="action">

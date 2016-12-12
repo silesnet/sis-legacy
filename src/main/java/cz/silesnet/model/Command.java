@@ -6,9 +6,9 @@ public class Command extends Entity {
   private String command;
   private String entity;
   private long entityId;
-  private String data;
-  private String status;
-  private Date insertedOn;
+  private String data = "{ }";
+  private String status = "issued";
+  private Date insertedOn = new Date();
   private Date startedOn;
   private Date finishedOn;
 

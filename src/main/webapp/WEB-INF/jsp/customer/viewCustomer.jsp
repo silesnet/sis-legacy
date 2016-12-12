@@ -126,6 +126,14 @@
 <span class="actionLink"><a href="${ctx}/customer/view.html?action=goBack">
 	<fmt:message key="app.action.goBack" /></a></span>
 <br />
+
+<c:choose>
+	<c:when test="${isDisconnected}">
+	    <fmt:message key="viewCustomer.status.disconnected" />
+    <br />
+	</c:when>
+</c:choose>
+
 <span class="actionLink"><a href="${ctx}/customer/view.html?action=showList">
 	<fmt:message key="viewCustomer.action.showList" /></a></span>
 <span class="actionLink"><a href="${ctx}/customer/edit.html?action=showForm&customerId=${customer.id}&_navPushUrl=1">
