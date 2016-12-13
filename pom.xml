@@ -55,6 +55,10 @@
                     <groupId>ehcache</groupId>
                     <artifactId>ehcache</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>jta</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -180,9 +184,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>postgresql</groupId>
+            <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.1-901.jdbc4</version>
+            <version>9.2-1002-jdbc4</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
