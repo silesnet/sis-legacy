@@ -23,7 +23,7 @@
 <!-- Header -->
 <div id="HeaderWrapper"><div id="Header">
 	<!-- Menu -->
-	<h2><a href="https://sis.silesnet.net">Zpìt</a></h2>
+	<h2><a href="https://sis.silesnet.net">ZpÄ›t</a></h2>
 </div></div>
 
 
