@@ -236,7 +236,10 @@ Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit sml
 <BR><CENTER>
 <TABLE BORDER=0 WIDTH="100%" FRAME="VOID">
 <TR>
-    <TD Width="50%" Align="Left">
+    <TD>
+      <canvas id='qrcode-canvas'></canvas>
+    </TD>
+    <TD Width="30%">
          <TABLE BORDER=1 BgColor="#F0F0F0">
            <TR>
              <TH ALIGN="Center">Sazba DPH</TH><TH ALIGN="Center">Základ (v Kč)</TH><TH ALIGN="Center">DPH (v Kč)</TH>
@@ -264,5 +267,14 @@ Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit sml
 	<br style="page-break-after: always" />
 </c:if>
 </c:forEach>
+<script type="text/javascript">
+  var qrCode = "${bill.QrCode}";
+  if (qrCode) {
+    var QRC = qrcodegen.QrCode;
+    var qr = QRC.encodeText(qrCode, QRC.Ecc.MEDIUM);
+    var canvas = document.getElementById('qrcode-canvas');
+    qr.drawCanvas(2, 2, canvas);
+  }
+</script>
 </Body>
 </HTML>
