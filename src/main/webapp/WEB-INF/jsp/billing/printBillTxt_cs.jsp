@@ -7,6 +7,7 @@
 <meta http-equiv="content-language" content="cs">
 <meta http-equiv="content-Type" content="text/html; charset=windows-1250">
 <Title>Doklad od dodavatele IČ:25392280 SilesNet s.r.o.</TITLE>
+<script type="text/javascript" src="/account/js/qrcodegen.js"></script>
 </Head>
 <Body BgColor="White">
 <c:forEach items="${bills}" var="bill" varStatus="billStatus">
