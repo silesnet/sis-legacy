@@ -50,6 +50,11 @@ public class CustomerManagerImpl implements CustomerManager {
         return dao.get(customerId);
     }
 
+    @Override
+    public String findAddressById(long addressId) {
+        return sDao.findAddressById(addressId);
+    }
+
     public ServiceBlueprint addService(final Integer blueprintId) {
         final ServiceBlueprint blueprint = sDao.findBlueprint(blueprintId);
         Customer customer;

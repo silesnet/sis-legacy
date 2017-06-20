@@ -36,4 +36,6 @@ public interface ServiceDAO extends DAO {
     public void saveBlueprint(ServiceBlueprint blueprint);
 
     public Long findMaxIdInRange(long min, long max);
+
+    public String findAddressById(long addressId);
 }

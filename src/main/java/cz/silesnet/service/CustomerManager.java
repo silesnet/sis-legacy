@@ -52,4 +52,6 @@ public interface CustomerManager {
     public void exportCustomersToInsert(List<Customer> customers, PrintWriter writer);
 
     long nextOneTimeServiceId(Long customerId);
+
+    String findAddressById(long addressId);
 }

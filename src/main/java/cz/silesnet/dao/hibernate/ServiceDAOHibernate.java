@@ -21,6 +21,17 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
     // ~ Methods
     // ----------------------------------------------------------------
 
+
+    @Override
+    public String findAddressById(long addressId) {
+        final Session session = getSessionFactory().getCurrentSession();
+        final SQLQuery query = session.createSQLQuery(
+            "SELECT label FROM addresses WHERE address_id=" + addressId
+        ).addScalar("label", Hibernate.STRING);
+        final Object label = query.uniqueResult();
+        return label != null ? label.toString() : "";
+    }
+
     public List<Service> getAllOrphans() {
         return getHibernateTemplate().find(
                 "from cz.silesnet.model.Service as s where not exists (from cz.silesnet.model.Customer as c where c.id = s.customerId)");
