@@ -18,7 +18,6 @@
         <component name="connectivity">
             <property name="download" />
             <property name="upload" />
-            <property name="isAggregated" column="is_aggregated" />
             <property name="bps" />
         </component>
         <property name="info" length="150" />

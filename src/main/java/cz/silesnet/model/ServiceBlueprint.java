@@ -75,8 +75,6 @@ public class ServiceBlueprint {
             service.getConnectivity().setBps("k");
         else
             service.getConnectivity().setBps("M");
-        service.getConnectivity().setIsAggregated(false);
-        service.getConnectivity().setAggregationId(null);
         return service;
     }
 

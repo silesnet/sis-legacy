@@ -61,8 +61,6 @@ public class PrepareMixture {
     Connectivity c = new Connectivity();
     c.setDownload(512);
     c.setUpload(256);
-    c.setIsAggregated(false);
-    c.setAggregationId(0);
     return c;
   }
 

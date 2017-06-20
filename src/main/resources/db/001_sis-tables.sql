@@ -111,12 +111,11 @@ CREATE TABLE services (
     frequency integer,
     download integer,
     upload integer,
-    is_aggregated boolean,
     info character varying(150),
-    replace_id bigint,
     additionalname character varying(50),
     bps character(1),
-    status character varying(50)
+    status character varying(50),
+    address_id integer
 );
 
 CREATE TABLE newservices

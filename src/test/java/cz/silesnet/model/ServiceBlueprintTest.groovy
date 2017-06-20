@@ -98,8 +98,7 @@ public class ServiceBlueprintTest extends Specification {
         service.connectivity.download == DOWNLOAD
         service.connectivity.upload == UPLOAD
         service.connectivity.bps == BPS
-        !service.connectivity.isAggregated
-        service.connectivity.aggregationId == null
+
         service.period.from.time == FROM
         service.period.to == null
         service.info == null

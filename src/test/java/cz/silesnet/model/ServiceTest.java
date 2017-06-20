@@ -91,7 +91,6 @@ public class ServiceTest {
         log.info("Invoice line text: " + s.getBillItemText(Country.CZ));
         log.info("Invoice line text: " + s.getBillItemText(Country.PL));
         // log.debug("Invoice line text: " + s.getShortInfo());
-        s.getConnectivity().setIsAggregated(false);
         log.info("Invoice line text: " + s.getBillItemText(Country.CZ));
         log.info("Invoice line text: " + s.getBillItemText(Country.PL));
         s.getConnectivity().setUpload(null);
@@ -124,7 +123,6 @@ public class ServiceTest {
         service.getConnectivity().setDownload(4);
         service.getConnectivity().setUpload(2);
         service.getConnectivity().setBps("M");
-        service.getConnectivity().setIsAggregated(true);
-        assertEquals("Wireless 4/2 Mbps (&)", service.getShortInfo());
+        assertEquals("Wireless 4/2 Mbps", service.getShortInfo());
     }
 }

@@ -23,10 +23,6 @@ public class Connectivity implements HistoricToString, Serializable {
 
   private Integer fUpload;
 
-  private Boolean fIsAggregated = false;
-
-  private Integer fAggregationId = 0;
-
   private String fBps = "M";
 
   // ~ Constructors
@@ -47,27 +43,15 @@ public class Connectivity implements HistoricToString, Serializable {
   /**
    * @param download
    * @param upload
-   * @param aggregated
-   * @param id
    */
   public Connectivity(Integer download, Integer upload, Boolean aggregated, Integer id) {
     this();
     fDownload = download;
     fUpload = upload;
-    fIsAggregated = aggregated;
-    fAggregationId = id;
   }
 
   // ~ Methods
   // ----------------------------------------------------------------
-
-  public void setAggregationId(Integer aggregationId) {
-    fAggregationId = aggregationId;
-  }
-
-  public Integer getAggregationId() {
-    return fAggregationId;
-  }
 
   public void setDownload(Integer download) {
     fDownload = download;
@@ -79,15 +63,7 @@ public class Connectivity implements HistoricToString, Serializable {
 
   public String getHistoricToString() {
     return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(getDownload()).append(
-        getUpload()).append(getIsAggregated()).append(getAggregationId()).toString();
-  }
-
-  public void setIsAggregated(Boolean isAggregated) {
-    fIsAggregated = isAggregated;
-  }
-
-  public Boolean getIsAggregated() {
-    return fIsAggregated;
+        getUpload()).toString();
   }
 
   public void setUpload(Integer upload) {

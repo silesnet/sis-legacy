@@ -124,8 +124,6 @@ public class Service extends Entity implements HistoricToString {
         StringBuffer shortName = new StringBuffer(getLongName());
         if (getIsConnectivity()) {
             shortName.append(" ").append(getConnectivity().getLinkSpeedText());
-            if (getConnectivity().getIsAggregated())
-                shortName.append(" (&)");
         }
         return shortName.toString();
     }
@@ -134,11 +132,7 @@ public class Service extends Entity implements HistoricToString {
         StringBuffer invoiceLine = new StringBuffer(getLongName());
         if (getIsConnectivity()) {
             Connectivity con = getConnectivity();
-            if (con.getIsAggregated() && Country.PL.equals(country))
-                invoiceLine.append(" do");
             invoiceLine.append(" ").append(con.getLinkSpeedText());
-            if (con.getIsAggregated() && Country.CZ.equals(country))
-                invoiceLine.append(" FUP");
         }
         return invoiceLine.toString();
     }

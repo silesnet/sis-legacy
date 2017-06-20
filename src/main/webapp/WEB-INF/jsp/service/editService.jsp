@@ -55,8 +55,6 @@
 		<input type="radio" name="connectivity.bps" value="k" ${service.connectivity.bps != 'M' ? 'checked ' : ''} />kbps
 	</spring:bind></td>
 	</tr>
-	<%-- Connectivity isAggregated --%>
-	<app:formCheckboxLine path="connectivity.isAggregated" label="Service.fConnectivity.fIsAggregated" required="true" />
 </table>
 
 </td></tr></table>
