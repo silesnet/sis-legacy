@@ -263,10 +263,6 @@ Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit sml
 </Table><BR>
 </CENTER>
 </DIV>
-<c:if test="${!billStatus.last}">
-	<br style="page-break-after: always" />
-</c:if>
-</c:forEach>
 <script type="text/javascript">
   var qrCode = "SPD*1.0*ACC:CZ9755000000000075583001+RZBCCZPP*AM:${bill.brt}*CC:CZK*MSG:SilesNet faktura ${bill.number}*X-INV:${bill.number}*X-KS:0308*X-VS:${bill.number}";
   var QRC = qrcodegen.QrCode;
@@ -274,5 +270,9 @@ Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit sml
   var canvas = document.getElementById('qrcode-canvas');
   qr.drawCanvas(2, 2, canvas);
 </script>
+<c:if test="${!billStatus.last}">
+	<br style="page-break-after: always" />
+</c:if>
+</c:forEach>
 </Body>
 </HTML>
