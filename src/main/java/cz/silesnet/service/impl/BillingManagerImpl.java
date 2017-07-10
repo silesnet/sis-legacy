@@ -109,6 +109,13 @@ public class BillingManagerImpl implements BillingManager {
   private static Map<String, String> errorsAndWarningsKeysMap() {
     HashMap<String, String> keys = new HashMap<String, String>();
     keys.put("billing.customerNotActive", "mainBilling.status.deactivated");
+    keys.put("billing.invoicingCeased", "mainBilling.msg.invoicingCeased");
+    keys.put("billing.customerDeadhead", "mainBilling.msg.customerDeadhead");
+    keys.put("billing.customerHostsCell", "mainBilling.msg.customerHostsCell");
+    keys.put("billing.customerVip", "mainBilling.msg.customerVip");
+    keys.put("billing.customerPromotion", "mainBilling.msg.customerPromotion");
+    keys.put("billing.billingExpired", "mainBilling.msg.billingExpired");
+    keys.put("billing.customerGivenToJurist", "mainBilling.msg.customerGivenToJurist");
     keys.put("billing.billingDisabled", "mainBilling.msg.billinDisabled");
     keys.put("billing.customerHasNoServices", "mainBilling.msg.no-active-services");
     keys.put("billing.noBillForPeriod", "mainBilling.msg.invalidPeriod");

@@ -1,13 +1,15 @@
 package cz.silesnet.model.invoice;
 
 import cz.silesnet.model.*;
-import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static cz.silesnet.model.enums.BillingStatus.INVOICE;
+
 
 /**
  * User: der3k
@@ -45,8 +47,34 @@ public class BillBuilder {
   private void checkPreconditions() {
     if (!billing.getIsActive())
       errors.add("billing.customerNotActive");
-    if (!billing.getStatus().equals(BillingStatus.INVOICE))
-      errors.add("billing.billingDisabled");
+    if (!billing.getStatus().equals(INVOICE)) {
+      switch (billing.getStatus()) {
+        case CEASE:
+          errors.add("billing.invoicingCeased");
+          break;
+        case DEADHEAD:
+          errors.add("billing.customerDeadhead");
+          break;
+        case CELL:
+          errors.add("billing.customerHostsCell");
+          break;
+        case VIP:
+          errors.add("billing.customerVip");
+          break;
+        case PROMOTION:
+          errors.add("billing.customerPromotion");
+          break;
+        case EXPIRED:
+          errors.add("billing.billingExpired");
+          break;
+        case JURIST:
+          errors.add("billing.customerGivenToJurist");
+          break;
+        default:
+          errors.add("billing.billingDisabled");
+          break;
+      }
+    }
     if (customer.getServices() == null || customer.getServices().size() == 0)
       errors.add("billing.customerHasNoServices");
     if (billPeriod.equals(Period.NONE))
