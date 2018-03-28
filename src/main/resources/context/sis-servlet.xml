@@ -42,6 +42,9 @@
     <property name="customerManager">
       <ref bean="customerManager" />
     </property>
+    <property name="productDao">
+      <ref bean="productDAO" />
+    </property>
     <property name="commandName">
       <value>service</value>
     </property>

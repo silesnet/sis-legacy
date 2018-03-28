@@ -1,8 +1,10 @@
 package cz.silesnet.web.mvc;
 
+import cz.silesnet.dao.ProductDAO;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.Label;
 import cz.silesnet.model.Period;
+import cz.silesnet.model.Product;
 import cz.silesnet.model.Service;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
@@ -27,6 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static org.springframework.web.bind.ServletRequestUtils.getLongParameters;
+
 /**
  * CRUD Controller for service entity objects.
  *
@@ -41,6 +45,8 @@ public class ServiceController extends AbstractCRUDController {
 
     private CustomerManager cmgr;
 
+    private ProductDAO productDao;
+
     // ~ Methods
     // ----------------------------------------------------------------
 
@@ -52,6 +58,10 @@ public class ServiceController extends AbstractCRUDController {
 
     public void setCustomerManager(CustomerManager customerManager) {
         cmgr = customerManager;
+    }
+
+    public void setProductDao(ProductDAO productDao) {
+        this.productDao = productDao;
     }
 
     @Secured({"ROLE_ACCOUNTING"})
@@ -186,6 +196,7 @@ public class ServiceController extends AbstractCRUDController {
     }
 
     protected Map<String, Object> referenceData(HttpServletRequest request) {
+        final Country country = resolveRequestCountry(request);
         HashMap<String, Object> model = new HashMap<String, Object>();
         // support view with types labels
         ArrayList<Label> serviceNames;
@@ -197,6 +208,9 @@ public class ServiceController extends AbstractCRUDController {
             // one time Frequency enums
             model.put("serviceFrequency", EnumSet.of(Frequency.ONE_TIME));
         } else {
+            final List<Product> products = productDao.getByCountry(country);
+            log.debug("products size: " + products.size());
+            model.put("products", products);
             // regular service names
             // FIXME can not be so hardcoded here
             serviceNames = (ArrayList<Label>) lmgr.getSubLabels(lmgr
@@ -215,6 +229,24 @@ public class ServiceController extends AbstractCRUDController {
                 "comboBox.js"});
 
         return model;
+    }
+
+    private Country resolveRequestCountry(HttpServletRequest request) {
+        final long[] serviceIds = getLongParameters(request, "serviceId");
+        final long[] customerIds = getLongParameters(request, "customerId");
+        if (serviceIds.length == 1) {
+            if ("1".equals(("" + serviceIds[0]).substring(0, 1))) {
+                return Country.CZ;
+            } else {
+                return Country.PL;
+            }
+        } else if (customerIds.length == 1) {
+            final Customer customer = cmgr.get(customerIds[0]);
+            if (customer != null) {
+                return customer.getContact().getAddress().getCountry();
+            }
+        }
+        return Country.CZ;
     }
 
     private boolean isOneTimeService(HttpServletRequest request) {

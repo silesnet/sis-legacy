@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="cz.silesnet.model.Product" table="products">
+        <id name="id" unsaved-value="null">
+            <generator class="increment" />
+        </id>
+        <property name="name" length="100" />
+        <property name="downlink" />
+        <property name="uplink" />
+        <property name="price" />
+        <property name="channel" length="100" />
+        <property name="isDedicated" column="is_dedicated"/>
+        <property name="priority" />
+        <property name="country" length="2" not-null="true"/>
+    </class>
+
+</hibernate-mapping>
