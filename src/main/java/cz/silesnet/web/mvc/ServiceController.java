@@ -29,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static cz.silesnet.model.enums.Frequency.ANNUAL;
+import static cz.silesnet.model.enums.Frequency.MONTHLY;
+import static cz.silesnet.model.enums.Frequency.ONE_TIME;
 import static org.springframework.web.bind.ServletRequestUtils.getLongParameters;
 
 /**
@@ -105,7 +108,7 @@ public class ServiceController extends AbstractCRUDController {
         Service command = (Service) bindAndValidate(request);
         if (log.isDebugEnabled())
             log.debug("Obtained object: " + command);
-        if (!Frequency.ONE_TIME.equals(command.getFrequency()))
+        if (!ONE_TIME.equals(command.getFrequency()))
             throw new IllegalArgumentException("can't insert non one time service '" + command.getFrequency() + "'");
         final long serviceId = cmgr.nextOneTimeServiceId(command.getCustomerId());
         command.setId(serviceId);
@@ -173,9 +176,9 @@ public class ServiceController extends AbstractCRUDController {
             // set frequency to monthly or one time
             if ("oneTime".equals(ServletRequestUtils.getStringParameter(
                     request, "formType", ""))) {
-                s.setFrequency(Frequency.ONE_TIME);
+                s.setFrequency(ONE_TIME);
             } else {
-                s.setFrequency(Frequency.MONTHLY);
+                s.setFrequency(MONTHLY);
             }
         } else
             s = cmgr.getService(ServletRequestUtils.getRequiredLongParameter(
@@ -192,45 +195,58 @@ public class ServiceController extends AbstractCRUDController {
                 new SimpleDateFormat("dd.MM.yyyy"), true));
         // Frequency
         binder.registerCustomEditor(Frequency.class,
-                new CustomEnumEditor<Frequency>(Frequency.MONTHLY));
+                new CustomEnumEditor<Frequency>(MONTHLY));
     }
 
     protected Map<String, Object> referenceData(HttpServletRequest request) {
-        final Country country = resolveRequestCountry(request);
         HashMap<String, Object> model = new HashMap<String, Object>();
-        // support view with types labels
-        ArrayList<Label> serviceNames;
+        final Country country = resolveRequestCountry(request);
+        final List<Product> products = new ArrayList<>();
+        model.put("country", country.getShortName().toUpperCase());
         if (isOneTimeService(request)) {
-            // one time service names
-            // FIXME can not be so hardcoded here
-            serviceNames = (ArrayList<Label>) lmgr.getSubLabels(lmgr
-                    .getLabelById(Long.valueOf(201)));
-            // one time Frequency enums
-            model.put("serviceFrequency", EnumSet.of(Frequency.ONE_TIME));
+            products.addAll(oneTimeProducts(country));
+            model.put("serviceFrequency", EnumSet.of(ONE_TIME));
         } else {
-            final List<Product> products = productDao.getByCountry(country);
-            log.debug("products size: " + products.size());
-            model.put("products", products);
-            // regular service names
-            // FIXME can not be so hardcoded here
-            serviceNames = (ArrayList<Label>) lmgr.getSubLabels(lmgr
-                    .getLabelById(Long.valueOf(200)));
-            // regular service Frequency enums
-            model.put("serviceFrequency", EnumSet.of(Frequency.MONTHLY,
-                    Frequency.ANNUAL));
+            products.addAll(productDao.getByCountry(country));
+            model.put("serviceFrequency", EnumSet.of(MONTHLY, ANNUAL));
         }
-        // sort service names by name
-        Collections.sort(serviceNames,
-                (Comparator<? super Label>) (new BeanComparator("name")));
-        model.put("serviceNames", serviceNames);
-
-        // include Javascripts for safe submitting
-        model.put("scripts", new String[]{"safeSubmit.js", "calendar.js",
-                "comboBox.js"});
+        model.put("products", uniqueProductNamesOf(products));
+        model.put("scripts", new String[]{
+            "safeSubmit.js", "calendar.js", "comboBox.js"});
 
         return model;
     }
 
+    private List<Product> uniqueProductNamesOf(List<Product> products) {
+        final Map<String, Product> map = new LinkedHashMap<>();
+        for (Product product : products) {
+            if (!map.containsKey(product.getName())) {
+                map.put(product.getName(), product);
+            }
+        }
+        final ArrayList<Product> result = new ArrayList<>();
+        result.addAll(map.values());
+        return result;
+    }
+
+    private List<Product> oneTimeProducts(Country country) {
+        if (Country.CZ.equals(country)) {
+            return oneTimeProducts("Aktivace", "Odpočet", "Jiné");
+        } else {
+            return oneTimeProducts("Aktywacja", "Odliczenie", "Inne");
+        }
+    }
+
+    private List<Product> oneTimeProducts(String ...names) {
+        final List<Product> products = new ArrayList<>();
+        for (String name : names) {
+            final Product product = new Product();
+            product.setName(name);
+            product.setIsDedicated(false);
+            products.add(product);
+        }
+        return products;
+    }
     private Country resolveRequestCountry(HttpServletRequest request) {
         final long[] serviceIds = getLongParameters(request, "serviceId");
         final long[] customerIds = getLongParameters(request, "customerId");
@@ -267,7 +283,7 @@ public class ServiceController extends AbstractCRUDController {
             }
             if (o instanceof Service) {
                 Service service = (Service) o;
-                if (Frequency.ONE_TIME.equals(service.getFrequency()))
+                if (ONE_TIME.equals(service.getFrequency()))
                     return true;
             }
         }

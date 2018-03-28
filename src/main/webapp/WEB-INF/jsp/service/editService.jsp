@@ -24,7 +24,7 @@
 <h3><fmt:message key="editService.header.Parameters" /></h3>
 <table class="editForm">
 	<%-- Name --%>
-	<app:formOptionsLine path="name" label="Service.fName" labels="${serviceNames}" required="true" />
+	<app:formOptionsLine path="name" label="Service.fName" labels="${products}" required="true" />
 	<%-- AdditionalName --%>
 	<app:formInputLine path="additionalName" label="Service.additionalName" size="20" />
 	<%-- Frequency --%>
@@ -63,7 +63,6 @@
 
 <%-- Form submit buttons --%>
 <app:formActionButtons confirmDeleteMsg="editService.confirmDelete" />
-
 </s:nestedPath>
 </form>
 
