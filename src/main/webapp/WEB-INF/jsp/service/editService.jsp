@@ -36,6 +36,7 @@
 	<%-- Price --%>
 	<fmt:message key="${money_label}" var="money_label_str" />
 	<app:formInputLine path="price" label="Service.fPrice" required="true" size="7" valueType="${money_label_str}" />
+	<app:formCheckboxLine path="includeDph" label="Service.fIncludeDph" required="true" />
 	<%-- Info --%>
 	<app:formTextareaLine path="info" label="Service.fInfo" cols="20" rows="3" />
 </table>
