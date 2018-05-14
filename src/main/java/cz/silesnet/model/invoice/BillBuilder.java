@@ -125,6 +125,7 @@ public class BillBuilder {
       handleOneTime(item, service);
     else
       updateAdjustedBillPeriod(billableServicePeriod);
+    item.setIncludeDph(service.getIncludeDph());
     return item;
   }
 

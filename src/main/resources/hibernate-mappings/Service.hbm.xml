@@ -24,5 +24,6 @@
         <property name="contract" formula="(id % 10000000) / 100" />
         <property name="status" length="50" />
         <property name="addressId" column="address_id" />
+        <property name="includeDph" column="dph" />
     </class>
 </hibernate-mapping>

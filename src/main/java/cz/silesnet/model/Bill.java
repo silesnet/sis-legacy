@@ -245,7 +245,11 @@ public class Bill extends Entity {
   }
 
   public int getVatRounded() {
-    double vat = getNetRounded() * (fVat / 100.0);
+//    double vat = getNetRounded() * (fVat / 100.0);
+    double vat = 0;
+    for (BillItem item : fItems) {
+     vat += item.getVat();
+    }
     return (int) Math.round(vat);
   }
 

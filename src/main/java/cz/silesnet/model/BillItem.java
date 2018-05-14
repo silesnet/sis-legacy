@@ -31,6 +31,8 @@ public class BillItem implements Serializable {
 
   private Boolean fIsDisplayUnit = true;
 
+  private Boolean fIncludeDph = true;
+
   // ~ Constructors
   // -----------------------------------------------------------
 
@@ -131,6 +133,9 @@ public class BillItem implements Serializable {
     if (getBill() == null)
       throw new IllegalStateException(
           "Bill item without bill, can not get VAT value.");
+    if (!fIncludeDph) {
+      return 0;
+    }
     double vat = getNet() * (getBill().getVat() / 100.0);
     return (float) vat;
   }
@@ -141,5 +146,17 @@ public class BillItem implements Serializable {
 
   public Amount net() {
     return Amount.of(getNet());
+  }
+
+  public Boolean getIncludeDph() {
+    return fIncludeDph;
+  }
+
+  public void setIncludeDph(Boolean fIncludeDph) {
+    this.fIncludeDph = fIncludeDph;
+  }
+
+  public int getVatRate() {
+    return fIncludeDph ? fBill.getVat() : 0;
   }
 }

@@ -204,7 +204,7 @@ ved. u Kraj. soudu v Ostravě v oddílu C, vložce číslo 17812
 <i18n:locale language="cs">
 <c:forEach items="${bill.items}" var="item">
 <c:set var="amount"><i18n:formatNumber value="${item.amount}" pattern="0.0###" /></c:set>
-<TR><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">Služba -&nbsp;</c:if>${item.text}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.price}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${fn:replace(amount, ",", ".")}  </TD><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">měs.</c:if>  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.net}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${item.bill.vat}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.brt}" />  </TD></TR>
+<TR><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">Služba -&nbsp;</c:if>${item.text}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.price}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${fn:replace(amount, ",", ".")}  </TD><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">měs.</c:if>  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.net}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${item.vatRate}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.brt}" />  </TD></TR>
 </c:forEach>
 </i18n:locale>
 <TR><TD COLSPAN=7><BR></TD></TR>

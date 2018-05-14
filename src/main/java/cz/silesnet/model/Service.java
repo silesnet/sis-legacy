@@ -44,6 +44,8 @@ public class Service extends Entity implements HistoricToString {
 
     private Integer fAddressId;
 
+    private Boolean fIncludeDph = true;
+
     // ~ Methods
     // ----------------------------------------------------------------
 
@@ -177,5 +179,13 @@ public class Service extends Entity implements HistoricToString {
 
     public void setAddressId(Integer fAddressId) {
         this.fAddressId = fAddressId;
+    }
+
+    public Boolean getIncludeDph() {
+        return fIncludeDph;
+    }
+
+    public void setIncludeDph(Boolean fDph) {
+        this.fIncludeDph = fDph;
     }
 }

@@ -26,6 +26,7 @@
                 <property name="amount" />
                 <property name="price" />
                 <property name="isDisplayUnit" column="is_display_unit" />
+                <property name="includeDph" column="dph" />
             </composite-element>
         </bag>
         <property name="vat" />
