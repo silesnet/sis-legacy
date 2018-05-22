@@ -232,6 +232,13 @@ ved. u Kraj. soudu v Ostravě v oddílu C, vložce číslo 17812
 </Table>
 </CENTER>
 <DIV Align="Left">
+<BR>
+<c:if test="${bill.isVatOnPayer}">
+    Daň odvede zákazník.<BR>
+    Jedná se o přenesení daňové povinnosti podle § 92a zákona o dani z přidané hodnoty,
+    kdy výši daně je povinen doplnit a přiznat plátce, pro kterého je plnění uskutečněno.<BR>
+    <BR>
+</c:if>
 Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit smluvní pokutu ve výši 0.05% z dlužné částky za každý den prodlení.<BR>
 <BR><CENTER>
 <TABLE BORDER=0 WIDTH="100%" FRAME="VOID">

@@ -257,4 +257,12 @@ public class Bill extends Entity {
     return getNetRounded() + getVatRounded();
   }
 
+  public boolean getIsVatOnPayer() {
+    for (BillItem item : fItems) {
+      if (!item.getIncludeDph()) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
