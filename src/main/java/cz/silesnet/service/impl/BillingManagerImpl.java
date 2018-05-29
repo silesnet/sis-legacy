@@ -1,5 +1,6 @@
 package cz.silesnet.service.impl;
 
+import com.google.common.base.Joiner;
 import cz.silesnet.dao.BillDAO;
 import cz.silesnet.dao.CustomerDAO;
 import cz.silesnet.model.*;
@@ -89,9 +90,14 @@ public class BillingManagerImpl implements BillingManager {
   }
 
   private void persistNewBIllAndUpdatedCustomerFrom(final BillingResult result) {
-    dao.save(result.bill());
+    final List<String> invoices = new ArrayList<>();
+    for (Bill bill : result.bills()) {
+      dao.save(bill);
+      invoices.add(bill.getNumber());
+    }
     customerDao.save(result.customer());
-    log.info("Customer " + result.customer().getName() + " successfully billed, bill #" + result.bill().getNumber());
+    final String invoiceNumbers = Joiner.on(", ").join(invoices);
+    log.info("Customer " + result.customer().getName() + " successfully billed, bills [" + invoiceNumbers + "]");
   }
 
   protected void auditBillBuildingErrors(final Invoicing invoicing, final Customer customer, final List<String> errors) {

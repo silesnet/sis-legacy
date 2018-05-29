@@ -117,9 +117,14 @@ public class PrepareMixture {
     Bill b = new Bill();
     b.setInvoicedCustomer(null);
     b.setPeriod(new Period(new Date(), new Date()));
-    b.setHashCode("hash1234123512351");
-    b.getItems().add(new BillItem("First Test Line", 1, 1234));
-    b.getItems().add(new BillItem("Second Test Line", 3, 234));
+//    b.setHashCode("hash1234123512351");
+    b.setHashCode("" + System.nanoTime());
+    final BillItem item1 = new BillItem("First Test Line", 1, 1234);
+    item1.setBill(b);
+    b.getItems().add(item1);
+    final BillItem item2 = new BillItem("Second Test Line", 3, 234);
+    item2.setBill(b);
+    b.getItems().add(item2);
     return b;
   }
 

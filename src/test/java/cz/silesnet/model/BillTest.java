@@ -54,7 +54,9 @@ public class BillTest {
     public void testBrtWithRounding() throws Exception {
         Bill bill = prepareMixture();
         bill.getItems().clear();
-        bill.getItems().add(new BillItem("Item 1", 292F, 1));
+        final BillItem item = new BillItem("Item 1", 292F, 1);
+        item.setBill(bill);
+        bill.getItems().add(item);
         bill.setVat(20);
 
         assertEquals(350, bill.getBrt());
@@ -66,6 +68,7 @@ public class BillTest {
         bill.setVat(21);
         bill.getItems().clear();
         final BillItem item = new BillItem("Item", 0F, 1);
+        item.setBill(bill);
         bill.getItems().add(item);
 
         item.setAmount(260F);

@@ -13,7 +13,7 @@ import spock.lang.Specification
 class AccountantTest extends Specification {
   def 'bills customer'() {
     def customer = Mock(Customer)
-    def bill = Mock(Bill)
+    def bill = Mock(Iterable)
     def builder = Mock(BillBuilder)
     def context = Mock(BillingContext)
     def invoicing = invoicingWithNumberingBase2011000()
@@ -30,7 +30,7 @@ class AccountantTest extends Specification {
     1 * customer.updateBillingAndServicesAfterBilledWith(builder)
     1 * builder.warnings() >> ['warning']
     result.isSuccess()
-    result.bill() == bill
+    result.bills() == bill
     result.customer() == customer
     result.warnings() == ['warning']
     result.errors() == []
@@ -52,7 +52,7 @@ class AccountantTest extends Specification {
     1 * builder.wouldBuild() >> false
     1 * builder.errors() >> ['error']
     !result.isSuccess()
-    result.bill() == null
+    result.bills() == null
     result.customer() == null
     result.warnings() == []
     result.errors() == ['error']
@@ -68,7 +68,7 @@ class AccountantTest extends Specification {
     def result = accountant.bill(Mock(Customer))
   then:
     !result.isSuccess()
-    result.bill() == null
+    result.bills() == null
     result.customer() == null
     result.warnings() == []
     result.errors() == ['billing.error']
@@ -141,7 +141,7 @@ class AccountantTest extends Specification {
 
   def 'sum of counters gives number of processed customers'() {
     def customer = Mock(Customer)
-    def bill = Mock(Bill)
+    def bill = Mock(Iterable)
     def builder = Mock(BillBuilder)
     def context = Mock(BillingContext)
     def invoicing = invoicingWithNumberingBase2011000()

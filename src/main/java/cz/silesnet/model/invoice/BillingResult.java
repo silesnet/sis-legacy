@@ -15,22 +15,22 @@ import java.util.List;
 public class BillingResult {
   private static final List<String> EMPTY_LIST = Collections.unmodifiableList(new ArrayList<String>());
 
-  private final Bill bill;
+  private final Iterable<Bill> bills;
   private final Customer customer;
   private final List<String> errors;
   private final List<String> warnings;
   private final boolean success;
 
-  public static BillingResult success(final Bill bill, final Customer customer, final List<String> warnings) {
-    return new BillingResult(bill, customer, warnings);
+  public static BillingResult success(final Iterable<Bill> bills, final Customer customer, final List<String> warnings) {
+    return new BillingResult(bills, customer, warnings);
   }
 
   public static BillingResult failure(final List<String> errors) {
     return new BillingResult(errors);
   }
 
-  private BillingResult(final Bill bill, final Customer customer, final List<String> warnings) {
-    this.bill = bill;
+  private BillingResult(final Iterable<Bill> bills, final Customer customer, final List<String> warnings) {
+    this.bills = bills;
     this.customer = customer;
     this.warnings = warnings;
     this.errors = EMPTY_LIST;
@@ -38,7 +38,7 @@ public class BillingResult {
   }
 
   private BillingResult(final List<String> errors) {
-    this.bill = null;
+    this.bills = null;
     this.customer = null;
     this.errors = errors;
     this.warnings = EMPTY_LIST;
@@ -49,8 +49,8 @@ public class BillingResult {
     return success;
   }
 
-  public Bill bill() {
-    return bill;
+  public Iterable<Bill> bills() {
+    return bills;
   }
 
   public Customer customer() {

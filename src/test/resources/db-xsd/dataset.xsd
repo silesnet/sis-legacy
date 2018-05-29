@@ -4,6 +4,7 @@
 	<xsd:element name="dataset">
 		<xsd:complexType>
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="EVENTS" type="dflt:EVENTS__type" />
 				<xsd:element name="SERVICES" type="dflt:SERVICES__type" />
 				<xsd:element name="BILL_ITEMS" type="dflt:BILL_ITEMS__type" />
 				<xsd:element name="DUAL_AUDIT_ITEM_ID_SEQ" type="dflt:DUAL_AUDIT_ITEM_ID_SEQ__type" />
@@ -14,6 +15,8 @@
 				<xsd:element name="SETTINGS" type="dflt:SETTINGS__type" />
 				<xsd:element name="DBMAINTAIN_SCRIPTS" type="dflt:DBMAINTAIN_SCRIPTS__type" />
 				<xsd:element name="CUSTOMERS" type="dflt:CUSTOMERS__type" />
+				<xsd:element name="COMMANDS" type="dflt:COMMANDS__type" />
+				<xsd:element name="PRODUCTS" type="dflt:PRODUCTS__type" />
 				<xsd:element name="AUDIT_ITEMS" type="dflt:AUDIT_ITEMS__type" />
 				<xsd:element name="LABELS" type="dflt:LABELS__type" />
 				<xsd:element name="USERS" type="dflt:USERS__type" />

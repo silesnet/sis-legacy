@@ -42,13 +42,14 @@ class BillingManagerInvoicingTest extends Specification {
     def customer = Mock(Customer)
     def bill = Mock(Bill)
     def invoicing = Mock(Invoicing)
-    def result = BillingResult.success(bill, customer, [])
+    def result = BillingResult.success([bill], customer, [])
   when:
     bMgr.billCustomersIn(invoicing)
   then:
     1 * customerDao.findActiveCustomerIdsByCountry(_) >> [1L]
     1 * customerDao.get(1L) >> customer
     1 * accountant.bill(customer) >> result
+    1 * bill.getNumber() >> '12345'
     1 * billDao.save(bill)
     1 * customerDao.save(customer)
   }

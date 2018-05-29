@@ -51,9 +51,9 @@ public class Accountant {
   private BillingResult doBill(final Customer customer) {
     BillBuilder builder = newBillBuilder(customer, invoicing.getInvoicingDate());
     if (builder.wouldBuild()) {
-      Bill bill = builder.build(this);
+      final Iterable<Bill> bills = builder.build(this);
       customer.updateBillingAndServicesAfterBilledWith(builder);
-      return BillingResult.success(bill, customer, builder.warnings());
+      return BillingResult.success(bills, customer, builder.warnings());
     }
     return BillingResult.failure(builder.errors());
   }
@@ -63,7 +63,7 @@ public class Accountant {
   }
 
   private static List<String> billingErrors() {
-    List<String> errors = new ArrayList<String>();
+    List<String> errors = new ArrayList<>();
     errors.add("billing.error");
     return errors;
   }

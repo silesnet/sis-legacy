@@ -43,7 +43,7 @@ class BillBuilderTest extends Specification {
   when:
     builder.updateBillingAndServicesOf(customer)
   then:
-    bill.getItems().size() == 2
+    bill.iterator().next().getItems().size() == 2
     customer.getServices().size() == 1
     customer.getServices()[0].getFrequency() == Frequency.MONTHLY
   }
@@ -73,7 +73,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(new Accountant(invoicingWithNumberingBase2011000(), context))
   then:
-    bill.getPurgeDate() == date('2011-01-19')
+    bill.iterator().next().getPurgeDate() == date('2011-01-19')
   }
 
   def 'build sets vat rate from billing context'() {
@@ -81,7 +81,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getVat() == 20
+    bill.iterator().next().getVat() == 20
   }
 
   def 'build sets confirmed flag to true'() {
@@ -89,7 +89,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getIsConfirmed()
+    bill.iterator().next().getIsConfirmed()
   }
 
   def 'build sets invoicingId'() {
@@ -99,7 +99,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(new Accountant(invoicing, contextWithVatRate20MockitoMock()))
   then:
-    bill.getInvoicingId() == 1000L
+    bill.iterator().next().getInvoicingId() == 1000L
   }
 
   def 'build fails when there are errors'() {
@@ -126,7 +126,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getBillingDate() == date('2011-01-05')
+    bill.iterator().next().getBillingDate() == date('2011-01-05')
   }
 
   def 'build populates adjusted bill period'() {
@@ -135,7 +135,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getPeriod() == period('2010-01-01', '2010-01-01')
+    bill.iterator().next().getPeriod() == period('2010-01-01', '2010-01-01')
   }
 
   def 'build populates delivery by email flag'() {
@@ -144,7 +144,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getDeliverByMail()
+    bill.iterator().next().getDeliverByMail()
   }
 
   def 'build populates each item with bill reference'() {
@@ -152,7 +152,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getItems()[0].getBill() == bill
+    bill.iterator().next().getItems()[0].getBill() == bill.iterator().next()
   }
 
   def "build populates customer's data"() {
@@ -162,9 +162,9 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getInvoicedCustomer() == builder.customer
-    bill.getCustomerId() == 1L
-    bill.getCustomerName() == 'Customer Name'
+    bill.iterator().next().getInvoicedCustomer() == builder.customer
+    bill.iterator().next().getCustomerId() == 1L
+    bill.iterator().next().getCustomerName() == 'Customer Name'
   }
 
   def "build sets bill hash-code"() {
@@ -173,7 +173,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getHashCode()[0..-4] == (Long.toHexString(1000001) + Long.toHexString(new Date().getTime()))[0..-4]
+    bill.iterator().next().getHashCode()[0..-4] == (Long.toHexString(1000001) + Long.toHexString(new Date().getTime()))[0..-4]
   }
 
   def 'build sets bill number from invoicing'() {
@@ -181,7 +181,7 @@ class BillBuilderTest extends Specification {
   when:
     def bill = builder.build(accountantWithNumberingBase2011000AndVatRate20())
   then:
-    bill.getNumber() == '2011001'
+    bill.iterator().next().getNumber() == '2011001'
   }
 
   def 'builder would skip zero priced items except for one-time'() {
@@ -384,7 +384,7 @@ class BillBuilderTest extends Specification {
   when:
     def builder = new BillBuilder(customer, new Date())
   then:
-    builder.errors().contains("billing.billingDisabled")
+    builder.errors().contains("billing.customerVip")
   }
 
   def 'would not build when there is no billing period for due date'() {

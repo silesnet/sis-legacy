@@ -1,10 +1,15 @@
 package cz.silesnet.model.invoice;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.enums.Frequency;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +23,7 @@ import static cz.silesnet.model.enums.BillingStatus.INVOICE;
  */
 public class BillBuilder {
   private static final int HASH_CODE_BASE = 1000000;
+  private long hashCodeSeq = 0;
   private final Customer customer;
   private final Billing billing;
   private final Date due;
@@ -154,20 +160,31 @@ public class BillBuilder {
     return errors.size() == 0;
   }
 
-  public Bill build(final Accountant accountant) {
+  public Iterable<Bill> build(final Accountant accountant) {
+    final List<Bill> bills = new ArrayList<>();
     if (built)
       throw new IllegalStateException("can not build the bill twice");
     if (!wouldBuild())
       throw new IllegalStateException("builder is not buildable");
-    Bill bill = new Bill();
-    assignNewNumberAndInvoicingReferenceTo(bill, accountant);
-    assignCustomerReferencesTo(bill);
-    addItemsTo(bill);
-    assignDatesAndVatRateTo(bill, accountant.billingContext());
-    bill.setHashCode(currentHashCode());
-    bill.setIsConfirmed(true);
+    final Multimap<Boolean, BillItem> billsItems = Multimaps.index(items, new Function<BillItem, Boolean>() {
+      @Override
+      public Boolean apply(BillItem input) {
+        return input.getIncludeDph();
+      }
+    });
+    for (Boolean isIncludeVat : billsItems.keySet()) {
+      final Collection<BillItem> billItems = billsItems.get(isIncludeVat);
+      Bill bill = new Bill();
+      assignNewNumberAndInvoicingReferenceTo(bill, accountant);
+      assignCustomerReferencesTo(bill);
+      addItemsTo(bill, billItems);
+      assignDatesAndVatRateTo(bill, accountant.billingContext());
+      bill.setHashCode(currentHashCode());
+      bill.setIsConfirmed(true);
+      bills.add(bill);
+    }
     built = true;
-    return bill;
+    return bills;
   }
 
   public void updateBillingAndServicesOf(final Customer otherCustomer) {
@@ -218,8 +235,8 @@ public class BillBuilder {
     bill.setDeliverByMail(customer.getBilling().getDeliverByMail());
   }
 
-  private void addItemsTo(final Bill bill) {
-    for (BillItem item : items) {
+  private void addItemsTo(final Bill bill, Iterable<BillItem> billItems) {
+    for (BillItem item : billItems) {
       item.setBill(bill);
       bill.getItems().add(item);
     }
@@ -234,7 +251,7 @@ public class BillBuilder {
   }
 
   private String currentHashCode() {
-    return Long.toHexString(customer.getId() + HASH_CODE_BASE) + Long.toHexString(new Date().getTime());
+    return Long.toHexString(customer.getId() + HASH_CODE_BASE) + Long.toHexString(new Date().getTime() + hashCodeSeq++);
   }
 
   private void failWhenNullArgumentEncountered(final Customer customer, final Date due) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="PUBLIC" targetNamespace="PUBLIC">
+	<xsd:element name="EVENTS" type="EVENTS__type" />
 	<xsd:element name="SERVICES" type="SERVICES__type" />
 	<xsd:element name="BILL_ITEMS" type="BILL_ITEMS__type" />
 	<xsd:element name="DUAL_AUDIT_ITEM_ID_SEQ" type="DUAL_AUDIT_ITEM_ID_SEQ__type" />
@@ -10,9 +11,20 @@
 	<xsd:element name="SETTINGS" type="SETTINGS__type" />
 	<xsd:element name="DBMAINTAIN_SCRIPTS" type="DBMAINTAIN_SCRIPTS__type" />
 	<xsd:element name="CUSTOMERS" type="CUSTOMERS__type" />
+	<xsd:element name="COMMANDS" type="COMMANDS__type" />
+	<xsd:element name="PRODUCTS" type="PRODUCTS__type" />
 	<xsd:element name="AUDIT_ITEMS" type="AUDIT_ITEMS__type" />
 	<xsd:element name="LABELS" type="LABELS__type" />
 	<xsd:element name="USERS" type="USERS__type" />
+	<xsd:complexType name="EVENTS__type">
+		<xsd:attribute name="HAPPENED_ON" use="optional" />
+		<xsd:attribute name="ENTITY" use="optional" />
+		<xsd:attribute name="ENTITY_ID" use="optional" />
+		<xsd:attribute name="DATA" use="optional" />
+		<xsd:attribute name="COMMAND_ID" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="EVENT" use="optional" />
+	</xsd:complexType>
 	<xsd:complexType name="SERVICES__type">
 		<xsd:attribute name="PRICE" use="optional" />
 		<xsd:attribute name="BPS" use="optional" />
@@ -20,7 +32,6 @@
 		<xsd:attribute name="CUSTOMER_ID" use="optional" />
 		<xsd:attribute name="DOWNLOAD" use="optional" />
 		<xsd:attribute name="INFO" use="optional" />
-		<xsd:attribute name="REPLACE_ID" use="optional" />
 		<xsd:attribute name="NAME" use="optional" />
 		<xsd:attribute name="ADDITIONALNAME" use="optional" />
 		<xsd:attribute name="STATUS" use="optional" />
@@ -28,7 +39,9 @@
 		<xsd:attribute name="IS_AGGREGATED" use="optional" />
 		<xsd:attribute name="FREQUENCY" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="DPH" use="optional" />
 		<xsd:attribute name="PERIOD_FROM" use="optional" />
+		<xsd:attribute name="ADDRESS_ID" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="BILL_ITEMS__type">
 		<xsd:attribute name="BILL_ID" use="optional" />
@@ -36,6 +49,7 @@
 		<xsd:attribute name="IS_DISPLAY_UNIT" use="optional" />
 		<xsd:attribute name="AMOUNT" use="optional" />
 		<xsd:attribute name="TEXT" use="optional" />
+		<xsd:attribute name="DPH" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="DUAL_AUDIT_ITEM_ID_SEQ__type">
 		<xsd:attribute name="ZERO" use="optional" />
@@ -130,6 +144,28 @@
 		<xsd:attribute name="CONNECTION_SPOT" use="optional" />
 		<xsd:attribute name="ACCOUNT_NO" use="optional" />
 		<xsd:attribute name="IS_BILLED_AFTER" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="COMMANDS__type">
+		<xsd:attribute name="STATUS" use="optional" />
+		<xsd:attribute name="ENTITY" use="optional" />
+		<xsd:attribute name="ENTITY_ID" use="optional" />
+		<xsd:attribute name="FINISHED_ON" use="optional" />
+		<xsd:attribute name="DATA" use="optional" />
+		<xsd:attribute name="COMMAND" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="INSERTED_ON" use="optional" />
+		<xsd:attribute name="STARTED_ON" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="PRODUCTS__type">
+		<xsd:attribute name="UPLINK" use="optional" />
+		<xsd:attribute name="PRICE" use="optional" />
+		<xsd:attribute name="CHANNEL" use="optional" />
+		<xsd:attribute name="COUNTRY" use="optional" />
+		<xsd:attribute name="PRIORITY" use="optional" />
+		<xsd:attribute name="ID" use="optional" />
+		<xsd:attribute name="DOWNLINK" use="optional" />
+		<xsd:attribute name="IS_DEDICATED" use="optional" />
+		<xsd:attribute name="NAME" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="AUDIT_ITEMS__type">
 		<xsd:attribute name="HISTORY_ID" use="optional" />

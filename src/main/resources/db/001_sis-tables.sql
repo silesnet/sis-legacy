@@ -26,7 +26,8 @@ CREATE TABLE bill_items (
     text character varying(100),
     amount real,
     price integer,
-    is_display_unit boolean
+    is_display_unit boolean,
+    dph boolean
 );
 
 CREATE TABLE bills (
@@ -111,11 +112,13 @@ CREATE TABLE services (
     frequency integer,
     download integer,
     upload integer,
+    is_aggregated boolean,
     info character varying(150),
     additionalname character varying(50),
     bps character(1),
     status character varying(50),
-    address_id integer
+    address_id integer,
+    dph boolean not null default true
 );
 
 CREATE TABLE newservices
@@ -151,3 +154,41 @@ CREATE TABLE vendors (
     mac_prefix varchar(10) NOT NULL,
     vendor varchar(50) NOT NULL
 );
+
+CREATE TABLE commands
+(
+   id           bigint     NOT NULL,
+   command      varchar(50)   NOT NULL,
+   entity       varchar(30),
+   entity_id    bigint,
+   data         varchar,
+   status       varchar(20)   NOT NULL,
+   inserted_on  timestamp     NOT NULL,
+   started_on   timestamp,
+   finished_on  timestamp
+);
+
+CREATE TABLE events
+(
+   id           bigint     NOT NULL,
+   event        varchar(50)   NOT NULL,
+   entity       varchar(30),
+   entity_id    bigint,
+   data         varchar,
+   command_id   bigint,
+   happened_on  timestamp     NOT NULL
+);
+
+CREATE TABLE products
+(
+   id            bigint         NOT NULL,
+   name          varchar(100),
+   downlink      integer,
+   uplink        integer,
+   price         integer,
+   channel       varchar(100),
+   is_dedicated  boolean,
+   priority      integer,
+   country       char(2)     NOT NULL   DEFAULT 'CZ'
+);
+
