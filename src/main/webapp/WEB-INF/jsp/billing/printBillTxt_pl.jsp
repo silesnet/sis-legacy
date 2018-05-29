@@ -149,7 +149,7 @@
   <TD Align="Left" width="48%" valign="top">
 	<table width="80%">
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Wystawił(a):</td></tr>
-		<tr><td align="center">Iwona Heczko</td></tr>
+		<tr><td align="center">Monika Mierva-Serwus</td></tr>
 	</table>
   </TD>
   <td>&nbsp;</td>
