@@ -149,25 +149,11 @@ public class Customer extends Entity implements Historic {
     }
 
     public Integer getOverallDownload() {
-        List<Service> sList = getConnectivityServices();
-        Integer download = 0;
-        // sum services download
-        for (Service s : sList) {
-            if (s.getConnectivity().getDownload() != null)
-                download += s.getConnectivity().getDownload();
-        }
-        return download;
+        return 0;
     }
 
     public Integer getOverallUpload() {
-        List<Service> sList = getConnectivityServices();
-        Integer upload = 0;
-        // sum services upload
-        for (Service s : sList) {
-            if (s.getConnectivity().getUpload() != null)
-                upload += s.getConnectivity().getUpload();
-        }
-        return upload;
+      return 0;
     }
 
     public Integer getOverallPrice() {
@@ -189,9 +175,9 @@ public class Customer extends Entity implements Historic {
         // filter service for monthy connectivity
         ArrayList<Service> cServices = new ArrayList<Service>();
         for (Service s : getServices()) {
-            if (Frequency.MONTHLY.equals(s.getFrequency())
-                    && s.getIsConnectivity() && (s.getConnectivity() != null))
+            if (Frequency.MONTHLY.equals(s.getFrequency())) {
                 cServices.add(s);
+            }
         }
         return cServices;
     }

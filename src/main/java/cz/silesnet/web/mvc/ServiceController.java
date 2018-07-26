@@ -2,7 +2,6 @@ package cz.silesnet.web.mvc;
 
 import cz.silesnet.dao.ProductDAO;
 import cz.silesnet.model.Customer;
-import cz.silesnet.model.Label;
 import cz.silesnet.model.Period;
 import cz.silesnet.model.Product;
 import cz.silesnet.model.Service;
@@ -13,7 +12,6 @@ import cz.silesnet.service.LabelManager;
 import cz.silesnet.util.CustomEnumEditor;
 import cz.silesnet.util.MessagesUtils;
 import cz.silesnet.util.NavigationUtils;
-import org.apache.commons.beanutils.BeanComparator;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.security.access.annotation.Secured;
@@ -242,7 +240,6 @@ public class ServiceController extends AbstractCRUDController {
         for (String name : names) {
             final Product product = new Product();
             product.setName(name);
-            product.setIsDedicated(false);
             products.add(product);
         }
         return products;

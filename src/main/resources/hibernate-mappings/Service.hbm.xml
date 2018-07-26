@@ -15,15 +15,11 @@
         <property name="additionalName" length="50" />
         <property name="price" not-null="true" />
         <property name="frequency" type="cz.silesnet.dao.hibernate.support.FrequencyHibernateUserType" />
-        <component name="connectivity">
-            <property name="download" />
-            <property name="upload" />
-            <property name="bps" />
-        </component>
         <property name="info" length="150" />
         <property name="contract" formula="(id % 10000000) / 100" />
         <property name="status" length="50" />
         <property name="addressId" column="address_id" />
         <property name="includeDph" column="dph" />
+        <many-to-one name="product" column="product_id" class="cz.silesnet.model.Product" not-null="false" />
     </class>
 </hibernate-mapping>

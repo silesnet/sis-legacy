@@ -40,7 +40,6 @@ public class HistoricToStringTest {
     service.setName("wirelessHOME");
     service.setPrice(Integer.valueOf(641));
     service.setFrequency(Frequency.MONTHLY);
-    service.setConnectivity(new Connectivity(512, 256));
     service.setInfo("Service info");
 
     log.debug(service.getHistoricToString());

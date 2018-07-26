@@ -1,14 +1,16 @@
 package cz.silesnet.model;
 
+import java.util.Date;
+
 public class Product extends Entity {
   private String name;
-  private Integer downlink;
-  private Integer uplink;
   private Integer price;
   private String channel;
-  private Boolean isDedicated;
-  private Integer priority;
+  private Integer position;
   private String country;
+  private Date activeFrom;
+  private Date activeTo;
+  private Boolean canChangePrice;
 
   public String getName() {
     return name;
@@ -16,22 +18,6 @@ public class Product extends Entity {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public Integer getDownlink() {
-    return downlink;
-  }
-
-  public void setDownlink(Integer downlink) {
-    this.downlink = downlink;
-  }
-
-  public Integer getUplink() {
-    return uplink;
-  }
-
-  public void setUplink(Integer uplink) {
-    this.uplink = uplink;
   }
 
   public Integer getPrice() {
@@ -50,20 +36,12 @@ public class Product extends Entity {
     this.channel = channel;
   }
 
-  public Boolean getIsDedicated() {
-    return isDedicated;
+  public Integer getPosition() {
+    return position;
   }
 
-  public void setIsDedicated(Boolean dedicated) {
-    isDedicated = dedicated;
-  }
-
-  public Integer getPriority() {
-    return priority;
-  }
-
-  public void setPriority(Integer priority) {
-    this.priority = priority;
+  public void setPosition(Integer position) {
+    this.position = position;
   }
 
   public String getCountry() {
@@ -72,5 +50,29 @@ public class Product extends Entity {
 
   public void setCountry(String country) {
     this.country = country;
+  }
+
+  public Date getActiveFrom() {
+    return activeFrom;
+  }
+
+  public void setActiveFrom(Date activeFrom) {
+    this.activeFrom = activeFrom;
+  }
+
+  public Date getActiveTo() {
+    return activeTo;
+  }
+
+  public void setActiveTo(Date activeTo) {
+    this.activeTo = activeTo;
+  }
+
+  public Boolean getCanChangePrice() {
+    return canChangePrice;
+  }
+
+  public void setCanChangePrice(Boolean canChangePrice) {
+    this.canChangePrice = canChangePrice;
   }
 }

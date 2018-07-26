@@ -27,16 +27,14 @@
 	</xsd:complexType>
 	<xsd:complexType name="SERVICES__type">
 		<xsd:attribute name="PRICE" use="optional" />
-		<xsd:attribute name="BPS" use="optional" />
 		<xsd:attribute name="PERIOD_TO" use="optional" />
 		<xsd:attribute name="CUSTOMER_ID" use="optional" />
-		<xsd:attribute name="DOWNLOAD" use="optional" />
 		<xsd:attribute name="INFO" use="optional" />
+		<xsd:attribute name="PRODUCT_ID" use="optional" />
 		<xsd:attribute name="NAME" use="optional" />
 		<xsd:attribute name="ADDITIONALNAME" use="optional" />
 		<xsd:attribute name="STATUS" use="optional" />
-		<xsd:attribute name="UPLOAD" use="optional" />
-		<xsd:attribute name="IS_AGGREGATED" use="optional" />
+		<xsd:attribute name="DATA" use="optional" />
 		<xsd:attribute name="FREQUENCY" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
 		<xsd:attribute name="DPH" use="optional" />
@@ -157,14 +155,14 @@
 		<xsd:attribute name="STARTED_ON" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="PRODUCTS__type">
-		<xsd:attribute name="UPLINK" use="optional" />
+		<xsd:attribute name="POSITION" use="optional" />
 		<xsd:attribute name="PRICE" use="optional" />
 		<xsd:attribute name="CHANNEL" use="optional" />
 		<xsd:attribute name="COUNTRY" use="optional" />
-		<xsd:attribute name="PRIORITY" use="optional" />
+		<xsd:attribute name="ACTIVE_FROM" use="optional" />
+		<xsd:attribute name="CAN_CHANGE_PRICE" use="optional" />
 		<xsd:attribute name="ID" use="optional" />
-		<xsd:attribute name="DOWNLINK" use="optional" />
-		<xsd:attribute name="IS_DEDICATED" use="optional" />
+		<xsd:attribute name="ACTIVE_TO" use="optional" />
 		<xsd:attribute name="NAME" use="optional" />
 	</xsd:complexType>
 	<xsd:complexType name="AUDIT_ITEMS__type">

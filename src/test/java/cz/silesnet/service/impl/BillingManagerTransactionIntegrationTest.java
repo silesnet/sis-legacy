@@ -198,7 +198,6 @@ public class BillingManagerTransactionIntegrationTest {
         service.setPrice(100);
         service.setFrequency(Frequency.MONTHLY);
         service.setPeriod(new Period(date("2010-01-01"), null));
-        service.setConnectivity(null);
         return service;
     }
 

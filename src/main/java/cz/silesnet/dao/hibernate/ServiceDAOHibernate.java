@@ -53,28 +53,17 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
         Map<String, Long> sum = new LinkedHashMap<String, Long>();
         Session session = getSessionFactory().getCurrentSession();
         // count service related statistics
-        SQLQuery query = session.createSQLQuery("select sum(case\n" +
-                "  when s.bps = 'M' then s.download * 1000\n" +
-                "  when s.bps = 'k' then s.download\n" +
-                "  else 0\n" +
-                "end) as download,\n" +
-                "sum(case\n" +
-                "  when s.bps = 'M' then s.upload * 1000\n" +
-                "  when s.bps = 'k' then s.upload\n" +
-                "  else 0\n" +
-                "end) as upload,\n" +
+        SQLQuery query = session.createSQLQuery("select \n" +
                 "sum(s.price) as price\n" +
                 "from services as s, customers c\n" +
                 "where c.id=s.customer_id\n" +
                 "and c.country = " + c.getId() + "\n" +
                 "and c.is_active")
-                .addScalar("download", Hibernate.LONG)
-                .addScalar("upload", Hibernate.LONG)
                 .addScalar("price", Hibernate.LONG);
-        Object[] result = (Object[]) query.uniqueResult();
-        sum.put("overviewCustomers.totalDownload", (Long) result[0] / 1000);
-        sum.put("overviewCustomers.totalUpload", (Long) result[1] / 1000);
-        sum.put("overviewCustomers.totalPrice.CZK", (Long) result[2]);
+        Long result = (Long) query.uniqueResult();
+        sum.put("overviewCustomers.totalDownload", 0L);
+        sum.put("overviewCustomers.totalUpload", 0L);
+        sum.put("overviewCustomers.totalPrice.CZK", result);
 
         // count customers
         query = session.createSQLQuery("select count(id) as customers_count\n" +

@@ -3,14 +3,12 @@ package cz.silesnet.model;
 import cz.silesnet.model.enums.BillingStatus;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.model.enums.InvoiceFormat;
-import cz.silesnet.util.Dates;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.util.StringUtils;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import static cz.silesnet.model.ServiceId.serviceId;
@@ -68,13 +66,6 @@ public class ServiceBlueprint {
         service.setPeriod(new Period(periodFrom, null));
         service.setName(name);
         service.setAdditionalName(null);
-        service.getConnectivity().setDownload(download);
-        service.getConnectivity().setUpload(upload);
-        if ((download != null && download == 512) || (upload != null && upload == 512))
-            // EXCEPTION for specific PL service
-            service.getConnectivity().setBps("k");
-        else
-            service.getConnectivity().setBps("M");
         return service;
     }
 

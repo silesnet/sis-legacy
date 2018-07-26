@@ -57,7 +57,6 @@ public class ServiceTest {
         s.setName("wirelessHOME");
         s.setPrice(Integer.valueOf(1278));
         s.setFrequency(Frequency.MONTHLY);
-        s.setConnectivity(new Connectivity(512, 256, false, 0));
         s.setInfo("Poznamky...");
 
         log.debug("Service: " + s);
@@ -83,8 +82,6 @@ public class ServiceTest {
         s.setName("LANaccess");
         s.setPrice(Integer.valueOf(1278));
         s.setFrequency(Frequency.MONTHLY);
-        s.setConnectivity(new Connectivity(4, 2, true, 0));
-        s.getConnectivity().setBps("M");
         s.setInfo("Poznamky...");
 
         // log.debug("Service: " + s);
@@ -93,36 +90,16 @@ public class ServiceTest {
         // log.debug("Invoice line text: " + s.getShortInfo());
         log.info("Invoice line text: " + s.getBillItemText(Country.CZ));
         log.info("Invoice line text: " + s.getBillItemText(Country.PL));
-        s.getConnectivity().setUpload(null);
         log.info("Invoice line text: " + s.getBillItemText(Country.CZ));
         log.info("Invoice line text: " + s.getBillItemText(Country.PL));
-        s.setConnectivity(null);
         log.info("Invoice line text: " + s.getBillItemText(Country.CZ));
         log.info("Invoice line text: " + s.getBillItemText(Country.PL));
-    }
-
-    @Test
-    public void testIsNotConnectivity() throws Exception {
-        Service service = new Service();
-        service.getConnectivity().setDownload(1);
-        assertTrue(service.getIsConnectivity());
-    }
-
-    @Test
-    public void testIsConnectivity() throws Exception {
-        Service service = new Service();
-        service.getConnectivity().setDownload(1);
-        service.getConnectivity().setUpload(1);
-        assertTrue(service.getIsConnectivity());
     }
 
     @Test
     public void testShortInfo() throws Exception {
         Service service = new Service();
         service.setName("Wireless");
-        service.getConnectivity().setDownload(4);
-        service.getConnectivity().setUpload(2);
-        service.getConnectivity().setBps("M");
-        assertEquals("Wireless 4/2 Mbps", service.getShortInfo());
+        assertEquals("Wireless", service.getShortInfo());
     }
 }

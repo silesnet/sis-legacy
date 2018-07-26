@@ -110,15 +110,13 @@ CREATE TABLE services (
     name character varying(70) NOT NULL,
     price integer NOT NULL,
     frequency integer,
-    download integer,
-    upload integer,
-    is_aggregated boolean,
     info character varying(150),
     additionalname character varying(50),
-    bps character(1),
     status character varying(50),
+    data character varying(100),
     address_id integer,
-    dph boolean not null default true
+    dph boolean not null default true,
+    product_id integer
 );
 
 CREATE TABLE newservices
@@ -183,12 +181,12 @@ CREATE TABLE products
 (
    id            bigint         NOT NULL,
    name          varchar(100),
-   downlink      integer,
-   uplink        integer,
    price         integer,
    channel       varchar(100),
-   is_dedicated  boolean,
-   priority      integer,
-   country       char(2)     NOT NULL   DEFAULT 'CZ'
+   position      integer,
+   country       char(2)     NOT NULL   DEFAULT 'CZ',
+   active_from   date NOT NULL DEFAULT now(),
+   active_to     date NOT NULL DEFAULT 'infinity',
+   can_change_price boolean NOT NULL DEFAULT false
 );
 

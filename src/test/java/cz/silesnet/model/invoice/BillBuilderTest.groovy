@@ -261,9 +261,6 @@ class BillBuilderTest extends Specification {
     def builder = new BillBuilder(customer, new Date())
     def service = monthlyServiceRunningFromJan2010WithPrice10()
     service.setName(name)
-    def connectivity = new Connectivity()
-    connectivity.setDownload(1000)
-    service.setConnectivity(connectivity)
   expect:
     builder.buildItemFor(service, period('2011-01-01', '2011-01-31')).getText() == service.getBillItemText(Country.CZ)
   where:

@@ -8,14 +8,14 @@
         <id name="id" unsaved-value="null">
             <generator class="increment" />
         </id>
-        <property name="name" length="100" />
-        <property name="downlink" />
-        <property name="uplink" />
-        <property name="price" />
-        <property name="channel" length="100" />
-        <property name="isDedicated" column="is_dedicated"/>
-        <property name="priority" />
+        <property name="name" length="100" not-null="true" />
+        <property name="price" not-null="true" />
+        <property name="channel" length="100" not-null="true" />
+        <property name="position" not-null="true" />
         <property name="country" length="2" not-null="true"/>
+        <property name="activeFrom" column="active_from" type="date" not-null="true" />
+        <property name="activeTo" column="active_to" type="date" not-null="true" />
+        <property name="canChangePrice" column="can_change_price" not-null="true" />
     </class>
 
 </hibernate-mapping>

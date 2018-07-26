@@ -34,8 +34,6 @@ public class Service extends Entity implements HistoricToString {
 
     private Frequency fFrequency = Frequency.MONTHLY;
 
-    private Connectivity fConnectivity = new Connectivity();
-
     private String fInfo;
 
     private Integer fContract;
@@ -46,17 +44,10 @@ public class Service extends Entity implements HistoricToString {
 
     private Boolean fIncludeDph = true;
 
+    private Product fProduct;
+
     // ~ Methods
     // ----------------------------------------------------------------
-
-
-    public void setConnectivity(Connectivity connectivity) {
-        fConnectivity = connectivity;
-    }
-
-    public Connectivity getConnectivity() {
-        return fConnectivity;
-    }
 
     public void setCustomerId(Long customerId) {
         fCustomerId = customerId;
@@ -88,12 +79,6 @@ public class Service extends Entity implements HistoricToString {
         return fInfo;
     }
 
-    public Boolean getIsConnectivity() {
-        if (fConnectivity == null)
-            return false;
-        return fConnectivity.getDownload() != null;
-    }
-
     public void setName(String name) {
         // FIXME dirty workaround
         if ("0".equals(name))
@@ -123,20 +108,11 @@ public class Service extends Entity implements HistoricToString {
     }
 
     public String getShortInfo() {
-        StringBuffer shortName = new StringBuffer(getLongName());
-        if (getIsConnectivity()) {
-            shortName.append(" ").append(getConnectivity().getLinkSpeedText());
-        }
-        return shortName.toString();
+        return getLongName();
     }
 
     public String getBillItemText(Country country) {
-        StringBuffer invoiceLine = new StringBuffer(getLongName());
-        if (getIsConnectivity()) {
-            Connectivity con = getConnectivity();
-            invoiceLine.append(" ").append(con.getLinkSpeedText());
-        }
-        return invoiceLine.toString();
+        return getLongName();
     }
 
     private String getLongName() {
@@ -187,5 +163,13 @@ public class Service extends Entity implements HistoricToString {
 
     public void setIncludeDph(Boolean fDph) {
         this.fIncludeDph = fDph;
+    }
+
+    public Product getProduct() {
+        return fProduct;
+    }
+
+    public void setProduct(Product fProduct) {
+        this.fProduct = fProduct;
     }
 }

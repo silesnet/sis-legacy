@@ -57,13 +57,6 @@ public class PrepareMixture {
     return b;
   }
 
-  public static Connectivity getConnectivity() {
-    Connectivity c = new Connectivity();
-    c.setDownload(512);
-    c.setUpload(256);
-    return c;
-  }
-
   public static Service getService(String name) {
     Service s = new Service();
     s.setId(Long.valueOf(ServiceId.firstServiceId(Country.CZ, ContractNo.contractNo(contract++)).id()));

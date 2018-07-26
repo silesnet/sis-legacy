@@ -26,8 +26,8 @@ public abstract class ServiceDAOTest extends DaoTestSupport<ServiceDAO> {
     public void testCalculateSummaryFor() throws Exception {
         Map<String, Long> summary = dao.calculateSummaryFor(Country.CZ);
         assertThat(summary.get("overviewCustomers.totalCustomers"), is(2L));
-        assertThat(summary.get("overviewCustomers.totalDownload"), is(4L));
-        assertThat(summary.get("overviewCustomers.totalUpload"), is(3L));
+        assertThat(summary.get("overviewCustomers.totalDownload"), is(0L));
+        assertThat(summary.get("overviewCustomers.totalUpload"), is(0L));
         assertThat(summary.get("overviewCustomers.totalPrice.CZK"), is(300L));
     }
 

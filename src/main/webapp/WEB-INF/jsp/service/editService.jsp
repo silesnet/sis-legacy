@@ -43,21 +43,6 @@
 
 </td><td>&nbsp;&nbsp;</td><td>
 
-<h3><fmt:message key="Service.fConnectivity" /></h3>
-<table class="editForm">
-	<%-- Connectivity download --%>
-	<app:formInputLine path="connectivity.download" label="Service.fConnectivity.fDownload" size="5" />
-	<%-- Connectivity upload --%>
-	<app:formInputLine path="connectivity.upload" label="Service.fConnectivity.fUpload" size="5" />
-	<%-- Bps --%>
-	<tr><td>&nbsp;</td>
-	<td><spring:bind path="connectivity.bps">
-		<input type="radio" name="connectivity.bps" value="M" ${service.connectivity.bps == 'M' ? 'checked ' : ''} />Mbps&nbsp;
-		<input type="radio" name="connectivity.bps" value="k" ${service.connectivity.bps != 'M' ? 'checked ' : ''} />kbps
-	</spring:bind></td>
-	</tr>
-</table>
-
 </td></tr></table>
 
 <%@ include file="/WEB-INF/jsp/inc/sidebar.jsp" %>
