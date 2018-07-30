@@ -210,7 +210,7 @@ public class ServiceController extends AbstractCRUDController {
         }
         model.put("products", uniqueProductNamesOf(products));
         model.put("scripts", new String[]{
-            "safeSubmit.js", "calendar.js", "comboBox.js"});
+            "safeSubmit.js", "calendar.js", "comboBox.js", "queue.js"});
 
         return model;
     }

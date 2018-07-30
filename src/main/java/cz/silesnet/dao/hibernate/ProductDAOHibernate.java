@@ -12,7 +12,7 @@ public class ProductDAOHibernate extends HibernateDaoSupport implements ProductD
   @Override
   public List<Product> getByCountry(Country c) {
     final List<Product> products = getHibernateTemplate().find(
-        "from Product as p where p.country=?", c.getShortName().toUpperCase());
+        "from Product as p where p.country=? order by p.position", c.getShortName().toUpperCase());
     return products != null ? products : Lists.<Product>newArrayList();
   }
 }

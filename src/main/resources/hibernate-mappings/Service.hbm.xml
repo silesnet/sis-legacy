@@ -20,6 +20,6 @@
         <property name="status" length="50" />
         <property name="addressId" column="address_id" />
         <property name="includeDph" column="dph" />
-        <many-to-one name="product" column="product_id" class="cz.silesnet.model.Product" not-null="false" />
+        <property name="productId" column="product_id" />
     </class>
 </hibernate-mapping>
