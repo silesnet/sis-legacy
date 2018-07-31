@@ -9,7 +9,7 @@
 
 <%-- IMPORTANT! sent object id with post 2 proper retrieve backing object. --%>
 <c:if test="${!isNew}">
-	<input type="hidden" name="serviceId" value="${service.id}" />
+	<input id="serviceId" type="hidden" name="serviceId" value="${service.id}" />
 </c:if>
 <%-- IMPORTANT! need 2 bind pre set values that are not edited directly,
   -- applies only to NEW command objects, on existing objects,
@@ -32,7 +32,7 @@
       <fmt:message key="Service.fName" />&nbsp;
     </td>
     <td>
-			<input id="currency" value="${money_label_str}" type="hidden" />
+      <input id="currency" value="${money_label_str}" type="hidden" />
       <html:input path="name" id="serviceName" type="hidden" />
       <html:input path="productId" id="productId" type="hidden" />
       <select id="products">
@@ -43,6 +43,7 @@
             data-price="${p.price}"
             data-channel="${p.channel}"
             data-can-change-price="${p.canChangePrice}"
+            data-country="${p.country}"
           >${p.name}<c:if test="${! p.canChangePrice}"> (${p.price} ${money_label_str})</c:if></option>
         </c:forEach>
       </select>
@@ -79,14 +80,16 @@
     return {
       id: option.value,
       name: option.getAttribute('data-name'),
+      channel: option.getAttribute('data-channel'),
       price: option.getAttribute('data-price'),
-      canChangePrice: option.getAttribute('data-can-change-price') === 'true'
+      canChangePrice: option.getAttribute('data-can-change-price') === 'true',
+      country: option.getAttribute('data-country')
     };
   }
 
   function selectedProduct() {
     var products = byId('products');
-    if (products.slectedIndex == -1) {
+    if (products.selectedIndex == -1) {
       return {};
     }
     return productFromOption(products[products.selectedIndex]);
@@ -94,6 +97,10 @@
 
   function priceInput() {
     return query('input[name="price"]');
+  }
+
+  function highlighInputWhenNonStandardProduct(input, productId) {
+    input.style['background-color'] = productId === '-1' ? 'red' : 'white';
   }
 
   function selectServiceProduct() {
@@ -106,25 +113,27 @@
       var product = productFromOption(option);
       if (serviceName === product.name) {
         if (product.canChangePrice || servicePrice === product.price) {
-		  products.value = product.id;
+          products.value = product.id;
           found = index;
         }
         break;
       }
     }
-	if (found === -1) {
-	  var extraOption = document.createElement('option');
-	  extraOption.value = -1;
-	  extraOption.innerHTML = serviceName +
-	    ' (' + servicePrice + ' ' + byId('currency').value +')';
-	  extraOption.setAttribute('data-name', serviceName);
+    if (found === -1) {
+      var extraOption = document.createElement('option');
+      extraOption.value = -1;
+      extraOption.innerHTML = serviceName +
+        ' (' + servicePrice + ' ' + byId('currency').value +')';
+      extraOption.setAttribute('data-name', serviceName);
       extraOption.setAttribute('data-price', servicePrice);
       extraOption.setAttribute('data-channel', '');
-	  extraOption.setAttribute('data-can-change-price', false);
-	  products.appendChild(extraOption);
-	  products.value = -1;
-	}
-	q.pub('productUpdated', selectedProduct());
+      extraOption.setAttribute('data-can-change-price', false);
+      extraOption.style['background-color'] = 'red';
+      products.appendChild(extraOption);
+      products.value = -1;
+      highlighInputWhenNonStandardProduct(products, '-1');
+    }
+    q.pub('productUpdated', selectedProduct());
   }
 
   q.on('productUpdated', byId('productId'), e => {
@@ -141,12 +150,50 @@
     input.value = product.price;
     input.readOnly = !product.canChangePrice;
     input.style['color'] = product.canChangePrice ? 'black' : 'gray';
+    highlighInputWhenNonStandardProduct(input, product.id);
   });
 
   selectServiceProduct();
 
   byId('products').onchange = e => {
-    q.pub('productUpdated', selectedProduct());
+    var product = selectedProduct();
+    highlighInputWhenNonStandardProduct(e.target, product.id);
+    q.pub('productUpdated', product);
+  }
+
+  function validatePrice(price, product) {
+    var p = Number(price);
+    var errors = [];
+    if (p < 0) {
+      errors.push('<fmt:message key="editService.negativePriceError"/>');
+    }
+    if (p % 1 != 0) {
+      errors.push('<fmt:message key="editService.fractionPriceError"/>');
+    }
+    if (errors.length > 0) {
+      return errors;
+    }
+    if (product.canChangePrice) {
+      if ('CZ' === product.country && 1 < p && p < 500) {
+        errors.push('<fmt:message key="editService.priceNotInRangeError"/>');
+      }
+    }
+    else {
+      if (price !== product.price) {
+        errors.push('<fmt:message key="editService.priceNotInSyncWithProduct"/>');
+      }
+    }
+    return errors;
+  }
+
+  priceInput().onchange = e => {
+    var price = e.target.value;
+    var product = selectedProduct();
+    var errors = validatePrice(price, product);
+    if (errors.length > 0) {
+      alert(errors);
+      e.target.value = 0;
+    }
   }
 </script>
 
