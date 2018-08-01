@@ -229,17 +229,22 @@ public class ServiceController extends AbstractCRUDController {
 
     private List<Product> oneTimeProducts(Country country) {
         if (Country.CZ.equals(country)) {
-            return oneTimeProducts("Aktivace", "Odpočet", "Jiné");
+            return oneTimeProducts("CZ", "Aktivace", "Odpočet", "Jiné");
         } else {
-            return oneTimeProducts("Aktywacja", "Odliczenie", "Inne");
+            return oneTimeProducts("PL", "Aktywacja", "Odliczenie", "Inne");
         }
     }
 
-    private List<Product> oneTimeProducts(String ...names) {
+    private List<Product> oneTimeProducts(String country, String ...names) {
         final List<Product> products = new ArrayList<>();
         for (String name : names) {
             final Product product = new Product();
+            product.setId(-2L);
             product.setName(name);
+            product.setPrice(0);
+            product.setChannel("none");
+            product.setCanChangePrice(true);
+            product.setCountry(country);
             products.add(product);
         }
         return products;

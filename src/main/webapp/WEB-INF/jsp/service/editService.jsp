@@ -99,8 +99,16 @@
     return query('input[name="price"]');
   }
 
-  function highlighInputWhenNonStandardProduct(input, productId) {
+  function highlightInputWhenNonStandardProduct(input, productId) {
     input.style['background-color'] = productId === '-1' ? 'red' : 'white';
+  }
+
+  function isOneTimeService() {
+    return query('select[name="frequency"]').value === '10';
+  }
+
+  function isRegularService() {
+    return !isOneTimeService();
   }
 
   function selectServiceProduct() {
@@ -120,18 +128,23 @@
       }
     }
     if (found === -1) {
-      var extraOption = document.createElement('option');
-      extraOption.value = -1;
-      extraOption.innerHTML = serviceName +
-        ' (' + servicePrice + ' ' + byId('currency').value +')';
-      extraOption.setAttribute('data-name', serviceName);
-      extraOption.setAttribute('data-price', servicePrice);
-      extraOption.setAttribute('data-channel', '');
-      extraOption.setAttribute('data-can-change-price', false);
-      extraOption.style['background-color'] = 'red';
-      products.appendChild(extraOption);
-      products.value = -1;
-      highlighInputWhenNonStandardProduct(products, '-1');
+      if (isOneTimeService()) {
+        products.selectedIndex = 0;
+      }
+      else {
+        var extraOption = document.createElement('option');
+        extraOption.value = -1;
+        extraOption.innerHTML = serviceName +
+          ' (' + servicePrice + ' ' + byId('currency').value +')';
+        extraOption.setAttribute('data-name', serviceName);
+        extraOption.setAttribute('data-price', servicePrice);
+        extraOption.setAttribute('data-channel', '');
+        extraOption.setAttribute('data-can-change-price', false);
+        extraOption.style['background-color'] = 'red';
+        products.appendChild(extraOption);
+        products.value = -1;
+        highlightInputWhenNonStandardProduct(products, '-1');
+      }
     }
     q.pub('productUpdated', selectedProduct());
   }
@@ -150,21 +163,21 @@
     input.value = product.price;
     input.readOnly = !product.canChangePrice;
     input.style['color'] = product.canChangePrice ? 'black' : 'gray';
-    highlighInputWhenNonStandardProduct(input, product.id);
+    highlightInputWhenNonStandardProduct(input, product.id);
   });
 
   selectServiceProduct();
 
   byId('products').onchange = e => {
     var product = selectedProduct();
-    highlighInputWhenNonStandardProduct(e.target, product.id);
+    highlightInputWhenNonStandardProduct(e.target, product.id);
     q.pub('productUpdated', product);
   }
 
   function validatePrice(price, product) {
     var p = Number(price);
     var errors = [];
-    if (p < 0) {
+    if (p < 0 && isRegularService()) {
       errors.push('<fmt:message key="editService.negativePriceError"/>');
     }
     if (p % 1 != 0) {
@@ -173,14 +186,16 @@
     if (errors.length > 0) {
       return errors;
     }
-    if (product.canChangePrice) {
-      if ('CZ' === product.country && 1 < p && p < 500) {
-        errors.push('<fmt:message key="editService.priceNotInRangeError"/>');
+    if (isRegularService()) {
+      if (product.canChangePrice) {
+        if ('CZ' === product.country && 1 < p && p < 500) {
+          errors.push('<fmt:message key="editService.priceNotInRangeError"/>');
+        }
       }
-    }
-    else {
-      if (price !== product.price) {
-        errors.push('<fmt:message key="editService.priceNotInSyncWithProduct"/>');
+      else {
+        if (price !== product.price) {
+          errors.push('<fmt:message key="editService.priceNotInSyncWithProduct"/>');
+        }
       }
     }
     return errors;
