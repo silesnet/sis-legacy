@@ -160,7 +160,7 @@
   q.on('productUpdated', priceInput(), e => {
     var input = e.target;
     var product = e.detail;
-    input.value = product.price;
+    input.value = product.canChangePrice ? input.defaultValue : product.price;
     input.readOnly = !product.canChangePrice;
     input.style['color'] = product.canChangePrice ? 'black' : 'gray';
     highlightInputWhenNonStandardProduct(input, product.id);
