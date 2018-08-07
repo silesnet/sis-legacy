@@ -42,6 +42,12 @@
             </TABLE>
             <TABLE BORDER=0 WIDTH="100%" FRAME="VOID">
               <TR>
+                <TD Align="Left">Specifický symbol</TD>
+                <TD Align="Right">${bill.invoicedCustomer.billing.variableSymbol}</TD>
+              </TR>
+            </TABLE>
+            <TABLE BORDER=0 WIDTH="100%" FRAME="VOID">
+              <TR>
                 <TD Align="Left">Konstantní symbol</TD>
                 <TD Align="Right">0308</TD>
               </TR>
@@ -198,13 +204,12 @@ ved. u Kraj. soudu v Ostravě v oddílu C, vložce číslo 17812
 <TR><TH ALIGN="LEFT" NOWRAP>  Popis položky  </TH><TH ALIGN="RIGHT" NOWRAP>  Cena za MJ  </TH><TH ALIGN="RIGHT" NOWRAP>    </TH><TH ALIGN="LEFT" NOWRAP>    </TH><TH ALIGN="RIGHT" NOWRAP>  Celkem  </TH><TH ALIGN="RIGHT" NOWRAP>  DPH  </TH><TH ALIGN="RIGHT" NOWRAP>  Celkem  </TH></TR>
 <TR><TH ALIGN="LEFT" NOWRAP>    </TH><TH ALIGN="RIGHT" NOWRAP>  bez DPH  </TH><TH ALIGN="RIGHT" NOWRAP>  Množství  </TH><TH ALIGN="LEFT" NOWRAP>  MJ  </TH><TH ALIGN="RIGHT" NOWRAP>  bez DPH  </TH><TH ALIGN="RIGHT" NOWRAP>  %  </TH><TH ALIGN="RIGHT" NOWRAP>  s DPH  </TH></TR>
 <TR><TD ALIGN="CENTER" COLSPAN=7 ><HR></TD></TR>
-<TR><TD ALIGN="LEFT" COLSPAN=7 NOWRAP>  Na základě smlouvy Vám fakturujeme poskytování   </TD></TR>
-<TR><TD ALIGN="LEFT" COLSPAN=7 NOWRAP>  služby za období&nbsp;${bill.period.periodString}:  </TD></TR>
+<TR><TD ALIGN="LEFT" COLSPAN=7 NOWRAP>  Na základě smlouvy Vám fakturujeme poskytování služby za období&nbsp;${bill.period.periodString}:  </TD></TR>
 <TR><TD ALIGN="LEFT" COLSPAN=7 NOWRAP>    </TD></TR>
 <i18n:locale language="cs">
 <c:forEach items="${bill.items}" var="item">
 <c:set var="amount"><i18n:formatNumber value="${item.amount}" pattern="0.0###" /></c:set>
-<TR><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">Služba -&nbsp;</c:if>${item.text}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.price}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${fn:replace(amount, ",", ".")}  </TD><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">měs.</c:if>  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.net}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${item.vatRate}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.brt}" />  </TD></TR>
+<TR><TD ALIGN="LEFT" NOWRAP>${item.text}</TD><TD ALIGN="RIGHT" NOWRAP><app:currency value="${item.price}" /></TD><TD ALIGN="RIGHT" NOWRAP>  ${fn:replace(amount, ",", ".")}  </TD><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">měs.</c:if>  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.net}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${item.vatRate}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.brt}" />  </TD></TR>
 </c:forEach>
 </i18n:locale>
 <TR><TD COLSPAN=7><BR></TD></TR>
