@@ -209,6 +209,8 @@ public class ServiceController extends AbstractCRUDController {
             model.put("serviceFrequency", EnumSet.of(MONTHLY, ANNUAL));
         }
         model.put("products", uniqueProductNamesOf(products));
+        model.put("dedicatedThreshold", country == Country.CZ ? 500 : 100);
+        model.put("serviceCurrency", country == Country.CZ ? "Kč" : "Zł");
         model.put("scripts", new String[]{
             "safeSubmit.js", "calendar.js", "comboBox.js", "queue.js"});
 

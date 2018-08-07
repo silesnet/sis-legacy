@@ -188,8 +188,8 @@
     }
     if (isRegularService()) {
       if (product.canChangePrice) {
-        if ('CZ' === product.country && 1 < p && p < 500) {
-          errors.push('<fmt:message key="editService.priceNotInRangeError"/>');
+        if (1 < p && p < ${dedicatedThreshold}) {
+          errors.push('<fmt:message key="editService.priceNotInRangeError"><fmt:param value="${dedicatedThreshold}"/><fmt:param value="${serviceCurrency}"/></fmt:message>');
         }
       }
       else {
