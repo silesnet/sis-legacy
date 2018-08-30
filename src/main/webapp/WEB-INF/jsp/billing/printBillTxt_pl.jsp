@@ -17,7 +17,7 @@
   	<img src="${ctx}/img/logo_silesnet.gif" />
 		<br />
 		SilesNet Polska Sp. z o.o.<br />
-		43-400 Cieszyn, ul. Motelowa 18<br />
+		43-400 Cieszyn, ul. Motelowa 16<br />
 		Tel.: 500 67 33 11, NIP: 896-138-01-08<br />
 		Bank Zachodni WBK S.A. 1 O. w Cieszynie,<br />
 		65109017820000000103270891<br /><br /><br />
@@ -40,7 +40,7 @@
 		<tr><td align="center" bgcolor="#cccccc" style="border: 1px solid;">Sprzedawca:</td></tr>
 		<tr><td>
 			SilesNet Polska Sp. z o.o.<br />
-			ul. Motelowa 18<br />
+			ul. Motelowa 16<br />
 			43-400 Cieszyn<br />
 			NIP: 896-138-01-08<br />
 		</td></tr>
@@ -54,7 +54,7 @@
 			${bill.invoicedCustomer.name}<br />
 			<c:if test="${!empty bill.invoicedCustomer.supplementaryName}">
             	${bill.invoicedCustomer.supplementaryName}<br />
-			</c:if>                
+			</c:if>
             ${bill.invoicedCustomer.contact.address.street}<br />
             ${bill.invoicedCustomer.contact.address.postalCode}&nbsp;${bill.invoicedCustomer.contact.address.city}<br />
             NIP:&nbsp;${bill.invoicedCustomer.DIC}
