@@ -226,13 +226,12 @@ public class CustomerController extends AbstractCRUDController {
     @Secured({"ROLE_ACCOUNTING"})
     public ModelAndView showOverview(HttpServletRequest request, HttpServletResponse response) {
         log.debug("Showing customers overview.");
-        Map<String, Long> summary_CZ = cMgr.getSummaryFor(Country.CZ);
-        Map<String, Long> summary_PL = cMgr.getSummaryFor(Country.PL);
+        Map<String, Long> summaryCZ = cMgr.getSummaryFor(Country.CZ);
+        Map<String, Long> summaryPL = cMgr.getSummaryFor(Country.PL);
         Map<String, Long> summary = new LinkedHashMap<String, Long>();
-        addSummaryKeys("overviewCustomers.totalCustomers", summary, summary_CZ, summary_PL);
-        addSummaryKeys("overviewCustomers.totalDownload", summary, summary_CZ, summary_PL);
-        addSummaryKeys("overviewCustomers.totalUpload", summary, summary_CZ, summary_PL);
-        addSummaryKeys("overviewCustomers.totalPrice.CZK", summary, summary_CZ, summary_PL);
+        addSummaryKeys("overviewCustomers.totalCustomers", summary, summaryCZ, summaryPL);
+        addSummaryKeys("overviewCustomers.totalServices.CZK", summary, summaryCZ, summaryPL);
+        addSummaryKeys("overviewCustomers.totalLastInvoicing.CZK", summary, summaryCZ, summaryPL);
 
         DecimalFormat format = new DecimalFormat();
         DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
@@ -241,8 +240,8 @@ public class CustomerController extends AbstractCRUDController {
         format.setDecimalFormatSymbols(formatSymbols);
         HashMap<String, Object> model = new HashMap<String, Object>();
         model.put("overviewCustomers", formatSummaryKeys(summary, format).entrySet());
-        model.put("overviewCustomersCZ", formatSummaryKeys(summary_CZ, format).entrySet());
-        model.put("overviewCustomersPL", formatSummaryKeys(summary_PL, format).entrySet());
+        model.put("overviewCustomersCZ", formatSummaryKeys(summaryCZ, format).entrySet());
+        model.put("overviewCustomersPL", formatSummaryKeys(summaryPL, format).entrySet());
         model.put("exchangeRate", settingMgr.get("exchangeRate.PLN_CZK"));
         return new ModelAndView("customer/overviewCustomers", model);
     }

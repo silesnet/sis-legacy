@@ -52,26 +52,31 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
     public Map<String, Long> calculateSummaryFor(Country c) {
         Map<String, Long> sum = new LinkedHashMap<String, Long>();
         Session session = getSessionFactory().getCurrentSession();
-        // count service related statistics
-        SQLQuery query = session.createSQLQuery("select \n" +
-                "sum(s.price) as price\n" +
-                "from services as s, customers c\n" +
-                "where c.id=s.customer_id\n" +
-                "and c.country = " + c.getId() + "\n" +
-                "and c.is_active")
-                .addScalar("price", Hibernate.LONG);
-        Long result = (Long) query.uniqueResult();
-        sum.put("overviewCustomers.totalDownload", 0L);
-        sum.put("overviewCustomers.totalUpload", 0L);
-        sum.put("overviewCustomers.totalPrice.CZK", result);
 
         // count customers
-        query = session.createSQLQuery("select count(id) as customers_count\n" +
+        SQLQuery query = session.createSQLQuery("select count(id) as customers_count\n" +
                 "from customers\n" +
                 "where country = " + c.getId() + "\n" +
                 "and is_active")
                 .addScalar("customers_count", Hibernate.LONG);
         sum.put("overviewCustomers.totalCustomers", (Long) query.uniqueResult());
+
+        // count service prices
+        query = session.createSQLQuery("select \n" +
+                "sum(s.price) as price\n" +
+                "from services as s inner join customers c on s.customer_id=c.id\n" +
+                "where c.country = " + c.getId() + " and (s.period_from <= current_date and (s.period_to >= current_date or s.period_to is null))\n")
+                .addScalar("price", Hibernate.LONG);
+        sum.put("overviewCustomers.totalServices", (Long) query.uniqueResult());
+
+        // last billing total
+        query = session.createSQLQuery("select sum(i.price) price" +
+                        " from invoicings bc" +
+                        " inner join bills b on b.invoicing_id = bc.id" +
+                        " inner join bill_items i on i.bill_id = b.id" +
+                        " where bc.id in (select max(id) from invoicings where country = " + c.getId() + ")")
+                .addScalar("price", Hibernate.LONG);
+        sum.put("overviewCustomers.totalLastInvoicing", (Long) query.uniqueResult());
 
         return sum;
     }

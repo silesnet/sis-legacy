@@ -174,13 +174,28 @@ public class CustomerManagerImpl implements CustomerManager {
 
     public Map<String, Long> getSummaryFor(Country c) {
         Map<String, Long> sumForCountry = sDao.calculateSummaryFor(c);
-        if (Country.PL.equals(c)) {
-            double ratePLN_CZK = settingMgr.getDouble("exchangeRate.PLN_CZK", Double.valueOf(7.5));
-            long price_PLN = sumForCountry.get("overviewCustomers.totalPrice.CZK");
-            long price_CZK = (long) (price_PLN * ratePLN_CZK);
-            sumForCountry.put("overviewCustomers.totalPrice.CZK", price_CZK);
-            sumForCountry.put("overviewCustomers.totalPrice.PLN", price_PLN);
-            sumForCountry.put("exchangeRate.PLN_CZK", (long) (ratePLN_CZK * 100.0));
+        if (Country.CZ.equals(c)) {
+            long totalServicesCZK = sumForCountry.remove("overviewCustomers.totalServices");
+            sumForCountry.put("overviewCustomers.totalServices.CZK", totalServicesCZK);
+
+            long lastInvoicingCZK = sumForCountry.remove("overviewCustomers.totalLastInvoicing");
+            sumForCountry.put("overviewCustomers.totalLastInvoicing.CZK", lastInvoicingCZK);
+
+        } else if (Country.PL.equals(c)) {
+            double ratePLNtoCZK = settingMgr.getDouble("exchangeRate.PLN_CZK", Double.valueOf(7.5));
+
+            long totalServicesPLN = sumForCountry.remove("overviewCustomers.totalServices");
+            long totalServicesCZK = (long) (totalServicesPLN * ratePLNtoCZK);
+            sumForCountry.put("overviewCustomers.totalServices.CZK", totalServicesCZK);
+
+            long lastInvoicingPLN = sumForCountry.remove("overviewCustomers.totalLastInvoicing");
+            long lastInvoicingCZK = (long) (lastInvoicingPLN * ratePLNtoCZK);
+            sumForCountry.put("overviewCustomers.totalLastInvoicing.CZK", lastInvoicingCZK);
+
+            sumForCountry.put("overviewCustomers.totalServices.PLN", totalServicesPLN);
+            sumForCountry.put("overviewCustomers.totalLastInvoicing.PLN", lastInvoicingPLN);
+
+            sumForCountry.put("exchangeRate.PLN_CZK", (long) (ratePLNtoCZK * 100.0));
         }
         return sumForCountry;
     }
