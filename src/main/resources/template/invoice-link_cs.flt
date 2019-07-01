@@ -1,13 +1,8 @@
-Vážený zákazníku,
+Vážený uživateli SilesNet,
 
-zasíláme Vám fakturu za poskytování internetových služeb za období ${invoice.period}.
+v příloze Vám zasíláme fakturu za poskytování internetových služeb za období ${invoice.period}.
+
 Faktura je zaslána pouze prostřednictvím této elektronické zprávy.
-
-
-
-Kliknutím na následující odkaz si fakturu vyzvednete a zároveň nám takto potvrdíte její převzetí.
-http://www.silesnet.cz/billing/confirmDelivery.html?uuid=${invoice.uuid}
-
 
 Děkujeme za využívání našich služeb.
 
