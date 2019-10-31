@@ -95,9 +95,6 @@ public class ServiceBlueprintTest extends Specification {
         service.price == PRICE
         service.name == NAME
         service.additionalName == null
-        service.connectivity.download == DOWNLOAD
-        service.connectivity.upload == UPLOAD
-        service.connectivity.bps == BPS
 
         service.period.from.time == FROM
         service.period.to == null
@@ -163,17 +160,6 @@ public class ServiceBlueprintTest extends Specification {
     expect:
         !blueprint.isNewContract()
         !blueprint.shouldCreateNewCustomer()
-    }
-
-    def 'should set connectivity kbps for magic value 512'() {
-        def blueprint = blueprintFixture()
-        blueprint.download = 512
-        blueprint.upload = 512
-        def customer = new Customer()
-        customer.id = CUSTOMER_ID;
-        def service = blueprint.buildService(customer)
-    expect:
-        service.connectivity.bps == 'k'
     }
 
     def static blueprintFixture() {
