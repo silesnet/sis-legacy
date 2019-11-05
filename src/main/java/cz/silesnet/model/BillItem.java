@@ -33,6 +33,8 @@ public class BillItem implements Serializable {
 
   private Boolean fIncludeDph = true;
 
+  private Charge charge;
+
   // ~ Constructors
   // -----------------------------------------------------------
 
@@ -158,5 +160,12 @@ public class BillItem implements Serializable {
 
   public int getVatRate() {
     return fIncludeDph ? fBill.getVat() : 0;
+  }
+
+  public Charge getCharge() {
+    if (charge == null) {
+      charge = Charge.of(this.fAmount, this.fPrice, getBill().getVat());
+    }
+    return charge;
   }
 }
