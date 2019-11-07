@@ -51,6 +51,8 @@ public class Bill extends Entity {
 
   private Boolean fDeliverByMail = false;
 
+  private Charge charge;
+
   // ~ Methods
   // ----------------------------------------------------------------
 
@@ -264,5 +266,16 @@ public class Bill extends Entity {
       }
     }
     return false;
+  }
+
+  public Charge getCharge() {
+    if (charge == null) {
+      Charge acc = Charge.ZERO;
+      for (BillItem item : fItems) {
+        acc = acc.add(item.getCharge());
+      }
+      charge = acc;
+    }
+    return charge;
   }
 }
