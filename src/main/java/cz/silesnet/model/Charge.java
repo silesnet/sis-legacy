@@ -21,12 +21,16 @@ public final class Charge {
     }
 
     public static Charge of(float amount, int unitPrice, int vatPct) {
-        final BigDecimal vatRate = BigDecimal.valueOf(100 + vatPct, 2);
-        final BigDecimal brt = BigDecimal.valueOf(amount * unitPrice)
-                .multiply(vatRate).setScale(0, RoundingMode.HALF_UP).setScale(2);
-        final BigDecimal net = brt.divide(vatRate, 2, RoundingMode.HALF_UP);
-        final BigDecimal vat = brt.subtract(net);
-        return new Charge(net, vat, brt);
+        try {
+            final BigDecimal vatRate = BigDecimal.valueOf(100 + vatPct, 2);
+            final BigDecimal brt = BigDecimal.valueOf(amount * unitPrice)
+                    .multiply(vatRate).setScale(0, RoundingMode.HALF_UP).setScale(2);
+            final BigDecimal net = brt.divide(vatRate, 2, RoundingMode.HALF_UP);
+            final BigDecimal vat = brt.subtract(net);
+            return new Charge(net, vat, brt);
+        } catch (Exception e) {
+            return ZERO;
+        }
     }
 
     public static Charge of(int net, int vatRate) {
