@@ -209,14 +209,13 @@ ved. u Kraj. soudu v Ostravě v oddílu C, vložce číslo 17812
 <i18n:locale language="cs">
 <c:forEach items="${bill.items}" var="item">
 <c:set var="amount"><i18n:formatNumber value="${item.amount}" pattern="0.0###" /></c:set>
-<TR><TD ALIGN="LEFT" NOWRAP>${item.text}</TD><TD ALIGN="RIGHT" NOWRAP><app:currency value="${item.price}" /></TD><TD ALIGN="RIGHT" NOWRAP>  ${fn:replace(amount, ",", ".")}  </TD><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">měs.</c:if>  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.net}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${item.vatRate}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.brt}" />  </TD></TR>
+<TR><TD ALIGN="LEFT" NOWRAP>${item.text}</TD><TD ALIGN="RIGHT" NOWRAP><app:currency value="${item.charge.net}" /></TD><TD ALIGN="RIGHT" NOWRAP>  1.0  </TD><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">měs.</c:if>  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.charge.net}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${item.vatRate}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.charge.brt}" />  </TD></TR>
 </c:forEach>
 </i18n:locale>
 <TR><TD COLSPAN=7><BR></TD></TR>
-<TR><TD Align="Right" ColSpan=6>Celkem bez DPH </TD><TD Align="Right"><app:currency value="${bill.net}" /></TD></TR>
-<TR><TD Align="Right" ColSpan=6>Bez DPH po zaokrouhlení </TD><TD Align="Right"><app:currency value="${bill.netRounded}" /></TD></TR>
-<TR><TD Align="Right" ColSpan=6>DPH </TD><TD Align="Right"><app:currency value="${bill.vatRounded}" /></TD></TR>
-<TR><TD Align="Right" ColSpan=6>Celkem s DPH </TD><TD Align="Right"><app:currency value="${bill.brt}" /></TD></TR>
+<TR><TD Align="Right" ColSpan=6>Celkem bez DPH </TD><TD Align="Right"><app:currency value="${bill.charge.net}" /></TD></TR>
+<TR><TD Align="Right" ColSpan=6>DPH </TD><TD Align="Right"><app:currency value="${bill.charge.vat}" /></TD></TR>
+<TR><TD Align="Right" ColSpan=6>Celkem s DPH </TD><TD Align="Right"><app:currency value="${bill.charge.brt}" /></TD></TR>
 <TR><TD COLSPAN=7><BR></TD></TR>
 <TR>
   <TD ALIGN="RIGHT" ColSpan=5 VAlign="Middle">
@@ -229,7 +228,7 @@ ved. u Kraj. soudu v Ostravě v oddílu C, vložce číslo 17812
   <TD ALIGN="Center" ColSpan=2>
     <TABLE Width="100%" Border=1 CellPadding=4>
       <TR>
-        <TH NoWrap Align="Right" VAlign="Middle" BgColor="Yellow"><FONT SIZE=4><app:currency value="${bill.brt}" /> Kč</FONT></TH>
+        <TH NoWrap Align="Right" VAlign="Middle" BgColor="Yellow"><FONT SIZE=4><app:currency value="${bill.charge.brt}" /> Kč</FONT></TH>
       </TR>
     </TABLE><BR>
   </TD>
@@ -257,7 +256,7 @@ Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit sml
              <TH ALIGN="Center">Sazba DPH</TH><TH ALIGN="Center">Základ (v Kč)</TH><TH ALIGN="Center">DPH (v Kč)</TH>
            </TR>
            <TR>
-             <TH ALIGN="Center">${bill.vat}%</TH><TD ALIGN="Right"><app:currency value="${bill.netRounded}" /></TD><TD ALIGN="Right"><app:currency value="${bill.vatRounded}" /></TD>
+             <TH ALIGN="Center">${bill.vat}%</TH><TD ALIGN="Right"><app:currency value="${bill.charge.net}" /></TD><TD ALIGN="Right"><app:currency value="${bill.charge.vat}" /></TD>
            </TR>
          </TABLE>
     </TD>
