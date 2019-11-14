@@ -164,7 +164,7 @@ public class BillItem implements Serializable {
 
   public Charge getCharge() {
     if (charge == null) {
-      charge = Charge.of(this.fAmount, this.fPrice, getBill().getVat());
+      charge = Charge.of(this.fAmount, this.fPrice, (fIncludeDph && fBill != null ? fBill.getVat() : 0));
     }
     return charge;
   }

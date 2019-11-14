@@ -12,6 +12,14 @@ public class ChargeTest {
     private static final Charge FIBER = Charge.of(260, 21);
     private static final Charge WIRELESS20 = Charge.of(360, 21);
     private static final Charge WIRELESS30 = Charge.of(410, 21);
+    private static final Charge FIBER_NOT_VAT = Charge.of(260, 0);
+
+    @Test
+    public void shouldExcludeVat() {
+        assertEquals(BigDecimal.valueOf(26000, 2), FIBER_NOT_VAT.getNet());
+        assertEquals(BigDecimal.valueOf(0, 2), FIBER_NOT_VAT.getVat());
+        assertEquals(BigDecimal.valueOf(26000, 2), FIBER_NOT_VAT.getBrt());
+    }
 
     @Test
     public void shouldHaveZeroCharge() {
