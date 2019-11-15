@@ -113,7 +113,7 @@
                   <TD></TD><TD></TD>
                   <TD Align="Left"><B>${bill.invoicedCustomer.supplementaryName}</B></TD>
                 </TR>
-</c:if>                
+</c:if>
                 <TR>
                   <TD></TD><TD></TD>
                   <TD Align="Left"><B></B></TD>
@@ -256,7 +256,7 @@ Za opožděnou platbu výše uvedené částky je odběratel povinen uhradit sml
              <TH ALIGN="Center">Sazba DPH</TH><TH ALIGN="Center">Základ (v Kč)</TH><TH ALIGN="Center">DPH (v Kč)</TH>
            </TR>
            <TR>
-             <TH ALIGN="Center">${bill.vat}%</TH><TD ALIGN="Right"><app:currency value="${bill.charge.net}" /></TD><TD ALIGN="Right"><app:currency value="${bill.charge.vat}" /></TD>
+             <TH ALIGN="Center">${bill.charge.vatPct}%</TH><TD ALIGN="Right"><app:currency value="${bill.charge.net}" /></TD><TD ALIGN="Right"><app:currency value="${bill.charge.vat}" /></TD>
            </TR>
          </TABLE>
     </TD>

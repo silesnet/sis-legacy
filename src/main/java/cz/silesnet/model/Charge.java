@@ -10,14 +10,16 @@ public final class Charge {
     private final BigDecimal net;
     private final BigDecimal vat;
     private final BigDecimal brt;
+    private final int vatPct;
 
-    private Charge(final BigDecimal net, final BigDecimal vat, final BigDecimal brt) {
+    private Charge(final BigDecimal net, final BigDecimal vat, final BigDecimal brt, int vatPct) {
         if (!brt.equals(net.add(vat))) {
             throw new IllegalArgumentException("invariant check failed: brt = net + vat");
         }
         this.net = net;
         this.vat = vat;
         this.brt = brt;
+        this.vatPct = vatPct;
     }
 
     public static Charge of(float amount, int unitPrice, int vatPct) {
@@ -27,7 +29,7 @@ public final class Charge {
                     .multiply(vatRate).setScale(0, RoundingMode.HALF_UP).setScale(2);
             final BigDecimal net = brt.divide(vatRate, 2, RoundingMode.HALF_UP);
             final BigDecimal vat = brt.subtract(net);
-            return new Charge(net, vat, brt);
+            return new Charge(net, vat, brt, vatPct);
         } catch (Exception e) {
             return ZERO;
         }
@@ -49,8 +51,12 @@ public final class Charge {
         return brt;
     }
 
+    public int getVatPct() {
+        return vatPct;
+    }
+
     public Charge add(Charge other) {
-        return new Charge(this.net.add(other.net), this.vat.add(other.vat), this.brt.add(other.brt));
+        return new Charge(this.net.add(other.net), this.vat.add(other.vat), this.brt.add(other.brt), other.vatPct);
     }
 
     @Override
@@ -65,7 +71,7 @@ public final class Charge {
 
     @Override
     public int hashCode() {
-        return Objects.hash(net, vat, brt);
+        return Objects.hash(net, vat, brt, vatPct);
     }
 
     @Override
@@ -74,6 +80,7 @@ public final class Charge {
                 "net=" + net +
                 ", vat=" + vat +
                 ", brt=" + brt +
+                ", vatPct=" + vatPct +
                 '}';
     }
 }
