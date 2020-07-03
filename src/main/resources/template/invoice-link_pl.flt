@@ -1,25 +1,19 @@
 Szanowny kliencie,
 
-w zalaczniku przesylamy fakture wystawiona za usluge dostepu do internetu za okres ${invoice.period}.
-Faktura ta jest posylana jedynie w wersji elektronicznej.
+w załączniku przesyłamy fakturę wystawiona za usługę dostępu do internetu za okres ${invoice.period}.
+Faktura ta jest posyłana jedynie w wersji elektronicznej.
 
+Dziękujemy za korzystanie z naszych usług.
 
-
-Kliknieciem na ponizszy link mozna fakture otworzyc i jednoczesnie potwierdzic jej odbior.
-http://www.silesnet.cz/billing/confirmDelivery.html?uuid=${invoice.uuid}
-
-
-Dziekujemy za korzystanie z naszych uslug.
-
-
-Z powazaniem,
+Z poważaniem,
 
 Monika Mierva-Serwus
 
 SilesNet Polska Sp. z o.o.
-skrytka poczt. 219
+ul. Motelowa 16
 43-400 Cieszyn
 
-e-mail  :  mierwa@silesnet.pl
+e-mail  :  mierva-serwus@silesnet.pl
 e-site  :  www.silesnet.pl
-telefon :  +48 500 67 33 11
+FB: www.facebook.com/silesnet
+telefon :  +48 500 673 311, +48 500 392 222
