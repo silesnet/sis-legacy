@@ -17,16 +17,3 @@ tel.: 558 711 585, 777 27 28 28
 SilesNet s. r. o.
 Ostravská 584/12
 737 01 Český Těšín
-<#if invoice.signedDelivery>
-
-
-Tento e-mail je elektronicky podepsán.
-
-V případě, že nemáte nainstalovaný kvalifikovaný kořenový certifikát společnosti I.CA, můžete si jej stáhnout v různých formátech z těchto odkazů:
-http://www.ica.cz/RootCERT_Qican.der
-http://www.ica.cz/RootCERT_Qican.pem
-http://www.ica.cz/RootCERT_Qican.txt
-http://www.ica.cz/root_QCC.cmf
-
-Pro vice informací kontaktujte prosím naší kancelář.
-</#if>
