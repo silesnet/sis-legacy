@@ -33,14 +33,14 @@ public class SimpleMimeMessagePreparatorFactoryTest {
   @Test
   public void newInstance() throws Exception {
     Invoice invoice = mockInvoiceFixture(false);
-    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice);
+    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice, null);
     assertThat(preparator, is(instanceOf(DelegatingMimeMessagePreparator.class)));
   }
 
   @Test
   public void newInstanceWhenSigned() throws Exception {
     Invoice invoice = mockInvoiceFixture(true);
-    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice);
+    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice, null);
     assertThat(preparator, is(instanceOf(DelegatingMimeMessagePreparator.class)));
   }
 

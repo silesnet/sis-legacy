@@ -55,7 +55,7 @@ public class InvoiceMailIntegrationTest extends UnitilsTestNG {
   @Test
   public void emailCsInvoice() throws Exception {
     Invoice invoice = prepareInvoiceFixture(Country.CZ, false);
-    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice);
+    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice, null);
     assertThat(preparator instanceof DelegatingMimeMessagePreparator, is(true));
 //    sender.send(preparator);
   }
@@ -63,7 +63,7 @@ public class InvoiceMailIntegrationTest extends UnitilsTestNG {
   @Test
   public void emailPlInvoice() throws Exception {
     Invoice invoice = prepareInvoiceFixture(Country.PL, false);
-    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice);
+    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice, null);
     assertThat(preparator instanceof DelegatingMimeMessagePreparator, is(true));
 //    sender.send(preparator);
   }
@@ -71,7 +71,7 @@ public class InvoiceMailIntegrationTest extends UnitilsTestNG {
   @Test
   public void emailCsInvoiceSigned() throws Exception {
     Invoice invoice = prepareInvoiceFixture(Country.CZ, true);
-    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice);
+    MimeMessagePreparator preparator = preparatorFactory.newInstance(invoice, null);
     assertThat(preparator instanceof DelegatingMimeMessagePreparator, is(true));
 //    sender.send(preparator);
   }
