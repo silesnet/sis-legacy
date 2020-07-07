@@ -10,5 +10,5 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
  * Time: 19:58:52
  */
 public interface MimeMessagePreparatorFactory {
-  MimeMessagePreparator newInstance(Invoice invoice);
+  MimeMessagePreparator newInstance(Invoice invoice, String bcc);
 }

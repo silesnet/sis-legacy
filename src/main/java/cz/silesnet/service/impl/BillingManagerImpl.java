@@ -301,7 +301,7 @@ public class BillingManagerImpl implements BillingManager {
       throw new IllegalArgumentException("Bill without customer set.");
     if (c.getBilling().getDeliverByEmail()) {
       try {
-        email(bill);
+        email(bill, null);
         if (emailedCounter != null)
           emailedCounter.setValue(emailedCounter.intValue() + 1);
       } catch (MailException e) {
@@ -363,7 +363,7 @@ public class BillingManagerImpl implements BillingManager {
       Customer customer = dao.fetchCustomer(bill);
       log.info("Emailing bill for " + customer.getName() + " (" + bill.getNumber() + ")");
       try {
-        email(bill);
+        email(bill, null);
       } catch (MailParseException e) {
         log.warn("Bill email parse exception: " + customer.getName());
       } catch (MailException e) {
@@ -379,11 +379,11 @@ public class BillingManagerImpl implements BillingManager {
     }
   }
 
-  public void email(final Bill bill) throws MailException {
+  public void email(final Bill bill, final String recipient) throws MailException {
     if (mailSender == null)
       throw new IllegalStateException("JavaMailSender not set.");
     Invoice invoice = createNewInvoice(bill);
-    MimeMessagePreparator messagePreparator = messagePreparatorFactory.newInstance(invoice);
+    MimeMessagePreparator messagePreparator = messagePreparatorFactory.newInstance(invoice, recipient);
     mailSender.send(messagePreparator);
     log.info("Email SENT for " + invoice.getEmail() + " (" + invoice.getNumber() + ")");
   }
@@ -401,7 +401,7 @@ public class BillingManagerImpl implements BillingManager {
       throw new IllegalArgumentException("Bill without customer set.");
     // handle PL customers as before
     if (Country.PL.equals(c.getContact().getAddress().getCountry())) {
-      email(bill);
+      email(bill, null);
       return;
     }
     final Locale locale = c.getContact().getAddress().getCountry().getLocale();

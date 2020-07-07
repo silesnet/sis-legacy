@@ -29,7 +29,6 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -183,8 +182,9 @@ public class BillingController extends MultiActionController {
   public ModelAndView emailBill(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     log.debug("Emailing bill.");
     Bill bill = getRequestedBill(request);
+    String recipient = getRequestedRecipient(request);
     try {
-      bMgr.email(bill);
+      bMgr.email(bill, recipient);
       // set success message
       MessagesUtils.setCodedSuccessMessage(request, "mainBilling.sendingEmailSuccess", bill.getNumber());
     } catch (MailParseException e) {
@@ -499,6 +499,10 @@ public class BillingController extends MultiActionController {
     if ("sk".equals(countryId))
       return Country.SK;
     return Country.CZ;
+  }
+
+  private String getRequestedRecipient(HttpServletRequest request) {
+    return ServletRequestUtils.getStringParameter(request, "recipient", null);
   }
 
   @SuppressWarnings("unchecked")

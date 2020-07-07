@@ -22,10 +22,10 @@ public class SimpleMimeMessagePreparatorFactory implements MimeMessagePreparator
   private DocumentService documentService;
 
 
-  public MimeMessagePreparator newInstance(final Invoice invoice) {
+  public MimeMessagePreparator newInstance(final Invoice invoice, final String recipient) {
     DelegatingMimeMessagePreparator messagePreparator = new DelegatingMimeMessagePreparator();
     InvoiceWriter writer = writerFactory.instanceOf(invoice);
-    messagePreparator.addPreparator(new InvoiceMimeMessagePreparator(invoice, writer, documentService));
+    messagePreparator.addPreparator(new InvoiceMimeMessagePreparator(invoice, writer, documentService, recipient));
 //    if (invoice.isSignedDelivery()) {
 //      messagePreparator.addPreparator(new SigningMimeMessagePreparator(signer));
 //    }

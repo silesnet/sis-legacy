@@ -29,11 +29,13 @@ public class InvoiceMimeMessagePreparator implements MimeMessagePreparator {
   private InvoiceWriter writer;
   private Locale locale = Locale.getDefault();
   private DocumentService documentService;
+  private String recipient;
 
-  public InvoiceMimeMessagePreparator(final Invoice invoice, final InvoiceWriter writer, DocumentService documentService) {
+  public InvoiceMimeMessagePreparator(final Invoice invoice, final InvoiceWriter writer, final DocumentService documentService, final String recipient) {
     this.invoice = invoice;
     this.writer = writer;
     this.documentService = documentService;
+    this.recipient = recipient;
   }
 
   public void prepare(final MimeMessage mimeMessage) throws Exception {
@@ -43,8 +45,12 @@ public class InvoiceMimeMessagePreparator implements MimeMessagePreparator {
 
     email.setSentDate(new Date());
     email.setFrom(message("billEmail.from"));
-    email.setTo(invoice.getEmail());
-    email.setCc(invoice.getCopyToEmails());
+    if (recipient == null) {
+      email.setTo(invoice.getEmail());
+      email.setCc(invoice.getCopyToEmails());
+    } else {
+      email.setTo(recipient);
+    }
     email.setSubject(message("billEmail.subject", invoice.getNumber(), invoice.getPeriod()));
     email.getMimeMessage().addHeader("X-Priority", "1");
     email.getMimeMessage().addHeader("X-MSMail-Priority", "High");

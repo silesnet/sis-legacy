@@ -19,7 +19,7 @@ public interface BillingManager {
 
   public void sendNextInvoice();
 
-  public void email(Bill bill) throws MailException;
+  public void email(Bill bill, String recipient) throws MailException;
 
   public void emailAll(List<Bill> bills);
 
