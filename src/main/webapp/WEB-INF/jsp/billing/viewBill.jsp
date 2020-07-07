@@ -58,9 +58,12 @@
 	<fmt:message key="listBills.action.deliver" /></a></span>
 </c:if>
 <br />
-<form name="emailBillForm" method="get" action="${ctx}/billing/edit.html?action=emailBill&billId=${bill.id}&_navPushUrl=1">
+<form name="emailBillForm" method="get" action="${ctx}/billing/edit.html">
+	<input type="hidden" name="action" value="emailBill" />
+	<input type="hidden" name="billId" value="${bill.id}" />
+	<input type="hidden" name="_navPushUrl" value="1" />
   <span class="mainBilling_formCaption"><fmt:message key="mainBilling.label.recipient" /></span>
-..<input type="text" name="recipient" value="${customer.contact.email}" />
+  <input type="text" name="recipient" value="${customer.contact.email}" />
 </form>
 <span class="actionLink"><a href="javascript:document.emailBillForm.submit();"
 	onclick="return confirm('<fmt:message key="listBills.confirm.resend"/>')">
