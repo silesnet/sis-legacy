@@ -247,6 +247,7 @@ public class BillingController extends MultiActionController {
     binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd.MM.yyyy"), true));
     Map model = binder.getBindingResult().getModel();
     Customer customer = bMgr.fetchCustomer(bill);
+    model.put("customer", customer);
     if (Country.PL == customer.getContact().getAddress().getCountry())
       model.put("money_key", "money.label.pl");
     else

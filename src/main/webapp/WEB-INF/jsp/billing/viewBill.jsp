@@ -58,7 +58,11 @@
 	<fmt:message key="listBills.action.deliver" /></a></span>
 </c:if>
 <br />
-<span class="actionLink"><a href="${ctx}/billing/edit.html?action=emailBill&billId=${bill.id}&_navPushUrl=1"
+<form name="emailBillForm" method="get" action="${ctx}/billing/edit.html?action=emailBill&billId=${bill.id}&_navPushUrl=1">
+  <span class="mainBilling_formCaption"><fmt:message key="mainBilling.label.recipient" /></span>
+..<input type="text" name="recipient" value="${customer.contact.email}" />
+</form>
+<span class="actionLink"><a href="javascript:document.emailBillForm.submit();"
 	onclick="return confirm('<fmt:message key="listBills.confirm.resend"/>')">
 	<fmt:message key="listBills.action.emailBill" /></a></span>
 <%-- needs fix in BillingConroller.exportToWinDuo()
