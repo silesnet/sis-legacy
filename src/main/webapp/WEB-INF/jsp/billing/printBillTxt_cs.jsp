@@ -210,7 +210,7 @@ ved. u Kraj. soudu v Ostravě v oddílu C, vložce číslo 17812
 <c:forEach items="${bill.items}" var="item">
 <c:set var="amount"><i18n:formatNumber value="${item.amount}" pattern="0.0###" /></c:set>
 <TR>
-    <TD ALIGN="LEFT" NOWRAP>${item.text}<c:if test="${!empty item.detail}"><br>${item.detail}</c:if></TD>
+    <TD ALIGN="LEFT" NOWRAP>${item.text}<c:if test="${!empty item.detail}"><br><small><i>${item.detail}</i></small></c:if></TD>
     <TD ALIGN="RIGHT" NOWRAP><app:currency value="${item.charge.net}" /></TD><TD ALIGN="RIGHT" NOWRAP>  1.0  </TD><TD ALIGN="LEFT" NOWRAP>  <c:if test="${item.isDisplayUnit}">měs.</c:if>  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.charge.net}" />  </TD><TD ALIGN="RIGHT" NOWRAP>  ${item.vatRate}  </TD><TD ALIGN="RIGHT" NOWRAP>  <app:currency value="${item.charge.brt}" />  </TD>
 </TR>
 </c:forEach>
