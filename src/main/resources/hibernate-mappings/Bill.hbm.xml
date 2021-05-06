@@ -27,6 +27,7 @@
                 <property name="price" />
                 <property name="isDisplayUnit" column="is_display_unit" />
                 <property name="includeDph" column="dph" />
+                <property name="serviceId" column="service_id" type="long" />
             </composite-element>
         </bag>
         <property name="vat" />

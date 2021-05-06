@@ -33,7 +33,10 @@ public class BillItem implements Serializable {
 
   private Boolean fIncludeDph = true;
 
+  private Long fServiceId;
+
   private Charge charge;
+
 
   // ~ Constructors
   // -----------------------------------------------------------
@@ -156,6 +159,14 @@ public class BillItem implements Serializable {
 
   public void setIncludeDph(Boolean fIncludeDph) {
     this.fIncludeDph = fIncludeDph;
+  }
+
+  public Long getServiceId() {
+    return fServiceId;
+  }
+
+  public void setServiceId(Long fServiceId) {
+    this.fServiceId = fServiceId;
   }
 
   public int getVatRate() {

@@ -1,7 +1,6 @@
 package cz.silesnet.model.invoice;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import cz.silesnet.model.*;
@@ -132,6 +131,7 @@ public class BillBuilder {
     else
       updateAdjustedBillPeriod(billableServicePeriod);
     item.setIncludeDph(service.getIncludeDph());
+    item.setServiceId(service.getId());
     return item;
   }
 
