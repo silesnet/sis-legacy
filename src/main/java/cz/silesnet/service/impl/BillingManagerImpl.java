@@ -3,6 +3,7 @@ package cz.silesnet.service.impl;
 import com.google.common.base.Joiner;
 import cz.silesnet.dao.BillDAO;
 import cz.silesnet.dao.CustomerDAO;
+import cz.silesnet.dao.ServiceDAO;
 import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.model.invoice.Accountant;
@@ -44,6 +45,8 @@ public class BillingManagerImpl implements BillingManager {
   private BillDAO dao;
 
   private CustomerDAO customerDao;
+
+  private ServiceDAO serviceDao;
 
   private HistoryManager hmgr;
 
@@ -388,6 +391,19 @@ public class BillingManagerImpl implements BillingManager {
     log.info("Email SENT for " + invoice.getEmail() + " (" + invoice.getNumber() + ")");
   }
 
+  public String getServiceAddressLabel(Long serviceId) {
+    if (serviceId == null) {
+      return null;
+    }
+    Service service = serviceDao.get(serviceId);
+    if (service == null) {
+      return null;
+    }
+    String addressLabel = serviceDao.findAddressById(service.getAddressId());
+
+    return "".equals(addressLabel) ? null : addressLabel;
+  }
+
   private Invoice createNewInvoice(final Bill bill) {
     final Customer customer = dao.fetchCustomer(bill);
     if (customer == null)
@@ -519,6 +535,10 @@ public class BillingManagerImpl implements BillingManager {
 
   public void setCustomerDao(final CustomerDAO customerDao) {
     this.customerDao = customerDao;
+  }
+
+  public void setServiceDao(final ServiceDAO serviceDao) {
+    this.serviceDao = serviceDao;
   }
 
   public void setSettingManager(SettingManager settingManager) {

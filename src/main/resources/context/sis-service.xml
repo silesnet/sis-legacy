@@ -126,6 +126,9 @@
                 <property name="customerDao">
                     <ref bean="customerDAO" />
                 </property>
+                <property name="serviceDao">
+                    <ref bean="serviceDAO" />
+                </property>
                 <property name="emailFromAddressCs" value="${email.from.cs}" />
                 <property name="emailSendingDelay" value="${email.delay}" />
             </bean>

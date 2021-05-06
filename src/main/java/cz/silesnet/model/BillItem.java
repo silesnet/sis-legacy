@@ -37,6 +37,8 @@ public class BillItem implements Serializable {
 
   private Charge charge;
 
+  private String detail;
+
 
   // ~ Constructors
   // -----------------------------------------------------------
@@ -167,6 +169,14 @@ public class BillItem implements Serializable {
 
   public void setServiceId(Long fServiceId) {
     this.fServiceId = fServiceId;
+  }
+
+  public String getDetail() {
+    return detail;
+  }
+
+  public void setDetail(String detail) {
+    this.detail = detail;
   }
 
   public int getVatRate() {

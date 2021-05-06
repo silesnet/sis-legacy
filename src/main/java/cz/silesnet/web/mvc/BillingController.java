@@ -1,9 +1,6 @@
 package cz.silesnet.web.mvc;
 
-import cz.silesnet.model.Bill;
-import cz.silesnet.model.Customer;
-import cz.silesnet.model.HistoryItem;
-import cz.silesnet.model.Invoicing;
+import cz.silesnet.model.*;
 import cz.silesnet.model.enums.Country;
 import cz.silesnet.service.BillingManager;
 import cz.silesnet.service.DocumentService;
@@ -162,7 +159,7 @@ public class BillingController extends MultiActionController {
       if (!ignoreDelivery) {
         bMgr.update(bill);
       }
-      fetchInvoicedCustomer(bill);
+      fetchInvoicedCustomerAndItemsDetail(bill);
       String localeString = getShortLocale(bill);
       view = "billing/printBillTxt_" + localeString;
       model.put("bills", new Bill[]{bill});
@@ -209,7 +206,7 @@ public class BillingController extends MultiActionController {
     log.debug("Printing bill text.");
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
-    fetchInvoicedCustomer(bill);
+    fetchInvoicedCustomerAndItemsDetail(bill);
     String localeString = getShortLocale(bill);
     model.put("bills", new Bill[]{bill});
     return new ModelAndView("billing/printBillTxt_" + localeString, model);
@@ -218,7 +215,7 @@ public class BillingController extends MultiActionController {
   public ModelAndView printBillPdf(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
     Map<String, Object> model = new HashMap<String, Object>();
     Bill bill = getRequestedBill(request);
-    fetchInvoicedCustomer(bill);
+    fetchInvoicedCustomerAndItemsDetail(bill);
     documentService.invoicePdfStream(bill.getHashCode());
     String localeString = getShortLocale(bill);
     model.put("bills", new Bill[]{bill});
@@ -230,7 +227,7 @@ public class BillingController extends MultiActionController {
     Map<String, Object> model = new HashMap<String, Object>();
     List<Bill> bills = getSelectedBills(request);
     for (Bill bill : bills)
-      fetchInvoicedCustomer(bill);
+      fetchInvoicedCustomerAndItemsDetail(bill);
     String localeString = "cs";
     if (bills.size() > 0) {
       localeString = getShortLocale(bills.get(0));
@@ -512,8 +509,11 @@ public class BillingController extends MultiActionController {
     return selectedBillsMap.keySet();
   }
 
-  private void fetchInvoicedCustomer(Bill bill) {
+  private void fetchInvoicedCustomerAndItemsDetail(Bill bill) {
     bill.setInvoicedCustomer(bMgr.fetchCustomer(bill));
+    for (BillItem item : bill.getItems()) {
+      item.setDetail(bMgr.getServiceAddressLabel(item.getServiceId()));
+    }
   }
 
 }

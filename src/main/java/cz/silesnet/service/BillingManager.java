@@ -67,4 +67,5 @@ public interface BillingManager {
   public int getCountByStatus(Invoicing invoicing, Boolean isConfirmed, Boolean isSent,
                               Boolean isDelivered, Boolean isArchived, Boolean isSnail);
 
+ String getServiceAddressLabel(Long serviceId);
 }
