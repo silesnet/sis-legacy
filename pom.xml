@@ -8,7 +8,7 @@
     <version>1.4</version>
     <description>SilesNet IS</description>
     <properties>
-        <spring.version>3.0.4.RELEASE</spring.version>
+        <spring.version>5.2.10.RELEASE</spring.version>
     </properties>
     <dependencies>
         <dependency>
