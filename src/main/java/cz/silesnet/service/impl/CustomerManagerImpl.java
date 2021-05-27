@@ -55,28 +55,6 @@ public class CustomerManagerImpl implements CustomerManager {
         return sDao.findAddressById(addressId);
     }
 
-    public ServiceBlueprint addService(final Integer blueprintId) {
-        final ServiceBlueprint blueprint = sDao.findBlueprint(blueprintId);
-        Customer customer;
-        if (blueprint.shouldCreateNewCustomer()) {
-            customer = blueprint.createNewCustomer();
-            log.debug(customer);
-            insert(customer);
-        } else {
-            customer = dao.get(blueprint.getCustomerId().longValue());
-        }
-        final Service service = blueprint.buildService(customer);
-        customer.getServices().add(service);
-        blueprint.imprintNewServiceOn(customer);
-        update(customer);
-
-        blueprint.setCustomerId(customer.getId().intValue());
-        blueprint.setBillingOn(new Date());
-        sDao.saveBlueprint(blueprint);
-        
-        return blueprint;
-    }
-
     public void insert(Customer customer) {
         customer.setId(null);     // make sure we will have insert
         updateSymbol(customer);

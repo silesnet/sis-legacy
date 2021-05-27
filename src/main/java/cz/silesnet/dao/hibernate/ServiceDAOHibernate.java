@@ -2,7 +2,6 @@ package cz.silesnet.dao.hibernate;
 
 import cz.silesnet.dao.ServiceDAO;
 import cz.silesnet.model.Service;
-import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Country;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
@@ -83,14 +82,6 @@ public class ServiceDAOHibernate extends HibernateDaoSupport implements ServiceD
 
     public void evict(Service service) {
         getHibernateTemplate().evict(service);
-    }
-
-    public ServiceBlueprint findBlueprint(Integer blueprintId) {
-        return getHibernateTemplate().get(ServiceBlueprint.class, blueprintId);
-    }
-
-    public void saveBlueprint(ServiceBlueprint blueprint) {
-        getHibernateTemplate().saveOrUpdate(blueprint);
     }
 
     public Long findMaxIdInRange(long min, long max) {

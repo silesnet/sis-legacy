@@ -3,7 +3,6 @@ package cz.silesnet.service;
 import cz.silesnet.model.Bill;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.Service;
-import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Country;
 
 import java.io.PrintWriter;
@@ -36,8 +35,6 @@ public interface CustomerManager {
     public Service getService(Long serviceId);
 
     public void insertService(Service service);
-
-    public ServiceBlueprint addService(Integer blueprintId);
 
     public void updateService(Service service);
 

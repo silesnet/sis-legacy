@@ -1,7 +1,6 @@
 package cz.silesnet.dao;
 
 import cz.silesnet.model.Service;
-import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Country;
 
 import java.util.List;
@@ -30,10 +29,6 @@ public interface ServiceDAO extends DAO {
     public Map<String, Long> calculateSummaryFor(Country c);
 
     public void evict(Service service);
-
-    public ServiceBlueprint findBlueprint(Integer blueprintId);
-
-    public void saveBlueprint(ServiceBlueprint blueprint);
 
     public Long findMaxIdInRange(long min, long max);
 

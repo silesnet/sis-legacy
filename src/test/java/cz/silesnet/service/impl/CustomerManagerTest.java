@@ -3,7 +3,6 @@ package cz.silesnet.service.impl;
 import cz.silesnet.dao.ServiceDAO;
 import cz.silesnet.model.Customer;
 import cz.silesnet.model.PrepareMixture;
-import cz.silesnet.model.ServiceBlueprint;
 import cz.silesnet.model.enums.Frequency;
 import cz.silesnet.service.CustomerManager;
 import cz.silesnet.service.HistoryManager;
@@ -11,7 +10,6 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.testng.annotations.Test;
 import org.unitils.spring.annotation.SpringBean;
 
-import java.util.Date;
 import java.util.List;
 
 import static org.testng.Assert.*;
