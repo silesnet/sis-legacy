@@ -151,7 +151,7 @@ public class BillingManagerBillsTest {
         log.info(hashCode2);
     }
 
-    @Test(groups = "integration")
+    @Test(groups = "integration", enabled = false)
     public void testGetByStatus() {
         String[] paths = {"context/sis-properties.xml", "context/sis-db.xml", "context/sis-hibernate.xml",
                 "context/sis-dao.xml", "context/sis-bus.xml", "context/sis-transaction.xml", "context/sis-service.xml", "context/sis-email.xml", "context/sis-template.xml", "context/sis-billing.xml"};
