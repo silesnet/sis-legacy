@@ -396,7 +396,7 @@ public class BillingManagerImpl implements BillingManager {
       return null;
     }
     Service service = serviceDao.get(serviceId);
-    if (service == null) {
+    if (service == null || service.getAddressId() == null) {
       return null;
     }
     String addressLabel = serviceDao.findAddressById(service.getAddressId());
